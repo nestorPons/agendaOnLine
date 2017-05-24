@@ -1,0 +1,28 @@
+<div id="dlgServicios" class="dialog">
+		<h1 class="heading">Editando servicios</h1>
+		<hr>
+		<form  id="frmEditarServicios">
+			<input type="hidden" id="id" class="txt" name="id" readonly>
+			<div class="iconClass-container icon-left">
+				<input type="text" class="txt" id="codigo" name="codigo" placeholder="Introduzca el Codigo" 
+					alt="Introduzca el Codigo" required autocomplete="off" data-max-leght="7" required>
+				<span class="iconClass-inside  icon-angle-right"></span>
+			</div>
+			<div class="iconClass-container icon-left">
+				<input type="text" class="txt" name="descripcion" id="descripcion" placeholder="Introduzca el Descripcion" 
+					alt="Introduzca el Descripcion" autocomplete="off" required>
+				<span class="iconClass-inside icon-pencil-1"></span>
+			</div>
+			<div class="iconClass-container icon-left">
+				<input type="number" class="txt" name="tiempo" id="tiempo" placeholder="Tiempo en minutos" required>
+				<i class="iconClass-inside icon-clock"></i>
+			</div>
+			<div class="iconClass-container icon-left">
+				<input type="number" class="txt" id="precio" name="precio" placeholder="Precio en €">
+				<i class="iconClass-inside icon-euro"></i>
+			</div> 
+			<div id="lstFamilias" class="iconClass-container icon-left"></div>
+		</form>
+	<button type="button" class="btn-danger btnLoad cancelar" id="btnEliminar" data-value="Eliminar"></button>
+	<button type="button" class="btn-success btnLoad aceptar"  id="btnAceptar" data-value="Guardar"></button>
+</div>

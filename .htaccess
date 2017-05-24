@@ -1,0 +1,7 @@
+Options +FollowSymLinks -MultiViews
+# Turn mod_rewrite on
+RewriteEngine On
+#RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^empresas/(.*)$ /php/index.php?empresa=$1 [L,QSA,NC]

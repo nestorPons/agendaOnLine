@@ -1,0 +1,30 @@
+
+@fondo:"%sii";
+@title-font:'Open Sans', sans-serif;
+@main-font: 'Roboto', sans-serif;
+@radius: 2px;
+@radio_popover: 10px;
+
+@color: #48c188 ;
+@base: #fff ;
+@auxiliar: #eda537;
+@t1:spin(@color, -30); 
+@t2: spin(@color, 20);
+@oposite: saturate(spin(@color, -120),100%);
+@saturate: saturate(@t2,75%);
+@text: #333333;
+@text1: darken(@color,30%);
+@text2: darken(@oposite,30%);
+@b1:mix(@color, #fff, 10%);
+@b2: mix(@oposite, #fff, 10%);
+@red:#e04747;
+@green: desaturate(#00fa00,lightness(@color));
+@blue :desaturate(#01cbef,lightness(@color));
+@grey:#8a8a7b;
+@grey-bg:#eee;
+@fontSize: 1rem;
+@tabla_celda_borde: mix(@grey,#fff,10%);
+
+
+
+@import '../css/index.css';
