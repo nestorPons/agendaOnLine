@@ -1,5 +1,5 @@
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind');
-var urlPhp = "../../php/admin/";
+var urlPhp = "../../php/admin/"; 
 var admin = true;
 var HORARIOS = document.horarios;
 var FESTIVOS = document.festivos;
