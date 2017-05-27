@@ -10,6 +10,7 @@ $url_logo_img = file_exists($url_empresa."logo.png")?$url_empresa."logo.png":"..
 
 $nombre_empresa =  ucwords(strtolower($_GET['empresa']),'_');
 $nombre_empresa = str_replace("_"," ",$nombre_empresa);
+$nombre_empresa = str_replace("/","",$nombre_empresa);
 
 if(isset($_COOKIE["id_user"])&&!isset($_GET["closeSession"])){
 	header ("location:../php/validar.php");

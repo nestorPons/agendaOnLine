@@ -3,6 +3,7 @@ var urlPhp = "../../php/admin/";
 var admin = true;
 var HORARIOS = document.horarios;
 var FESTIVOS = document.festivos;
+var hora = 0; 
 
 function sincronizar(date,dias,callback){
 
@@ -437,19 +438,21 @@ var crearCita ={
 
 	},
 	crear: function (callback){
+		cargarDatepicker();
+		/*
 		var conTablas = $('#crearCita #tablas');
 		var url =  urlPhp+'crearCita/horasCns.php';
 
 		$("#crearCita #principal")
 			.clone()
-				.removeClass('principal')
-				.attr('id',Fecha.id)
-				.appendTo(conTablas)
-				.addClass('editando')
+			.removeClass('principal')
+			.attr('id',Fecha.id)
+			.appendTo(conTablas)
+			.addClass('editando')
 
 		var diaSemana = Fecha.diaSemana(Fecha.general)
 
-		for (let h=1; h <= ARRAYHORAS.length ;h++ ){
+		for (let h=1; h <= HORARIOS.length ;h++ ){
 			let hora = 'h'+diaSemana+h;
 			let estado = horario.activo[hora];
 			let $hora = $('.editando #tr'+h+' td');
@@ -481,6 +484,7 @@ var crearCita ={
 			}
 			typeof callback == "function" && callback();
 		}
+		*/
 	},
 	pintar: function(){
 		$('#crearCita #'+Fecha.id+' .ocupado').removeClass('ocupado')
@@ -532,7 +536,7 @@ var crearCita ={
 
 			var fecha = new Date(milisegundos +minTime);
 
-			var h = ARRAYHORAS[hora];
+			var h = HORARIOS[hora];
 			var day = parseInt(Fecha.id.substr(6,2));
 			var hour = parseInt(h.substr(0,2));
 			var min = parseInt(h.substr(3,5));
@@ -811,6 +815,7 @@ var festivo = {
 	},
 }
 var horario = {
+	activo:null,
 	editar: function (){
 
 		var numeroHorario = $('#horarios  #nombre option:selected').val();
@@ -926,7 +931,6 @@ var horario = {
 		
 		return return_function;
 	},
-	activo:null,
 }
 var main ={
 	sincronizar: function (dir,callback){
@@ -1264,8 +1268,6 @@ var main ={
 					})
 			}
 		})
-;
-
 		typeof callback == "function" && callback();
 	},
 	inactivas: function(){
@@ -1441,12 +1443,13 @@ var servicio = {
 		var height = parseInt($('#servicios .cabecera').css('height'));
 	},
 	mostrar: function(id) {
-		var section = $('.capasPrincipales.activa');
+		var section = $('.capasPrincipales:visible');
 		var contenedor = section.find('.contenedorServicios');
 		var id = $.isEmpty(id)?1:id;
 
 		contenedor
 			.find('tbody tr').fadeOut().end()
+			.find('.disabled').removeClass('disabled').end()
 			.find('tbody .fam'+id).fadeIn().end()
 			.find('.c3').removeClass('c3').end()
 			.find('#'+id).addClass('c3');

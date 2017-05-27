@@ -1,15 +1,12 @@
 var xhr= null;
-var on = false;
-var arrayNotas = new Array;
-var hora =0;
+
 var ruta = window.location.pathname;
 var arrayNombre = new Array;
 arrayNombre = ruta.split("/");
 var nombreEmpresa = $('body').data('empresa');
-var tiempoServicios=0;
+
 var horarios = new Array();
 var festivos = new Array();
-var contador  = 0;
 
 $(document)
 	.keyup(function(event){
@@ -27,16 +24,16 @@ $(document)
 		$this.attr('type',tipo)
 	})
 	.on('blur','input:password',function(){validar.pass.funcion($(this))})
-	.find('input:password').change(function(){validar.pass.estado=false}).end()
+	.on('change','input:password',function(){validar.pass.estado=false})
 	.on('blur','.email',function(){validar.email.funcion($(this))})
-	.find('.email').change(function(){validar.email.estado=false}).end()
+	.on('change','.email',function(){validar.email.estado=false})
 	.on('blur','.tel',function(){validar.tel.funcion($(this))})
-	.find('.tel').change(function(){validar.tel.estado=false}).end()
+	.on('change','.tel',function(){validar.tel.estado=false})
 	.on('click','.iconClass-inside.icon-cancel',function(){
 		$(this).parent().find('input').val("");
 	})
 	.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
-	.find('.nombre').change(function(){validar.nombre.estado=false}).end()
+	.on('change','.nombre',function(){validar.nombre.estado=false}).end()
 	.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
 	.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
 	.on('click','.inicio',function(){window.location.href="index.php"})
@@ -46,7 +43,7 @@ $(document)
 
 $(function(){
 	$('.time').mask('00:00');
-	$('.phone').mask('## 000 00 00 00');
+	$('.tel').mask('## 000 00 00 00');
 	$('.date').mask('00/00/0000');
 	
 	jQuery.each(jQuery('textarea[data-autoresize]'), function() {

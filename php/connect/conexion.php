@@ -9,9 +9,10 @@ date_default_timezone_set("Europe/Madrid");
 define('MARGEN_DIAS',10);
 
 function conexion ( $security=true,$bd=false,$tools = false){ 
-		
-	$bd = $bd!=false?$bd:$_SESSION['bd'];
 	
+	$bd = $bd!=false?$bd:$_SESSION['bd'];
+	$bd = str_replace('/','',$bd);
+
 	if ($security) {		include "security.php";		}
 	
 	$user = "user";

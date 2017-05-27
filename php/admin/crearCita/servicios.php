@@ -1,24 +1,29 @@
 <?php
 include "../../../php/menus/servicios.php";
 ?>
-<table class ='tablas  contenedorServicios' >
+<table class ='tablas-group  contenedorServicios' >
 	<tbody>
 		<?php
-		foreach ($_SESSION['SERVICIOS'] as $data){
+		$n = 0; 
+		foreach ($_SESSION['SERVICIOS'] as $row){
+			// $n para niniciar los servicios de la primera familia
+			$n++;
+			$ini_familia = $n==1 ?   $row[5]  : $ini_familia;
 			// 0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
 			?>
-				<tr id="rowServicios<?php echo $data[0]?>" class="fam<?php echo $data[5]?>">
+				<tr id="rowServicios<?php echo $row[0]?>" 
+				class="fam<?php echo $row[5]?> <?php echo $row[5] == $ini_familia ? "" : "disabled"; ?>">
 					<td>
-						<label for="<?php echo $data[1]?>">
+						<label for="<?php echo $row[1]?>">
 							<input 
 								type="checkbox" 
 								name="servicios[]" 
-								id ="<?php echo $data[1]?>"
-								value="<?php echo $data[0]?>"
-								data-time='<?php echo $data[4]?>'
-								data-familia="<?php echo $data[5]?>"
+								id ="<?php echo $row[1]?>"
+								value="<?php echo $row[0]?>"
+								data-time='<?php echo $row[4]?>'
+								data-familia="<?php echo $row[5]?>"
 							>
-							'<?php echo $data[2]?>' ('<?php echo $data[4]?>' min.)
+							'<?php echo $row[2]?>' ('<?php echo $row[4]?>' min.)
 						</label>
 					</td>
 				</tr>
