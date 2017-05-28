@@ -78,15 +78,20 @@ jQuery.serializeForm = function(form){
 	return arr_return;
 }
 var Fecha = {
+	actual: fechaActual(),
+	general: formatoFecha(fechaActual(),'sql'),
 	sql: function(fecha){return formatoFecha(fecha,'sql')},
 	print: function(fecha){return formatoFecha(fecha,'print')},
 	md: function(fecha){return formatoFecha(fecha,'md')},
 	number: function(fecha){return formatoFecha(fecha,'number')},
-	actual: fechaActual(),
 	calcular: function(dia,fecha){return calcularFecha(dia,fecha)},
-	diaSemana: function(fecha){return diaDeLaSemana(fecha)},
+	diaSemana: function(fecha){
+	    var fecha = this.sql(fecha);
+		var mdy = fecha.split('-')
+		fecha = new Date(mdy[0], mdy[1]-1, mdy[2]);
+		return fecha.getDay();
+	},
 	restar: function(f1,f2){return restaFechas(f1,f2)},
-	general: formatoFecha(fechaActual(),'sql'),
 	id: function(){return new Date('Ymj')},
 }
 var btnLoad = {
@@ -529,12 +534,6 @@ function colorearMenuDiasSemana(arg){
 	}
 
 };
-function diaDeLaSemana(fecha){
-	var mdy = fecha.split('-')
-	fecha = new Date(mdy[0], mdy[1]-1, mdy[2]);
-	var dS = fecha.getDay()==0?7:fecha.getDay();
-	return dS;
-}
 function getAbsolutePath() {
     var loc = window.location;
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);

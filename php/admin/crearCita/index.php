@@ -20,19 +20,6 @@ include "../../connect/tools.php";
 				<h2>Tiempo total de los servicios:<span id='tSer' class="resaltado"></span> min.</h2>	
 				<div id="tablas" class="tablas">
 				<!--	<div data-role="preloader" data-type="cycle" data-style="color" class="margin20"></div>-->
-					<table id="principal">						
-						<?php for($i=1;$i<= count($_SESSION['HORAS']);$i++){?>
-							<tr  id="tr<?php echo$i?>">
-								<td class="hora">
-									<label class="label"  id="lbl<?php echo$i?>">
-										<input type="radio" name="hora[]" id="<?php echo$i?>" value="<?php echo$i?>">
-											<span class="lblHoras"><?php echo $_SESSION['HORAS'][$i]?></span> 
-										</input>
-									</label>
-								</td>
-							</tr>
-						<?php }?>
-					</table>
 				</div>
 			</div>
 

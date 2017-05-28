@@ -57,7 +57,6 @@ function mostrarCapa(capa,callback){
 
 	$('html,body').animate({scrollTop:0}, 500);
 
-
 	typeof callback == "function" && callback();
 }
 var menu = {
@@ -209,7 +208,7 @@ var menu = {
 	},
 }
 var agendas = {
-	change: false,
+	change: false ,
 	guardar: function (callback){
 		$.ajax({
 			type: "POST",
@@ -238,6 +237,7 @@ var agendas = {
 	}
 }
 var familias = {
+	change : false , 
 	eliminar : function (e) {
 		var id = $('#dlgFamilias #id').val();
 
@@ -355,15 +355,15 @@ var crearCita ={
 		$('#crearCita #'+Fecha.id).addClass('activa');
 	},
 	servicios:function(callback){
-		var $contSer = $('#crearCita .contenedorServicios');
-		var listaServicios= "";
-		var listaFamilias= "";
+		 	
+		var contenedor = $('#crearCita .contenedorServicios');
+		var familias = "";
 
-		$contSer
+		contenedor
 			.html($('#servicios .menuServicios').clone())
 			.append('<table class="datos"></table>');
 
-		$contSer.find('table').html(listaFamilias);
+		contenedor.find('table').html(familias);
 		$('#servicios .datos tr').each(function(i,v){
 			var $this = $(this);
 
@@ -376,7 +376,7 @@ var crearCita ={
 			}
 			//crearCita.mostrar.servicios(datos);
 		})
-		var fam = $contSer.find('.lstServicios a:first').attr('id');
+		var fam = contenedor.find('.lstServicios a:first').attr('id');
 
 		//servicio.mostrar(fam);
 
@@ -438,34 +438,54 @@ var crearCita ={
 
 	},
 	crear: function (callback){
-		cargarDatepicker();
-		/*
-		var conTablas = $('#crearCita #tablas');
-		var url =  urlPhp+'crearCita/horasCns.php';
+		
+		if (!$('#crearCita .datepicker').length) cargarDatepicker();
 
-		$("#crearCita #principal")
-			.clone()
-			.removeClass('principal')
-			.attr('id',Fecha.id)
-			.appendTo(conTablas)
-			.addClass('editando')
+		var contenedor = $('#crearCita #tablas');
+		var url = urlPhp+'crearCita/horasCns.php';
+		
+		$('#main .dia').each(function(index , value){
+			var self = {
+				obj : $('#crearCita #'+$(this).attr('id')),
+				id : $(this).attr('id'),
+				diaSemana : Fecha.diaSemana($(this).attr('id'))
+			}
 
-		var diaSemana = Fecha.diaSemana(Fecha.general)
+			if (!self.obj.length) {
+				let table = 
+				$('<table>', {
+					id : $(this).attr('id'),
+					text : self.id
+				}).appendTo(contenedor);
 
-		for (let h=1; h <= HORARIOS.length ;h++ ){
-			let hora = 'h'+diaSemana+h;
-			let estado = horario.activo[hora];
-			let $hora = $('.editando #tr'+h+' td');
-			let clase = estado == 1 ?'activa':'inactiva';
-			if($('#main #'+Fecha.id+' .hora.activa').last().data('hora')==h) clase= 'inactiva';
-			$hora.addClass(clase);
-		}
-		_ordenar(function(){
+				$(this).find('.hora').not('.disabled')
+				.each( function( index , value ){
+					$('<tr>' , { 
+						id : 'tr' + HORARIOS[self.diaSemana][index]
+					}).append($('<td>' , {
+						'class' : 'hora'
+					}).append($('<label>' , {
+						'id' : 'lbl' + index , 
+						'class'  : 'label' , 
+					}).append($('<input>' , {
+						type  : 'radio' , 
+						name : 'hora[]' ,
+						id : index , 
+					})).append($('<span>' , {
+						'class' : 'blHoras' , 
+						text : HORARIOS[self.diaSemana][index] + 'h'
+					})))).appendTo(table)
+				})	
+				 //_ordenar($('#crearCita #'+$(this).attr('id').length));			
+			}
+		})
+
+
+		_ordenar(function(self){
 			$('#crearCita .editando').removeClass('editando')
 			typeof callback == "function" && callback();
 			//fin
 		});
-
 
 		function _ordenar(callback){
 			var $tabla = $('#crearCita .editando');
@@ -484,9 +504,10 @@ var crearCita ={
 			}
 			typeof callback == "function" && callback();
 		}
-		*/
+
 	},
 	pintar: function(){
+		/*
 		$('#crearCita #'+Fecha.id+' .ocupado').removeClass('ocupado')
 
 		var tiempoServicios = _tiempoServicios();
@@ -549,6 +570,7 @@ var crearCita ={
 			return  (fechaEsMayor||last==0);
 
 		}
+		*/
 	},
 	refresh:function(){
 	/*	$('#crearCita table.activa')
@@ -934,6 +956,7 @@ var horario = {
 }
 var main ={
 	sincronizar: function (dir,callback){
+
 		var idFecha=Fecha.number(Fecha.general);
 		var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 		
@@ -1850,15 +1873,14 @@ function loadHide(){
 }
 
 $(function(){
-	$('.tabcontrol').tabcontrol();
-	main.colorCitas();
-	var 	cambioFamilia=false;
-	var agendas = $('#main .cabecera').data('agendas');
-	var widht = $('#main').css('widht')/agendas;
-	var editarObs = "";
-	$("[name='desplazarFecha']").click(function(e){
+	$('body').on('click',"[name='desplazarFecha']",function(e){
 		if(!$(this).data('disabled'))sincronizar(null,$(this).data('action'));
 	})
+	$('.tabcontrol').tabcontrol();
+	main.colorCitas();
+	var agendas_width = $('#main .cabecera').data('agendas');
+	var widht = $('#main').css('widht')/agendas_width	;
+	var editarObs = "";
 	$('html')
 		.on('click','.close',function(e){popup.close()})
 		.on('change','input',function(){$(this).removeClass('input-error')})
@@ -2041,7 +2063,7 @@ $(function(){
 	$('#servicios')
 		.on('click','a',function(){servicio.mostrar($(this).attr('id'),$('#servicios'))})
 		.on('change','.lstServicios ',function(){servicio.mostrar($(this).val())})
-		.on('change','#familia',function(){cambioFamilia = true})
+		.on('change','#familia',function(){familias.change = true})
 		.on( "click", "[name*='editar']", function(e){servicio.poppup($(this).attr('value'))})
 		.find('option:first-child').attr('selected','selected');
 		

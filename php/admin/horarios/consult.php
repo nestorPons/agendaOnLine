@@ -25,6 +25,8 @@ function horarios( $return_row = false ){
 						$horas_array[$d][] = date('H:i', $h);
 					} 
 				}
+			}else{
+				$horas_array[$d][] = null;
 			}
 		}			
 	}
