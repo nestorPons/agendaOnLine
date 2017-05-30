@@ -80,19 +80,30 @@ jQuery.serializeForm = function(form){
 var Fecha = {
 	actual: fechaActual(),
 	general: formatoFecha(fechaActual(),'sql'),
+	id:  formatoFecha(fechaActual(),'number'), //inicializo con fecha actual pero es un id.
 	sql: function(fecha){return formatoFecha(fecha,'sql')},
 	print: function(fecha){return formatoFecha(fecha,'print')},
 	md: function(fecha){return formatoFecha(fecha,'md')},
 	number: function(fecha){return formatoFecha(fecha,'number')},
 	calcular: function(dia,fecha){return calcularFecha(dia,fecha)},
 	diaSemana: function(fecha){
-	    var fecha = this.sql(fecha);
-		var mdy = fecha.split('-')
+	    var fecha = Fecha.sql(fecha);
+		var mdy = fecha.split('-');
 		fecha = new Date(mdy[0], mdy[1]-1, mdy[2]);
 		return fecha.getDay();
 	},
-	restar: function(f1,f2){return restaFechas(f1,f2)},
-	id: function(){return new Date('Ymj')},
+	restar: function (f1,f2){
+		var f2  = $.isEmpty(f2)?this.actual:this.sql(f2);
+		var f1 = this.sql(f1);
+	
+		var aFecha1 = f1.split('-');
+		var aFecha2 = f2.split('-');
+		var fFecha1 = Date.UTC(aFecha1[0],aFecha1[1]-1,aFecha1[2]);
+		var fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha2[2]);
+		var dif = fFecha1 - fFecha2 	;
+
+		return Math.floor(dif / (1000 * 60 * 60 * 24));
+	},
 }
 var btnLoad = {
 	show: function($this){
@@ -387,26 +398,27 @@ var notify = {
 	},
 }
 function formatoFecha (fechaTxt,formatOut){
-	var fechaTxt = (fechaTxt!='undefined')?fechaTxt.toString():Fecha.general;
 
-	if (fechaTxt.indexOf("/")>0){
-		var mdy = fechaTxt.split('/');
+	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
+
+	if (fecha.indexOf("/")>0){
+		var mdy = fecha.split('/');
 		var d = ("0" + mdy[0]).slice (-2);
 		var m = ("0" + mdy[1]).slice (-2);
 		var a = mdy[2];
-	}else if(fechaTxt.indexOf("-")>0){
-		var mdy = fechaTxt.split('-');
+	}else if(fecha.indexOf("-")>0){
+		var mdy = fecha.split('-');
 		var d = ("0" + mdy[2]).slice (-2);
 		var m = ("0" + mdy[1]).slice (-2);
 		var a = mdy[0];
-	}else if(fechaTxt.length==4){
-		var d = fechaTxt.substr(2);
-		var m = fechaTxt.substr(0,2);
+	}else if(fecha.length==4){
+		var d = fecha.substr(2);
+		var m = fecha.substr(0,2);
 		var a =  fechaActual('y');
-	}else if(fechaTxt.length==8){
-		var d = fechaTxt.substr(6,2);
-		var m = fechaTxt.substr(4,2);
-		var a =  fechaTxt.substr(0,4);
+	}else if(fecha.length==8){
+		var d = fecha.substr(6,2);
+		var m = fecha.substr(4,2);
+		var a =  fecha.substr(0,4);
 	}
 	switch(formatOut) {
 		case 'sql':
@@ -553,15 +565,6 @@ function resetBtnLoad(callback){
 	});
 	typeof callback == "function" && callback();
 }
-function restaFechas(f1,f2){
- var aFecha1 = f1.split('-');
- var aFecha2 = f2.split('-');
- var fFecha1 = Date.UTC(aFecha1[0],aFecha1[1]-1,aFecha1[2]);
- var fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha2[2]);
- var dif = fFecha2 - fFecha1 	;
- var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
- return dias;
- }
 function normalize(string){
 	var str = string.split(" ").join("_");
 	if ($.isEmpty(str))return false;

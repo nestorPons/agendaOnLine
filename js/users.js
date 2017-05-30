@@ -259,7 +259,7 @@ var historial = {
 	eliminar: function($this){			
 		var id = $this.attr('id')
 		var $this = $this.parent();
-		var fecha =  formatoFecha($this.data('fecha'),'number');
+		var fecha =  Fecha.number($this.data('fecha'));
 		var hora = $this.data('hora');
 		var idSer = $this.attr('class');
 		var $rows = $("#historial #tableHistory ."+idSer);
@@ -422,7 +422,7 @@ function sincronizar(fecha,dias,callback){
 	else
 		dias = 0;
 
-	if(Fecha.restar(Fecha.actual,fecha)<0) return false;
+	if(Fecha.restar(fecha)<0) return false;
 	
 	Fecha.general = Fecha.sql(fecha);	
 	Fecha.id = Fecha.number(Fecha.general);

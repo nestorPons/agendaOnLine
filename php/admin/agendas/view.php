@@ -26,7 +26,7 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 							$array = explode(":",$hora);
 							$claseHora=$array[1]=='00'?"num resaltado":"num";
 							?>
-							<tr class="h<?php echo $h . " hora "?>" data-hora=<?php echo $h?>>
+							<tr id='<?php echo $h?>' class="hora h<?php echo $h?>" data-hour='<?php echo $hora?>'>
 								<td class="<?php echo $claseHora ?> "><?php echo $hora?> </td>
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){

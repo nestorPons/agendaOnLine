@@ -20,12 +20,11 @@ function sincronizar(date,dias,callback){
 
 	colorearMenuDiasSemana();
 
-
 	//sincronizo horarios para hacer consulta en crear Cita
-	main.sincronizar(dias,function(){	
-		crearCita.sincronizar(dias);
-		typeof callback == "function" && callback();
-	});
+	main.sincronizar(dias);	
+	crearCita.sincronizar(dias);
+	typeof callback == "function" && callback();
+	
 
 	$('.datepicker').each(function(){
 		$(this)
@@ -346,12 +345,10 @@ var crearCita ={
 	sincronizar: function(dias,callback){
 		$('#crearCita #tablas table').removeClass('activa');
 
-		if(!$('#crearCita #'+Fecha.number(Fecha.general)).length){
-			crearCita.crear(crearCita.pintar);
-		}else{
-			crearCita.pintar();
-		}
-
+		if(!$('#crearCita #'+Fecha.number(Fecha.general)).length)
+			crearCita.crear()//crearCita.pintar);
+		
+		//crearCita.pintar();
 		$('#crearCita #'+Fecha.id).addClass('activa');
 	},
 	servicios:function(callback){
@@ -401,7 +398,7 @@ var crearCita ={
 			$('#dlgGuardar')
 				.find('#lblHora').html(hora).end()
 				.find('#lblFecha')
-					.html(formatoFecha(Fecha.general,'print')).end()
+					.html(Fecha.print(Fecha.general)).end()
 				.find('#lblCliente').html($('#crearCita #cliente').val()).end()
 				.find('#lblSer').html(str_servicios)
 			dialog.open('#dlgGuardar',crearCita.guardar)
@@ -442,9 +439,8 @@ var crearCita ={
 		if (!$('#crearCita .datepicker').length) cargarDatepicker();
 
 		var contenedor = $('#crearCita #tablas');
-		var url = urlPhp+'crearCita/horasCns.php';
 		
-		$('#main .dia').each(function(index , value){
+		$('#main .dia').each(function(index , table){
 			var self = {
 				obj : $('#crearCita #'+$(this).attr('id')),
 				id : $(this).attr('id'),
@@ -455,88 +451,93 @@ var crearCita ={
 				let table = 
 				$('<table>', {
 					id : $(this).attr('id'),
-					text : self.id
 				}).appendTo(contenedor);
 
-				$(this).find('.hora').not('.disabled')
-				.each( function( index , value ){
+				$(this).find('.hora') //.not('.disabled')
+				.each( function( index , $this ){
 					$('<tr>' , { 
-						id : 'tr' + HORARIOS[self.diaSemana][index]
+						id : 'tr' + $this.id //HORARIOS[self.diaSemana][index]
 					}).append($('<td>' , {
 						'class' : 'hora'
 					}).append($('<label>' , {
-						'id' : 'lbl' + index , 
+						'id' : 'lbl' + $this.id , 
 						'class'  : 'label' , 
 					}).append($('<input>' , {
 						type  : 'radio' , 
 						name : 'hora[]' ,
-						id : index , 
+						id : $this.id , 
 					})).append($('<span>' , {
 						'class' : 'blHoras' , 
-						text : HORARIOS[self.diaSemana][index] + 'h'
+						text : $(this).data('hour') + 'h'
 					})))).appendTo(table)
 				})	
-				 //_ordenar($('#crearCita #'+$(this).attr('id').length));			
+				 _ordenar(table);
+				 crearCita.pintar($(this).attr('id')); //TODO: hay que quitarlo de aqui y mandarlo a la visuañizacion de las horas
+	
 			}
 		})
+		//fin
 
-
-		_ordenar(function(self){
-			$('#crearCita .editando').removeClass('editando')
-			typeof callback == "function" && callback();
-			//fin
-		});
-
-		function _ordenar(callback){
-			var $tabla = $('#crearCita .editando');
-			var tr = $tabla.find('.activa').parent();
-			var filas = tr.length
+		function _ordenar($table, callback){
+			var tr = $table.find('tr');
+			var filas = tr.length;
 			var filasM = Math.round((filas/2));
 			var n= 0;
-			for (let f=filasM;f<=filas;f++){
-				tr
-					.eq(f)
-						.detach()
-						.find('td')
-							.addClass('secondColumn')
-							.appendTo(tr.eq(n));
-			n++;
+			for ( let f = filasM; f <= filas; f++ ){
+				tr.eq(f)
+					.detach()
+					.find('td')
+						.addClass('secondColumn')
+						.appendTo(tr.eq(n));
+				n++;
 			}
 			typeof callback == "function" && callback();
 		}
 
 	},
-	pintar: function(){
-		/*
-		$('#crearCita #'+Fecha.id+' .ocupado').removeClass('ocupado')
-
+	pintar: function(id_table){
+		var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
 		var tiempoServicios = _tiempoServicios();
-
-		var a = $('#crearCita input[name="agenda[]"]:checked').val()||1;
-		var tabla = $('#crearCita  .editando')
 		var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
-		var last = $('#main #'+Fecha.id+' .hora.activa').last().data('hora')||0;
-		var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
+		
+			$(this).find('.ocupado').removeClass('ocupado')
 
-		for(let i =  last; i >=0 ; i--){
-			if(diaFestivo||_esPasada(i)){
-				_colorear(i);
-			}else{
-				if(_ocupado(i)){
-					_colorear(i);
-					for(let l = 0; l <= ts; l++){
-						_colorear(i-l);
-					}
-				}
-			}
+			var horas = $('#main #'+ id_table+' .hora').reverse();		
+			var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS);
+
+echo ( '======================== ' + id_table )
+echo (' es pasada = ' + _esPasada(id_table , hora.id) )
+			
+			horas.each(function( index , hora ){
+//echo (' pasada =' + _esPasada(id_table, $(this)));
+//echo ( 'ocupado =' + _ocupado( $(this) ))
+
+			if(diaFestivo || _esPasada(id_table , hora.id )){ //$(this).data('hour')
+	
+				_colorear(id_table , hora.id);
+			}	
+					
+/*
+					}else{
+						if(_ocupado( $(this) )){
+							_colorear(id_table, hora.id);
+							// for(let l = 0; l <= ts; l++)
+								// _colorear(id_table, horas[index-l].attr('id'));
+						}
+					
+*/
+			})
+
+		function _ocupado($this){
+echo (' celda =  ' + $this.find('.celda table').length != 0)
+echo ( ' disabled  = ' + $this.hasClass('disabled'))
+echo ( 'class ocupado  = ' + $this.find('label').hasClass('ocupado') )
+			return $this.find('table').hasClass('ocupado')
 		}
-
-		function _ocupado(hora){
-			var celda =  $('#main #'+Fecha.id+' .h'+hora+' .agenda'+a+ ' table');
-			return celda.length != 0 ;
+		function _fueraHorario($this){
+			return $this.hasClass('disabled') 
 		}
-
-		function _tiempoServicios(hora){
+		function _tiempoServicios(){
 			var ts = 0;
 			$('#crearCita [name="servicios[]"]:checked').each(function() {
 				ts += $(this).data('time');
@@ -545,32 +546,51 @@ var crearCita ={
 			return ts;
 		}
 
-		function _colorear(hora){
-			$('#crearCita #'+Fecha.id+' #lbl'+hora).addClass('ocupado');
+		function _colorear(id , hora){
+			$('#crearCita #'+ id + ' #lbl' + hora).addClass('ocupado');
 		}
 
-		function _esPasada(hora){
-			//sumo los minutos a la fecha actual
+		function _esPasada(table_id, hora){
+			var diff_fechas = Fecha.restar(table_id); 
+			//sumo los minutos a la fecha actua
+			var _return = false;
+			if (diff_fechas<0){
+				//fecha dia es mayor 
+			
+				_return = true;
+				/*
+				var dia_semana = Fecha.diaSemana(table_id);
+				var minTime = $('#minTime').val()*60000;
+				var milisegundos = new Date().getTime();
 
-			var minTime = $('#minTime').val()*60000;
-			var milisegundos = new Date().getTime();
+				var fecha = new Date(milisegundos +minTime);
 
-			var fecha = new Date(milisegundos +minTime);
+				var h = HORARIOS[dia_semana][hora];
+				if (h!=null){
+					var day = parseInt(id.substr(6,2));
+					var hour = parseInt(h.substr(0,2));
+					var min = parseInt(h.substr(3,5));
+					var month = parseInt(table_id.substr(4,2));
+					var year = parseInt(table_id.substr(0,4));
 
-			var h = HORARIOS[hora];
-			var day = parseInt(Fecha.id.substr(6,2));
-			var hour = parseInt(h.substr(0,2));
-			var min = parseInt(h.substr(3,5));
-			var month = parseInt(Fecha.id.substr(4,2));
-			var year = parseInt(Fecha.id.substr(0,4));
+					var hora = new Date(year,month-1,day,hour,min);
+					 _return = Date.parse(hora)<=Date.parse(fecha);
+				}
+				*/
+			}else if(diff_fechas == 0 ){
+				var a = new Date(hora*1000);
+				var b = new Date();
+				var c = (a<b);
+				console.log(c)
+				//var d = c.getHours() + ' : ' + c.getMinutes();		
+				//La diferencia se da en milisegundos así que debes dividir entre 1000
+		//		var c = ((a-b)/1000);
+				
+			}
 
-			var hora = new Date(year,month-1,day,hour,min);
-			var fechaEsMayor = Date.parse(hora)<=Date.parse(fecha);
-
-			return  (fechaEsMayor||last==0);
+			return  (_return);
 
 		}
-		*/
 	},
 	refresh:function(){
 	/*	$('#crearCita table.activa')
@@ -822,7 +842,7 @@ var festivo = {
 						<tr id="'+r.id+'">\
 							<td><a name="eliminar[]"  class= "icon-cancel c5 x6"></a></td>\
 							<td  class="aling-left"><span name="nombre[]">'+nombre+'</span></td>\
-							<td> <span  name="mes[]" >'+formatoFecha(fecha,'print')+'</span></td>\
+							<td> <span  name="mes[]" >'+Fecha.print(fecha)+'</span></td>\
 						</tr>\
 					').end()
 						.find('#frmNuevo')[0].reset();
@@ -1935,7 +1955,6 @@ $(function(){
 		.on('click','[name="hora[]"]',function(){crearCita.dialog()})
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
 		.on('blur','#cliente',function(){
-			sincronizar(null,1);
 			if($(this).val()!="")crearCita.valName();
 		})
 		.on("swipeleft",'.tablas');
