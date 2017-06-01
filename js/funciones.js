@@ -463,7 +463,7 @@ function cargarDatepicker(callback){
 	var format = $dp.data('format')||"dd/mm/yy";
 	var fesOn = $dp.data('festivos-show');
 	var minDate = $dp.data('min-date');
-	var defaultDate =formatoFecha(Fecha.general,'print')|| new Date();
+
 	$.datepicker.regional['es'] = {
 		closeText: 'Cerrar',
 		prevText: '<Ant',
@@ -498,7 +498,7 @@ function cargarDatepicker(callback){
 		onClose: function(){
 			this.blur();
 		},
-		defaultDate: defaultDate,
+		defaultDate: Fecha.print(Fecha.general)|| new Date(),
 		showAnim: 'blind',
 	});
 	$dp.each(function(){$(this).val(formatoFecha(Fecha.general,'print'))})

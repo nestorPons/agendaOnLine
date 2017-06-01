@@ -346,7 +346,7 @@ var crearCita ={
 		$('#crearCita #tablas table').removeClass('activa');
 
 		if(!$('#crearCita #'+Fecha.number(Fecha.general)).length)
-			crearCita.crear()//crearCita.pintar);
+			crearCita.horas.iniciar()//crearCita.pintar);
 		
 		//crearCita.pintar();
 		$('#crearCita #'+Fecha.id).addClass('activa');
@@ -434,163 +434,137 @@ var crearCita ={
 		}
 
 	},
-	crear: function (callback){
-		
-		if (!$('#crearCita .datepicker').length) cargarDatepicker();
-
-		var contenedor = $('#crearCita #tablas');
-		
-		$('#main .dia').each(function(index , table){
-			var self = {
-				obj : $('#crearCita #'+$(this).attr('id')),
-				id : $(this).attr('id'),
-				diaSemana : Fecha.diaSemana($(this).attr('id'))
-			}
-
-			if (!self.obj.length) {
-				let table = 
-				$('<table>', {
+	horas: {
+		iniciar: function(){
+			if (!$('#crearCita .datepicker').length) cargarDatepicker();
+			$('#main .dia').each(function(index , table){
+				var self = {
+					obj : $('#crearCita #'+$(this).attr('id')),
 					id : $(this).attr('id'),
-				}).appendTo(contenedor);
-
-				$(this).find('.hora') //.not('.disabled')
-				.each( function( index , $this ){
-					$('<tr>' , { 
-						id : 'tr' + $this.id //HORARIOS[self.diaSemana][index]
-					}).append($('<td>' , {
-						'class' : 'hora'
-					}).append($('<label>' , {
-						'id' : 'lbl' + $this.id , 
-						'class'  : 'label' , 
-					}).append($('<input>' , {
-						type  : 'radio' , 
-						name : 'hora[]' ,
-						id : $this.id , 
-					})).append($('<span>' , {
-						'class' : 'blHoras' , 
-						text : $(this).data('hour') + 'h'
-					})))).appendTo(table)
-				})	
-				 _ordenar(table);
-				 crearCita.pintar($(this).attr('id')); //TODO: hay que quitarlo de aqui y mandarlo a la visuañizacion de las horas
-	
-			}
-		})
-		//fin
-
-		function _ordenar($table, callback){
-			var tr = $table.find('tr');
-			var filas = tr.length;
-			var filasM = Math.round((filas/2));
-			var n= 0;
-			for ( let f = filasM; f <= filas; f++ ){
-				tr.eq(f)
-					.detach()
-					.find('td')
-						.addClass('secondColumn')
-						.appendTo(tr.eq(n));
-				n++;
-			}
-			typeof callback == "function" && callback();
-		}
-
-	},
-	pintar: function(id_table){
-		var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
-		var tiempoServicios = _tiempoServicios();
-		var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
-		
-			$(this).find('.ocupado').removeClass('ocupado')
-
-			var horas = $('#main #'+ id_table+' .hora').reverse();		
-			var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS);
-
-echo ( '======================== ' + id_table )
-echo (' es pasada = ' + _esPasada(id_table , hora.id) )
-			
-			horas.each(function( index , hora ){
-//echo (' pasada =' + _esPasada(id_table, $(this)));
-//echo ( 'ocupado =' + _ocupado( $(this) ))
-
-			if(diaFestivo || _esPasada(id_table , hora.id )){ //$(this).data('hour')
-	
-				_colorear(id_table , hora.id);
-			}	
-					
-/*
-					}else{
-						if(_ocupado( $(this) )){
-							_colorear(id_table, hora.id);
-							// for(let l = 0; l <= ts; l++)
-								// _colorear(id_table, horas[index-l].attr('id'));
-						}
-					
-*/
-			})
-
-		function _ocupado($this){
-echo (' celda =  ' + $this.find('.celda table').length != 0)
-echo ( ' disabled  = ' + $this.hasClass('disabled'))
-echo ( 'class ocupado  = ' + $this.find('label').hasClass('ocupado') )
-			return $this.find('table').hasClass('ocupado')
-		}
-		function _fueraHorario($this){
-			return $this.hasClass('disabled') 
-		}
-		function _tiempoServicios(){
-			var ts = 0;
-			$('#crearCita [name="servicios[]"]:checked').each(function() {
-				ts += $(this).data('time');
-			})
-			$('#tSer').html(ts);
-			return ts;
-		}
-
-		function _colorear(id , hora){
-			$('#crearCita #'+ id + ' #lbl' + hora).addClass('ocupado');
-		}
-
-		function _esPasada(table_id, hora){
-			var diff_fechas = Fecha.restar(table_id); 
-			//sumo los minutos a la fecha actua
-			var _return = false;
-			if (diff_fechas<0){
-				//fecha dia es mayor 
-			
-				_return = true;
-				/*
-				var dia_semana = Fecha.diaSemana(table_id);
-				var minTime = $('#minTime').val()*60000;
-				var milisegundos = new Date().getTime();
-
-				var fecha = new Date(milisegundos +minTime);
-
-				var h = HORARIOS[dia_semana][hora];
-				if (h!=null){
-					var day = parseInt(id.substr(6,2));
-					var hour = parseInt(h.substr(0,2));
-					var min = parseInt(h.substr(3,5));
-					var month = parseInt(table_id.substr(4,2));
-					var year = parseInt(table_id.substr(0,4));
-
-					var hora = new Date(year,month-1,day,hour,min);
-					 _return = Date.parse(hora)<=Date.parse(fecha);
+					diaSemana : Fecha.diaSemana($(this).attr('id'))
 				}
-				*/
-			}else if(diff_fechas == 0 ){
-				var a = new Date(hora*1000);
-				var b = new Date();
-				var c = (a<b);
-				console.log(c)
-				//var d = c.getHours() + ' : ' + c.getMinutes();		
-				//La diferencia se da en milisegundos así que debes dividir entre 1000
-		//		var c = ((a-b)/1000);
-				
+				if (Fecha.restar(self.id)>=0 && !self.obj.length) 
+					crearCita.horas.crear($(this));
+			})
+		},
+		
+		crear: function ($this, callback){
+			var contenedor = $('#crearCita #tablas');
+			
+			let table = 
+			$('<table>', {
+				id : $this.attr('id'),
+			}).appendTo(contenedor);
+
+			$this.find('.hora') 
+			.each( function( ){
+				$('<tr>' , { 
+					id : 'tr' + $(this).attr('id') 
+				}).append($('<td>' , {
+					'class' : 'hora'
+				}).append($('<label>' , {
+					'id' : 'lbl' + $(this).attr('id') , 
+					'class'  : 'label' , 
+				}).append($('<input>' , {
+					type  : 'radio' , 
+					name : 'hora[]' ,
+					id : $(this).attr('id') , 
+				})).append($('<span>' , {
+					'class' : 'blHoras' , 
+					text : $(this).data('hour') + 'h'
+				})))).appendTo(table)
+			})	
+			 _ordenar(table);
+			 crearCita.horas.pintar($this.attr('id')); //TODO: hay que quitarlo de aqui y mandarlo a la visuañizacion de las horas
+			//fin
+			
+			function _ordenar($table, callback){
+				var tr = $table.find('tr');
+				var filas = tr.length;
+				var filasM = Math.round((filas/2));
+				var n= 0;
+				for ( let f = filasM; f <= filas; f++ ){
+					tr.eq(f)
+						.detach()
+						.find('td')
+							.addClass('secondColumn')
+							.appendTo(tr.eq(n));
+					n++;
+				}
+				typeof callback == "function" && callback();
 			}
 
-			return  (_return);
+		},
+		
+		pintar: function(id_table){
+			var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
+			var tiempoServicios = _tiempoServicios();
+			var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
+			
+				$(this).find('.ocupado').removeClass('ocupado')
 
-		}
+				var horas = $('#main #'+ id_table+' .hora').reverse();		
+				var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS);
+				
+				horas.each(function( index , hora ){
+
+				if(diaFestivo || _esPasada( hora.id )){ //$(this).data('hour')
+					_colorear( hora.id);
+				}else{
+					if(_ocupado(  hora.id )){
+	echo ('ocupado = true')
+						/*
+						_colorear(id_table, hora.id);
+						 for(let l = 0; l <= ts; l++)
+							 _colorear(id_table, horas[index-l].attr('id'));
+						 */
+					}
+				}
+			})
+
+			function _ocupado( hora){
+				return $('#main #'+id_table + ' #'+hora +' .agenda'+agenda + ' table').height >0 ;
+			}
+			function _fueraHorario($this){
+				return $this.hasClass('disabled') 
+			}
+			function _tiempoServicios(){
+				var ts = 0;
+				$('#crearCita [name="servicios[]"]:checked').each(function() {
+					ts += $(this).data('time');
+				})
+				$('#tSer').html(ts);
+				return ts;
+			}
+
+			function _colorear( hora){
+				$('#crearCita #'+ id_table + ' #lbl' + hora).addClass('ocupado');
+			}
+
+			function _esPasada(table_id, hora){
+				var diff_fechas = Fecha.restar(table_id); 
+				//sumo los minutos a la fecha actua
+				var _return = false;
+				
+				if (diff_fechas<0){
+
+					_return = true;
+					
+				}else if(diff_fechas == 0 ){
+					
+					var minTime = document.minTime * 60000;
+					var a = new Date(hora*1000);
+					var milisegundos = new Date().getTime();
+					var f = new Date(milisegundos + minTime);
+
+					_return =  (a<f);
+					
+				}
+
+				return  _return;
+
+			}
+		},
 	},
 	refresh:function(){
 	/*	$('#crearCita table.activa')
