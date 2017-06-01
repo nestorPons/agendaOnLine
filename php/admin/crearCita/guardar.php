@@ -46,6 +46,7 @@ for ($i = 0; $i < count($servi); $i++) {
 		$h++;
 	}
 }
+
 if ($ocupado<2){
 	$data['ocupado']=false;
 	$sql= "INSERT INTO data (Agenda,IdUsuario,Fecha,Obs,UsuarioCogeCita) VALUE ($agenda,$userId,'$fecha','$nota',".$_SESSION['id_usuario'].")";
@@ -61,13 +62,14 @@ if ($ocupado<2){
 			$sql="";
 			for ($a = 1; $a <= ($unidades_t); $a++) {
 				
-				$sql = 'INSERT INTO cita (IdCita, Hora, Servicio) VALUE ('.$idServicio.','.$hora.','. $servi[$i].')';
+				$sql = 'INSERT INTO cita (IdCita, Hora, Servicio) VALUE ('.$idServicio.',FROM_UNIXTIME("' . $hora . '"),'. $servi[$i].')';
 				if(!mysqli_query($conexion,$sql)){
 					$data['success']=false;
 					 mnsExit($sql);
 					 break;
 				}
-				$hora++;
+
+				$hora = strtotime ( '+15 minute' ,  $hora ) ;
 
 			}
 		}

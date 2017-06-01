@@ -455,9 +455,10 @@ var crearCita ={
 			$('<table>', {
 				id : $this.attr('id'),
 			}).appendTo(contenedor);
-
+			
 			$this.find('.hora') 
 			.each( function( ){
+				var cls_fuera_horario = $(this).find('.celda').hasClass('fuera_horario')?'fuera_horario':'';
 				$('<tr>' , { 
 					id : 'tr' + $(this).attr('id') 
 				}).append($('<td>' , {
@@ -468,10 +469,11 @@ var crearCita ={
 				}).append($('<input>' , {
 					type  : 'radio' , 
 					name : 'hora[]' ,
+					value :  $(this).attr('id') , 
 					id : $(this).attr('id') , 
 				})).append($('<span>' , {
-					'class' : 'blHoras' , 
-					text : $(this).data('hour') + 'h'
+					'class' : 'blHoras ' + cls_fuera_horario  , 
+					text : $(this).data('hour') + 'h ' 
 				})))).appendTo(table)
 			})	
 			 _ordenar(table);
@@ -497,7 +499,7 @@ var crearCita ={
 		},
 		
 		pintar: function(id_table){
-
+			
 			var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
 			var tiempoServicios = _tiempoServicios();
 			var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
@@ -509,8 +511,8 @@ var crearCita ={
 
 				
 			horas.each(function( index , hora ){
-				
-				if(diaFestivo || _esPasada( hora.id ) || ocupado > 0){ //$(this).data('hour')
+				ocupado = $(this).find('.celda').hasClass('fuera_horario')?ts:ocupado;
+				if(diaFestivo || _esPasada( hora.id ) || ocupado > 0){
 					_colorear( hora.id);
 					ocupado--;
 				}else{
