@@ -1959,6 +1959,16 @@ $(function(){
 			});
 
 	$('#main')
+		.on('click','#mainLstDiasSemana a',function(){
+			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
+			var diaB = parseInt($(this).data('value'));
+			sincronizar(null,diaB-diaA);
+		})
+		.on('change','#lstDiasSemana',function(){
+			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
+			var diaB = parseInt($(this).val());
+			sincronizar(null,diaB-diaA);
+		})
 		.on('click','.icon-attention',function(e){main.citasSup($(this));e.stopPropagation()})
 		.on('click','.icon-plus',function(){
 				hora =$(this).parents('tr').attr('class').substr(1,2);
@@ -2066,17 +2076,7 @@ $(function(){
 		.on( "click", "[name*='editar']", function(e){servicio.poppup($(this).attr('value'))})
 		.find('option:first-child').attr('selected','selected');
 		
-	$('.diassemana')
-		.on('click','#mainLstDiasSemana a',function(){
-			var diaA =  parseInt(diaDeLaSemana(Fecha.general));
-			var diaB = parseInt($(this).data('value'));
-			sincronizar(null,diaB-diaA);
-		})
-		.on('change','#lstDiasSemana',function(){
-			var diaA =  parseInt(diaDeLaSemana(Fecha.general));
-			var diaB = parseInt($(this).val());
-			sincronizar(null,diaB-diaA);
-		})
+
 
 
 	$('#dialogs')
