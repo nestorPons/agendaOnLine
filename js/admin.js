@@ -497,33 +497,35 @@ var crearCita ={
 		},
 		
 		pintar: function(id_table){
+
 			var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
 			var tiempoServicios = _tiempoServicios();
 			var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
-			
-				$(this).find('.ocupado').removeClass('ocupado')
+			var ocupado = ts;
+			var horas = $('#main #'+ id_table+' .hora').reverse();		
+			var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS);
 
-				var horas = $('#main #'+ id_table+' .hora').reverse();		
-				var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS);
+			$(this).find('.ocupado').removeClass('ocupado')
+
 				
-				horas.each(function( index , hora ){
-
-				if(diaFestivo || _esPasada( hora.id )){ //$(this).data('hour')
+			horas.each(function( index , hora ){
+				
+				if(diaFestivo || _esPasada( hora.id ) || ocupado > 0){ //$(this).data('hour')
 					_colorear( hora.id);
+					ocupado--;
 				}else{
+
 					if(_ocupado(  hora.id )){
-	echo ('ocupado = true')
-						/*
-						_colorear(id_table, hora.id);
-						 for(let l = 0; l <= ts; l++)
-							 _colorear(id_table, horas[index-l].attr('id'));
-						 */
+
+						_colorear( hora.id );
+						ocupado = ts ; 
+						 
 					}
 				}
 			})
 
-			function _ocupado( hora){
-				return $('#main #'+id_table + ' #'+hora +' .agenda'+agenda + ' table').height >0 ;
+			function _ocupado( hora ) {
+				return $('#main #'+id_table + ' #'+hora +' .agenda'+agenda + ' table').length >0 ;
 			}
 			function _fueraHorario($this){
 				return $this.hasClass('disabled') 
@@ -537,12 +539,14 @@ var crearCita ={
 				return ts;
 			}
 
-			function _colorear( hora){
+			function _colorear( hora ){
+
 				$('#crearCita #'+ id_table + ' #lbl' + hora).addClass('ocupado');
+
 			}
 
-			function _esPasada(table_id, hora){
-				var diff_fechas = Fecha.restar(table_id); 
+			function _esPasada( hora ){
+				var diff_fechas = Fecha.restar(id_table); 
 				//sumo los minutos a la fecha actua
 				var _return = false;
 				
@@ -563,7 +567,7 @@ var crearCita ={
 
 				return  _return;
 
-			}
+			} 
 		},
 	},
 	refresh:function(){
