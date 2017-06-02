@@ -5,8 +5,10 @@ $conexion = conexion();
 
 
 //ELIMINAR REGISTROS DE LA TABLA CONTROL CITAS USUARIOS (CITA_USERS)
-//CONSULTA DE INSERTADAS
+
 if(isset($_GET['ins'])){
+//CONSULTA DE INSERTADAS
+
 	foreach ($_GET['ins'] as $idCita){
 		//$idCita = $_GET['data'][$i];
 			
@@ -26,8 +28,8 @@ if(isset($_GET['ins'])){
 	}	
 }
 
-//CONSULTA DE ELIMINADAS
 if(isset($_GET['del'])){
+//CONSULTA DE ELIMINADAS
 	
 	foreach ($_GET['del'] as $idCita){
 		

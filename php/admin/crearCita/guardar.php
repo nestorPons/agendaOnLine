@@ -53,6 +53,7 @@ if ($ocupado<2){
 	if (mysqli_query($conexion,$sql)){
 		$idServicio = mysqli_insert_id($conexion);
 		$data['idCita'] = $idServicio ;
+		
 		for ($i = 0; $i < count($servi); $i++) {
 
 			$sql= 'SELECT A.Tiempo FROM articulos A WHERE Id  = '. $servi[$i].' LIMIT 1';
