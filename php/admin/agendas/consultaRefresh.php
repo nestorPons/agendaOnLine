@@ -14,13 +14,14 @@ if(isset($_GET['ins'])){
 		FROM cita C JOIN data D ON C.IdCita = D.IdCita 
 		INNER JOIN usuarios U ON D.IdUsuario = U.Id 
 		LEFT JOIN articulos A ON C.Servicio = A.Id 
-		WHERE D.IdCita ='.$idCita;
+		WHERE D.IdCita ='. $idCita . ' 
+		LIMIT 1 ' ;
 
 		$sql = preg_replace("/\r\n+|\r+|\n+|\t+/i", "", $sql);
 		
 		$result = mysqli_query($conexion,$sql);
-		if($data['ins'][$idCita] = mysqli_fetch_array($result,MYSQLI_NUM)) 
-			delConsult($idCita);
+		$data['ins'][$idCita] = mysqli_fetch_array($result,MYSQLI_NUM);
+		
 
 	}	
 }
@@ -30,19 +31,14 @@ if(isset($_GET['del'])){
 	
 	foreach ($_GET['del'] as $idCita){
 		
-		$sql = 'SELECT DISTINCT C.Servicio FROM del_cita C JOIN del_data D ON C.IdCita = D.IdCita WHERE D.IdCita = '.$idCita;
+		$sql = 'SELECT DISTINCT C.Servicio FROM del_cita C JOIN del_data D ON C.IdCita = D.IdCita WHERE D.IdCita = '.$idCita .' LIMIT 1;' ;
 			
 		$result = mysqli_query($conexion,$sql);
-		if ($data['del'][$idCita] = mysqli_fetch_all($result,MYSQLI_NUM))
-			delConsult($idCita);
+		$data['del'][$idCita] = mysqli_fetch_all($result,MYSQLI_NUM);
 
 	}
 }
 
-echo json_encode($data);
+mysqli_query($conexion,'TRUNCATE TABLE user_reg');
 
-function delConsult($idCita){
-	global $conexion;
-	$sql = 'DELETE FROM cita_user WHERE idCita ='.$idCita;
-	return mysqli_query($conexion,$sql);
-}
+echo json_encode($data);

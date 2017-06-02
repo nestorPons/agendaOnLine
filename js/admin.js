@@ -173,6 +173,7 @@ var menu = {
 							$(this)
 								.attr('class','icon-undo')
 								.fadeIn()
+								.css("display","inline-block")
 						})
 				});
 			break;
@@ -405,22 +406,21 @@ var crearCita ={
 		})
 	},
 	guardar: function(){
+//AKI : No consigo hacer pintar lbl cuando se añaden horas
+
 		if(crearCita.valForm()){
 			var url = urlPhp + 'crearCita/guardar.php';
 			var data = $('#crearCita #frmCrearCita').serialize()+"&fecha="+Fecha.general;
 
-			$.post(url,data,function(r,status){
-				if(r.ocupado){
+			$.post(url,data,function( rsp ){
+				if(rsp.ocupado){
 					notify.error('Ya no se puede reservar más la cita. \n Cambie la hora seleccionada.');
-				}else{
-					main.refresh();
+				}else{	
+					main.refresh(rsp.idCita , null , document.idUser );
 					mostrarCapa('main');
-					
-					notify.success('Cita guardada con exito', 'Guardado');
-					
 				}
 				dialog.close('#dlgGuardar');
-			})
+			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown){
 				echo(jqXHR);
 				echo(textStatus);
@@ -571,14 +571,6 @@ var crearCita ={
 
 			} 
 		},
-	},
-	refresh:function(){
-	/*	$('#crearCita table.activa')
-			.hide('fade',function(){
-				$(this).removeClass('activa');
-				$('#crearCita #'+Fecha.id).addClass('activa');
-			})
-	*/
 	},
 	reset: function(){
 		$('.steperCapa li').hide(function(){
@@ -963,7 +955,7 @@ var main ={
 		(diaFestivo)?$('.datepicker').addClass('c-red'):$('.datepicker').removeClass('c-red');
 
 		$('#main #'+idFecha).length>0
-			?main.refresh(false,_finCarga)
+			?main.check(false,_finCarga)
 			:main.crearDias(_finCarga);
 
 		//no lo meto en fin de carga para avanzar mas rapido
@@ -1030,7 +1022,35 @@ var main ={
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
 		
 	},
-	refresh: function(datos,callback){
+	refresh : function(arr_id_insert , arr_id_del , idUser ){
+
+		var url = "agendas/consultaRefresh.php";	
+		var arr_data = {
+			ins : arr_id_insert,
+			del : arr_id_del
+		};
+		$.getJSON(url,arr_data,function(data){ 
+			if (!$.isEmpty(data)){
+				if (!$.isEmpty(data.ins)){
+					$.each(data.ins,function(index,data){
+						main.lbl.crear(data,true);
+					})
+					notify.success('Se ha creado la cita ' + data.ins,'Guardado');
+					
+				};
+				
+				if (!$.isEmpty(data.del)){
+					$.each(data.del,function(index,data){
+				
+						main.lbl.eliminar(index,data);
+						notify.error('El cliente ' + idUser + ',<br> ha eliminado la cita ' + data.del,'Eliminada');
+					})
+				} 
+				main.colorCitas();
+			}
+		});
+	},
+	check: function(datos,callback){
 		//var idFecha = Fecha.number(Fecha.general);
 		//$('#'+idFecha).addClass('editando')
 		//var $celdas = $('.editando .celda');
@@ -1041,54 +1061,27 @@ var main ={
 			type:"get",
 			url: urlPhp+'agendas/refrescarDatos.php',
 			dataType: 'json',
-			data: {f:Fecha.general},
+			
 		})
 		.done(function(data){
 			//ASSOC
 			//id idCita status
 			
 			if(!$.isEmpty(data)){
-				var array_ins_data  = new Array();
-				var array_del_data  = new Array();
+				var arr_id_insert  = new Array();
+				var arr_id_del  = new Array();
 				$.each(data,function(i,data){
 					if (data.status == 1){
 						//ha creado cita 
-						array_ins_data.push(data.idCita);
-						
-						
+						arr_id_nset.push(data.idCita);
 					}else{
 						//ha eliminado la cita
-						array_del_data.push(data.idCita);
-						('eliminada ' + data.idCita)
+						arr_id_del.push(data.idCita);
 					}
-					
 				})
 	
-	//AKI : hay que encapsular esta parte para hacer peticion al crear la cita. o hay que hacer  func¡on que rellene la cita en la agenda
-	
-				if (!$.isEmpty(array_ins_data) || !$.isEmpty(array_del_data)){
-					var url = "agendas/consultaRefresh.php";	
-					var data = {
-						ins : array_ins_data,
-						del : array_del_data
-					};
-					$.getJSON(url,data,function(data){ 
-						
-						if (!$.isEmpty(data.ins)){
-							$.each(data.ins,function(index,data){
-								main.lbl.crear(data,true);
-							})
-						};
-						
-						if (!$.isEmpty(data.del)){
-							$.each(data.del,function(index,data){
-						
-								main.lbl.eliminar(index,data);
-							})
-						} 
-						main.colorCitas();
-					});
-				} 				
+				if (!$.isEmpty(arr_id_insert) || !$.isEmpty(arr_id_del))
+					main.refresh( arr_id_insert , arr_id_del , data.idUser ); 
 
 			}
 			typeof callback == "function" && callback();

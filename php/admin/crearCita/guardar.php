@@ -37,12 +37,12 @@ for ($i = 0; $i < count($servi); $i++) {
 		$sql="SELECT D.IdCita
 		FROM cita C
 		JOIN data D ON C.IdCita = D.IdCita
-		WHERE D.Fecha = '$fecha' AND C.Hora =$h AND D.Agenda = $agenda;" ;
+		WHERE D.Fecha = '$fecha' AND C.Hora =$h AND D.Agenda = $agenda LIMIT 1;" ;
 
 		$result = mysqli_query($conexion,$sql);
-		if(mysqli_num_rows($result)!=0){
+		if(mysqli_num_rows($result)!=0)
 			$ocupado++;
-		}
+
 		$h++;
 	}
 }
@@ -52,6 +52,7 @@ if ($ocupado<2){
 	$sql= "INSERT INTO data (Agenda,IdUsuario,Fecha,Obs,UsuarioCogeCita) VALUE ($agenda,$userId,'$fecha','$nota',".$_SESSION['id_usuario'].")";
 	if (mysqli_query($conexion,$sql)){
 		$idServicio = mysqli_insert_id($conexion);
+		$data['idCita'] = $idServicio ;
 		for ($i = 0; $i < count($servi); $i++) {
 
 			$sql= 'SELECT A.Tiempo FROM articulos A WHERE Id  = '. $servi[$i].' LIMIT 1';

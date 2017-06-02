@@ -106,6 +106,7 @@ var Fecha = {
 	},
 }
 var btnLoad = {
+	status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
 	show: function($this){
 		if (btnLoad.status){
 			var frm = $this.parents('form:first');
@@ -118,8 +119,7 @@ var btnLoad = {
 		var $this = $('.btnLoad:visible');
 		var caption = $this.data('value');
 		$this.html(caption);			
-	},
-	status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
+	},	
 }
 var validar = {
 	nombre: {

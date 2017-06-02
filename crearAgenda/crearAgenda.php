@@ -69,9 +69,9 @@ function add_db($bd){
 				$sql = "INSERT INTO usuarios (Nombre,Email,Pass,Tel,Admin,dateBaja)
 				VALUE ('$nom','$email','$pass','$tel',1,'$fecha');";
 				$sql.= "INSERT INTO config (idEmpresa) VALUE ($id);";
-				$sql.= "INSERT INTO config_css () VALUES ();"
+				$sql.= "INSERT INTO config_css () VALUES ();";
 				
-				if (mysqli_multi_query($con,$sql)){return true;}else{error($sql);};
+				return mysqli_multi_query($con,$sql)??error($sql);
 				
 			}else{error($sql);}
 		}else{error("error mysqldump =>".$output);}

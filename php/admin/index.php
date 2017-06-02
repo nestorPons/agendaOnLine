@@ -34,7 +34,8 @@ include 'core.php';
 <script>
 	document.festivos = <?php echo  json_encode (festivos())?>;
 	document.horarios = <?php echo  json_encode(HORAS)?>;
-	document.minTime = <?php echo  json_encode(CONFIG['MinTime'])?>
+	document.minTime = <?php echo  json_encode(CONFIG['MinTime'])?>;
+	document.idUser = <?php echo $_SESSION['id_usuario']?>;
 </script>
 <title>Agenda onLine</title>
 
