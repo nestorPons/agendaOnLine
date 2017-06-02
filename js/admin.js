@@ -1052,9 +1052,9 @@ var main ={
 				var array_del_data  = new Array();
 				$.each(data,function(i,data){
 					if (data.status == 1){
+						//ha creado cita 
 						array_ins_data.push(data.idCita);
 						
-						//ha creado cita 
 						
 					}else{
 						//ha eliminado la cita
@@ -1063,6 +1063,9 @@ var main ={
 					}
 					
 				})
+	
+	//AKI : hay que encapsular esta parte para hacer peticion al crear la cita. o hay que hacer  func¡on que rellene la cita en la agenda
+	
 				if (!$.isEmpty(array_ins_data) || !$.isEmpty(array_del_data)){
 					var url = "agendas/consultaRefresh.php";	
 					var data = {

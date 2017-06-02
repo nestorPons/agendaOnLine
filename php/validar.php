@@ -38,7 +38,7 @@ function usuarioRegistrado(&$idUsuario,&$permisoAdministrador,&$activa){
 		header ("location:../php/admin/index.php");
 	}else{
 		$url = $activa?err('Cuenta inactiva'):"../".$empresa."/users/index.php";
-		//header ("Location: $url");//REDIRIJO A USUARIOS BLOQUEADOS
+		header ("Location: $url");//REDIRIJO A USUARIOS BLOQUEADOS
 	}
 }
 
@@ -54,8 +54,7 @@ function crearCookie($id){
 	return true;
 }
 function err($err){
-	echo $err. '->'. $_POST['pass'];
 	global $empresa;
 	include "connect/destroysession.php";
-	//header("location:../empresas/$empresa?closeSession=1&err=".$err);
+	header("location:../empresas/$empresa?closeSession=1&err=".$err);
 }
