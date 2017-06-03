@@ -366,34 +366,40 @@ var dialog = {
 	}
 }
 var notify = {
-	success: function(mns,cptn){
+	success: function(mns,cptn, keep){
+		var keepOpen = keep||false;
 		var cptn = cptn||'Guardado';
 		var mns = mns||'El registro ha sido guardado';
 		$.Notify({
 			type: 'success',
 			caption: cptn,
 			content: mns,
-			icon: 'icon-floppy'
+			icon: 'icon-floppy', 
+			keepOpen: keep,
 		})
 	},
-	error: function(mns,cptn){
+	error: function(mns,cptn,keep){
+		var keepOpen = keep||false;
 		var cptn = cptn||'Error';
 		var mns = mns||'Ha sucedido un error';
 		$.Notify({
 			type: 'alert',
 			caption: cptn,
 			content: mns,
-			icon: 'icon-cross'
+			icon: 'icon-cross',
+			keepOpen: keep,
 		})
 	},
-	alert: function(mns,cptn){
+	alert: function(mns,cptn,keep){
+		var keepOpen = keep||false;
 		var cptn = cptn||'Warning';
 		var mns = mns||'Alerta algo requiere su atencion';
 		$.Notify({
 			type: 'warning',
 			caption: cptn,
 			content: mns,
-			icon: 'icon-attention'
+			icon: 'icon-attention',
+			keepOpen: keep,
 		})
 	},
 }

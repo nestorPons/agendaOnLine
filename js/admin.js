@@ -406,7 +406,6 @@ var crearCita ={
 		})
 	},
 	guardar: function(){
-//AKI : No consigo hacer pintar lbl cuando se añaden horas
 
 		if(crearCita.valForm()){
 			var url = urlPhp + 'crearCita/guardar.php';
@@ -414,8 +413,22 @@ var crearCita ={
 
 			$.post(url,data,function( rsp ){
 				if(rsp.ocupado){
-					notify.error('Ya no se puede reservar más la cita. \n Cambie la hora seleccionada.');
+					notify.error('Ya no se puede reservar más la cita. <br> Cambie la hora seleccionada.' , ' Hora ocupada' );
 				}else{	
+				//Generar un arreglo por cada celda
+				//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
+	
+//AKI : generando el array
+					var array = $('#frmCrearCita input:checkbox:checked')
+					$.each(array,function( index , value ){
+						var time = parseInt(Math.ceil($(this).data('time')/15))||0 , 
+						datos = {};
+						
+						main.lbl.crear(datos)
+						
+					})
+						
+					
 					main.refresh(rsp.idCita , null , document.idUser );
 					mostrarCapa('main');
 				}
@@ -1022,35 +1035,42 @@ var main ={
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
 		
 	},
-	refresh : function(arr_id_insert , arr_id_del , idUser ){
+	refresh : function(arr_id_insert , arr_id_del , arr_idUser ){
 
-		var url = "agendas/consultaRefresh.php";	
+		var url = "agendas/refreshCns.php";	
 		var arr_data = {
 			ins : arr_id_insert,
-			del : arr_id_del
+			del : arr_id_del,  
 		};
 		$.getJSON(url,arr_data,function(data){ 
 			if (!$.isEmpty(data)){
 				if (!$.isEmpty(data.ins)){
-					$.each(data.ins,function(index,data){
-						main.lbl.crear(data,true);
+					
+					$.each(data.ins,function(index,value){
+						
+						main.lbl.crear(value,true);
+						notify.success('Se ha creado la cita ' + index ,'Guardado',true);
+						
 					})
-					notify.success('Se ha creado la cita ' + data.ins,'Guardado');
 					
 				};
 				
 				if (!$.isEmpty(data.del)){
-					$.each(data.del,function(index,data){
-				
-						main.lbl.eliminar(index,data);
-						notify.error('El cliente ' + idUser + ',<br> ha eliminado la cita ' + data.del,'Eliminada');
+					
+					$.each(data.del,function(index,value){
+
+						main.lbl.eliminar(index,value);
+
+						notify.error('El cliente ' + arr_idUser[index] + ',<br> ha eliminado la cita ' + index,'Eliminada',true);
+						
 					})
+					
 				} 
 				main.colorCitas();
 			}
 		});
 	},
-	check: function(datos,callback){
+	check: function(callback){
 		//var idFecha = Fecha.number(Fecha.general);
 		//$('#'+idFecha).addClass('editando')
 		//var $celdas = $('.editando .celda');
@@ -1059,78 +1079,44 @@ var main ={
 
 		xhr =  $.ajax({
 			type:"get",
-			url: urlPhp+'agendas/refrescarDatos.php',
+			url: urlPhp+'agendas/refreshCheck.php',
 			dataType: 'json',
 			
 		})
 		.done(function(data){
+	
 			//ASSOC
 			//id idCita status
 			
 			if(!$.isEmpty(data)){
 				var arr_id_insert  = new Array();
 				var arr_id_del  = new Array();
+				var arr_id_user  = new Array();
+				
 				$.each(data,function(i,data){
+					
+					arr_id_user[data.idCita] = data.idUser;
+					
 					if (data.status == 1){
+				
 						//ha creado cita 
-						arr_id_nset.push(data.idCita);
+						arr_id_insert.push(data.idCita);
+						
 					}else{
+						
 						//ha eliminado la cita
 						arr_id_del.push(data.idCita);
+						
 					}
 				})
 	
 				if (!$.isEmpty(arr_id_insert) || !$.isEmpty(arr_id_del))
-					main.refresh( arr_id_insert , arr_id_del , data.idUser ); 
+					main.refresh( arr_id_insert , arr_id_del , arr_id_user); 
 
 			}
 			typeof callback == "function" && callback();
 		})
 		
-		function _colaRefresco(ins,del){
-			if (!$.isEmpty(ins)) _buscarCreadas(ins);
-			if (!$.isEmpty(del)) _buscarEliminadas(del);
-		}
-
-		function _buscarEliminadas(datos){
-			if ($.isEmpty(datos)) return false;
-
-			$.each(datos,function(){
-				var idCita = datos[1];
-				var idCodigo = datos[6];
-
-				//main.lbl.eliminar(idCita,idCodigo);
-			})
-		}
-
-		function _buscarCreadas(datos){
-			if ($.isEmpty(datos)) return false;
-
-			var d = new Array();
-
-			for(let i = 0; i < datos.length; i++){
-				var dat = datos[i];
-				var id = dat[0];
-				//serie de condiciones para ver que no han sido modificadas
-
-				var verificar = (function (){
-					if($celdas.find('[idser="'+id+'"]').length){
-						if($celdas.find('[idser="'+id+'"]').parent().data('agenda')==dat[9]){
-							if($celdas.find('.ic'+dat[1]+' .note input').val()==dat[10]){
-								return true;
-							}else{return false}
-						}else{return false}
-					}else{return false}
-				})()
-
-				if(!verificar){
-					let idCita = dat[1];
-					let idCodigo = dat[6];
-					main.lbl.eliminar(idCita,idCodigo);
-					main.lbl.crear(dat,true,	main.colorCitas)
-				}
-			}
-		}
 	},
 	citasSup: function($this){
 		var $celda = $this.parents('.celda');
@@ -1334,7 +1320,7 @@ var main ={
 				var obs = data[10];
 
 				var attention = "<span class='icon-attention aling-right' title='¡ATENCION, CITAS SUPERPUESTAS!'></span>";
-				var $celda  =$('#main div#'+idFecha+'.editando .h'+ hora+' [data-agenda="'+agenda+'"]');
+				var $celda  =$('#main #'+idFecha+' .h'+ hora+' .agenda'+agenda);
 				var mostrarNotas = (!$.isEmpty(obs))?'show':'';				
 
 						
@@ -1417,6 +1403,7 @@ var main ={
 				for(let i = 0; i<idCod.length; i++){
 					_eliminar(idCod[i]);
 				}
+				
 			}else{
 				_eliminar (idCodigos);
 			}
@@ -1424,11 +1411,18 @@ var main ={
 			function _eliminar (id){
 
 				var table = $('#main .ic'+idCita+'.cod'+id);
-				var celda = $('#main .ic'+idCita+'.cod'+id).parent();
+				var celda = table.parent();
+
 				table.each(function(){
 					table
 						.hide('explode',750)
 						.remove()
+					celda
+						.removeClass('color1 color2 color3 color-red')
+						.find('.icon-attention')
+							.each(function(){
+								$(this).hide('explode').removeClass('show')
+							})
 
 					if(celda.find('table').length>0){
 						table = celda.find('table');
@@ -1438,12 +1432,6 @@ var main ={
 							.find('.icon-attention')
 								.hide()
 					}
-					celda
-						.removeClass('color1 color2 color3 color-red')
-						.find('.icon-attention')
-							.each(function(){
-								$(this).hide('explode').removeClass('show')
-							})
 				})
 				main.colorCitas();
 			}

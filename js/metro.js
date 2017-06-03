@@ -3404,7 +3404,7 @@ var Notify = {
 		style: false, // {background: '', color: ''}
 		position: 'right', //right, left
 		timeout: 2000,
-		keepOpen: false,
+		keepOpen: true,
 		type: 'default' //default, success, alert, info, warning
 	},
 

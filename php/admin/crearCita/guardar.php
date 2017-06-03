@@ -69,6 +69,8 @@ if ($ocupado<2){
 					$data['success']=false;
 					 mnsExit($sql);
 					 break;
+				}else{
+					$data['id'][]= mysqli_insert_id($conexion);
 				}
 
 				$hora = strtotime ( '+15 minute' ,  $hora ) ;
