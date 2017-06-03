@@ -33,6 +33,7 @@ function usuarios(){
 	$result= mysqli_query($conexion,$sql);
 	return mysqli_fetch_all($result);
 }
+//AKI : HAY que refrescar datos usuario cuado un usuario actualice o nuevo 
 $_SESSION['USUARIOS'] = usuarios();
 
 //FESTIVOS

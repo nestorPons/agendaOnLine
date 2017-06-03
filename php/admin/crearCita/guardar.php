@@ -18,7 +18,7 @@ function mnsExit($mns){
 }
 function idUsuario($userName){
 	global $conexion;
-	$sql = "SELECT usuarios.Id FROM usuarios WHERE usuarios.Nombre LIKE '$userName'";
+	$sql = "SELECT usuarios.Id FROM usuarios WHERE usuarios.Nombre LIKE '$userName' LIMIT 1";
 	$result = mysqli_query($conexion,$sql);
 	$row= mysqli_fetch_row($result);
 	return $row[0];

@@ -18,7 +18,7 @@ include "../../connect/tools.php";
 					include "../../../php/menus/datepicker.php" ;
 				?>
 				<h2>Tiempo total de los servicios:<span id='tSer' class="resaltado"></span> min.</h2>	
-				<div id="tablas" class="tablas">
+				<div id="tablas" class="tablas tblHoras">
 				<!--	<div data-role="preloader" data-type="cycle" data-style="color" class="margin20"></div>-->
 				</div>
 			</div>

@@ -36,6 +36,7 @@ include 'core.php';
 	document.horarios = <?php echo  json_encode(HORAS)?>;
 	document.minTime = <?php echo  json_encode(CONFIG['MinTime'])?>;
 	document.idUser = <?php echo $_SESSION['id_usuario']?>;
+	
 </script>
 <title>Agenda onLine</title>
 

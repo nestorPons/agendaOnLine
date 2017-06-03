@@ -407,7 +407,7 @@ var crearCita ={
 	},
 	guardar: function(){
 
-		if(crearCita.valForm()){
+		if(crearCita.validate.form()){
 			var url = urlPhp + 'crearCita/guardar.php';
 			var data = $('#crearCita #frmCrearCita').serialize()+"&fecha="+Fecha.general;
 
@@ -415,22 +415,30 @@ var crearCita ={
 				if(rsp.ocupado){
 					notify.error('Ya no se puede reservar más la cita. <br> Cambie la hora seleccionada.' , ' Hora ocupada' );
 				}else{	
-				//Generar un arreglo por cada celda
+				//Generar un arreglo para pintar lbl
 				//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
 	
 //AKI : generando el array
-					var array = $('#frmCrearCita input:checkbox:checked')
-					$.each(array,function( index , value ){
-						var time = parseInt(Math.ceil($(this).data('time')/15))||0 , 
-						datos = {};
-						
-						main.lbl.crear(datos)
+					var arr_datos = new Array();
+					var codigos = $('#frmCrearCita .contenedorServicios input:checked') ; 
+					var hora = $('#frmCrearCita .tblHoras input:checked').val() ;
+					
+					var nombre = $('#frmCrearCita #cliente').val() ;
+
+					var agenda = $('#frmCrearCita #selAgendas input:checked').val() ;
+					var nota  = $('#frmCrearCita #crearCitaNota').val() ;
+					$.each(codigos,function( index , $this ){
+						var time = parseInt(Math.ceil($(this).data('time')/15))||0 ; 
+//AKI : hay que obtener id de usuarios
+						for(let i = 0 ; i <= time ; i++){
+							arr_datos.push(rsp.id[index], rsp.idCita , Fecha.general , hora , nombre , nombre , $this.value , $this.id , $(this).data('time') , agenda , nota ) ;
+						}	
 						
 					})
-						
-					
-					main.refresh(rsp.idCita , null , document.idUser );
+
+					main.lbl.crear(arr_datos) ;
 					mostrarCapa('main');
+						
 				}
 				dialog.close('#dlgGuardar');
 			},'json')
@@ -462,7 +470,7 @@ var crearCita ={
 		},
 		
 		crear: function ($this, callback){
-			var contenedor = $('#crearCita #tablas');
+			var contenedor = $('#crearCita .tblHoras');
 			
 			let table = 
 			$('<table>', {
@@ -519,8 +527,14 @@ var crearCita ={
 			var ocupado = ts;
 			var horas = $('#main #'+ id_table+' .hora').reverse();		
 			var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS);
+			
+			var _ocupado = ( hora ) =>  $('#main #'+id_table + ' #'+hora +' .agenda'+agenda + ' table').length >0 ;
 
-			$(this).find('.ocupado').removeClass('ocupado')
+			var _fueraHorario  = ($this) =>  $this.hasClass('disabled') ;
+
+			var _colorear = ( hora ) =>	$('#crearCita #'+ id_table + ' #lbl' + hora).addClass('ocupado');
+
+			$(this).find('.ocupado').removeClass('ocupado');
 
 				
 			horas.each(function( index , hora ){
@@ -539,12 +553,7 @@ var crearCita ={
 				}
 			})
 
-			function _ocupado( hora ) {
-				return $('#main #'+id_table + ' #'+hora +' .agenda'+agenda + ' table').length >0 ;
-			}
-			function _fueraHorario($this){
-				return $this.hasClass('disabled') 
-			}
+
 			function _tiempoServicios(){
 				var ts = 0;
 				$('#crearCita [name="servicios[]"]:checked').each(function() {
@@ -554,11 +563,6 @@ var crearCita ={
 				return ts;
 			}
 
-			function _colorear( hora ){
-
-				$('#crearCita #'+ id_table + ' #lbl' + hora).addClass('ocupado');
-
-			}
 
 			function _esPasada( hora ){
 				var diff_fechas = Fecha.restar(id_table); 
@@ -628,9 +632,9 @@ var crearCita ={
 		if($visible.attr('id')==$stepper.attr('id'))return false;
 		if (!$stepper.is(':visible')&&$visible.length){
 			if(index==0)_slider();
-			else if(index==1 &&crearCita.valName())_slider()
-			else if(index==2&&crearCita.valSer()){
-				if(crearCita.valName())_slider(function(){
+			else if(index==1 &&crearCita.validate.name())_slider()
+			else if(index==2&&crearCita.validate.service()){
+				if(crearCita.validate.name())_slider(function(){
 					if (hora!=0){
 						var f = formatoFecha(Fecha.general,'number');
 						$('#crearCita #'+hora).attr('checked',true);
@@ -657,15 +661,17 @@ var crearCita ={
 			typeof callback == "function" && callback();
 		}
 	},
-	valForm:function(){
-		return $('#crearCita [name="servicios[]"]:checked').length!==0
-			&&$('#crearCita #cliente').val()!==""
-			&&$('#crearCita [name="hora[]"]:checked').length!==0;
-	},
-	valName: function (){;
-		var $this =  $('#crearCita #cliente');
+	validate : {
+		form : function (){
+			return $('#crearCita [name="servicios[]"]:checked').length!==0
+				&&$('#crearCita #cliente').val()!==""
+				&&$('#crearCita [name="hora[]"]:checked').length!==0;
+		},
 
+		name : function () {
+			var $this =  $('#crearCita #cliente');	
 			var cliente = $this.val();
+
 			if(cliente!=""){
 				str = normalize(cliente);
 
@@ -690,23 +696,26 @@ var crearCita ={
 				$this.popover('show');
 				return false;
 			}
-	},
-	valSer: function(){
-		crearCita.sincronizar();
-		$('#crearCita #lblSer').empty();
-		var $ser = $('#crearCita [name="servicios[]"]:checked');
-		if($ser.length==0){
-			$('#login #crearCita [name="stepperServicios"]').popover('show');
-			return false;
-		}else{
+		}, 
 
-				$ser.each(function(i,v){
-				var txtSer= $(this).attr('id');
-				$('#crearCita #lblSer').append(txtSer+', ');
-			})
-			return true;
+		service: function(){
+			crearCita.sincronizar();
+			$('#crearCita #lblSer').empty();
+			var $ser = $('#crearCita [name="servicios[]"]:checked');
+			if($ser.length==0){
+				$('#login #crearCita [name="stepperServicios"]').popover('show');
+				return false;
+			}else{
+
+					$ser.each(function(i,v){
+					var txtSer= $(this).attr('id');
+					$('#crearCita #lblSer').append(txtSer+', ');
+				})
+				return true;
+			}
 		}
-	}
+	},
+
 }
 var config ={
 	change : false,
@@ -1322,44 +1331,39 @@ var main ={
 				var attention = "<span class='icon-attention aling-right' title='¡ATENCION, CITAS SUPERPUESTAS!'></span>";
 				var $celda  =$('#main #'+idFecha+' .h'+ hora+' .agenda'+agenda);
 				var mostrarNotas = (!$.isEmpty(obs))?'show':'';				
+	
+				var servicio = '<table class="cita"  \
+											idcita=' + idCita+' \
+											codigo="'+codigo+'" \
+											idcodigo="'+idCodigo+'" \
+											idser = "'+id+'">';
+				var tdCodigo = "<td><span class='icon-angle-right'></span>\
+													<span class='nomCod'>"+codigo+"</span></td>"
+					
+					if($('.ic'+idCita).length==0||todaCita){
+						servicio += "<tr>";
+							servicio += "<td>";
+								servicio += "<span class='icon-user-1'>"+nombre+"</span>";
+								servicio += attention;
+								servicio += "<span class='icon-cancel aling-right '></span>";
+								servicio += "<span class='aling-right numidcita'>"+idCita+"</span>";
+							servicio += "</td>";
+							servicio += "<td class='note "+mostrarNotas+"'>";
+								servicio += "<div class='iconClass-container icon-right'>";
+									servicio +="<span class='icon-note'></span>";
+									servicio += "<input type='text' value='"+obs+"'>";
+									servicio +="<span class='iconClass-inside icon-load  animate-spin'></span>";
+									servicio += "<span class='iconClass-inside icon-ok'></span>";
+								servicio += "</div>";
+							servicio += "</td>";
+						servicio += tdCodigo;
 
+					}else{
 						
-					var servicio = '<table class="cita"  \
-												idcita=' + idCita+' \
-												codigo="'+codigo+'" \
-												idcodigo="'+idCodigo+'" \
-												idser = "'+id+'">';
-					var tdCodigo = "<td><span class='icon-angle-right'></span>\
-														<span class='nomCod'>"+codigo+"</span></td>"
-					
-				
-					
-						if($('.ic'+idCita).length==0||todaCita){
-							servicio += "<tr>";
-								servicio += "<td>";
-									servicio += "<span class='icon-user-1'>"+nombre+"</span>";
-									servicio += attention;
-									servicio += "<span class='icon-cancel aling-right '></span>";
-									servicio += "<span class='aling-right numidcita'>"+idCita+"</span>";
-								servicio += "</td>";
-								servicio += "<td class='note "+mostrarNotas+"'>";
-									servicio += "<div class='iconClass-container icon-right'>";
-										servicio +="<span class='icon-note'></span>";
-										servicio += "<input type='text' value='"+obs+"'>";
-										servicio +="<span class='iconClass-inside icon-load  animate-spin'></span>";
-										servicio += "<span class='iconClass-inside icon-ok'></span>";
-									servicio += "</div>";
-								servicio += "</td>";
-							servicio += tdCodigo;
+						servicio += (codigo!=servicioAnterior)?tdCodigo:"<td>"+attention+"</td><td></td><td></td>";
 
-						}else{
-							
-							servicio += (codigo!=servicioAnterior)?tdCodigo:"<td>"+attention+"</td><td></td><td></td>";
+					}
 
-
-						}
-		
-				
 					servicio += "</tr></table>";
 
 					if($celda.find('.cita').length){
@@ -1375,12 +1379,14 @@ var main ={
 						 }
 						 
 					}else{
-						
+alert()						
+echo ($celda)
+echo (servicio)
 						// cuando se hace referencia a tabla hay que tener encuenta que pueden ser varias
 						$celda
-							.hide()
-							.html(servicio)
-							.fadeIn() 		
+							.empty()
+							.append(servicio)
+		
 					}
 
 
@@ -1919,7 +1925,7 @@ $(function(){
 		.on('click','[name="hora[]"]',function(){crearCita.dialog()})
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
 		.on('blur','#cliente',function(){
-			if($(this).val()!="")crearCita.valName();
+			if($(this).val()!="")crearCita.validate.name();
 		})
 		.on("swipeleft",'.tablas');
 

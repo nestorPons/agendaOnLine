@@ -1,5 +1,5 @@
 
-<div>
+<div id='selAgendas'>
 	<?php 
 		$agenda[0]=1;
 		for ($i=1;$i<=$_SESSION['CONFIG']['NumAg'];$i++){
