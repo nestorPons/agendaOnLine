@@ -81,6 +81,9 @@ if ($ocupado<2){
 }else{
 	$data['ocupado']=true;
 }
+//AKI :: hay que hacer una consulta refresh 
+
+
 //if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
 //registrarEvento(1, $idServicio,$_SESSION['id_usuario'],$agenda);
 echo json_encode($data);

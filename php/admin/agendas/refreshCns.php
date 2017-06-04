@@ -16,12 +16,13 @@ if(isset($_GET['ins'])){
 		FROM cita C JOIN data D ON C.IdCita = D.IdCita 
 		INNER JOIN usuarios U ON D.IdUsuario = U.Id 
 		LEFT JOIN articulos A ON C.Servicio = A.Id 
-		WHERE D.IdCita ='. $idCita ;
+		WHERE D.IdCita ='. $idCita .' 
+		ORDER BY Hora' ;
 
 		$sql = preg_replace("/\r\n+|\r+|\n+|\t+/i", "", $sql);
 		
 		$result = mysqli_query($conexion,$sql);
-		$data['ins'][$idCita] = mysqli_fetch_array($result,MYSQLI_NUM);
+		$data['ins'][$idCita] = mysqli_fetch_all($result,MYSQLI_NUM);
 		
 	}	
 }

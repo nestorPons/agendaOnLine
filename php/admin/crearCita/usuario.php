@@ -22,11 +22,16 @@
 	foreach($_SESSION['USUARIOS'] as $row){
 		if($row[14]==0){
 			$nombres[] = $row[1];
+			$id_usuarios[] = $row[0]; 
 		}
 	}
 	for($i = 0; $i < count($nombres);$i++){
 		?>
-		<option data-id="<?php echo normaliza($nombres[$i])?>"><?php echo $nombres[$i]?></option>
+		<option 
+			data-id="<?php echo normaliza($nombres[$i])?>" 
+			value="<?php echo $nombres[$i]?>">
+			<?php echo $id_usuarios[$i]?>
+		</option>
 		<?php
 	}
 	?>

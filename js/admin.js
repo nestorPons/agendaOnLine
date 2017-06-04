@@ -343,6 +343,11 @@ var familias = {
 	},
 }
 var crearCita ={
+	idUser : function () {
+		var cli = $('#crearCita #cliente').val();
+		var  nombre = normalize(cli);
+		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
+	}, 
 	sincronizar: function(dias,callback){
 		$('#crearCita #tablas table').removeClass('activa');
 
@@ -417,26 +422,27 @@ var crearCita ={
 				}else{	
 				//Generar un arreglo para pintar lbl
 				//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
-	
-//AKI : generando el array
-					var arr_datos = new Array();
+
+					
 					var codigos = $('#frmCrearCita .contenedorServicios input:checked') ; 
 					var hora = $('#frmCrearCita .tblHoras input:checked').val() ;
 					
 					var nombre = $('#frmCrearCita #cliente').val() ;
-
+					var idUser = crearCita.idUser();
 					var agenda = $('#frmCrearCita #selAgendas input:checked').val() ;
 					var nota  = $('#frmCrearCita #crearCitaNota').val() ;
+					var arr_datos = new Array();
 					$.each(codigos,function( index , $this ){
 						var time = parseInt(Math.ceil($(this).data('time')/15))||0 ; 
-//AKI : hay que obtener id de usuarios
+//AKI : solo me pone una hora en el lbl
 						for(let i = 0 ; i <= time ; i++){
-							arr_datos.push(rsp.id[index], rsp.idCita , Fecha.general , hora , nombre , nombre , $this.value , $this.id , $(this).data('time') , agenda , nota ) ;
+							arr_datos.push(rsp.id[index], rsp.idCita , Fecha.general , hora , idUser , nombre , $this.value , $this.id , $(this).data('time') , agenda , nota ) ;
+							hora += 900;
 						}	
+						main.lbl.crear(arr_datos) ;
 						
 					})
 
-					main.lbl.crear(arr_datos) ;
 					mostrarCapa('main');
 						
 				}
@@ -1057,7 +1063,8 @@ var main ={
 					
 					$.each(data.ins,function(index,value){
 						
-						main.lbl.crear(value,true);
+						main.lbl.crear(value);
+						
 						notify.success('Se ha creado la cita ' + index ,'Guardado',true);
 						
 					})
@@ -1304,8 +1311,9 @@ var main ={
 	lbl:{
 		crear: function(datos,todaCita,callback){
 			//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
-
-			if($.isEmpty(datos)){return false}
+			var servicioAnterior = "";
+			
+			if($.isEmpty(datos)) return false  ;
 
 			if ($.isArray(datos[0])){
 				for(let i = 0; i<datos.length;i++){
@@ -1316,7 +1324,7 @@ var main ={
 			}
 
 			function  _crear(data){
-
+echo (data)
 				var id = data[0];
 				var idCita = data[1];
 				var idFecha = Fecha.number(data[2]);
@@ -1327,7 +1335,9 @@ var main ={
 				var codigo = data[7];
 				var agenda  = data[9];
 				var obs = data[10];
-
+				
+				
+			
 				var attention = "<span class='icon-attention aling-right' title='¡ATENCION, CITAS SUPERPUESTAS!'></span>";
 				var $celda  =$('#main #'+idFecha+' .h'+ hora+' .agenda'+agenda);
 				var mostrarNotas = (!$.isEmpty(obs))?'show':'';				
@@ -1340,7 +1350,8 @@ var main ={
 				var tdCodigo = "<td><span class='icon-angle-right'></span>\
 													<span class='nomCod'>"+codigo+"</span></td>"
 					
-					if($('.ic'+idCita).length==0||todaCita){
+					if($('#' + idFecha + ' .ic'+idCita).length==0||todaCita){
+						
 						servicio += "<tr>";
 							servicio += "<td>";
 								servicio += "<span class='icon-user-1'>"+nombre+"</span>";
@@ -1377,16 +1388,13 @@ var main ={
 									?$celda.find(".icon-user-1").parents('table:first ').removeClass('hidden')
 									:$celda.find('table:first-child').removeClass('hidden')
 						 }
-						 
+
 					}else{
-alert()						
-echo ($celda)
-echo (servicio)
 						// cuando se hace referencia a tabla hay que tener encuenta que pueden ser varias
 						$celda
-							.empty()
-							.append(servicio)
-		
+							.hide()
+							.html(servicio)	
+							.fadeIn() 	
 					}
 
 
@@ -1397,6 +1405,7 @@ echo (servicio)
 
 					servicioAnterior = codigo;
 					
+				main.colorCitas();
 				typeof callback == "function" && callback();
 
 			}
@@ -1439,8 +1448,9 @@ echo (servicio)
 								.hide()
 					}
 				})
-				main.colorCitas();
+				
 			}
+			main.colorCitas();
 		},
 	},
 }
@@ -1924,9 +1934,7 @@ $(function(){
 		.on('change','.lstServicios ',function(){servicio.mostrar($(this).val())})
 		.on('click','[name="hora[]"]',function(){crearCita.dialog()})
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
-		.on('blur','#cliente',function(){
-			if($(this).val()!="")crearCita.validate.name();
-		})
+		.on('blur','#cliente',crearCita.validate.name)
 		.on("swipeleft",'.tablas');
 
 	$('#familias')
@@ -2066,9 +2074,6 @@ $(function(){
 		.on( "click", "[name*='editar']", function(e){servicio.poppup($(this).attr('value'))})
 		.find('option:first-child').attr('selected','selected');
 		
-
-
-
 	$('#dialogs')
 		.on('click','#ppServicios #btnEliminar',function(){servicio.eliminar()})
 		.on('click','#ppServicios #btnAceptar',function(){servicio.guardar()})
