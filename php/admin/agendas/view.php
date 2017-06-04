@@ -82,7 +82,7 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 																	</td>
 																	<td>
 																		<span class='icon-angle-right'></span>
-																		<span class="nomCod"><?php echo $cita['codigo']?><span>
+																		<span class="<?php echo $cita['codigo']?>"><?php echo $cita['codigo']?><span>
 																	</td>
 														<?php
 													}else 

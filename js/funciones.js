@@ -781,3 +781,8 @@ function slideDias(contenedor,dir,callback){
 		})
 
 }
+function loadHide(){
+	$('#btnSave')
+		.find('.icon-floppy').show().end()
+		.find('.icon-load').hide()
+}

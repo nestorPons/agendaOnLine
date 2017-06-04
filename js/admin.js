@@ -3,7 +3,7 @@ var urlPhp = "../../php/admin/";
 var admin = true;
 var HORARIOS = document.horarios;
 var FESTIVOS = document.festivos;
-var hora = 0; 
+//var hora = 0; 
 
 function sincronizar(date,dias,callback){
 
@@ -40,7 +40,6 @@ function mostrarCapa(capa,callback){
 			$('#'+capa).append(html);
 		},'html')
 	}
-	
 	
 	if($('#config').is(':visible')&&config.change) config.guardar();
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
@@ -349,12 +348,11 @@ var crearCita ={
 		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
 	}, 
 	sincronizar: function(dias,callback){
-		$('#crearCita #tablas table').removeClass('activa');
 
-		if(!$('#crearCita #'+Fecha.number(Fecha.general)).length)
-			crearCita.horas.iniciar()//crearCita.pintar);
+		$('#crearCita #tablas table').removeClass('activa');
+		if(!$('#crearCita #'+Fecha.id).length)
+			crearCita.horas.iniciar();
 		
-		//crearCita.pintar();
 		$('#crearCita #'+Fecha.id).addClass('activa');
 	},
 	servicios:function(callback){
@@ -421,28 +419,30 @@ var crearCita ={
 					notify.error('Ya no se puede reservar más la cita. <br> Cambie la hora seleccionada.' , ' Hora ocupada' );
 				}else{	
 				//Generar un arreglo para pintar lbl
+				//index idCita
 				//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
 
-					
-					var codigos = $('#frmCrearCita .contenedorServicios input:checked') ; 
-					var hora = $('#frmCrearCita .tblHoras input:checked').val() ;
+					var servicios = $('#frmCrearCita .contenedorServicios :checked') ; 					
+					var hora = parseInt($('#frmCrearCita .tblHoras input:checked').val()) ;
 					
 					var nombre = $('#frmCrearCita #cliente').val() ;
 					var idUser = crearCita.idUser();
 					var agenda = $('#frmCrearCita #selAgendas input:checked').val() ;
 					var nota  = $('#frmCrearCita #crearCitaNota').val() ;
 					var arr_datos = new Array();
-					$.each(codigos,function( index , $this ){
-						var time = parseInt(Math.ceil($(this).data('time')/15))||0 ; 
-//AKI : solo me pone una hora en el lbl
-						for(let i = 0 ; i <= time ; i++){
-							arr_datos.push(rsp.id[index], rsp.idCita , Fecha.general , hora , idUser , nombre , $this.value , $this.id , $(this).data('time') , agenda , nota ) ;
-							hora += 900;
-						}	
-						main.lbl.crear(arr_datos) ;
-						
-					})
+					
+			
+					$.each(servicios,function( index , $this ){
+						var time = Math.ceil(parseInt($(this).data('time'))/15) ; 
 
+						for(let i = 0 ; i <= time ; i++){	
+
+							arr_datos = [rsp.id[index], rsp.idCita , Fecha.general , hora , idUser , nombre , $this.value , $this.id , $(this).data('time') , agenda , nota ] ;
+							hora += 900;
+							main.lbl.crear(arr_datos) ;
+						}	
+					})
+						
 					mostrarCapa('main');
 						
 				}
@@ -463,18 +463,19 @@ var crearCita ={
 	},
 	horas: {
 		iniciar: function(){
-			if (!$('#crearCita .datepicker').length) cargarDatepicker();
+//AKI :  crear dias cuando no estan creadas en el crearCitas horas		
+		
+			cargarDatepicker();
 			$('#main .dia').each(function(index , table){
 				var self = {
 					obj : $('#crearCita #'+$(this).attr('id')),
-					id : $(this).attr('id'),
-					diaSemana : Fecha.diaSemana($(this).attr('id'))
+					id : $(this).attr('id')
 				}
 				if (Fecha.restar(self.id)>=0 && !self.obj.length) 
 					crearCita.horas.crear($(this));
 			})
 		},
-		
+
 		crear: function ($this, callback){
 			var contenedor = $('#crearCita .tblHoras');
 			
@@ -504,7 +505,8 @@ var crearCita ={
 				})))).appendTo(table)
 			})	
 			 _ordenar(table);
-			 crearCita.horas.pintar($this.attr('id')); //TODO: hay que quitarlo de aqui y mandarlo a la visuañizacion de las horas
+			 crearCita.horas.pintar($this.attr('id')); 
+//AKI: hay que quitarlo de aqui y mandarlo a la visuañizacion de las horas
 			//fin
 			
 			function _ordenar($table, callback){
@@ -992,7 +994,7 @@ var main ={
 		//**
 
 		function _finCarga(){
-			main.colorCitas($('.editando'),function(){
+			main.lbl.color($('.editando'),function(){
 				$('#main .editando').removeClass('editando');
 				typeof callback == "function" && callback();
 			})
@@ -1065,7 +1067,7 @@ var main ={
 						
 						main.lbl.crear(value);
 						
-						notify.success('Se ha creado la cita ' + index ,'Guardado',true);
+						notify.success('El cliente ' + arr_idUser[index] + ',<br> ha creado la cita ' + index ,'Guardado',true);
 						
 					})
 					
@@ -1082,7 +1084,7 @@ var main ={
 					})
 					
 				} 
-				main.colorCitas();
+				main.lbl.color();
 			}
 		});
 	},
@@ -1256,41 +1258,7 @@ var main ={
 			.always($this.find('.icon-load').fadeOut());
 		}
 	},
-	colorCitas: function(callback){	
-		var dias= $('.dia');
-		var agendas = $('#main .cabecera').data('agendas');
-		var idsCitas = new Array;
-
-		dias.each(function(){
-			var celdas = $(this).find('.celda');
-		
-			$(this)
-				.find('color1').removeClass('color1').end()
-				.find('color2').removeClass('color2').end()
-				.find('color3').removeClass('color3').end()
-				.find('color-red').removeClass('color-red')
-				var color = 'color1';
-
-			for(let a = 1; a <= agendas; a++){
-				
-				let idCita = 0;
-				$(this).find('.agenda'+a+' .cita')
-					.each(function(){
-						if (idCita != $(this).attr('idcita')){
-							color = color == 'color1'?'color2':'color1';
-						}
-
-						$(this).data('color',color)
-						let celda = $(this).parent();
-						if (!celda.is('.color1, .color2, .color3, .color-red'))
-								celda.addClass(color);
-
-						idCita = $(this).attr('idcita');
-					})
-			}
-		})
-		typeof callback == "function" && callback();
-	},
+	
 	inactivas: function(){
 			if($('#main .cuerpo').data('estado-inactivas')==0){
 				$('#main .cuerpo').data('estado-inactivas',1)
@@ -1311,7 +1279,6 @@ var main ={
 	lbl:{
 		crear: function(datos,todaCita,callback){
 			//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
-			var servicioAnterior = "";
 			
 			if($.isEmpty(datos)) return false  ;
 
@@ -1324,7 +1291,6 @@ var main ={
 			}
 
 			function  _crear(data){
-echo (data)
 				var id = data[0];
 				var idCita = data[1];
 				var idFecha = Fecha.number(data[2]);
@@ -1347,9 +1313,8 @@ echo (data)
 											codigo="'+codigo+'" \
 											idcodigo="'+idCodigo+'" \
 											idser = "'+id+'">';
-				var tdCodigo = "<td><span class='icon-angle-right'></span>\
-													<span class='nomCod'>"+codigo+"</span></td>"
-					
+				var tdCodigo = "<td><span class='icon-angle-right'></span> <span class='"+codigo+"'>"+codigo+"</span></td>";
+				
 					if($('#' + idFecha + ' .ic'+idCita).length==0||todaCita){
 						
 						servicio += "<tr>";
@@ -1371,7 +1336,7 @@ echo (data)
 
 					}else{
 						
-						servicio += (codigo!=servicioAnterior)?tdCodigo:"<td>"+attention+"</td><td></td><td></td>";
+						servicio += ($('#' + idFecha + ' .ic'+idCita + ' .'+codigo).length <=0)?tdCodigo:"<td>"+attention+"</td><td></td><td></td>";
 
 					}
 
@@ -1403,9 +1368,8 @@ echo (data)
 						//soluciono problema color en las celdas vacias
 
 
-					servicioAnterior = codigo;
 					
-				main.colorCitas();
+				main.lbl.color();
 				typeof callback == "function" && callback();
 
 			}
@@ -1450,8 +1414,43 @@ echo (data)
 				})
 				
 			}
-			main.colorCitas();
+			main.lbl.color();
 		},
+		color: function(callback){	
+			var dias= $('.dia');
+			var agendas = $('#main .cabecera').data('agendas');
+			var idsCitas = new Array;
+
+			dias.each(function(){
+				var celdas = $(this).find('.celda');
+			
+				$(this)
+					.find('color1').removeClass('color1').end()
+					.find('color2').removeClass('color2').end()
+					.find('color3').removeClass('color3').end()
+					.find('color-red').removeClass('color-red')
+					var color = 'color1';
+
+				for(let a = 1; a <= agendas; a++){
+					
+					let idCita = 0;
+					$(this).find('.agenda'+a+' .cita')
+						.each(function(){
+							if (idCita != $(this).attr('idcita')){
+								color = color == 'color1'?'color2':'color1';
+							}
+
+							$(this).data('color',color)
+							let celda = $(this).parent();
+							if (!celda.is('.color1, .color2, .color3, .color-red'))
+									celda.addClass(color);
+
+							idCita = $(this).attr('idcita');
+						})
+				}
+			})
+			typeof callback == "function" && callback();
+		}
 	},
 }
 var servicio = {
@@ -1790,94 +1789,12 @@ var usuario = {
 	},
 }
 
-//notas
-function cargarNotas(callback){
-	/*
-	$('#notas #txtNotas').fadeOut();
-	var fecha = Fecha.general;
-	if ($.isEmpty(arrayNotas)){
-		if(xhr && xhr.readystatus != 4) { xhr.abort();}
-		xhr =
-		$.ajax({
-			type:"get",
-			url: urlPhp+"notas/consult.php",
-			dataType: 'json',
-		})
-		.done(function(r){
-			arrayNotas = r;
-			$('#notas #txtNotas').val(arrayNotas[fecha]);
-		})
-	}else{
-		$('#notas #txtNotas').val(arrayNotas[fecha]);
-	}
-$('#notas #txtNotas').fadeIn();
-	typeof callback == "function" && callback();
-	*/
-}
-function colorearMenuNotas(fecha){
-	if (!fecha){
-		var d = new Date();
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-		var fecha =  day+ '/' +
-			(month<10 ? '0' : '') + month + '/' +
-			(day<10 ? '0' : '') + d.getFullYear();
-	}
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: urlPhp+"menus/notasCns.php",
-		data:{fecha:fecha}
-	})
-	.done(function(mns){
-		if (mns.success){
-			$('#icon-info-circled').show();
-		}else{
-			$('#icon-info-circled').hide();
-		}
-	})
-}
-function guardarNotas(){
-	var data = $("#notas #frmNotas").serialize();
-		$.ajax({
-			type: "POST",
-			dataType: 'json',
-			url: urlPhp+"notas/guardar.php",
-			data: data
-		})
-		.done(function(respuesta){
-			arrayNotas[Fecha.general]= $('#notas #txtNotas').val();
-			notify.success('Nota guardada con exito','Guardado');
-		})
-		.fail(function(r){echo ("error Nota=>"+r)})
-		.always(function(){resetBtnLoad()})
-}
-function eliminarNota(){
-	var data = new Array() ;
-	data['fecha'] = document.getElementById('dpN').value;
-	$.ajax({
-		type: "POST",
-		url: urlPhp + "notas/eliminar.php",
-		data: data,
-		dataType: "html",
-		type: 'get'
-	})
-	.done(function(respuesta){
-		$("#notas #txtNotas").val('');
-});
-}
-function loadHide(){
-	$('#btnSave')
-		.find('.icon-floppy').show().end()
-		.find('.icon-load').hide()
-}
-
 $(function(){
 	$('body').on('click',"[name='desplazarFecha']",function(e){
 		if(!$(this).data('disabled'))sincronizar(null,$(this).data('action'));
 	})
 	$('.tabcontrol').tabcontrol();
-	main.colorCitas();
+	main.lbl.color();
 	var agendas_width = $('#main .cabecera').data('agendas');
 	var widht = $('#main').css('widht')/agendas_width	;
 	var editarObs = "";
@@ -2044,7 +1961,7 @@ $(function(){
 		})
 		.find('[name="menu[]"]').click(function(){
 			mostrarCapa($(this).data('capa'));
-			$('.app-bar-pullmenu ').hide('blid');
+			$('.app-bar-pullmenu ').hide('blind');
 		})
 
 	$("#notas")
