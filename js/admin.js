@@ -3,7 +3,7 @@ var urlPhp = "../../php/admin/";
 var admin = true;
 var HORARIOS = document.horarios;
 var FESTIVOS = document.festivos;
-//var hora = 0; 
+var hora = 0; 
 
 function sincronizar(date,dias,callback){
 
@@ -16,13 +16,13 @@ function sincronizar(date,dias,callback){
 	
 	Fecha.general = Fecha.sql(fecha);
 	Fecha.id = Fecha.number(Fecha.general);
-	
 
 	colorearMenuDiasSemana();
 
 	//sincronizo horarios para hacer consulta en crear Cita
-	main.sincronizar(dias);	
-	crearCita.sincronizar(dias);
+	main.sincronizar(dias,function(){alert();
+		crearCita.sincronizar(dias);
+	});	
 	typeof callback == "function" && callback();
 	
 
@@ -449,12 +449,9 @@ var crearCita ={
 				dialog.close('#dlgGuardar');
 			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown){
-				echo(jqXHR);
-				echo(textStatus);
-				echo(errorThrown);
+				notify.error(jqXHR + textStatus + errorThrown);
 				return false;
 			})
-			
 		}else{
 			notify.error('Complete todos los datos');
 			return false;
@@ -462,18 +459,22 @@ var crearCita ={
 
 	},
 	horas: {
-		iniciar: function(){
-//AKI :  crear dias cuando no estan creadas en el crearCitas horas		
-		
+		iniciar: function(){		
 			cargarDatepicker();
-			$('#main .dia').each(function(index , table){
-				var self = {
-					obj : $('#crearCita #'+$(this).attr('id')),
-					id : $(this).attr('id')
-				}
-				if (Fecha.restar(self.id)>=0 && !self.obj.length) 
-					crearCita.horas.crear($(this));
-			})
+			if ($('#main #'+Fecha.id).length ) 
+				_bucleDias();
+
+			
+			function _bucleDias (){
+				$('#main .dia').each(function(index , table){
+					var self = {
+						obj : $('#crearCita #'+$(this).attr('id')),
+						id : $(this).attr('id')
+					}
+					if (Fecha.restar(self.id)>=0 && !self.obj.length) 
+						crearCita.horas.crear($(this));
+				})		
+			}
 		},
 
 		crear: function ($this, callback){
@@ -979,12 +980,12 @@ var horario = {
 var main ={
 	sincronizar: function (dir,callback){
 
-		var idFecha=Fecha.number(Fecha.general);
+		var idFecha=Fecha.id;
 		var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 		
 		(diaFestivo)?$('.datepicker').addClass('c-red'):$('.datepicker').removeClass('c-red');
 
-		$('#main #'+idFecha).length>0
+		$('#main #'+idFecha).length
 			?main.check(false,_finCarga)
 			:main.crearDias(_finCarga);
 
@@ -996,8 +997,9 @@ var main ={
 		function _finCarga(){
 			main.lbl.color($('.editando'),function(){
 				$('#main .editando').removeClass('editando');
-				typeof callback == "function" && callback();
 			})
+//AKI : no funcionan los callbacks
+			typeof callback == "function" && callback();
 		}
 
 		function _sliderDias(idFecha,dir,callback){
@@ -1024,8 +1026,8 @@ var main ={
 	},
 	crearDias: function(callback){
 
-		var mD = ($('body').data('margenDias'))/2;
-		var fechaIni = calcularFecha(-1*mD,Fecha.general);
+		var mD = parseInt(document.margenDias)/2;
+		var fechaIni = Fecha.calcular(-1*mD,Fecha.general);
 		var fecha = fecha||Fecha.general;
 		var dias = $('#main .cuerpo .dia');
 		var ids = new Array();

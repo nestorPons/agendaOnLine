@@ -7,6 +7,7 @@ include (ROOT . 'horarios/consult.php');
 define('HORAS',Horarios\horarios());
 $_SESSION['HORAS'] = HORAS;
 
+define('MARGEN_DIAS',10);
 
 function familias(){
 	global $conexion;

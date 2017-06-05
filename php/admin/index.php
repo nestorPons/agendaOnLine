@@ -36,13 +36,12 @@ include 'core.php';
 	document.horarios = <?php echo  json_encode(HORAS)?>;
 	document.minTime = <?php echo  json_encode(CONFIG['MinTime'])?>;
 	document.idUser = <?php echo $_SESSION['id_usuario']?>;
-	
+	document.margenDias  = <?php echo MARGEN_DIAS?> ; 
 </script>
 <title>Agenda onLine</title>
 
 </head><body
 	data-empresa="<?php echo CONFIG['Nombre']?>" 
-	data-margen-dias = <?php echo MARGEN_DIAS?>
 >
 
 	<?php include "../../php/menus/menuAdmin.php"?>
