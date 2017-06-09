@@ -93,7 +93,7 @@ var crearCita = {
 					icon: 'icon-cross'
 				})
 				$('.dialog').hide();
-				resetBtnLoad();
+				btnLoad.reset();
 			}
 		}).fail(function(r){console.log("ERROR=>"+r.success);})
 		
@@ -496,7 +496,7 @@ function resize(that){
 
 function cerrarMenu(){
 	var $this = $('.tile-active');	
-	resetBtnLoad();
+	btnLoad.reset();
 	crearCita.stepper(0);
 	
 	if(typeof(ancho) != "undefined"){

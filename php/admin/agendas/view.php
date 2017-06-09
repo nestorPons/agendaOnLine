@@ -1,5 +1,17 @@
 <?php namespace agendas;
 
+if (! empty($_GET)){
+	require_once "../../connect/conexion.php";
+	$conexion = conexion(true,false,true);
+
+	include '../core.php';
+
+	$fecha_inicio = $_GET['f'];
+	$datos_agenda = datosAgenda($fecha_inicio);
+	$ids_existentes = json_decode(stripslashes($_GET['ids']));
+	view($datos_agenda,$fecha_inicio,$ids_existentes);
+}
+
 function view($datosAgenda,$fecha_inicio,$existen_array=false){
 	
 	$primer_dia_agenda = sumarFecha($fecha_inicio,-MARGEN_DIAS/2);
@@ -14,7 +26,8 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 					<?php 
 					echo $fecha==$fecha_inicio?'activa':'';
 					?>" 
-				data-transition>
+				diaSemana = "<?php echo date('w',strtotime($fecha) )?>" 
+			>
 				<table class = "tablas tablas-general" >	
 					<?php
 					for($h =  strtotime(CONFIG['hora_ini']); $h <=  strtotime(CONFIG['hora_fin']) ; $h += strtotime("+15 minutes", strtotime($h))){	

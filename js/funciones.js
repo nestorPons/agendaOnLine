@@ -16,7 +16,7 @@ $(document)
 			popup.close();
 		}
 	})
-	.on('click',".btnLoad",function(){btnLoad.show($(this))})
+	.on('click',".btn.load",function(){btn.load.show($(this))})
 	.on('click','.iconClass-inside.icon-eye',function(){
 		var $this = $(this).parent().find('input:visible')
 		var tipo = $this.attr('type')
@@ -105,21 +105,36 @@ var Fecha = {
 		return Math.floor(dif / (1000 * 60 * 60 * 24));
 	},
 }
-var btnLoad = {
-	status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
-	show: function($this){
-		if (btnLoad.status){
-			var frm = $this.parents('form:first');
-			var validar = (frm.length>0)?frm[0].checkValidity():true;
-			if(validar)$this.html('<span class="icon-load animate-spin"></span>');
+var btn = {
+	load : {
+		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
+		show : function($this){
+			if (btn.load.status){
+				var frm = $this.parents('form:first');
+				var validar = (frm.length>0)?frm[0].checkValidity():true;
+				if(validar)$this.html('<span class="icon-load animate-spin"></span>');
+			}
+			btn.load.status = true; 
+		},
+		hide : function(){
+			var $this = $('.btnLoad:visible');
+			var caption = $this.data('value');
+			$this.html(caption);			
+		},
+		reset :	function (callback){
+			$('.btnLoad').each(function(){
+				$(this).html($(this).data('value'))
+			});
+			typeof callback == "function" && callback();
 		}
-		btnLoad.status = true; 
 	},
-	hide: function(){
-		var $this = $('.btnLoad:visible');
-		var caption = $this.data('value');
-		$this.html(caption);			
-	},	
+	save : {
+		show : function (){
+			$('#btnSave')
+				.find('.icon-floppy').show().end()
+				.find('.icon-load').hide()
+		}
+	},
 }
 var validar = {
 	nombre: {
@@ -274,13 +289,13 @@ var popup  ={
 	open:
 		function(id){
 			$this = $(id);
-			resetBtnLoad();
+			btn.load.reset();
 			$this.fadeIn('slow');
 			$('.popup-overlay').fadeIn('slow');
 		},
 	close:
 		function(){
-			resetBtnLoad(function(){
+			btn.load.reset(function(){
 				$('body').css('overflow','scroll');
 				$('.popup').fadeOut('slow');
 				$('.popup-overlay').fadeOut('slow');
@@ -303,7 +318,7 @@ var popup  ={
 }
 var dialog = {
 	open:function(idObj,fnOk,fnCancel,callback){
-		resetBtnLoad();
+		btn.load.reset();
 
 		var $this = $(idObj);
 		if(!$this.find('.icon-cancel').length){
@@ -445,14 +460,6 @@ function formatoFecha (fechaTxt,formatOut){
 
 	return (fch);
 }
-function crearStrClase(str){
-	var arrClase = str.split(' ');
-	var clase =  "";
-	for (let i = 0; i < arrClase.length; i++){
-		clase += "."+arrClase[i] ;
-	}
-	return clase;
-}
 function fechaActual(arg){
 	var arg = arg||null;
 	var fecha_actual = new Date();
@@ -498,7 +505,7 @@ function cargarDatepicker(callback){
 			return day == 0 ||$.inArray(current,  document.festivos) > -1?[fesOn, "festivo"]:[true, ""];
 		},
 		onSelect: function (fecha) {
-			sincronizar(fecha);
+			sincronizar(null, fecha);
 			$('.ui-datepicker-inline').html(fecha);//para usuarios
 		},
 		onClose: function(){
@@ -552,24 +559,11 @@ function colorearMenuDiasSemana(arg){
 	}
 
 };
-function getAbsolutePath() {
-    var loc = window.location;
-    var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
-	var arrayLoc = pathName.split('/');
-	var folder =  arrayLoc[1];
-    return loc.protocol +'//'+ loc.hostname +'/'+folder+'/';
-}
 function hideShow(param){
 	for (var i = 0; i < arguments.length; ++i) {
 			let $obj = $(arguments[i])
 			$obj.toggle();
 	}
-}
-function resetBtnLoad(callback){
-	$('.btnLoad').each(function(){
-		$(this).html($(this).data('value'))
-	});
-	typeof callback == "function" && callback();
 }
 function normalize(string){
 	var str = string.split(" ").join("_");
@@ -780,9 +774,4 @@ function slideDias(contenedor,dir,callback){
 				});
 		})
 
-}
-function loadHide(){
-	$('#btnSave')
-		.find('.icon-floppy').show().end()
-		.find('.icon-load').hide()
 }

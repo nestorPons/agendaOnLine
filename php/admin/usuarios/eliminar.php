@@ -6,5 +6,20 @@ $conexion = conexion();
 $sql="UPDATE  usuarios SET dateBaja = '". date('Y-m-d H:m:s') ."' WHERE Id =".$_GET['id'];
 $jsondata['sql'] = $sql;
 $jsondata['success'] =mysqli_query($conexion, $sql)?true:false;
+
+foreach ( $_SESSION['USUARIOS'] as $key => $value ) {
+
+    if ($_GET['id'] == $value[0] ){
+        $key_id = $key ; 
+        break;
+    }
+
+}
+
+// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 Block 8 Baja 9 Activa 
+//10 datePass 11 cookie 12 Idioma 13 dateReg 14 dateBaja 
+
+$_SESSION['USUARIOS'][$key_id][14] =  date('Y-m-d H:m:s');
+
 //registrarEvento(2,0, $_GET['id'],0);
 echo json_encode($jsondata);

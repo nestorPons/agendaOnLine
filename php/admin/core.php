@@ -20,7 +20,7 @@ $_SESSION['FAMILIAS'] = familias();
 
 function servicios(){
 	global $conexion;
-	
+	//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
 	$sql="SELECT * FROM articulos WHERE Baja = 0 ORDER BY Descripcion";
 	$result= mysqli_query($conexion,$sql);
 	return mysqli_fetch_all($result,MYSQLI_NUM);
@@ -34,7 +34,7 @@ function usuarios(){
 	$result= mysqli_query($conexion,$sql);
 	return mysqli_fetch_all($result);
 }
-//AKI : HAY que refrescar datos usuario cuado un usuario actualice o nuevo 
+ 
 $_SESSION['USUARIOS'] = usuarios();
 
 //FESTIVOS

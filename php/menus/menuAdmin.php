@@ -126,7 +126,7 @@
 			</ul>
 		</li>
 
-		 <div id="btnReset" class="app-bar-element no-flexible place-right">
+		 <div id="btnReset" class="app-bar-element no-flexible place-right ">
 			<span  class="icon-undo"></span>
 			<span  class="menulbl">Refrescar</span>
 		</div>
