@@ -932,7 +932,6 @@ var crearCita ={
 				})		
 			}
 		},
-
 		crear: function (id_table, callback){
 
 			var contenedor = $('#crearCita .tblHoras');
@@ -1451,7 +1450,7 @@ var servicios = {
 		var height = parseInt($('#servicios .cabecera').css('height'));
 	},
 	mostrar: function(id) {
-		if ($('#servicios .fam'+ id).is(':visible') ) return false ;
+		if ($('#servicios .fam'+ id).is(':visible') ||$('#crearCita .fam'+ id).is(':visible') ) return false ;
 		var contenedor = $('.capasPrincipales:visible .contenedorServicios');
 		var id = $.isEmpty(id)?1:id;
 
@@ -1527,12 +1526,13 @@ var servicios = {
 					}
 					servicios.mostrar(rsp.familia);
 					popup.close();
+				}else{
+					notify.error('Codigo de servicio ocupado </br> Seleccione otro codigo distinto.', 'CODIGO OCUPADO') ;
 				}
 			}).fail(function(r){echo ("ERROR guardar servicios =>"+r)});
 	},
 	eliminar: function() {
-		var id= ($('#dlgServicios #id').val());
-		id =id.trim();
+		var id= $('#dlgServicios #id').val().trim();
 
 		if (id!=0){
 			if (confirm ("Deseas eliminar el servicio "+id+", " + $('#dlgServicios #codigo').val() + "?")) {
@@ -1548,14 +1548,13 @@ var servicios = {
 				})
 				.done(function(){
 
-					$("#servicios #rowServicios"+id).fadeTo("slow", 0 , function(){
-						//$(this).remove('#rowServicios'+id);
-						$('body #rowServicios'+id).each(function(){
-							$(this).remove();
-						})
-					});
+					$("#servicios #rowServicios"+id).remove();
+					$("#crearCita #rowServicios"+id).remove();
+
 				})
-				.fail(function(){$("#servicios #rowServicios"+id).show("fast")})
+				.fail(function( jqXHR, textStatus, errorThrown){
+					alert( jqXHR, textStatus, errorThrown)
+					$("#servicios #rowServicios"+id).show("fast")})
 			}else{popup.close();}
 		}else{
 			popup.close();
@@ -1584,15 +1583,18 @@ var servicios = {
 				.prepend(html)
 				.promise()
 				.done(servicios.mostrar(data.familia))
-
+		
 		},'html')
-		$.get(url,data,function(html){
-			$('#servicios .tablas tbody')
-				.prepend(html)
-				.promise()
-				.done(servicios.mostrar(data.familia))
+		
+		if (!$.isEmpty($('#crearCita').html())){
+			url = urlPhp+'crearCita/rowServicios.php' ; 
+			
+			$.get(url,data,function(html){
+				$('#crearCita .contenedorServicios tbody')
+					.prepend(html)
+			},'html')			
+		}
 
-		},'html')
 	}
 }
 var usuario = {
@@ -1980,16 +1982,12 @@ $(function(){
 		.on( "click", "[name*='editar']", function(e){servicios.poppup($(this).attr('value'))})
 		.find('option:first-child').attr('selected','selected');
 		
-	$('#dialogs')
-		.on('click','#dlgServicios #btnAceptar',servicios.guardar)
-		.on('click',"#ppFamilias #btnEliminar",function(e){familias.eliminar(e)})
-		.on('click','#ppFamilias #frmEditarFamilia',familias.guardar)
-
-		$('#familias input[name*="mostrar"]').change(function(){
-			var mostrar = ($(this).is(':checked'))?1:0;
-			var id = $(this).attr('id');
-			familias.chckGuardar(id, mostrar);
-		});
+		$('#familias input[name*="mostrar"]')
+			.change(function(){
+				var mostrar = ($(this).is(':checked'))?1:0;
+				var id = $(this).attr('id');
+				familias.chckGuardar(id, mostrar);
+			});
 
 	$("#usuarios")
 		.on('click','[name*="editar"]',function(){

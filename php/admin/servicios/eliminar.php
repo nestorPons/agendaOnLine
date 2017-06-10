@@ -8,7 +8,7 @@ $jsondata['success'] =mysqli_query($conexion, $sql);
 
 foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {
 
-    if ($id == $value[0] ){
+    if ($_GET['id'] == $value[0] ){
         $key_id = $key ; 
         break;
     }
