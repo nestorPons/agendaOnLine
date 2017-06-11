@@ -1590,7 +1590,7 @@ class lessc {
 		$out = ob_get_clean();
 		setlocale(LC_NUMERIC, $locale);
 		return $out;
-	}
+	} 
 	public function compileFile($fname, $outFname = null) {
 		if (!is_readable($fname)) {
 			throw new Exception('load error: failed to find '.$fname);
@@ -1603,7 +1603,11 @@ class lessc {
 		$out = $this->compile(file_get_contents($fname), $fname);
 		$this->importDir = $oldImport;
 		if ($outFname !== null) {
-			return file_put_contents($outFname, $out);
+			$file =  file_put_contents($outFname, $out);
+			chown($outFname,getenv('APACHE_RUN_USER'));
+//AKI :: hay que cambiar dueño y pemisos del archivo creado
+			chmod($outFname , 0755);
+			return $file ; 
 		}
 		return $out;
 	}

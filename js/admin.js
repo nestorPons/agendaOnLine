@@ -49,15 +49,18 @@ function mostrarCapa(capa,callback){
 	if($('#crearCita').is(':visible')) crearCita.reset();
 
 	$('.capasPrincipales').hide();
-
 	$('#'+capa).fadeIn();
+
 	menu.status(capa);
-	if(capa=='main') $('#'+Fecha.number(Fecha.general)).show();
-	if(capa=='servicios') servicios.menuTamaño();
+
+	if(capa=='main') $('#'+Fecha.id).show();
+
 	btn.load.reset();
 
 	$('html,body').animate({scrollTop:0}, 500);
-
+	$('#navbar')
+		.find('.app-bar-element .selected').removeClass('selected').end()
+		.find('[data-capa="'+capa+'"]').addClass('selected')
 	typeof callback == "function" && callback();
 }
 var main ={
@@ -1446,9 +1449,6 @@ var servicios = {
 		var txt = normalize($('#txtBuscar').val());
 		$("[name*='"+txt+"']").fadeIn();
 	},
-	menuTamaño: function(){
-		var height = parseInt($('#servicios .cabecera').css('height'));
-	},
 	mostrar: function(id) {
 		if ($('#servicios .fam'+ id).is(':visible') ||$('#crearCita .fam'+ id).is(':visible') ) return false ;
 		var contenedor = $('.capasPrincipales:visible .contenedorServicios');
@@ -1459,8 +1459,11 @@ var servicios = {
 				contenedor 
 					.find('tbody .fam'+id).show()
 			}).end()
-			.find('.c3').removeClass('c3').end()
-			.find('#'+id).addClass('c3');
+		$('.menuServicios').each(function(){
+			$(this)
+				.find('.c3').removeClass('c3').end()
+				.find('#'+id).addClass('c3');
+		})
 
 	},
 	poppup:function(id){

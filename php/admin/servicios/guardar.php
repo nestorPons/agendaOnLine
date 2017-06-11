@@ -12,18 +12,17 @@ $precio =$_POST['precio']??0;
 $familia =$_POST['familia']??0;
 $tiempo = intval(preg_replace('/[^0-9]+/', '', $tiempo), 10);
 $precio = intval(preg_replace('/[^0-9]+/', '', $precio), 10);
- (!empty($id)){
+ if (!empty($id)){
 	$nuevo = false ;
 	$sql="UPDATE articulos SET Codigo = '$codigo',Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia WHERE Id = $id" ;
 }else{
 	$nuevo = true ;
-	$sql = 'SELECT * FROM articulos WHERE Codigo LIKE "'. $codigo .'"';
-	$result = mysqli_query($conexion,$sql)
+	$sql = "SELECT * FROM articulos WHERE Codigo LIKE '$codigo'";
+	$result = mysqli_query($conexion,$sql) ;
 	if (mysqli_num_rows($result)<=0){
 		$sql="INSERT INTO articulos (Codigo,Descripcion,Tiempo,Precio,IdFamilia) VALUE ('$codigo','$descripcion',$tiempo,$precio,$familia);";
 	}else{
-		$sql="UPDATE articulos SET Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia WHERE Id = $id" ;
-//AKI :: no se si darlo de alta nuevamente o mostrarlo al administrador para que decida
+		$sql="UPDATE articulos SET Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia, Baja = 0 WHERE Codigo LIKE '$codigo'" ;
 	}
 }
 
@@ -55,5 +54,7 @@ if (mysqli_query($conexion,$sql)){
 
 }else{	
 	$jsondata['success'] = false;
+	$jsondata['sql'] = $sql;
+ 	$jsondata['error'] = mysqli_error($conexion);
 }	
 echo json_encode($jsondata);
