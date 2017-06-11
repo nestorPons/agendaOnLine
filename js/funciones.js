@@ -286,15 +286,13 @@ var validar = {
 		
 }
 var popup  ={
-	open:
-		function(id){
+	open: function(id){
 			$this = $(id);
 			btn.load.reset();
 			$this.fadeIn('slow');
 			$('.popup-overlay').fadeIn('slow');
 		},
-	close:
-		function(){
+	close: function(){
 			btn.load.reset(function(){
 				$('body').css('overflow','scroll');
 				$('.popup').fadeOut('slow');

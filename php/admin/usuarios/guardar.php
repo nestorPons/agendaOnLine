@@ -34,7 +34,7 @@ if ($id==0){
 		$id  = mysqli_insert_id($conexion);
 		// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 Block 8 Baja 9 Activa 
 		//10 datePass 11 cookie 12 Idioma 13 dateReg 14 dateBaja 
-		$_SESSION['USUARIOS'][] = array($id, $nombre , $email , '' , $tel , $admin , $obs , 0 , 0 , 0 , 0 , 'es' , date() , 0);
+		$_SESSION['USUARIOS'][] = array($id, $nombre , $email , '' , $tel , $admin , $obs , 0 , 0 , 0 , 0 , 'es' , date("Y-m-d H:i:s") , 0);
 	}	
 }else{
 	$sql = "UPDATE usuarios SET Nombre ='$nombre', Email ='$email', Tel ='$tel', Obs='$obs',dateBaja='$fecha_baja',Admin=$admin WHERE Id=$id";

@@ -7,10 +7,10 @@ $email = $row[2]??$_GET['email'] ;
 $tel = $row[4]??$_GET['tel'] ; 
 $admin  =$row[5]??$_GET['admin'] ; 
 $obs = $row[6]??$_GET['obs'] ; 
-$activa = $row[14]??$_GET['activa'] ; 
+$activa = $row[14]??0; 
 $email_status= empty($email)?"No":"Si";
 $obs_status =empty($obs)?"No":"Si";
-$clase_estado_baja = $aciva!=0?'ocultar_baja':'';
+$clase_estado_baja = $activa!=0?'ocultar_baja':'';
 ?> 
 <tr id="rowUsuarios<?php echo $id?>" class="<?php echo $clase_estado_baja?>" data-value ="<?php echo$id?>"> 
     <td> 

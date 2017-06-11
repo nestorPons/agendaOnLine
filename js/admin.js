@@ -39,6 +39,7 @@ function mostrarCapa(capa,callback){
 			function __INIT__ (){
 				if(capa=='crearCita') crearCita.init();
 				if(capa=='servicios') servicios.init();
+				if(capa=='usuarios') usuarios.init();
 			}
 
 		},'html')
@@ -618,7 +619,7 @@ var menu = {
 
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'usuarios':
-				usuario.poppup(0);
+				usuarios.poppup(0);
 				break;
 			case 'servicios':
 				 servicios.poppup(0);
@@ -669,7 +670,7 @@ var menu = {
 		if($('#txtBuscar').val()!=""){
 			switch($('.capasPrincipales:visible').attr('id')) {
 				case 'usuarios':
-					usuario.buscar($('#txtBuscar').val());
+					usuarios.buscar($('#txtBuscar').val());
 					break;
 				case 'servicios':
 					servicios.buscar();
@@ -844,7 +845,7 @@ var crearCita ={
 	cliente: function (){
 		var url = urlPhp + 'usuarios/guardar.php';
 		var nombre = $('#crearCita #cliente').val();
-		usuario.guardar(0,nombre,btn.load.hide);
+		usuarios.guardar(0,nombre,btn.load.hide);
 	},
 	dialog: function (){
 		dialog.create('dlgGuardar',function(){
@@ -1449,8 +1450,11 @@ var servicios = {
 		var txt = normalize($('#txtBuscar').val());
 		$("[name*='"+txt+"']").fadeIn();
 	},
-	mostrar: function(id) {
-		if ($('#servicios .fam'+ id).is(':visible') ||$('#crearCita .fam'+ id).is(':visible') ) return false ;
+	mostrar: function(id_familia, no_validate) {
+		var id = id_familia;
+		var no_validate = no_validate || false;
+		
+		if (no_validate && $('#servicios .fam'+ id).is(':visible') ||$('#crearCita .fam'+ id).is(':visible')  ) return false ;
 		var contenedor = $('.capasPrincipales:visible .contenedorServicios');
 		var id = $.isEmpty(id)?1:id;
 
@@ -1583,9 +1587,12 @@ var servicios = {
 
 		$.get(url,data,function(html){
 			$('#servicios .tablas tbody')
-				.prepend(html)
+				.append(html)
 				.promise()
-				.done(servicios.mostrar(data.familia))
+				.done(function(){
+					notify.success('Se ha creado el servicio.','Nuevo servicio') ; 
+					servicios.mostrar(data.familia,true)
+				})
 		
 		},'html')
 		
@@ -1594,13 +1601,16 @@ var servicios = {
 			
 			$.get(url,data,function(html){
 				$('#crearCita .contenedorServicios tbody')
-					.prepend(html)
+					.append(html)
 			},'html')			
 		}
 
 	}
 }
-var usuario = {
+var usuarios = {
+	init : function () {
+		usuarios.select('A') ;
+	},
 	eliminar: function (id, nombre,callback) {
 		if ($('#usuarios #id').val()!=0){
 			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
@@ -1611,7 +1621,6 @@ var usuario = {
 					data: {id:id},
 					url: urlPhp+'usuarios/eliminar.php',
 					beforeSend: function (){
-						popup.close();
 						$("#usuarios #rowUsuarios"+id).fadeTo("slow", 0.30);
 					},
 				})
@@ -1619,15 +1628,17 @@ var usuario = {
 					$("#usuarios #rowUsuarios"+id)
 						.hide('explode')
 						.remove();
+						$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove();
+						notify.alert('El usuario ha sido eliminado con éxito.','Usuario eliminado!!')
 				})
 				.fail(function(){
 					$("#usuarios #rowUsuarios"+id).show("fast");
-					alert ("¡¡No se pudo borrar el registro!!");
+					notify.error("¡¡No se pudo borrar el registro!!",'Error!');
 				})
 			}
-		}else{
-			popup.close();
 		}
+		
+		popup.close();
 	},
 	guardar: function (idUsuario,nombreUsuario,callback){
 			var id= idUsuario||$('#dlgUsuarios #id').val();
@@ -1663,6 +1674,7 @@ var usuario = {
 						},function(rsp){
 							$('#usuarios .tablas').prepend(rsp);
 							$('#lstClientes').append('<option data-id="'+normalize(frm.nombre)+'">'+frm.nombre+'</option>')	
+							notify.success('Usuario guardado con éxito!.','Nuevo usuario')
 						})
 					}else{ 
 						//EDITANDO....
@@ -1697,15 +1709,16 @@ var usuario = {
 								.fadeTo("slow", 1);
 							$('#lstClientes')
 								.append('<option data-id="'+normalize(frm.nombre)+'">'+frm.nombre+'</option>')
-						}			
+						}	
+						notify.success('Usuario guardado con éxito!.','Usuario editado')						
 					}
 				btn.load.reset();
 				popup.close();
-				usuario.select(letra);
+				usuarios.select(letra);
 
 				typeof callback == "function" && callback();
 			})
-			.fail(function(r){echo ('ERROR guardar registro' + r);})
+			.fail(function( jqXHR, textStatus, errorThrown ){alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )})
 	
 	},
 	poppup: function (id){
@@ -1737,8 +1750,8 @@ var usuario = {
 						.find("#admin").attr('checked', false).end()
 						.find('#eliminar').val('Cancelar');
 				}
-			dialog.open('#dlgUsuarios',usuario.guardar,function(){
-				usuario.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
+			dialog.open('#dlgUsuarios',usuarios.guardar,function(){
+				usuarios.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
 			})
 		})		
 	},
@@ -1775,7 +1788,7 @@ var usuario = {
 	},
 	buscar: function (txt){
 		var txt =  normalize(txt);
-		usuario.select(txt.toUpperCase());
+		usuarios.select(txt.toUpperCase());
 		var txt = txt.replace(/\s/g, "");
 		txt = txt.toLowerCase();
 		$("#usuarios").find(".body").fadeOut().end()
@@ -1934,7 +1947,7 @@ $(function(){
 			}
 		})
 		.on('click','#btnReset',function(){
-			if($('#usuarios').is(':visible')) usuario.select('A');
+			if($('#usuarios').is(':visible')) usuarios.select('A');
 		})
 		.on('click','#btnSave',menu.save)
 		.on('keyup','#txtBuscar',function(event){
@@ -1995,13 +2008,13 @@ $(function(){
 	$("#usuarios")
 		.on('click','[name*="editar"]',function(){
 			var id = $(this).parents('tr:first').data('value')
-			usuario.poppup(id)
+			usuarios.poppup(id)
 		})
-		.on('click',"[name^='historia']",function(e){usuario.historial($(this))})
+		.on('click',"[name^='historia']",function(e){usuarios.historial($(this))})
 		.on('click','#mainLstABC a',function(){
-			usuario.select($(this).html());
+			usuarios.select($(this).html());
 		})
-		.on('change','#lstABC',function(){usuario.select($(this).val())})
+		.on('change','#lstABC',function(){usuarios.select($(this).val())})
 		.on('click','.icon-search',function(){
 			$('#popupHistorial').hide()
 			$('.popup-overlay').hide()
