@@ -126,7 +126,6 @@ var main ={
 		.done(function(html){
 			$('#main .cuerpo').append(html);
 
-			//AKI :: culpa de callbaks no puedo ponerlo en sincronizar 
 			crearCita.horas.iniciar(); 
 			
 			typeof callback == "function" && callback();
@@ -752,44 +751,54 @@ var familias = {
 
 	},
 	guardar :function (){
-		var id = $('#dlgFamilias #id').val();
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			data: $("#frmEditarFamilia").serialize(),
-			url: urlPhp+"familias/guardar.php",
-			beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
-		})
-		.done(function(data){
-			if (id>=0){
-				 $('#familias #nombre'+id).html(data.nombre);
-				var estado = (data.mostrar==1)?true:false;
-				var $chck = $('#familias #chck'+id);
-				$chck.prop("checked",estado);
-				$('#servicios #frmEditar #familia option[value='+id+']').html(data.nombre);
+		btn.load.show($('#dlgFamilia .aceptar',false));
+		
+		if (familias.validate()){
 
-				$('.menuServicios').each(function(){
-					$(this).find('.lstMenu #'+id).html(data.nombre)
-				});
+			var id = $('#dlgFamilias #id').val();
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				data: $("#frmEditarFamilia").serialize(),
+				url: urlPhp+"familias/guardar.php",
+				beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
+			})
+			.done(function(data){
+				if (id>=0){
+					$('#familias #nombre'+id).html(data.nombre);
+					var estado = (data.mostrar==1)?true:false;
+					var $chck = $('#familias #chck'+id);
+					$chck.prop("checked",estado);
+					$('#servicios #frmEditar #familia option[value='+id+']').html(data.nombre);
 
-			}else{
-				var mostrar = (data.mostrar==1)?'checked':'';
-				$("#familias table").append("\
-					<tr id='rowFamilias"+data.id+"'>\
-					<td><a name='editar[]' class= 'icon-edit x6' value="+data.id+"></a></td>\
-					<td id='nombre"+data.id+"' class='nom'>"+data.nombre+"</td>\
-					<td class='ico'>\
-					<input type='checkbox' name = 'mostrar[]' id='chck"+data.id+" class='mostrar'\
-					value="+data.id+" "+ mostrar + "></td></tr>")
-				$('#servicios #frmEditar #familia').append("<option value="+data.id+">"+data.nombre+"</option>");
-				$('.menuServicios')
-					.find('#mainLstServicios').append("<a id="+data.id+">"+data.nombre+"</a>").end()
-					.find('.lstServicios select').append("<option id="+data.id+" value="+data.id+">"+data.nombre+"</option>");
-			}
-			popup.close();
-			crearCita.mostrar.familias(data);
-			$("#rowFamilias"+id).fadeTo("fast", 1);
-		})	.fail(function(){echo ("¡¡No se pudo guardar el registro!!");})
+					$('.menuServicios').each(function(){
+						$(this).find('.lstMenu #'+id).html(data.nombre)
+					});
+
+				}else{
+					var mostrar = (data.mostrar==1)?'checked':'';
+					$("#familias table").append("\
+						<tr id='rowFamilias"+data.id+"'>\
+						<td><a name='editar[]' class= 'icon-edit x6' value="+data.id+"></a></td>\
+						<td id='nombre"+data.id+"' class='nom'>"+data.nombre+"</td>\
+						<td class='ico'>\
+						<input type='checkbox' name = 'mostrar[]' id='chck"+data.id+" class='mostrar'\
+						value="+data.id+" "+ mostrar + "></td></tr>")
+					$('#servicios #frmEditar #familia').append("<option value="+data.id+">"+data.nombre+"</option>");
+					$('.menuServicios')
+						.find('#mainLstServicios').append("<a id="+data.id+">"+data.nombre+"</a>").end()
+						.find('.lstServicios select').append("<option id="+data.id+" value="+data.id+">"+data.nombre+"</option>");
+				}
+				popup.close();
+				crearCita.mostrar.familias(data);
+				$("#rowFamilias"+id).fadeTo("fast", 1);
+
+				btn.load.hide();
+			})	.fail(function(){echo ("¡¡No se pudo guardar el registro!!");})
+		}else{
+			btn.load.hide();
+		}
+		
 	},
 	chckGuardar: function(id,mostrar){
 		var url = urlPhp + "familias/familias.chckGuardar.php";
@@ -820,6 +829,15 @@ var familias = {
 			dialog.open('#dlgFamilias',familias.guardar,familias.eliminar);
 		});
 	},
+	validate : function () {  
+		var valNom = $('#dlgFamilias #nombre').val(); 
+		if ($.isEmpty(valNom)){
+			notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
+			return false ;
+		}else {
+			return true ;
+		}
+	}
 }
 var crearCita ={
 	init : function(){
@@ -1510,6 +1528,10 @@ var servicios = {
 		});
 	},
 	guardar: function (){
+		btn.load.show($('#dlgServicios .aceptar',false));
+
+		if (servicios.validate()) {
+
 			var id= $('#frmEditarServicios #id').val();
 			var data = $('#frmEditarServicios').serialize();
 			var url = urlPhp+'servicios/guardar.php';
@@ -1525,8 +1547,10 @@ var servicios = {
 			.done(function(rsp){
 				if (rsp.success) {
 					if (id==0){
+
 						if (rsp.success)
 							servicios.crear(rsp);
+
 					}else{
 						
 							servicios.actualizar(rsp);
@@ -1536,7 +1560,11 @@ var servicios = {
 				}else{
 					notify.error('Codigo de servicio ocupado </br> Seleccione otro codigo distinto.', 'CODIGO OCUPADO') ;
 				}
+				btn.load.hide();
 			}).fail(function(r){echo ("ERROR guardar servicios =>"+r)});
+		}
+
+		btn.load.hide();
 	},
 	eliminar: function() {
 		var id= $('#dlgServicios #id').val().trim();
@@ -1605,7 +1633,20 @@ var servicios = {
 			},'html')			
 		}
 
-	}
+	},
+	validate : function (param) {
+		var valCod = $('#dlgServicios #codigo').val();
+		var valDes = $('#dlgServicios #descripcion').val();
+		var valTim = $('#dlgServicios #tiempo').val();
+		if ($.isEmpty(valCod) || $.isEmpty(valDes) || $.isEmpty(valTim)){
+			notify.error('Son campos obligatorios :<br> Código <br> Descripcion <br> Tiempo') ;
+			btn.load.hide();
+			return false ;
+		}else{
+			return true ;
+		}
+
+	},
 }
 var usuarios = {
 	init : function () {
@@ -1641,6 +1682,13 @@ var usuarios = {
 		popup.close();
 	},
 	guardar: function (idUsuario,nombreUsuario,callback){
+		btn.load.show($('#dlgUsuarios .aceptar',false));
+
+		
+		if (!usuarios.validate()){
+			btn.load.hide();
+			return false 
+		};
 			var id= idUsuario||$('#dlgUsuarios #id').val();
 			var data = $.isEmpty(nombreUsuario)
 				?$("#frmUsuarios").serialize()
@@ -1715,7 +1763,8 @@ var usuarios = {
 				btn.load.reset();
 				popup.close();
 				usuarios.select(letra);
-
+				
+				btn.load.hide();
 				typeof callback == "function" && callback();
 			})
 			.fail(function( jqXHR, textStatus, errorThrown ){alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )})
@@ -1793,6 +1842,16 @@ var usuarios = {
 		txt = txt.toLowerCase();
 		$("#usuarios").find(".body").fadeOut().end()
 	},
+	validate : function(){
+		var value = $('#dlgUsuarios	#nombre').val() ;
+		if ($.isEmpty(value)){
+			notify.error('El campo nombre no puede estar vacio.','Error crear usuario')
+			return false ;
+		}else{
+			return true ;
+		}
+
+	}
 }
 $(function(){
 	$('body').on('click',"[name='desplazarFecha']",function(e){

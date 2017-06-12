@@ -8,39 +8,6 @@ var nombreEmpresa = $('body').data('empresa');
 var horarios = new Array();
 var festivos = new Array();
 
-$(document)
-	.keyup(function(event){
-		if(event.which==27){
-			popup.close();
-			dialog.close('.dialog');
-			popup.close();
-		}
-	})
-	.on('click',".btn.load",function(){btn.load.show($(this))})
-	.on('click','.iconClass-inside.icon-eye',function(){
-		var $this = $(this).parent().find('input:visible')
-		var tipo = $this.attr('type')
-		tipo = tipo == 'password'?'text':'password';
-		$this.attr('type',tipo)
-	})
-	.on('blur','input:password',function(){validar.pass.funcion($(this))})
-	.on('change','input:password',function(){validar.pass.estado=false})
-	.on('blur','.email',function(){validar.email.funcion($(this))})
-	.on('change','.email',function(){validar.email.estado=false})
-	.on('blur','.tel',function(){validar.tel.funcion($(this))})
-	.on('change','.tel',function(){validar.tel.estado=false})
-	.on('click','.iconClass-inside.icon-cancel',function(){
-		$(this).parent().find('input').val("");
-	})
-	.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
-	.on('change','.nombre',function(){validar.nombre.estado=false}).end()
-	.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
-	.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
-	.on('click','.inicio',function(){window.location.href="index.php"})
-	.on('click','#btnMenuResponsive',function(){
-		toggleMetroCharm('#mnuResponsive')
-	})
-
 $(function(){
 	$('.time').mask('00:00');
 	$('.tel').mask('## 000 00 00 00');
@@ -54,6 +21,38 @@ $(function(){
 	};
 	jQuery(this).on('keyup input', function() { resizeTextarea(this); }).removeAttr('data-autoresize');
 	});
+	$(document)
+		.keyup(function(event){
+			if(event.which==27){
+				popup.close();
+				dialog.close('.dialog');
+				popup.close();
+			}
+		})
+		.on('click',".btnLoad",function(){btn.load.show($(this))})
+		.on('click','.iconClass-inside.icon-eye',function(){
+			var $this = $(this).parent().find('input:visible')
+			var tipo = $this.attr('type')
+			tipo = tipo == 'password'?'text':'password';
+			$this.attr('type',tipo)
+		})
+		.on('blur','input:password',function(){validar.pass.funcion($(this))})
+		.on('change','input:password',function(){validar.pass.estado=false})
+		.on('blur','.email',function(){validar.email.funcion($(this))})
+		.on('change','.email',function(){validar.email.estado=false})
+		.on('blur','.tel',function(){validar.tel.funcion($(this))})
+		.on('change','.tel',function(){validar.tel.estado=false})
+		.on('click','.iconClass-inside.icon-cancel',function(){
+			$(this).parent().find('input').val("");
+		})
+		.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
+		.on('change','.nombre',function(){validar.nombre.estado=false}).end()
+		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
+		.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
+		.on('click','.inicio',function(){window.location.href="index.php"})
+		.on('click','#btnMenuResponsive',function(){
+			toggleMetroCharm('#mnuResponsive')
+	})
 })
 jQuery.isEmpty = function(obj){
 	var isEmpty =
@@ -106,25 +105,42 @@ var Fecha = {
 	},
 }
 var btn = {
+	active : null , 
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
-		show : function($this){
+//AKI :: se ejecuta dos veces show ;
+		show : function($this, status){
+
+//AKI :: Se ejecuta primero el evento close btn hide que btn.load
+			
+
 			if (btn.load.status){
+
 				var frm = $this.parents('form:first');
 				var validar = (frm.length>0)?frm[0].checkValidity():true;
-				if(validar)$this.html('<span class="icon-load animate-spin"></span>');
+				if(validar){
+					$this.html('<span class="icon-load animate-spin"></span>');
+					btn.active = $this ;
+echo (btn.active)
+				}
 			}
-			btn.load.status = true; 
+			btn.load.status = (status != 'undefined') ? status : true;	
+
+			
 		},
-		hide : function(){
-			var $this = $('.btnLoad:visible');
+		hide : function(btnId){
+			var $this = btnId||btn.active //$('.icon-load:visible').parent();
+
 			var caption = $this.data('value');
-			$this.html(caption);			
+			
+			$this.html(caption);	
+			btn.active = null ;		
 		},
 		reset :	function (callback){
 			$('.btnLoad').each(function(){
 				$(this).html($(this).data('value'))
 			});
+			btn.active = null ;
 			typeof callback == "function" && callback();
 		}
 	},
@@ -363,13 +379,21 @@ var dialog = {
 			 $.get(url,function(html){
 				$('#dialogs')
 					.append(html)
-					.find('#'+objName)
-						.keypress(function(event){
-						//BOTON PREDETERMINADO EN LOS DIALOGS
-							if(event.which==13)
-								$this.find('.aceptar').click(); //AKI SE ME HA ATRAGANTADO NO REACCIONA EL EVENTO CLICK
-						})
-				 typeof callback == "function" && callback();
+					.promise()
+					.done(function(){
+						$this = $('#dialogs #'+objName)
+							.keypress(function(e){
+									var code = e.keyCode || e.which;
+								//BOTON PREDETERMINADO EN LOS DIALOGS
+									if(event.which==13)
+										$this.find('.aceptar').click();
+
+							})
+							.find("form:not(.filter) :input:visible:enabled:first").focus();
+//AKI : no consigo pasar el foco 
+					typeof callback == "function" && callback();
+
+					})
 			 })
 		}else{
 			if ($this.find('form').length)
@@ -550,11 +574,11 @@ function colorearMenuDiasSemana(arg){
 
 	//coloreo rojo festivos en datepicker
 	var fes = formatoFecha(fecha,'md');
-	if(d==7||$.inArray(fes,festivos.year)!=-1){
+	if(d==7||$.inArray(fes,festivos.year)!=-1)
 		$('.datepicker').css('color','#e04747')
-	}else{
+	else
 		$('.datepicker').css('color','inherit')
-	}
+	
 
 };
 function hideShow(param){

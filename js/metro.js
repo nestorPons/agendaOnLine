@@ -3413,6 +3413,7 @@ var Notify = {
 		
 		if($('#'+options.id).length) return false;
 		this._build();
+
 		return this;
 	},
 

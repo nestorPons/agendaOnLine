@@ -1604,8 +1604,7 @@ class lessc {
 		$this->importDir = $oldImport;
 		if ($outFname !== null) {
 			$file =  file_put_contents($outFname, $out);
-			chown($outFname,getenv('APACHE_RUN_USER'));
-//AKI :: hay que cambiar dueño y pemisos del archivo creado
+		
 			chmod($outFname , 0755);
 			return $file ; 
 		}
