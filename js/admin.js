@@ -751,7 +751,7 @@ var familias = {
 
 	},
 	guardar :function (){
-		btn.load.show($('#dlgFamilia .aceptar',false));
+		btn.load.show($('#dlgFamilia .aceptar'),false);
 		
 		if (familias.validate()){
 
@@ -800,6 +800,12 @@ var familias = {
 		}
 		
 	},
+	crear : function () {
+		$('.menuServicios').each(function(){
+			$(this).find('#lstSerMain')
+//AKI :: Creando elemento de familia en todos los menus 
+		})
+	}, 
 	chckGuardar: function(id,mostrar){
 		var url = urlPhp + "familias/familias.chckGuardar.php";
 
@@ -1528,10 +1534,9 @@ var servicios = {
 		});
 	},
 	guardar: function (){
-		btn.load.show($('#dlgServicios .aceptar',false));
-
-		if (servicios.validate()) {
-
+		var validate  = btn.load.show($('#dlgServicios .aceptar'),false);
+		var idFrm = $('#dlgServicios form').attr('id') ;
+		if(validar.form(idFrm)){
 			var id= $('#frmEditarServicios #id').val();
 			var data = $('#frmEditarServicios').serialize();
 			var url = urlPhp+'servicios/guardar.php';
@@ -1562,8 +1567,8 @@ var servicios = {
 				}
 				btn.load.hide();
 			}).fail(function(r){echo ("ERROR guardar servicios =>"+r)});
-		}
 
+		}
 		btn.load.hide();
 	},
 	eliminar: function() {
@@ -1634,19 +1639,7 @@ var servicios = {
 		}
 
 	},
-	validate : function (param) {
-		var valCod = $('#dlgServicios #codigo').val();
-		var valDes = $('#dlgServicios #descripcion').val();
-		var valTim = $('#dlgServicios #tiempo').val();
-		if ($.isEmpty(valCod) || $.isEmpty(valDes) || $.isEmpty(valTim)){
-			notify.error('Son campos obligatorios :<br> Código <br> Descripcion <br> Tiempo') ;
-			btn.load.hide();
-			return false ;
-		}else{
-			return true ;
-		}
 
-	},
 }
 var usuarios = {
 	init : function () {

@@ -108,25 +108,16 @@ var btn = {
 	active : null , 
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
-//AKI :: se ejecuta dos veces show ;
+
 		show : function($this, status){
 
-//AKI :: Se ejecuta primero el evento close btn hide que btn.load
-			
-
 			if (btn.load.status){
-
-				var frm = $this.parents('form:first');
-				var validar = (frm.length>0)?frm[0].checkValidity():true;
-				if(validar){
 					$this.html('<span class="icon-load animate-spin"></span>');
 					btn.active = $this ;
-echo (btn.active)
-				}
 			}
+			
 			btn.load.status = (status != 'undefined') ? status : true;	
 
-			
 		},
 		hide : function(btnId){
 			var $this = btnId||btn.active //$('.icon-load:visible').parent();
@@ -299,7 +290,18 @@ var validar = {
 		},
 		estado: false,
 	},	
-		
+	form : function(idFrm){
+//AKI :: personalizando mensaje de error 
+		var frm = $('#'+idFrm);
+
+		if (frm[0].checkValidity(opts) != false){
+			return true; 
+		}else{
+			notify.error(frm[0].validationMessage,'Error formulario')
+			return false ;
+		}		
+
+	},
 }
 var popup  ={
 	open: function(id){

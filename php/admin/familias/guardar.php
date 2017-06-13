@@ -13,7 +13,26 @@ $sql= ($id>=0)
 $jsondata['nombre'] = $nombre;
 $jsondata['mostrar'] = $mostrar;
 if(mysqli_query($conexion, $sql)){
+// 0 IdFamilia 1 Nombre 2 Mostrar 
 	$jsondata['id'] = mysqli_insert_id($conexion);
 	$jsondata['success'] = true;
+if($id>=0){
+
+		foreach ( $_SESSION['FAMILIAS'] as $key => $value ) {
+
+			if ($id == $value[0] ){
+				$key_id = $key ; 
+				break;
+			}
+
+		}	
+		$_SESSION['FAMILIAS'][$key_id]  = array($id , $nombre , $mostrar ) ; 
+	
+}else{
+
+	$_SESSION['FAMILIAS'][]  = array($jsondata['id'],$jsondata['nombre'],$jsondata['mostrar'] ); 
+	
+}
+
 }
 echo json_encode($jsondata);
