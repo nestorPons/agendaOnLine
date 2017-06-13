@@ -716,10 +716,13 @@ var agendas = {
 }
 var familias = {
 	change : false , 
-	eliminar : function (e) {
-		var id = $('#dlgFamilias #id').val();
+	eliminar : function () {
 
-		if (confirm ("Deseas eliminar la familia " + id + "?")) {
+		btn.load.show($('#dlgFamilias .cancelar'),false)
+
+		var id = $('#dlgFamilias #id').val();
+		var nombre = $('#dlgFamilias #nombre').val();
+		if (confirm ("Deseas eliminar la familia " + nombre + "?")) {
 			$.ajax({
 				type: "GET",
 				data: {id:id},
@@ -728,25 +731,22 @@ var familias = {
 				beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
 			})
 			.done(function(mns){
-				if (mns.success==true){
+				if (mns.success == true){
 					$("#familias #rowFamilias"+id).remove();
 					$('#servicios #frmEditar #familia option[value="'+id+'"]').remove();
-					$('.menuServicios').each(function(){
-						$(this).find('.menu #'+id).remove()
-					});
+					familias.menu.eliminar( id ) ;
 				}else{
 					$("#familias #rowFamilias"+id).fadeTo("slow", 1);
 					console.log("ERROR=>"+mns);
 				}
-				popup.close(id);
+				popup.close(id) ;
 			}).fail(function(mns){
 				console.log("ERROR =>"+mns);
 				$("#familias #"+id).fadeTo("slow", 1);
 			});
 
 		}else{
-			e.stopPropagation();
-			btn.load.reset();
+			btn.load.hide()
 		}
 
 	},
@@ -771,9 +771,7 @@ var familias = {
 					$chck.prop("checked",estado);
 					$('#servicios #frmEditar #familia option[value='+id+']').html(data.nombre);
 
-					$('.menuServicios').each(function(){
-						$(this).find('.lstMenu #'+id).html(data.nombre)
-					});
+					familias.menu.editar( data.id , data.nombre ) ;
 
 				}else{
 					var mostrar = (data.mostrar==1)?'checked':'';
@@ -785,12 +783,12 @@ var familias = {
 						<input type='checkbox' name = 'mostrar[]' id='chck"+data.id+" class='mostrar'\
 						value="+data.id+" "+ mostrar + "></td></tr>")
 					$('#servicios #frmEditar #familia').append("<option value="+data.id+">"+data.nombre+"</option>");
-					$('.menuServicios')
-						.find('#mainLstServicios').append("<a id="+data.id+">"+data.nombre+"</a>").end()
-						.find('.lstServicios select').append("<option id="+data.id+" value="+data.id+">"+data.nombre+"</option>");
+					
+					familias.menu.crear( data.id , data.nombre ) ;
+
 				}
 				popup.close();
-				crearCita.mostrar.familias(data);
+				
 				$("#rowFamilias"+id).fadeTo("fast", 1);
 
 				btn.load.hide();
@@ -800,11 +798,37 @@ var familias = {
 		}
 		
 	},
-	crear : function () {
-		$('.menuServicios').each(function(){
-			$(this).find('#lstSerMain')
-//AKI :: Creando elemento de familia en todos los menus 
-		})
+	menu : {
+		editar : function ( id ,  nombre ){
+			familias.menu.eliminar ( id ) ;
+			familias.menu.crear( id , nombre ) ; 
+
+		},
+		eliminar : function ( id ) {
+			$('.menuServicios').each(function(){
+				$(this).find('#lstSerMain').find('#'+id).remove();
+				$(this).find('#lstSerSelect').find('#'+id).remove();
+			})
+		},
+		crear : function (id, name ) {
+			$('.menuServicios').each(function(){
+				$(this).find('#lstSerMain').append(familias.menu.a(id ,name))
+
+				$(this).find('#lstSerSelect').append(familias.menu.option(id , name))
+	//AKI :: Creando elemento de familia en todos los menus 
+			})
+		},
+		a : function(id , name) {
+
+			return  $('<a>').attr('id', id).html( name ) ;
+	
+		},
+		option : function (id , name  ) {
+
+			return $('<option>').attr('id', id ).val(id).html( name ) ;
+
+		},
+
 	}, 
 	chckGuardar: function(id,mostrar){
 		var url = urlPhp + "familias/familias.chckGuardar.php";
@@ -843,7 +867,7 @@ var familias = {
 		}else {
 			return true ;
 		}
-	}
+	},
 }
 var crearCita ={
 	init : function(){
@@ -1497,6 +1521,7 @@ var servicios = {
 	poppup:function(id){
 		dialog.create('dlgServicios',function(){
 			//clono el listado de familias desde el menu crearservicios.
+//AKI :: creando eliminanado y editando familias . cuando se crea nueva familia no se iserta en el dialog servicios
 			if ($('#dlgServicios #lstFamilias select').length==0){
 				var $lstFam = 
 					$('#servicios .menuServicios #lstSerSelect')

@@ -4,8 +4,23 @@ include "../../connect/conexion.php";
 $conexion = conexion();
 
 $id=$_GET['id'];
-$sql = "DELETE FROM familias WHERE IdFamilia = $id;";
-$sql.= "UPDATE articulos SET Baja=1 WHERE IdFamilia = $id";
-$return['success'] = mysqli_multi_query($conexion, $sql);
+$sql = "UPDATE familias SET Baja = 1 WHERE IdFamilia = $id;";
+$sql.= "UPDATE articulos SET Baja=1 WHERE IdFamilia = $id ;";
 
-echo json_encode($return);
+$r['success'] = mysqli_multi_query($conexion, $sql) or die (mysqli_error($conexion)) ;
+
+if ($r['success'] == true) {
+    // 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
+
+    foreach ( $_SESSION['FAMILIAS'] as $key => $value ) {
+
+        if ($_GET['id'] == $value[0] ){
+            $key_id = $key ; 
+            break;
+        }
+
+    }	
+
+    $_SESSION['SERVICIOS'][$key_id][3]  =  1 ;
+}
+echo json_encode($r);

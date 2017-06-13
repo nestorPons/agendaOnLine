@@ -12,16 +12,19 @@
 	<tbody>
 		<?php 
 		foreach ($_SESSION['FAMILIAS'] as $row){
-			?>
-			<tr  id="rowFamilias<?php echo $row[0]?>">
-				<td>	<a class= "icon-edit" value="<?php echo $row[0]?>"></a></td>
-				<td	id="nombre<?php echo $row[0]?>" ><?php echo$row[1]?></td>
-				<td >
-					<input id="chck<?php echo $row[0]?>" type='checkbox' name = 'mostrar[]' class="mostrar"
-						value="<?php echo$row[0]?>"	<?php if ($row[2] ==1){ echo ' checked';}?>>
-				</td>
-			</tr>
+			// 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
+			if ($row[3] == 0 ){
+				?>
+				<tr  id="rowFamilias<?php echo $row[0]?>">
+					<td>	<a class= "icon-edit" value="<?php echo $row[0]?>"></a></td>
+					<td	id="nombre<?php echo $row[0]?>" ><?php echo$row[1]?></td>
+					<td >
+						<input id="chck<?php echo $row[0]?>" type='checkbox' name = 'mostrar[]' class="mostrar"
+							value="<?php echo$row[0]?>"	<?php if ($row[2] ==1){ echo ' checked';}?>>
+					</td>
+				</tr>
 			<?php
+			}
 		}
 		?>	
 	</tbody>

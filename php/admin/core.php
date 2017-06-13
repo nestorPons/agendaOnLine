@@ -11,8 +11,10 @@ define('MARGEN_DIAS',10);
 
 function familias(){
 	global $conexion;
-	
-	$sql= "SELECT * FROM familias ORDER BY Nombre ASC";
+// 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
+
+
+	$sql= "SELECT * FROM familias  ORDER BY Nombre";
 	$result= mysqli_query($conexion,$sql);
 	return mysqli_fetch_all($result,MYSQLI_NUM);
 }

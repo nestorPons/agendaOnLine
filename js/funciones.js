@@ -369,7 +369,7 @@ var dialog = {
 	},
 	close:function (idObj,callback){
 		var $this = $(idObj);
-		$this.fadeOut();
+		$this.fadeOut().hide();
 		$('#dialogs').fadeOut().hide();
 
 		typeof callback == "function" && callback();
