@@ -120,12 +120,14 @@ var btn = {
 
 		},
 		hide : function(btnId){
+			/*
 			var $this = btnId||btn.active //$('.icon-load:visible').parent();
-
+//AKI :: error con el btn 	
 			var caption = $this.data('value');
 			
 			$this.html(caption);	
 			btn.active = null ;		
+			*/
 		},
 		reset :	function (callback){
 			$('.btnLoad').each(function(){
@@ -292,9 +294,10 @@ var validar = {
 	},	
 	form : function(idFrm){
 //AKI :: personalizando mensaje de error 
+//AKI :: cambiar forma de validar el formulario
 		var frm = $('#'+idFrm);
 
-		if (frm[0].checkValidity(opts) != false){
+		if (frm[0].checkValidity() != false){
 			return true; 
 		}else{
 			notify.error(frm[0].validationMessage,'Error formulario')
@@ -369,8 +372,9 @@ var dialog = {
 	},
 	close:function (idObj,callback){
 		var $this = $(idObj);
-		$this.fadeOut().hide();
-		$('#dialogs').fadeOut().hide();
+
+		$this.fadeOut();
+		$('#dialogs').fadeOut();
 
 		typeof callback == "function" && callback();
 	},
@@ -383,12 +387,12 @@ var dialog = {
 					.append(html)
 					.promise()
 					.done(function(){
+						//AKI :: FALLA EL ENTER BTN PREDETERMINADO
 						$this = $('#dialogs #'+objName)
 							.keypress(function(e){
 									var code = e.keyCode || e.which;
-								//BOTON PREDETERMINADO EN LOS DIALOGS
-									if(event.which==13)
-										$this.find('.aceptar').click();
+									//BOTON PREDETERMINADO EN LOS DIALOGS
+									if(event.which==13) {$this.find('.aceptar').click()};
 
 							})
 							.find("form:not(.filter) :input:visible:enabled:first").focus();

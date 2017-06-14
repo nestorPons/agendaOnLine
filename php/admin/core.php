@@ -11,8 +11,7 @@ define('MARGEN_DIAS',10);
 
 function familias(){
 	global $conexion;
-// 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
-
+	// 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
 
 	$sql= "SELECT * FROM familias  ORDER BY Nombre";
 	$result= mysqli_query($conexion,$sql);
@@ -23,7 +22,7 @@ $_SESSION['FAMILIAS'] = familias();
 function servicios(){
 	global $conexion;
 	//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
-	$sql="SELECT * FROM articulos WHERE Baja = 0 ORDER BY Codigo";
+	$sql="SELECT * FROM articulos  ORDER BY Codigo";
 	$result= mysqli_query($conexion,$sql);
 	return mysqli_fetch_all($result,MYSQLI_NUM);
 }

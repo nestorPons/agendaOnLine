@@ -7,21 +7,22 @@ $descripcion = $row[2]??$_GET['descripcion'];
 $precio = $row[3]??$_GET['precio'];
 $tiempo = $row[4]??$_GET['tiempo'];
 $familia = $row[5]??$_GET['familia'];
+$baja  = $row[6] == 1 ? 'ocultar_baja' : ''  ;
 
 ?>
 
-<tr id="rowServicios<?php echo $id ?>" class="fam<?php echo $familia?>">
+<tr id="rowServicios<?php echo $id ?>" class="fam<?php echo $familia?> <?php echo $baja?>">
     <td>
+        <input 
+            type="checkbox" 
+            name="servicios[]" 
+            id ="<?php echo $codigo?>"
+            value="<?php echo $id?>"
+            data-time='<?php echo $tiempo?>'
+            data-familia="<?php echo $familia?>"
+        >
         <label for="<?php echo $codigo?>">
-            <input 
-                type="checkbox" 
-                name="servicios[]" 
-                id ="<?php echo $codigo?>"
-                value="<?php echo $id?>"
-                data-time='<?php echo $tiempo?>'
-                data-familia="<?php echo $familia?>"
-            >
-            '<?php echo $descripcion?>' ('<?php echo $tiempo?>' min.)
+            <?php echo $descripcion?>(<?php echo $tiempo?>min.)
         </label>
     </td>
 </tr>

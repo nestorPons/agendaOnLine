@@ -121,8 +121,9 @@
 			<ul class="d-menu" data-role="dropdown">
 				<li>
 					<input type="checkbox" id="chckOpUsersDel">
-						Mostrar clientes eliminados.
+					<label for = "chckOpUsersDel" >	Mostrar registros eliminados.</label>
 				</li>
+
 			</ul>
 		</li>
 

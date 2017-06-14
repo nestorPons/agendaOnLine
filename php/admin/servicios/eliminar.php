@@ -3,8 +3,8 @@ header('Content-Type: application/json');
 include "../../connect/conexion.php";
 $conexion = conexion();
 
-$sql='UPDATE articulos  SET Baja = 1 WHERE id='.$_GET['id'];;
-$jsondata['success'] =mysqli_query($conexion, $sql);
+$sql='UPDATE articulos  SET Baja = 1 WHERE id='.$_GET['id'] .' LIMIT 1;';
+$r['success'] =mysqli_query($conexion, $sql);
 
 foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {
 
@@ -15,6 +15,6 @@ foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {
 
 }	
 //	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
-$_SESSION['SERVICIOS'][$key_id][6]  =  1 ;
-
-echo json_encode($jsondata);
+$_SESSION['SERVICIOS'][$key_id][6]  =  '1' ;
+$r[$key_id] = $_SESSION['SERVICIOS'][$key_id]  ;
+echo json_encode($r);

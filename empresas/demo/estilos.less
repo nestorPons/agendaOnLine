@@ -1919,13 +1919,7 @@ width: 60%;
 		top: 2.3rem;
 		}
 		.tablas{
-			.ocultar_baja{
-				display:none !important;
-			}
-			.mostrar_baja{
-				display:table-row;
-				color: @red;
-			}
+
 		}
 	}
 	#popupHistorial{
@@ -2395,4 +2389,16 @@ width: 60%;
 		}
 	}
 
+}
+.ocultar_baja{
+	display:none !important;
+}
+.mostrar_baja{
+	display:initial;
+	color: @red;
+}
+table {
+	.mostrar_baja{
+		display:table-row;
+	}
 }

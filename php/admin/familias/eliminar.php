@@ -5,9 +5,8 @@ $conexion = conexion();
 
 $id=$_GET['id'];
 $sql = "UPDATE familias SET Baja = 1 WHERE IdFamilia = $id;";
-$sql.= "UPDATE articulos SET Baja=1 WHERE IdFamilia = $id ;";
 
-$r['success'] = mysqli_multi_query($conexion, $sql) or die (mysqli_error($conexion)) ;
+$r['success'] = mysqli_query($conexion, $sql) or die (mysqli_error($conexion)) ;
 
 if ($r['success'] == true) {
     // 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
@@ -21,6 +20,6 @@ if ($r['success'] == true) {
 
     }	
 
-    $_SESSION['SERVICIOS'][$key_id][3]  =  1 ;
+    $_SESSION['FAMILIAS'][$key_id][3]  =  1 ;
 }
 echo json_encode($r);

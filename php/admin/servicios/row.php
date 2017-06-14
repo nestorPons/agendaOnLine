@@ -7,11 +7,10 @@ $descripcion = $row[2]??$_GET['descripcion'];
 $precio = $row[3]??$_GET['precio'];
 $tiempo = $row[4]??$_GET['tiempo'];
 $familia = $row[5]??$_GET['familia'];
-
-
+$baja = $row[6]==1?'ocultar_baja':'';
 ?>
 <tr id="rowServicios<?php echo $id?>" 
-    class="fam<?php echo$familia?>" 
+    class="fam<?php echo$familia?> <?php echo$baja?>"  
     name="<?php echo normaliza($codigo)?>" 
     familia = "<?php echo$familia?>"
     value=<?php echo $id?> >

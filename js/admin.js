@@ -49,6 +49,7 @@ function mostrarCapa(capa,callback){
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
 	if($('#crearCita').is(':visible')) crearCita.reset();
 
+
 	$('.capasPrincipales').hide();
 	$('#'+capa).fadeIn();
 
@@ -60,7 +61,7 @@ function mostrarCapa(capa,callback){
 
 	$('html,body').animate({scrollTop:0}, 500);
 	$('#navbar')
-		.find('.app-bar-element .selected').removeClass('selected').end()
+		.find('.app-bar-element').removeClass('selected').end()
 		.find('[data-capa="'+capa+'"]').addClass('selected')
 	typeof callback == "function" && callback();
 }
@@ -547,7 +548,7 @@ var menu = {
 		var options  =  $('#btnOptions')
 		var del  =  $('#btnDel')
 
-		menu.disabled(add,reset,search,save,show,edit);
+		menu.disabled(add,reset,search,save,show,edit,options);
 
 		switch(capa) {
 			case 'main':
@@ -559,14 +560,14 @@ var menu = {
 				 menu.enabled(add,search,options)
 				 break;
 			case 'servicios':
-				 menu.enabled(add,search)
+				 menu.enabled(add,search,options)
 				 break;
 			case 'config':
 				menu.enabled(save)
 				 break;
 			case 'familias':
-				menu.enabled(add)
-				 break;
+				menu.enabled(add,options)
+				break;
 			case 'horarios':
 				menu.enabled(add,save,del)
 				 break;
@@ -684,6 +685,9 @@ var menu = {
 			.parent()
 				.hide('slide',{direction:'right'})
 	},
+	options : function(){
+		
+	}
 }
 var agendas = {
 	change: false ,
@@ -732,12 +736,12 @@ var familias = {
 			})
 			.done(function(mns){
 				if (mns.success == true){
-					$("#familias #rowFamilias"+id).remove();
-					$('#servicios #frmEditar #familia option[value="'+id+'"]').remove();
+
 					familias.menu.eliminar( id ) ;
+					if (id>=0)$("#rowFamilias"+id).hide();
+
 				}else{
 					$("#familias #rowFamilias"+id).fadeTo("slow", 1);
-					console.log("ERROR=>"+mns);
 				}
 				popup.close(id) ;
 			}).fail(function(mns){
@@ -765,7 +769,12 @@ var familias = {
 			})
 			.done(function(data){
 				if (id>=0){
+					//EDICION
 					$('#familias #nombre'+id).html(data.nombre);
+					$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+					$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+					$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+
 					var estado = (data.mostrar==1)?true:false;
 					var $chck = $('#familias #chck'+id);
 					$chck.prop("checked",estado);
@@ -774,6 +783,7 @@ var familias = {
 					familias.menu.editar( data.id , data.nombre ) ;
 
 				}else{
+					//NUEVO
 					var mostrar = (data.mostrar==1)?'checked':'';
 					$("#familias table").append("\
 						<tr id='rowFamilias"+data.id+"'>\
@@ -787,28 +797,41 @@ var familias = {
 					familias.menu.crear( data.id , data.nombre ) ;
 
 				}
-				popup.close();
+				
+				dialog.close('#dlgFamilias');
 				
 				$("#rowFamilias"+id).fadeTo("fast", 1);
 
-				btn.load.hide();
-			})	.fail(function(){echo ("¡¡No se pudo guardar el registro!!");})
+			})
+			.fail(function( jqXHR, textStatus, errorThrown){
+				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
+				return false;
+			})
 		}else{
 			btn.load.hide();
 		}
 		
 	},
 	menu : {
-		editar : function ( id ,  nombre ){
-			familias.menu.eliminar ( id ) ;
-			familias.menu.crear( id , nombre ) ; 
 
-		},
-		eliminar : function ( id ) {
+		editar : function ( id ,  nombre ){
 			$('.menuServicios').each(function(){
 				$(this).find('#lstSerMain').find('#'+id).remove();
 				$(this).find('#lstSerSelect').find('#'+id).remove();
+
 			})
+
+			familias.menu.crear( id , nombre ) ; 
+
+		},
+		eliminar : function ( id ,callback ) {
+			$('.menuServicios').each(function(){
+				$(this).find('#lstSerMain').find('#'+id).addClass('ocultar_baja');
+				$(this).find('#lstSerSelect').find('#'+id).addClass('ocultar_baja');
+			})
+			$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+			$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+			typeof callback == "function" && callback();
 		},
 		crear : function (id, name ) {
 			$('.menuServicios').each(function(){
@@ -830,22 +853,6 @@ var familias = {
 		},
 
 	}, 
-	chckGuardar: function(id,mostrar){
-		var url = urlPhp + "familias/familias.chckGuardar.php";
-
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			data: {id:id, mostrar:mostrar},
-			url: url,
-			beforeSend: function(){
-				console.log ("envio..."+id);
-			}
-		}).done(function(mns){
-		}).fail(function(mns){
-			echo ("¡¡No se pudo editar el registro!!");
-		})
-	},
 	mostrarPoppup: function (id){
 		dialog.create('dlgFamilias',function(){
 			if (id!=-1){
@@ -854,9 +861,13 @@ var familias = {
 					.find("#nombre").val($('#familias #nombre'+id).html()).end()
 					.find("#mostrar").attr('checked', $('#familias #chck'+id).prop('checked'));
 			}else{
-				$("#dlgFamilias #frmEditarFamilia #id").val(id);
 			}
+
 			dialog.open('#dlgFamilias',familias.guardar,familias.eliminar);
+			if ($('#familias #rowFamilias'+ id ).hasClass('mostrar_baja')) {
+				$('#dlgFamilias .aceptar').html('Activar')
+			}
+			$("#dlgFamilias #frmEditarFamilia #id").val(id);
 		});
 	},
 	validate : function () {  
@@ -956,7 +967,7 @@ var crearCita ={
 				dialog.close('#dlgGuardar');
 			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown){
-				notify.error(jqXHR + textStatus + errorThrown);
+				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;
 			})
 		}else{
@@ -1149,11 +1160,13 @@ var crearCita ={
 		if($visible.attr('id')==$stepper.attr('id'))return false;
 		if (!$stepper.is(':visible')&&$visible.length){
 			if(index==0)_slider();
-			else if(index==1 &&crearCita.validate.name())_slider()
-			else if(index==2&&crearCita.validate.service()){
+			else if(index==1 &&crearCita.validate.name()){
+
+				_slider(servicios.init) ;
+
+			} else if(index==2&&crearCita.validate.service()){
 				if(crearCita.validate.name())_slider(function(){
 					if (_hora!=0){
-						var f = formatoFecha(Fecha.general,'number');
 						$('#crearCita #'+Fecha.id + ' #'+_hora).attr('checked',true);
 						crearCita.dialog();
 					}
@@ -1486,17 +1499,18 @@ var horario = {
 }
 var servicios = {
 	init : function () {
-		var clase = $('#servicios .cuerpo tbody tr').attr('class') ; 
-		clase_id = clase.replace(/\D/g,'');
-		servicios.mostrar(clase_id) ;
+		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
 
+		clase_id = clase.replace(/\D/g,'')
+
+		servicios.mostrar(clase_id) ;
 	},
 	buscar: function(){
 		$('#servicios .capaServicios').fadeIn();
 		$("#servicios tr").fadeOut();
 		$("#servicios .encabezado:first").fadeIn();
 		var txt = normalize($('#txtBuscar').val());
-		$("[name*='"+txt+"']").fadeIn();
+		$("[name*='"+txt+"']").not('.ocultar_baja').fadeIn();
 	},
 	mostrar: function(id_familia, no_validate) {
 		var id = id_familia;
@@ -1521,7 +1535,7 @@ var servicios = {
 	poppup:function(id){
 		dialog.create('dlgServicios',function(){
 			//clono el listado de familias desde el menu crearservicios.
-//AKI :: creando eliminanado y editando familias . cuando se crea nueva familia no se iserta en el dialog servicios
+		//AKI :: creando eliminanado y editando familias . cuando se crea nueva familia no se iserta en el dialog servicios
 			if ($('#dlgServicios #lstFamilias select').length==0){
 				var $lstFam = 
 					$('#servicios .menuServicios #lstSerSelect')
@@ -1556,40 +1570,41 @@ var servicios = {
 				$('#dlgServicios #btnEliminar').val('Cancelar');
 			}
 			dialog.open('#dlgServicios',servicios.guardar,servicios.eliminar);
+			if ($('#servicios #rowServicios'+ id ).hasClass('mostrar_baja')) {
+				$('#dlgServicios .aceptar').html('Activar')
+			}
 		});
 	},
 	guardar: function (){
 		var validate  = btn.load.show($('#dlgServicios .aceptar'),false);
 		var idFrm = $('#dlgServicios form').attr('id') ;
 		if(validar.form(idFrm)){
-			var id= $('#frmEditarServicios #id').val();
+			var id= $('#frmEditarServicios #id').val().replace(/\D/g,' ').trim();
+
 			var data = $('#frmEditarServicios').serialize();
 			var url = urlPhp+'servicios/guardar.php';
-			id = id.replace(/\D/g,' ').trim();
 
 			$.ajax({
 				type: "POST",
 				dataType: "json",
 				data: data,
 				url: url,
-				beforeSend: function(){if (id!=0)$("#rowServicios"+id).fadeTo("slow", 0.30)}
+				beforeSend: function(){if (id!=0)$("#servicios #rowServicios"+id).fadeTo("slow", 0.30)}
 			})
 			.done(function(rsp){
 				if (rsp.success) {
+	
 					if (id==0){
-
-						if (rsp.success)
-							servicios.crear(rsp);
-
+						if (rsp.success) servicios.crear(rsp);
 					}else{
-						
-							servicios.actualizar(rsp);
+						servicios.actualizar(rsp);
 					}
 					servicios.mostrar(rsp.familia);
 					popup.close();
 				}else{
 					notify.error('Codigo de servicio ocupado </br> Seleccione otro codigo distinto.', 'CODIGO OCUPADO') ;
 				}
+				$("#servicios #rowServicios"+id).fadeTo("slow", 1);
 				btn.load.hide();
 			}).fail(function(r){echo ("ERROR guardar servicios =>"+r)});
 
@@ -1626,8 +1641,10 @@ var servicios = {
 		}
 	},
 	actualizar: function(datos){
+
 		$('#servicios #rowServicios'+datos.id)
 			.css('class','fam'+datos.familia)
+			.removeClass('mostrar_baja , ocultar_baja') 
 			.attr('name',normalize(datos.codigo))
 			.attr('familia',datos.familia)
 			.attr('value',datos.id)
@@ -1635,10 +1652,21 @@ var servicios = {
 			.find(' td:nth-child(2)').html(datos.codigo).end()
 			.find(' td:nth-child(3)').html(datos.descripcion).end()
 			.find(' td:nth-child(4)').html(datos.tiempo).end()
-			.find(' td:nth-child(4)').attr('value',datos.precio).end()
-			.fadeTo("fast", 1);
+		
 		$('#crearCita #rowServicios'+datos.id)
-
+			.removeClass('mostrar_baja , ocultar_baja') 
+			.css('class','fam'+datos.familia)
+			.find('label')
+				.attr('for', datos.codigo)
+				.text(datos.descripcion + ' (' + datos.tiempo +'min.)')
+			.end()
+			.find(':checkbox').attr({
+				id : datos.codigo , 
+				value : datos.id , 
+				'data-time' : datos.tiempo , 
+				'data-familia' : datos.familia ,
+			})
+		
 	},
 	crear: function(data){
 		var url = urlPhp+'servicios/row.php';
@@ -2038,10 +2066,14 @@ $(function(){
 		.on('click','#btnDel',menu.del)
 		.on('click','#btnReset',menu.reset)
 		.on('click','#btnOptions #chckOpUsersDel',function(){
+
 			if ($(this).is(':checked'))
 				$('.ocultar_baja').removeClass('ocultar_baja').addClass('mostrar_baja')
 			else
 				$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja')
+
+			servicios.init();
+
 		})
 		.find('[name="menu[]"]').click(function(){
 			mostrarCapa($(this).data('capa'));

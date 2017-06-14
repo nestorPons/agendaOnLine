@@ -12,9 +12,10 @@ $precio =$_POST['precio']??0;
 $familia =$_POST['familia']??0;
 $tiempo = intval(preg_replace('/[^0-9]+/', '', $tiempo), 10);
 $precio = intval(preg_replace('/[^0-9]+/', '', $precio), 10);
+
  if (!empty($id)){
 	$nuevo = false ;
-	$sql="UPDATE articulos SET Codigo = '$codigo',Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia WHERE Id = $id" ;
+	$sql="UPDATE articulos SET Codigo = '$codigo',Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia , Baja = 0 WHERE Id = $id" ;
 }else{
 	$nuevo = true ;
 	$sql = "SELECT * FROM articulos WHERE Codigo LIKE '$codigo'";
@@ -27,7 +28,7 @@ $precio = intval(preg_replace('/[^0-9]+/', '', $precio), 10);
 }
 
 if (mysqli_query($conexion,$sql)){
-	$jsondata['id'] = mysqli_insert_id($conexion);
+	
 	$jsondata['codigo'] = $codigo;
 	$jsondata['descripcion'] = $descripcion;
 	$jsondata['tiempo'] = $tiempo;
@@ -36,10 +37,12 @@ if (mysqli_query($conexion,$sql)){
 	
 	if($nuevo){
 		//Nuevo 
+		$jsondata['id'] = mysqli_insert_id($conexion);
 		$_SESSION['SERVICIOS'][]  = array($jsondata['id'] , $codigo , $descripcion , $precio , $tiempo  , $familia, 0 ) ; 
 	}else{
 		//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
 		//Editar 
+		$jsondata['id'] = $id;
 		foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {
 
 			if ($id == $value[0] ){
