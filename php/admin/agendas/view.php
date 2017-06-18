@@ -1,6 +1,6 @@
 <?php namespace agendas;
 
-if (! empty($_GET)){
+if (!empty($_GET)){
 	require_once "../../connect/conexion.php";
 	$conexion = conexion(true,false,true);
 

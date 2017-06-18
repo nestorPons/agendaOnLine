@@ -1,4 +1,7 @@
-<?php session_start() ?>
+<?php 
+session_start() ;
+include_once "../../connect/tools.php";
+?>
 
 <h1>Familias</h1>
 <table class="tablas-mini">
@@ -17,7 +20,7 @@
 				?>
 				<tr  id="rowFamilias<?php echo $row[0]?>" class='<?php echo$class ?>'>
 					<td> <a class= "icon-edit" value="<?php echo $row[0]?>"></a></td>
-					<td	id="nombre<?php echo $row[0]?>" ><?php echo$row[1]?></td>
+					<td	id="<?php echo normaliza($row[1])?>" class="nombre" ><?php echo$row[1]?></td>
 					<td >
 						<input id="chck<?php echo $row[0]?>" type='checkbox' name = 'mostrar[]' class="mostrar"
 							value="<?php echo$row[0]?>"	<?php if ($row[2] ==1){ echo ' checked';}?>>

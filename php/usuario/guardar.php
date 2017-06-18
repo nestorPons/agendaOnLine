@@ -13,7 +13,7 @@ $empresa = CONFIG['Nombre'];
 $rsp['success'] = false;
 
 if ($pass1==$pass2){
-	$sql = "INSERT INTO usuarios (Nombre,Email,Pass,datePass,Tel) VALUE ('$nombre','$email','$pass1','" . date('Y-m-d') ."','$tel');";
+	$sql = "INSERT INTO usuarios (Nombre,Email,Pass,dateReg,Tel) VALUE ('$nombre','$email','$pass1','" . date('Y-m-d') ."','$tel');";
 	$rsp['sql']=$sql;
 	if(mysqli_query($conexion,$sql)){					
 		$id = mysqli_insert_id($conexion);

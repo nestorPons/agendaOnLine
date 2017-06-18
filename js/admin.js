@@ -31,7 +31,10 @@ function sincronizar( dias, date , callback ){
 }
 function mostrarCapa(capa,callback){
 	if($('#'+capa).is(':visible')) return false;
-	
+
+	$('#chckOpUsersDel').prop( "checked", false ) ;
+	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
+
 	if($('#'+capa).is(':empty')){
 		$.get($('#'+capa).data('url'),function(html){
 
@@ -61,7 +64,7 @@ function mostrarCapa(capa,callback){
 
 	$('html,body').animate({scrollTop:0}, 500);
 	$('#navbar')
-		.find('.app-bar-element').removeClass('selected').end()
+		.find('a').removeClass('selected').end()
 		.find('[data-capa="'+capa+'"]').addClass('selected')
 	typeof callback == "function" && callback();
 }
@@ -685,9 +688,8 @@ var menu = {
 			.parent()
 				.hide('slide',{direction:'right'})
 	},
-	options : function(){
-		
-	}
+	options : function(){	
+	},
 }
 var agendas = {
 	change: false ,
@@ -736,14 +738,24 @@ var familias = {
 			})
 			.done(function(mns){
 				if (mns.success == true){
-
+					var baja ; 
 					familias.menu.eliminar( id ) ;
-					if (id>=0)$("#rowFamilias"+id).hide();
 
+					if($('#chckOpUsersDel').is(':checked')){
+						baja = 'mostrar_baja' ;
+					}else{
+						baja = 'ocultar_baja' ;
+					}
+					if (id>=0) $("#rowFamilias"+id).addClass(baja) ;
 				}else{
-					$("#familias #rowFamilias"+id).fadeTo("slow", 1);
+
+					$("#familias #rowFamilias"+id).fadeTo("slow", 1) ;
+					notify.error(mns.err,'ERROR') ; 
 				}
-				popup.close(id) ;
+				$("#rowFamilias"+id).fadeTo("fast", 1)
+
+				dialog.close('#dlgFamilias');
+
 			}).fail(function(mns){
 				console.log("ERROR =>"+mns);
 				$("#familias #"+id).fadeTo("slow", 1);
@@ -757,7 +769,7 @@ var familias = {
 	guardar :function (){
 		btn.load.show($('#dlgFamilia .aceptar'),false);
 		
-		if (familias.validate()){
+		if (familias.validate.form()){
 
 			var id = $('#dlgFamilias #id').val();
 			$.ajax({
@@ -768,39 +780,43 @@ var familias = {
 				beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
 			})
 			.done(function(data){
-				if (id>=0){
-					//EDICION
-					$('#familias #nombre'+id).html(data.nombre);
-					$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-					$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-					$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+				if (data.success){
+					if (id>=0){
+						//EDICION
+						$('#familias #' + normalize(data.nombre) ).html(data.nombre);
+						$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+						$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+						$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
 
-					var estado = (data.mostrar==1)?true:false;
-					var $chck = $('#familias #chck'+id);
-					$chck.prop("checked",estado);
-					$('#servicios #frmEditar #familia option[value='+id+']').html(data.nombre);
+						var estado = (data.mostrar==1)?true:false;
+						var $chck = $('#familias #chck'+id);
+						$chck.prop("checked",estado);
+						$('#servicios #frmEditar #familia option[value='+id+']').html(data.nombre);
 
-					familias.menu.editar( data.id , data.nombre ) ;
+						familias.menu.editar( data.id , data.nombre ) ;
 
-				}else{
-					//NUEVO
-					var mostrar = (data.mostrar==1)?'checked':'';
-					$("#familias table").append("\
-						<tr id='rowFamilias"+data.id+"'>\
-						<td><a name='editar[]' class= 'icon-edit x6' value="+data.id+"></a></td>\
-						<td id='nombre"+data.id+"' class='nom'>"+data.nombre+"</td>\
-						<td class='ico'>\
-						<input type='checkbox' name = 'mostrar[]' id='chck"+data.id+" class='mostrar'\
-						value="+data.id+" "+ mostrar + "></td></tr>")
-					$('#servicios #frmEditar #familia').append("<option value="+data.id+">"+data.nombre+"</option>");
+					}else{
+						//NUEVO
+						var mostrar = (data.mostrar==1)?'checked':'';
+						$("#familias table").append("\
+							<tr id='rowFamilias"+data.id+"'>\
+							<td><a name='editar[]' class= 'icon-edit x6' value="+data.id+"></a></td>\
+							<td id='"+normalize(data.nombre)+"' class='nombre'>"+data.nombre+"</td>\
+							<td class='ico'>\
+							<input type='checkbox' name = 'mostrar[]' id='chck"+data.id+" class='mostrar'\
+							value="+data.id+" "+ mostrar + "></td></tr>")
+						$('#servicios #frmEditar #familia').append("<option value="+data.id+">"+data.nombre+"</option>");
+						
+						familias.menu.crear( data.id , data.nombre ) ;
+
+					}
 					
-					familias.menu.crear( data.id , data.nombre ) ;
-
+					dialog.close('#dlgFamilias');
+				}else{
+					notify.error( data.err , 'Error!! ')
 				}
-				
-				dialog.close('#dlgFamilias');
-				
-				$("#rowFamilias"+id).fadeTo("fast", 1);
+
+					$("#rowFamilias"+id).fadeTo("fast", 1);
 
 			})
 			.fail(function( jqXHR, textStatus, errorThrown){
@@ -858,7 +874,7 @@ var familias = {
 			if (id!=-1){
 				$('#dlgFamilias #frmEditarFamilia')
 					.find ('#id').val(id).end()
-					.find("#nombre").val($('#familias #nombre'+id).html()).end()
+					.find("#nombre").val($('#familias #rowFamilias'+id + ' .nombre ').html()).end()
 					.find("#mostrar").attr('checked', $('#familias #chck'+id).prop('checked'));
 			}else{
 			}
@@ -870,13 +886,30 @@ var familias = {
 			$("#dlgFamilias #frmEditarFamilia #id").val(id);
 		});
 	},
-	validate : function () {  
-		var valNom = $('#dlgFamilias #nombre').val(); 
-		if ($.isEmpty(valNom)){
-			notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
-			return false ;
-		}else {
-			return true ;
+	validate : {
+		form : function () {  
+			var valNom = $('#dlgFamilias #nombre').val(); 
+			if ($.isEmpty(valNom)){
+				notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
+				return false ;
+			}else {
+				return familias.validate.name(valNom) ;
+			}
+		},
+		name : function (name) {
+			var idName = $('#dlgFamilias #id').val() ;
+			var obj = $('#familias #' +  normalize(name) ) ;
+
+			if(obj.length == 0 ){
+				return true ;
+			}else{
+				if (obj.parents('tr').attr('id') != 'rowFamilias'+idName){
+					notify.error('El nombre no puede estar repetido.','Error crear familia')  ;
+					return false ;
+				}else{
+					return true ;
+				}
+			}
 		}
 	},
 }
@@ -1499,10 +1532,10 @@ var horario = {
 }
 var servicios = {
 	init : function () {
+
 		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
-
 		clase_id = clase.replace(/\D/g,'')
-
+		
 		servicios.mostrar(clase_id) ;
 	},
 	buscar: function(){
@@ -1535,7 +1568,7 @@ var servicios = {
 	poppup:function(id){
 		dialog.create('dlgServicios',function(){
 			//clono el listado de familias desde el menu crearservicios.
-		//AKI :: creando eliminanado y editando familias . cuando se crea nueva familia no se iserta en el dialog servicios
+			//AKI :: creando eliminanado y editando familias . cuando se crea nueva familia no se iserta en el dialog servicios
 			if ($('#dlgServicios #lstFamilias select').length==0){
 				var $lstFam = 
 					$('#servicios .menuServicios #lstSerSelect')
@@ -1573,12 +1606,13 @@ var servicios = {
 			if ($('#servicios #rowServicios'+ id ).hasClass('mostrar_baja')) {
 				$('#dlgServicios .aceptar').html('Activar')
 			}
+
 		});
 	},
 	guardar: function (){
 		var validate  = btn.load.show($('#dlgServicios .aceptar'),false);
 		var idFrm = $('#dlgServicios form').attr('id') ;
-		if(validar.form(idFrm)){
+		if(servicios.validate.form()){
 			var id= $('#frmEditarServicios #id').val().replace(/\D/g,' ').trim();
 
 			var data = $('#frmEditarServicios').serialize();
@@ -1608,8 +1642,10 @@ var servicios = {
 				btn.load.hide();
 			}).fail(function(r){echo ("ERROR guardar servicios =>"+r)});
 
+		}else{
+			btn.load.hide();
 		}
-		btn.load.hide();
+		
 	},
 	eliminar: function() {
 		var id= $('#dlgServicios #id').val().trim();
@@ -1623,19 +1659,35 @@ var servicios = {
 					url: urlPhp+'servicios/eliminar.php',
 					beforeSend: function (){
 						$("#servicios #rowServicios"+id).fadeTo("slow", 0.30);
-						popup.close();
 					},
 				})
 				.done(function(){
 
-					$("#servicios #rowServicios"+id).remove();
-					$("#crearCita #rowServicios"+id).remove();
+					if (mns.success == true){
+						var baja ; 
 
+						if($('#chckOpUsersDel').is(':checked')){
+							baja = 'mostrar_baja' ;
+						}else{
+							baja = 'ocultar_baja' ;
+						}
+						$("#servicios  #rowServicios"+id).addClass(baja) ;
+						$("#crearCita  #rowServicios"+id).addClass(baja) ;
+					}else{
+
+						$("#servicios #rowServicios"+id).fadeTo("slow", 1) ;
+						notify.error(mns.err,'ERROR') ; 
+					}
+
+
+
+
+					dialog.close('#dlgServicios');
 				})
 				.fail(function( jqXHR, textStatus, errorThrown){
 					alert( jqXHR, textStatus, errorThrown)
 					$("#servicios #rowServicios"+id).show("fast")})
-			}else{popup.close();}
+			}
 		}else{
 			popup.close();
 		}
@@ -1692,7 +1744,33 @@ var servicios = {
 		}
 
 	},
+	validate : {
+		form : function () {  
+			var nombre = $('#dlgServicios #codigo').val(); 
 
+			if ($.isEmpty(nombre)){
+				notify.error('El campo del codigo no puede estar vacio.','ERROR CAMPO VACIO!')
+				return false ;
+			}else {
+				return servicios.validate.name(nombre) ;
+			}
+		},
+		name : function (name) {
+			var idName = $('#dlgServicios #id').val() ;
+			var obj = $('#servicios #' +  normalize(name) ) ;
+
+			if($('#servicios #' +  normalize(name) ).length == 0){
+				return true ;
+			}else{
+				if (obj.parents('tr').attr('id') != 'rowServicios'+idName){
+					notify.error('El codigo esta en uso.','Error crear servicio')  ;
+					return false ;
+				}else{
+					return true ;
+				}
+			}
+		}
+	}
 }
 var usuarios = {
 	init : function () {
@@ -1731,7 +1809,7 @@ var usuarios = {
 		btn.load.show($('#dlgUsuarios .aceptar',false));
 
 		
-		if (!usuarios.validate()){
+		if (!usuarios.validate.form()){
 			btn.load.hide();
 			return false 
 		};
@@ -1888,14 +1966,36 @@ var usuarios = {
 		txt = txt.toLowerCase();
 		$("#usuarios").find(".body").fadeOut().end()
 	},
-	validate : function(){
-		var value = $('#dlgUsuarios	#nombre').val() ;
-		if ($.isEmpty(value)){
-			notify.error('El campo nombre no puede estar vacio.','Error crear usuario')
-			return false ;
-		}else{
-			return true ;
-		}
+	validate : {
+		form : function(){
+			var value = $('#dlgUsuarios	#nombre').val() ;
+			if ($.isEmpty(value)){
+				
+				notify.error('El campo nombre no puede estar vacio.','Error crear usuario')  ;
+				return false ;
+
+			}else{
+
+				return usuarios.validate.name(value) ;
+				
+			}
+		},
+		name : function (name) {
+			var idName = $('#dlgUsuarios #id').val() ;
+			var obj = $('#usuarios #' +  normalize(name) ) ;
+
+			if($('#usuarios #' +  normalize(name) ).length == 0){
+				return true ;
+			}else{
+				if (obj.parents('tr').attr('id') != 'rowUsuarios'+idName){
+					notify.error('El nombre esta en uso.','Error crear usuario')  ;
+					return false ;
+				}else{
+					return true ;
+				}
+			}
+		},	
+		
 
 	}
 }
@@ -2037,7 +2137,7 @@ $(function(){
 			.on("swiperight",function(){sincronizar(-1)})
 
 	$('#navbar')
-		.find('#btnShow').click(menu.show).end()
+		.on('click','#btnShow',menu.show)
 		.on('click','#btnEdit',menu.edit)
 		.on('click','#btnSearch',function(){
 			if ($('#txtBuscar').is(':hidden')){

@@ -121,7 +121,7 @@
 			<ul class="d-menu" data-role="dropdown">
 				<li>
 					<input type="checkbox" id="chckOpUsersDel">
-					<label for = "chckOpUsersDel" >	Mostrar registros eliminados.</label>
+					<label for = "chckOpUsersDel" >	Mostrar eliminados.</label>
 				</li>
 
 			</ul>

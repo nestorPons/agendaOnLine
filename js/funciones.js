@@ -388,11 +388,14 @@ var dialog = {
 					.promise()
 					.done(function(){
 						//AKI :: FALLA EL ENTER BTN PREDETERMINADO
-						$this = $('#dialogs #'+objName)
+						 $('#dialogs #'+objName)
 							.keypress(function(e){
-									var code = e.keyCode || e.which;
+									var code = e.keyCode ;
+					
 									//BOTON PREDETERMINADO EN LOS DIALOGS
-									if(event.which==13) {$this.find('.aceptar').click()};
+									if(event.which==13) {
+										$('#dialogs #'+objName).find('.aceptar').click()
+									};
 
 							})
 							.find("form:not(.filter) :input:visible:enabled:first").focus();

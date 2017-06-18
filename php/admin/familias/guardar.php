@@ -41,6 +41,7 @@ if(mysqli_query($conexion, $sql)){
 
 	$jsondata['success'] = false;
 	$jsondata['err'] = mysqli_error($conexion);
+	$jsondata['err_num'] = mysqli_errno($conexion);
 
 }
 echo json_encode($jsondata);

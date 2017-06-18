@@ -1,13 +1,12 @@
 <?php
-// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 Block 8 Baja 9 Activa 
-//10 datePass 11 cookie 12 Idioma 13 dateReg 14 dateBaja 
+// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 
 $id = $row[0]??$_GET['id'] ;
 $nombre = $row[1]??$_GET['nombre'] ; 
 $email = $row[2]??$_GET['email'] ; 
 $tel = $row[4]??$_GET['tel'] ; 
 $admin  =$row[5]??$_GET['admin'] ; 
 $obs = $row[6]??$_GET['obs'] ; 
-$activa = $row[14]??0; 
+$activa = $row[10]??0; 
 $email_status= empty($email)?"No":"Si";
 $obs_status =empty($obs)?"No":"Si";
 $clase_estado_baja = $activa!=0?'ocultar_baja':'';

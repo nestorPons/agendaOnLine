@@ -15,7 +15,7 @@ $baja = $row[6]==1?'ocultar_baja':'';
     familia = "<?php echo$familia?>"
     value=<?php echo $id?> >
     <td class="ico"><a name="editar[]" class= "icon-edit x6" value="<?php echo $id?>"></a></td>
-    <td name='cod' class='aling-left cod'><?php echo $codigo?></td>
+    <td name='cod'  id = "<?php echo normaliza($codigo)?>"  class='aling-left cod'><?php echo $codigo?></td>
     <td name='des' class="nom"><?php echo $descripcion?> </td>
     <td name='time' class ="ico" ><?php echo $tiempo?></td>
     <td name='price' class="hidden" data-value=<?php echo $precio?>></td>

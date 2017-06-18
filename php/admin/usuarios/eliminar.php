@@ -16,10 +16,9 @@ foreach ( $_SESSION['USUARIOS'] as $key => $value ) {
 
 }
 
-// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 Block 8 Baja 9 Activa 
-//10 datePass 11 cookie 12 Idioma 13 dateReg 14 dateBaja 
+// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 
 
-$_SESSION['USUARIOS'][$key_id][14] =  date('Y-m-d H:m:s');
+$_SESSION['USUARIOS'][$key_id][10] =  date('Y-m-d H:m:s');
 
 //registrarEvento(2,0, $_GET['id'],0);
 echo json_encode($jsondata);

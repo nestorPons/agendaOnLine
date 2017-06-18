@@ -4,9 +4,12 @@ include "../../connect/conexion.php";
 $conexion = conexion();
 
 $id=$_GET['id'];
+
+//AKI :: Se podria eliminar definitivamente
+
 $sql = "UPDATE familias SET Baja = 1 WHERE IdFamilia = $id;";
 
-$r['success'] = mysqli_query($conexion, $sql) or die (mysqli_error($conexion)) ;
+$r['success'] = mysqli_query($conexion, $sql) ;
 
 if ($r['success'] == true) {
     // 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
@@ -21,5 +24,7 @@ if ($r['success'] == true) {
     }	
 
     $_SESSION['FAMILIAS'][$key_id][3]  =  1 ;
+}else { 
+     $r['err'] = (mysqli_error($conexion)) ; 
 }
 echo json_encode($r);
