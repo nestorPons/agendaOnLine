@@ -1,3 +1,4 @@
+
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind');
 var urlPhp = "../../php/admin/"; 
 var admin = true;
@@ -69,6 +70,7 @@ function mostrarCapa(capa,callback){
 	typeof callback == "function" && callback();
 }
 var main ={
+	status : 0 ,
 	sincronizar: function (dir,callback){
 
 		var idFecha=Fecha.id;
@@ -347,21 +349,25 @@ var main ={
 		}
 	},
 	inactivas: function(){
-			if($('#main .cuerpo').data('estado-inactivas')==0){
-				$('#main .cuerpo').data('estado-inactivas',1)
-				$('#btnShow')
-					.find('.menulbl').html('Ocultar').end()
-					.find('.on').show().end()
-					.find('.off').hide().end()
-				$('#main .fuera_horario').parent().removeClass('disabled');
-			}else{
-				$('#main .cuerpo').data('estado-inactivas',0)
-				$('#btnShow')
-					.find('.menulbl').html('Mostrar').end()
-					.find('.off').show().end()
-					.find('.on').hide().end()
-				$('#main .fuera_horario').parent().addClass('disabled');
-			}
+		var url = urlPhp+'agendas/estado_visible_guardar.php';
+		if( main.status == 0 ){
+			main.status = 1 ;
+			$('#btnShow')
+				.find('.menulbl').html('Ocultar').end()
+				.find('.on').show().end()
+				.find('.off').hide().end()
+			$('#main .fuera_horario').parent().removeClass('disabled');
+		}else{
+			main.status = 0 ;
+			$('#btnShow')
+				.find('.menulbl').html('Mostrar').end()
+				.find('.off').show().end()
+				.find('.on').hide().end()
+			$('#main .fuera_horario').parent().addClass('disabled');
+
+		}
+		$.get(url,{status : main.status});
+		
 	},
 	lbl:{
 		crear: function(datos,todaCita,callback){
@@ -541,6 +547,7 @@ var main ={
 	},
 }
 var menu = {
+
 	status: function (capa){
 		var add = $('#btnAdd');
 		var reset = $('#btnReset');
@@ -608,6 +615,7 @@ var menu = {
 	show: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'main':
+
 				main.inactivas();
 			break;
 		}
@@ -850,12 +858,14 @@ var familias = {
 			typeof callback == "function" && callback();
 		},
 		crear : function (id, name ) {
-			$('.menuServicios').each(function(){
-				$(this).find('#lstSerMain').append(familias.menu.a(id ,name))
 
-				$(this).find('#lstSerSelect').append(familias.menu.option(id , name))
-	//AKI :: Creando elemento de familia en todos los menus 
+			$('#lstSerMain').each(function(){
+				$(this).append(familias.menu.a(id ,name))
 			})
+			$('#lstSerSelect').each(function(){
+				$(this).append(familias.menu.option(id , name))
+			})
+
 		},
 		a : function(id , name) {
 
@@ -1572,7 +1582,7 @@ var servicios = {
 			if ($('#dlgServicios #lstFamilias select').length==0){
 				var $lstFam = 
 					$('#servicios .menuServicios #lstSerSelect')
-						.clone()
+						.clone(true,true)
 						.removeClass('responsiveDesing_show')
 						.appendTo('#dlgServicios #lstFamilias');
 			}
@@ -1634,7 +1644,7 @@ var servicios = {
 						servicios.actualizar(rsp);
 					}
 					servicios.mostrar(rsp.familia);
-					popup.close();
+					dialog.close('#dlgServicios');
 				}else{
 					notify.error('Codigo de servicio ocupado </br> Seleccione otro codigo distinto.', 'CODIGO OCUPADO') ;
 				}
@@ -2234,5 +2244,5 @@ $(function(){
 		//funciones
 		cargarDatepicker();
 		colorearMenuDiasSemana();
-		main.inactivas($('#main .cuerpo').data('estado-inactivas')==1);
+		main.status = $('#main .cuerpo').data('estado-inactivas');
 })

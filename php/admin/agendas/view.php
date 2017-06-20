@@ -34,12 +34,13 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 						$hora = date('H:i', $h);
 						$array_horas = HORAS[date('w',strtotime($fecha))]??false;
 						if ($array_horas) {
-							$horario = (array_search($hora,$array_horas)>0)?"":"fuera_horario"; 
+							$horario = (array_search($hora,$array_horas)>0)?"":"fuera_horario "; 
+							$disabled = CONFIG['ShowRow']==0&&(array_search($hora,$array_horas)<=0)?'disabled':'';
 
 							$array = explode(":",$hora);
 							$claseHora=$array[1]=='00'?"num resaltado":"num";
 							?>
-							<tr id='<?php echo $h?>' class="hora h<?php echo $h?>" data-hour='<?php echo $hora?>'>
+							<tr id='<?php echo $h?>' class="hora h<?php echo $h . ' ' . $disabled?> " data-hour='<?php echo $hora?>'>
 								<td class="<?php echo $claseHora ?> "><?php echo $hora?> </td>
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){

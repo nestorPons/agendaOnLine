@@ -4,7 +4,7 @@ require "../../connect/conexion.php";
 $conexion = conexion();
 
 $id = $_POST['id'];
-$a = $_POST['agenda']
+$a = $_POST['agenda'] ; 
 $user = $_POST['nombre'];
 $note = $_POST['notas'];
 
