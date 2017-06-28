@@ -1,14 +1,10 @@
 <?php namespace Horarios;
 
 function horarios( $return_row = false ){
-		global $conexion;
-		if(empty($conexion)){
-			require('../../connect/conexion.php');
-			$conexion = conexion(false);
-		}
+		global $conn;
+		if(empty($conn)) require('../../connect/clsConexion.php');
 
-	$sql = "SELECT * FROM horarios ORDER BY dia";
-	$row = mysqli_fetch_all(mysqli_query($conexion,$sql),MYSQLI_ASSOC);
+	$row = $conn->all("SELECT * FROM horarios ORDER BY dia",MYSQLI_ASSOC);
 
 	if ( $return_row ){
 		return $row;

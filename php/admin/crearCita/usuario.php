@@ -20,19 +20,15 @@
 <datalist id ='lstClientes'>
 	<?php
 	foreach($_SESSION['USUARIOS'] as $row){
-		if($row[14]==0){
-			$nombres[] = $row[1];
-			$id_usuarios[] = $row[0]; 
+		if ($row[10]==0){
+			?>
+			<option 
+				data-id="<?php echo normaliza($row[1])?>" 
+				value="<?php echo $row[1]?>" >
+				<?php echo $row[0]?>
+			</option>
+			<?php
 		}
-	}
-	for($i = 0; $i < count($nombres);$i++){
-		?>
-		<option 
-			data-id="<?php echo normaliza($nombres[$i])?>" 
-			value="<?php echo $nombres[$i]?>">
-			<?php echo $id_usuarios[$i]?>
-		</option>
-		<?php
 	}
 	?>
 </datalist>

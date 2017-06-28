@@ -57,3 +57,16 @@ function sumarFecha($fecha,$num){
 	$f = date('Y-m-d',$f);
 	return $f;
 }
+//FESTIVOS
+function festivos(){
+	global $conn;
+	$row = $conn->row("SELECT Fecha FROM festivos") ;
+
+	for ($i = 0 ; $i < count($row) ; $i++ ){
+		$date =new DateTime($row[$i]);
+		$date = date_format($date,"md");
+		$data['festivos'][]=$date;	
+	}
+
+	return $data['festivos']??false;
+}

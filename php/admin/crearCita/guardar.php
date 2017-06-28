@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/conexion.php";
-$conexion = conexion();
+include "../../connect/clsConfig.php";
 
 $fecha =$_POST['fecha']??mnsExit('Sin fecha');
 $hora = $_POST['hora'][0]??mnsExit('Sin hora');
@@ -17,10 +16,9 @@ function mnsExit($mns){
 	exit();
 }
 function idUsuario($userName){
-	global $conexion;
+	global $conn;
 	$sql = "SELECT usuarios.Id FROM usuarios WHERE usuarios.Nombre LIKE '$userName' LIMIT 1";
-	$result = mysqli_query($conexion,$sql);
-	$row= mysqli_fetch_row($result);
+	$row = $conn->row($sql);
 	return $row[0];
 }
 $h = $hora;
@@ -29,8 +27,8 @@ for ($i = 0; $i < count($servi); $i++) {
 	$ocupado = 0 ;
 
 	$servicio = $servi[$i];
-	$sql= "SELECT A.Tiempo, A.Id FROM articulos A WHERE Id  = ". $servicio;
-	$row= mysqli_fetch_array(mysqli_query($conexion,$sql));
+	$sql = "SELECT A.Tiempo, A.Id FROM articulos A WHERE Id  = $servicio LIMIT 1";
+	$row = $conn->array($sql);
 	$unidades_t = ceil(($row['Tiempo'] / 15));
 
 	for ($a = 1; $a <= ($unidades_t); $a++) {
@@ -39,9 +37,7 @@ for ($i = 0; $i < count($servi); $i++) {
 		JOIN data D ON C.IdCita = D.IdCita
 		WHERE D.Fecha = '$fecha' AND C.Hora =$h AND D.Agenda = $agenda LIMIT 1;" ;
 
-		$result = mysqli_query($conexion,$sql);
-		if(mysqli_num_rows($result)!=0)
-			$ocupado++;
+		if( $conn->num($sql) != 0 ) $ocupado++;
 
 		$h++;
 	}
@@ -50,27 +46,27 @@ for ($i = 0; $i < count($servi); $i++) {
 if ($ocupado<2){
 	$data['ocupado']=false;
 	$sql= "INSERT INTO data (Agenda,IdUsuario,Fecha,Obs,UsuarioCogeCita) VALUE ($agenda,$userId,'$fecha','$nota',".$_SESSION['id_usuario'].")";
-	if (mysqli_query($conexion,$sql)){
-		$idServicio = mysqli_insert_id($conexion);
+	if ($conn->query($sql)){
+		$idServicio = $conn->id();
 		$data['idCita'] = $idServicio ;
 		
 		for ($i = 0; $i < count($servi); $i++) {
 
 			$sql= 'SELECT A.Tiempo FROM articulos A WHERE Id  = '. $servi[$i].' LIMIT 1';
-			$result_t = mysqli_query($conexion,$sql) or die(mysqli_error($conexion));
-			$ser= mysqli_fetch_array($result_t);
+			$ser= $conn->array($sql);
+
 			$unidades_t = ceil(($ser['Tiempo'] / 15));
 
 			$sql="";
 			for ($a = 1; $a <= ($unidades_t); $a++) {
 				
 				$sql = 'INSERT INTO cita (IdCita, Hora, Servicio) VALUE ('.$idServicio.',FROM_UNIXTIME("' . $hora . '"),'. $servi[$i].')';
-				if(!mysqli_query($conexion,$sql)){
+				if(!$conn->query($sql)){
 					$data['success']=false;
 					 mnsExit($sql);
 					 break;
 				}else{
-					$data['id'][]= mysqli_insert_id($conexion);
+					$data['id'][]= $conn->id();
 				}
 
 				$hora = strtotime ( '+15 minute' ,  $hora ) ;
@@ -82,7 +78,6 @@ if ($ocupado<2){
 	$data['ocupado']=true;
 }
 
-
-//if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
+if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
 //registrarEvento(1, $idServicio,$_SESSION['id_usuario'],$agenda);
 echo json_encode($data);

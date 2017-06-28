@@ -36,6 +36,7 @@ $(function(){
 			tipo = tipo == 'password'?'text':'password';
 			$this.attr('type',tipo)
 		})
+		
 		.on('blur','input:password',function(){validar.pass.funcion($(this))})
 		.on('change','input:password',function(){validar.pass.estado=false})
 		.on('blur','.email',function(){validar.email.funcion($(this))})
@@ -108,7 +109,6 @@ var btn = {
 	active : null , 
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
-
 		show : function($this, status){
 
 			if (btn.load.status){
@@ -119,15 +119,13 @@ var btn = {
 			btn.load.status = (status != 'undefined') ? status : true;	
 
 		},
-		hide : function(btnId){
-			/*
-			var $this = btnId||btn.active //$('.icon-load:visible').parent();
-//AKI :: error con el btn 	
+		hide : function(){
+			var $this = btn.active||$('.icon-load:visible').parent();
 			var caption = $this.data('value');
 			
 			$this.html(caption);	
 			btn.active = null ;		
-			*/
+			
 		},
 		reset :	function (callback){
 			$('.btnLoad').each(function(){
@@ -241,56 +239,56 @@ var validar = {
 		estado: true,
 	},
 	pass: {
+		//AKI :: blur solo para mensajes keyup para ir verificando
+		estado: false,
 		funcion:function($this){
-			if ($this.val()=="") return false;
-			var pass = $this.val();
-			if(pass.length>6){
-				var pass = SHA1($this.val());
-				var $hidden_pass = $this.siblings('input:hidden');
-				$hidden_pass.val(pass);
-				$this.addClass('input-success');
+			if ($this.val()!=""){
+					
+				var pass = $this.val();
+				if(pass.length>6){
+					var pass = SHA1($this.val());
+					var $hidden_pass = $this.siblings('input:hidden');
+					$hidden_pass.val(pass);
+					$this.addClass('input-success');
 
-				var $pass = $(':password');
-				
-				//esto solo es para cuando se quiere cambiar la contraseña desde config 
-				var n = ($this.parents('#dlgCambiarPass').length>0)?1:0;
+					var $pass = $(':password');
+					
+					//esto solo es para cuando se quiere cambiar la contraseña desde config 
+					var n = ($this.parents('#dlgCambiarPass').length>0)?1:0;
 
-				if ($pass.length>1){
-					if ($this.attr('id') === $pass.eq(n+1).attr('id'))
-					if ($pass.eq(n+1).val()!=$pass.eq(n).val()&&$pass.eq(n+1).val()!=""){
+					if ($pass.length>1){
+						if ($this.attr('id') === $pass.eq(n+1).attr('id'))
+						if ($pass.eq(n+1).val()!=$pass.eq(n).val()&&$pass.eq(n+1).val()!=""){
+							$this.addClass('input-error').removeClass('input-success');
+							validar.pass.estado =  false;
+						}else{
+							$this.addClass('input-success').removeClass('input-error');
+							validar.pass.estado =  true;
+						}
+					}
+				}else{
+					if(!$this.hasClass('input-error')){
+						$this.removeClass('input-success').addClass('input-error');
 						$.Notify({
-							id:'lblPassNC',
+							id:'lblPass',
 							type: 'warning',
-							caption: 'Repetir contraseña',
-							content: 'Las contraseñas no coinciden.',
+							caption: 'Contraseña',
+							content: 'Tiene que tener más de 6 carácteres.',
 							icon:'icon-lock'
 						})
-						$this
-							.addClass('input-error')
-							.removeClass('input-success');
-						validar.pass.estado =  false;
-					}else{
-						$this
-							.addClass('input-success')
-							.removeClass('input-error');
-						validar.pass.estado =  true;
 					}
+					validar.pass.estado =  false;
 				}
-			}else{
-				if(!$this.hasClass('input-error')){
-					$.Notify({
-						id:'lblPass',
-						type: 'warning',
-						caption: 'Contraseña',
-						content: 'Tiene que tener más de 6 carácteres.',
-						icon:'icon-lock'
-					})
-					$this.addClass('input-error');
-				}
-				validar.pass.estado =  false;
+			} else {
+				$this.removeClass('input-error input-success')
+				return false;
 			}
 		},
-		estado: false,
+		reset: function($this){
+			$this.find(':password').each(function(){
+				$(this).removeClass('input-error input-success').val('') ;
+			})
+		}
 	},	
 	form : function(idFrm){
 //AKI :: personalizando mensaje de error 
@@ -372,6 +370,9 @@ var dialog = {
 	},
 	close:function (idObj,callback){
 		var $this = $(idObj);
+
+		//en el caso que exisan passwords formaear el diseño
+		validar.pass.reset($this) ;
 
 		$this.fadeOut();
 		$('#dialogs').fadeOut();

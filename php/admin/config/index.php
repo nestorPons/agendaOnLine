@@ -1,3 +1,4 @@
+<?php require_once('../../connect/clsConfig.php') ; ?>
 <h1>Configuración</h1>
 <form id="frmConfig" enctype="multipart/form-data"  class="chck-container">
 		<label>
@@ -21,9 +22,9 @@
 			Reservar hora con un mínimo de minutos.
 		</label>
 		<label>
-			<div class="aling-left padding10" > 
+			<div class="aling-left" > 
 				<span>Subir la imagen del LOGO de la empresa:</span>
-				<input type="file" class ="w10" name="fileLogo" accept="image/jpg image/png image/ico">
+				<input type="file" name="fileLogo" accept="image/jpg image/png image/ico">
 			</div>
 		</label>
 		<label><div id="respuestaLogo"></div></label>

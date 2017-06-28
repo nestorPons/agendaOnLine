@@ -16,7 +16,7 @@ foreach ( $_SESSION['USUARIOS'] as $key => $value ) {
 
 }
 
-// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 
+// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 Block
 
 $_SESSION['USUARIOS'][$key_id][10] =  date('Y-m-d H:m:s');
 

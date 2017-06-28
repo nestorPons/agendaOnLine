@@ -1,8 +1,7 @@
 <div id="tablasEncabezado">
 	<?php
-	$sql = "SELECT Nombre FROM agendas";
-	$result=mysqli_query($conexion,$sql);
-	$nombreAgenda = mysqli_fetch_all($result);
+	
+	$nombreAgenda = $conn->all("SELECT Nombre FROM agendas");
 
 	if (!$_SESSION['esMobil']){ ?>
 		<table class = "tablas" >	
@@ -22,25 +21,26 @@
 				</tr>
 			</thead>
 		</table>
-	<?php }else{
-				?>
-				<div class="tabcontrol" datar-role="tabcontrol" data-save-state=true>	
-					<ul class="tabs">
-						<?php
-						for ($a=1;$a<=CONFIG['NumAg'];$a++){
-							?>
-							<li>
-								<a href="">
-								<?php
-								echo empty($nombreAgenda[$a-1][0])?"Agenda $a":$nombreAgenda[$a-1][0]; 
-								?>
-								</a>
-							</li>
-							<?php
-						}
-						?>
-					</ul>
-				</div>
+		<?php 
+	}else{
+			?>
+		<div class="tabcontrol" datar-role="tabcontrol" data-save-state=true>	
+			<ul class="tabs">
 				<?php
-			} ?>
+				for ($a=1;$a<=CONFIG['NumAg'];$a++){
+					?>
+					<li>
+						<a href="">
+						<?php
+						echo empty($nombreAgenda[$a-1][0])?"Agenda $a":$nombreAgenda[$a-1][0]; 
+						?>
+						</a>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
+		</div>
+		<?php
+	} ?>
 </div>

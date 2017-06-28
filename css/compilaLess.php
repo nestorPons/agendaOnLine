@@ -3,7 +3,7 @@
 //Compilando la hoja de estilos
 
 function compilaLess($style_css,$style_less){
-	global $conexion;
+	global $conn;
 	//if (file_exists ( $style_css )) unlink ( $style_css);
 	require_once __DIR__ . "/lessc.inc.php";
 
@@ -12,9 +12,7 @@ function compilaLess($style_css,$style_less){
 
 	try {
 
-		$sql = "SELECT * FROM config_css;";
-		$result = mysqli_query($conexion, $sql);
-		if ($config = mysqli_fetch_assoc($result)){		
+		if ($config = $conn->assoc("SELECT * FROM config_css")){		
 
 			$less->arrPHP = $config;
 			$less->checkedCompile($style_less,$style_css);

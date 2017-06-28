@@ -1,10 +1,11 @@
 <?php namespace agendas;
 
+
 if (!empty($_GET)){
-	require_once "../../connect/conexion.php";
+	require_once "../connect/conexion.php";
 	$conexion = conexion(true,false,true);
 
-	include '../core.php';
+	include 'agendas/core.php';
 
 	$fecha_inicio = $_GET['f'];
 	$datos_agenda = datosAgenda($fecha_inicio);
@@ -12,8 +13,11 @@ if (!empty($_GET)){
 	view($datos_agenda,$fecha_inicio,$ids_existentes);
 }
 
-function view($datosAgenda,$fecha_inicio,$existen_array=false){
-	
+//AKI :: intentando instanciar clases dentro de la funcion.
+$lbl = new Lbl($datosAgenda);
+function view($datosAgenda,$fecha_inicio,$existen_array=false){									
+global $lbl;
+$n = 40; //borrar
 	$primer_dia_agenda = sumarFecha($fecha_inicio,-MARGEN_DIAS/2);
 	for ($d = 0; $d <= MARGEN_DIAS; $d++){
 		$fecha = sumarFecha($primer_dia_agenda,$d);
@@ -44,6 +48,19 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 								<td class="<?php echo $claseHora ?> "><?php echo $hora?> </td>
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){
+									?>
+									<td class="celda  <?php  if( $h == 1498550400 ) echo'doble '?>" agenda="<?php echo$a?>" >
+										<?php
+										
+										if ( $h == 1498550400 ) {
+
+												
+												$lbl.paint();
+										}
+										?>
+									</td>
+									<?php
+								/*
 									$citas = $datosAgenda[$fecha][$h][$a]??0;
 									$class = $_SESSION['esMobil']&&$a!=1?' hiddenim ':'';
 									$class .=  $horario;
@@ -52,7 +69,7 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 											<?php
 												if(!empty($citas)){
 													array_multisort($citas); //ordeno array para los que se montan aparezcan seguidos 
-													
+
 													for($t = 0; $t < count($citas);$t++){
 														$cita = $citas[$t] ;
 																						
@@ -132,7 +149,7 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 										?>
 									</td>
 									<?php
-								}?>
+								*/}?>
 							</tr>
 							<?php
 						}

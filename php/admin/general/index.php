@@ -1,3 +1,6 @@
+<?php
+	require_once('../../connect/clsConfig.php') ;
+?>
 <form id='generalFrm' action="">	
 	<div class="iconClass-container icon-left">
 		<input type='text' name='nombre' value='<?php echo CONFIG['Nombre']?>' placeholder='Nombre comercial'>
@@ -37,6 +40,5 @@
 	</div>
 	<p class="submit">
 		<button type="button" class="btn-primary" id="btnCambiarPass" data-value="Contraseña">Contraseña</button>
-		<button type="submit" class="btn-success btnLoad" id="btnGuardarCita" data-value="Guardar">Guardar</button>
 	</p>
 </form>

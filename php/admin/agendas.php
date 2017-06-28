@@ -1,17 +1,19 @@
+<?php include "../connect/clsConfig.php"; ?>
+
 <h1>Configuracion Agendas</h1>
 <h2>Seleccione las agendas que quiere que vean los clientes:</h2>
-<form id="frmAg" class="">
-<?php 
+<form id="frmAg">
+	<?php 
 	for ($i=1;$i<=6;$i++){
 		$b = $i+5;
 		$disabled = $i<=CONFIG['NumAg']?"":"disabled";
 		$disabledb = $b<=CONFIG['NumAg']?"":"disabled";
-		$sql = "SELECT * FROM agendas WHERE Id = $i";
-		$row=mysqli_fetch_assoc(mysqli_query($conexion,$sql));
+		
+		$row=$conn->assoc("SELECT * FROM agendas WHERE Id = $i LIMIT 1");
 		$checked = $row['Mostrar']==0?"":"checked";
 		$nom = $disabled=="disabled"?"":$row['Nombre'];
-		$sql = "SELECT * FROM agendas WHERE Id = $b";
-		$row=mysqli_fetch_assoc(mysqli_query($conexion,$sql));
+		
+		$row=$conn->assoc("SELECT * FROM agendas WHERE Id = $b LIMIT 1");
 		$checkedb = $row['Mostrar']==0?"":"checked";
 		$nomb = $disabledb=="disabled"?"":$row['Nombre'];
 		?>

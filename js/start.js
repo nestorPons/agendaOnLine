@@ -2,12 +2,10 @@
 loadSync('../../js/jquery.min.js' , function(){
 	loadAsync('../../js/jquery-ui.min.js',function(){
 		loadAsync('../../js/metro.js',function(){
-			loadAsync('../../js/jquery.mobile.custom.min.js' , function(){
-				loadSync('../../js/jquery.mask.min.js',function(){
-					loadAsync('../../js/funciones.js',function(){
-						loadAsync(url(),function(){
-													
-						})
+			loadSync('../../js/jquery.mask.min.js',function(){
+				loadAsync('../../js/funciones.js',function(){
+					loadAsync(url(),function(){
+						if (window.innerWidth < 800) loadAsync('../../js/jquery.mobile.custom.min.js' )
 					})
 				})
 			})

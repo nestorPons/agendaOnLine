@@ -10,95 +10,74 @@ $_SESSION['HORAS'] = HORAS;
 define('MARGEN_DIAS',10);
 
 function familias(){
-	global $conexion;
+	global $conn;
 	// 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
-
-	$sql= "SELECT * FROM familias  ORDER BY Nombre";
-	$result= mysqli_query($conexion,$sql);
-	return mysqli_fetch_all($result,MYSQLI_NUM);
+	return $conn->all("SELECT * FROM familias  ORDER BY Nombre");
 }
 $_SESSION['FAMILIAS'] = familias();
 
 function servicios(){
-	global $conexion;
+	global $conn;
 	//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
-	$sql="SELECT * FROM articulos  ORDER BY Codigo";
-	$result= mysqli_query($conexion,$sql);
-	return mysqli_fetch_all($result,MYSQLI_NUM);
+	return $conn->all("SELECT * FROM articulos  ORDER BY Codigo",MYSQLI_NUM);
 }
 $_SESSION['SERVICIOS'] = servicios();
 
 function usuarios(){
-	global $conexion;
-	
-	$sql="SELECT * FROM usuarios ORDER BY Nombre";
-	$result= mysqli_query($conexion,$sql);
-	return mysqli_fetch_all($result);
+	global $conn;
+
+	return $conn->all("SELECT * FROM usuarios ORDER BY Nombre");
 }
  
 $_SESSION['USUARIOS'] = usuarios();
 
-//FESTIVOS
-function festivos(){
-	global $conexion;
-	
-	$sql="SELECT * FROM festivos";
-	$resultf = mysqli_query($conexion, $sql);
-	while ($rowf=mysqli_fetch_array($resultf)){
-		$date =new DateTime($rowf['Fecha']);
-		$date = date_format($date,"md");
-		$data['festivos'][]=$date;	
-	}
-
-	return $data['festivos']??false;
-}
-
 //AGENDA
 function datosAgenda($fecha){
-	global $conexion;
+	global $conn;
 	
 	$dias = MARGEN_DIAS;
 	$fchIni =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
 	$fchFin =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
 
-	$sql = 'SELECT C.Id, A.Codigo, D.Agenda, D.IdCita, D.IdUsuario, U.Nombre, D.Obs, C.Hora , D.Fecha ,A.Tiempo, A.Id AS IdCodigo
+//AKI :: acomodando el array para el obj lbl
+// hay que cambiar la forma de guardar los registros
+// apuntar solo la primera hora .
+
+	$sql = "SELECT D.IdCita, C.Id AS IdCodigo, A.Codigo, D.Agenda, D.IdUsuario, U.Nombre, D.Obs, D.Hora , D.Fecha ,A.Tiempo
 		FROM cita C JOIN data D ON C.IdCita = D.IdCita 
 		INNER JOIN usuarios	U ON D.IdUsuario = U.Id 
 		LEFT JOIN articulos A ON C.Servicio = A.Id  
-		WHERE D.Fecha BETWEEN "'.$fchFin.'" AND "'.$fchIni.'"  
-		ORDER BY D.Fecha, D.Agenda, C.Hora';
+		WHERE D.Fecha BETWEEN '$fchFin' AND '$fchIni'  
+		ORDER BY D.IdCita, D.Hora";
 
-	$result=mysqli_query($conexion,$sql);
-	$data['agenda']=mysqli_fetch_all($result,MYSQLI_ASSOC);
-
-	//acomodo un array para la consulta php de inicio
-	for($i=0;$i<count($data['agenda']);$i++){
-		for ($x= 0 ; $x <=5 ;$x++){		
-			$fecha  = $data['agenda'][$i]['Fecha'];
-			$hora =  strtotime($data['agenda'][$i]['Hora']);
-			$agenda = $data['agenda'][$i]['Agenda'];
-			
-			if (!isset($datosAgenda[$fecha][$hora][$agenda][$x])){
-				$datosAgenda[$fecha][$hora][$agenda][$x]
-					= array(
-						'id'=>$data['agenda'][$i]['Id'],
-						'idCita'=>$data['agenda'][$i]['IdCita'],
-						'codigo'=>$data['agenda'][$i]['Codigo'],
-						'idCodigo'=>$data['agenda'][$i]['IdCodigo'],
-						'tiempo'=>$data['agenda'][$i]['Tiempo'],
-						'obs'=>$data['agenda'][$i]['Obs'],
-						'idUsuario'=>$data['agenda'][$i]['IdUsuario'],
-						'nombre'=>$data['agenda'][$i]['Nombre']
-					);
-					break;
-			}
+	$data=$conn->all($sql,MYSQLI_ASSOC);
+	
+	for( $i = 0 ; $i < count($data) ; $i++ ){
+		if (!isset($datosAgenda[$data[$i]['IdCita']])){
+			$datosAgenda[$data[$i]['IdCita']] 
+			= array(
+				'idCita'=>$data[$i]['IdCita'],
+				'fecha'=>$data[$i]['Fecha'],
+				'hora'=>$data[$i]['Hora'],
+				'agenda'=>$data[$i]['Agenda'],
+				'obs'=>$data[$i]['Obs'],
+				'idUsuario'=>$data[$i]['IdUsuario'],
+				'nombre'=>$data[$i]['Nombre'],
+				'idCodigo'=>array($data[$i]['IdCodigo']),
+				'codigo'=>array($data[$i]['Codigo']),
+				'tiempo'=> (int)$data[$i]['Tiempo'],
+			);
+		}else{
+			$datosAgenda[$data[$i]['IdCita']]['tiempo'] += (int)$data[$i]['Tiempo'] ;
+			$datosAgenda[$data[$i]['IdCita']]['idCodigo'][]=  $data[$i]['IdCodigo'] ;
+			$datosAgenda[$data[$i]['IdCita']]['codigo'][]=  $data[$i]['Codigo'] ;
 		}
+	
 	}
-	//RESET TABLA CITA_USER
 
-	//mysqli_query($conexion,"TRUNCATE cita_user");
+	//RESET TABLA CITA_USER
+	$conn->query("TRUNCATE user_reg");
 	
 	return $datosAgenda??false;
 }
-$datosAgenda = datosAgenda(Date('Y-m-d'));
-$_SESSION['AGENDAS'] = $datosAgenda;
+$datosAgenda = datosAgenda(Date('Y-m-d')); //no creo variable session no es encesario.

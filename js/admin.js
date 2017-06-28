@@ -580,15 +580,17 @@ var menu = {
 				break;
 			case 'horarios':
 				menu.enabled(add,save,del)
-				 break;
+				break;
 			case 'agendas':
 				menu.enabled(save)
-				 break;
+				break;
 			case 'festivos':
-				menu.enabled(save)
-				 break;
+				menu.enabled(save) ;
+				break;
+			case 'general':
+				menu.enabled(save) ;
+				break ;
 		}
-
 		$('#navbar').resize();
 	},
 	save:function (){
@@ -597,25 +599,32 @@ var menu = {
 				.find('.icon-floppy').hide().end()
 				.find('.icon-load').css('display','inherit')
 		}();
+		var _loadHide = function (){
+			$('#btnSave')
+				.find('.icon-load').hide().end()
+				.find('.icon-floppy').show();
+		};
 			switch($('.capasPrincipales:visible').attr('id')) {
 			case 'config':
-				config.guardar( );
+				config.guardar(_loadHide);
 				break;
 			case 'horarios':
-				horario.guardar(btn.save.show);
+				horario.guardar(_loadHide);
 				break;
 			case 'agendas':
-				agendas.guardar( btn.save.show);
+				agendas.guardar(_loadHide);
 				break;
 			case 'festivos':
-				festivo.guardar(loadHide);
+				festivo.guardar(_loadHide);
+				break;
+			case 'general':
+				general.guardar(_loadHide);
 				break;
 		}
 	},
 	show: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'main':
-
 				main.inactivas();
 			break;
 		}
@@ -696,7 +705,13 @@ var menu = {
 			.parent()
 				.hide('slide',{direction:'right'})
 	},
-	options : function(){	
+	options : function($this){
+		if ($('#btnOptions #chckOpUsersDel').is(':checked'))
+			$('.ocultar_baja').removeClass('ocultar_baja').addClass('mostrar_baja') ;
+		else
+			$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
+
+		servicios.init();	
 	},
 }
 var agendas = {
@@ -736,7 +751,24 @@ var familias = {
 
 		var id = $('#dlgFamilias #id').val();
 		var nombre = $('#dlgFamilias #nombre').val();
-		if (confirm ("Deseas eliminar la familia " + nombre + "?")) {
+
+		if ( $('#rowFamilias'+id).hasClass('mostrar_baja') ){
+			var mens = 
+			"Si elimina definitivamente la familia " + nombre + " y se perderan todos los servicios y citas relacionados con esta (No se aconseja).  \n ¿Desea continuar?"  ;
+			var del = true ;
+		}else{
+			var mens = "Deseas eliminar la familia " + nombre + "?" ;
+			var del = false ; 
+		}
+			
+	
+		if (confirm (mens)) {
+			_del() ;
+		}else{
+			btn.load.hide() ; 
+		}
+
+		function _del(){
 			$.ajax({
 				type: "GET",
 				data: {id:id},
@@ -745,20 +777,26 @@ var familias = {
 				beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
 			})
 			.done(function(mns){
-				if (mns.success == true){
-					var baja ; 
-					familias.menu.eliminar( id ) ;
-
-					if($('#chckOpUsersDel').is(':checked')){
-						baja = 'mostrar_baja' ;
+				if (mns == true){
+					if (del){
+		
+						familias.menu.eliminar( id ) ;
 					}else{
-						baja = 'ocultar_baja' ;
+						var baja ; 
+						familias.menu.ocultar( id ) ;
+
+						if($('#chckOpUsersDel').is(':checked')){
+							baja = 'mostrar_baja' ;
+						}else{
+							baja = 'ocultar_baja' ;
+						}
+						if (id>=0) $("#rowFamilias"+id).addClass(baja) ;
 					}
-					if (id>=0) $("#rowFamilias"+id).addClass(baja) ;
 				}else{
 
 					$("#familias #rowFamilias"+id).fadeTo("slow", 1) ;
-					notify.error(mns.err,'ERROR') ; 
+					notify.error(mns,'ERROR') ; 
+					
 				}
 				$("#rowFamilias"+id).fadeTo("fast", 1)
 
@@ -769,10 +807,7 @@ var familias = {
 				$("#familias #"+id).fadeTo("slow", 1);
 			});
 
-		}else{
-			btn.load.hide()
 		}
-
 	},
 	guardar :function (){
 		btn.load.show($('#dlgFamilia .aceptar'),false);
@@ -848,7 +883,17 @@ var familias = {
 			familias.menu.crear( id , nombre ) ; 
 
 		},
-		eliminar : function ( id ,callback ) {
+		eliminar : function( id ,callback ){
+			$("#rowFamilias"+id).remove();
+			$('.menuServicios').each(function(){
+				$(this).find('#lstSerMain').find('#'+id).remove();
+				$(this).find('#lstSerSelect').find('#'+id).remove();
+			})
+			$('#sevicios .fam' + id ).remove() ;
+			$('#crearCita .fam' + id ).remove() ;
+			typeof callback == "function" && callback();	
+		},
+		ocultar : function ( id ,callback ) {
 			$('.menuServicios').each(function(){
 				$(this).find('#lstSerMain').find('#'+id).addClass('ocultar_baja');
 				$(this).find('#lstSerSelect').find('#'+id).addClass('ocultar_baja');
@@ -1291,84 +1336,80 @@ var crearCita ={
 }
 var config ={
 	change : false,
-	cambiarContraseña: 	function (){ 
-			var $newPass = $('#dlgCambiarPass #newPass');
-			var $repeatPass = $('#dlgCambiarPass #repeatPass');
-			var url =  urlPhp + 'config/cambiarPass.php';
-			var data = {
-				oldPass : $('#dlgCambiarPass #oldPass').val(),
-				newPass: $('#dlgCambiarPass #pass').val()
-			}
-			if(validar.pass.estado){
-				$.post(url,data,function(r){
-					if(r.success){
-						$.Notify({
-							type: 'success',
-							caption: 'Guardada',
-							content: 'Contraseña cambiada',
-							icon: 'icon-floppy'
-						})
-						$('#dlgCambiarPass')[0].reset();
-						dialog.close('#dialogs #dlgCambiarPass');					
-					}else{
-							$.Notify({
-								type: 'alert',
-								caption: '¡Error!',
-								content: r.respond,
-								icon: 'icon-cross'
-							});				
-					}
-					btn.load.hide();
-				},'json')
-			}else{
-				btn.load.status=false;
-			}
-		},
+	pass: 	function (){ 
+		var $newPass = $('#dlgCambiarPass #newPass');
+		var $repeatPass = $('#dlgCambiarPass #repeatPass');
+		var url =  urlPhp + 'config/pass.php';
+		var data = {
+			oldPass : SHA1($('#dlgCambiarPass #oldPass').val().trim()),
+			newPass: SHA1($('#dlgCambiarPass #pass').val().trim()) 
+		}
+		if(general.validar()){
+			$.post(url,data,function(r){
+				if(r.success){
+					notify.success('Contraseña cambiada' , 'Guardada') ;
+						
+					$('#dlgCambiarPass')[0].reset();
+
+					dialog.close('#dialogs #dlgCambiarPass');					
+
+				}else{
+					notify.error( r.respond ) ; 
+				}
+				btn.load.hide();
+			},'json')
+			.fail(function(r){alert(r)})
+		}else{
+			btn.load.status=false;
+			notify.error('Algun dato no esta correcto, verifique el formlario.') ;
+		}
+	},
 	guardar: function (callback){
-			var formData = new FormData($("#config form")[0]);
-			var std = $('#config #frmConfig #showInactivas').is(':checked');
-			var ruta = "../../php/admin/config/guardar.php";
+	
+		var formData = new FormData($("#config form")[0])
+		var std = $('#config #frmConfig #showInactivas').is(':checked')
+		var ruta = "../../php/admin/config/guardar.php"
 
-			main.inactivas(std);
+		main.inactivas(std);
 
-			$.ajax({
-				url: ruta,
-				type: "POST",
-				data: formData,
-				contentType: false,
-				processData: false,
-			})
-			.done(function(r){
-				var rsp = r.err==3?"Archivo demasiado grande":'<img src="../arch/logo.png">';
+		$.ajax({
+			url: ruta,
+			type: "POST",
+			data: formData,
+			contentType: false,
+			processData: false,
+		})
+		.done(function(r){
+			if (r.success==true && r.err == true){
+				notify.success('Guardado con éxito.')
+				$("#config #respuestaLogo").html(r.img) 
+			} else {	
+				notify.error(r.err)	
+			}
+	 		typeof callback == "function" && callback()
+		})
+		.fail(function( jqXHR, textStatus, errorThrown ){
+			alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
+	 		typeof callback == "function" && callback()
+		})
 
-				$("#config #respuestaLogo").html(rsp);
+		config.change = false
+	},
 
-				r.err == 0?	ocation.reload(true):btn.save.show();
-
-				typeof callback == "function" && callback();
-			})
-			.fail(function(){
-
-				typeof callback == "function" && callback();
-			})
-			config.change = false;
-		},
 }
 var general = {
-	guardar: function ($this){
-		var  data = $this.serialize();
+	guardar: function (callback){
+		var  data = $('#general form').serialize();
 		var url  = urlPhp+'general/guardar.php';
 		$.post(url,data, function(r) {
-				$.Notify({
-					caption: 'Configuración',
-					content: 'Guardada',
-					type: 'success',
-					icon: 'icon-floppy'
-				})
-			btn.load.reset();
+			
+			notify.success( 'Configuración guardada') ; 
+			typeof callback == "function" && callback();
 		},'json')
-		.fail(function(r){echo("ERROR guardando configuración")})
-		.always(btn.load.hide)
+		.fail(function(r){console.log(r)})
+	},
+	validar: function () {
+		return $('#dlgCambiarPass .input-success').length == 3 ;
 	}
 }
 var festivo = {
@@ -1544,9 +1585,11 @@ var servicios = {
 	init : function () {
 
 		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
-		clase_id = clase.replace(/\D/g,'')
+		if (!$.isEmpty( clase )){
+			clase_id = clase.replace(/\D/g,'')
+			servicios.mostrar(clase_id) ;
+		}
 		
-		servicios.mostrar(clase_id) ;
 	},
 	buscar: function(){
 		$('#servicios .capaServicios').fadeIn();
@@ -1800,16 +1843,15 @@ var usuarios = {
 					},
 				})
 				.done(function(){
-					$("#usuarios #rowUsuarios"+id)
-						.hide('explode')
-						.remove();
-						$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove();
-						notify.alert('El usuario ha sido eliminado con éxito.','Usuario eliminado!!')
+					$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1);
+					$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove();
+					notify.alert('El usuario ha sido eliminado con éxito.','Usuario eliminado!!')
 				})
 				.fail(function(){
 					$("#usuarios #rowUsuarios"+id).show("fast");
 					notify.error("¡¡No se pudo borrar el registro!!",'Error!');
 				})
+
 			}
 		}
 		
@@ -1853,9 +1895,10 @@ var usuarios = {
 							obs : frm.obs , 			
 							activa : activa , 
 							
-						},function(rsp){
-							$('#usuarios .tablas').prepend(rsp);
-							$('#lstClientes').append('<option data-id="'+normalize(frm.nombre)+'">'+frm.nombre+'</option>')	
+						},function(html){
+							$('#usuarios .tablas').prepend(html);
+							$('#lstClientes')
+								.append('<option data-id="'+normalize(frm.nombre)+'" value = "' + frm.nombre + '">'+rsp.id+'</option>')	
 							notify.success('Usuario guardado con éxito!.','Nuevo usuario')
 						})
 					}else{ 
@@ -1890,7 +1933,7 @@ var usuarios = {
 								.removeClass('mostrar_baja ocultar_baja')
 								.fadeTo("slow", 1);
 							$('#lstClientes')
-								.append('<option data-id="'+normalize(frm.nombre)+'">'+frm.nombre+'</option>')
+								.append('<option data-id="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
 						}	
 						notify.success('Usuario guardado con éxito!.','Usuario editado')						
 					}
@@ -1939,7 +1982,7 @@ var usuarios = {
 		})		
 	},
 	historial: function ($this){
-    var id =$this.parent().parent().data('value');  
+    	var id =$this.parent().parent().data('value');  
 		var url = urlPhp+'usuarios/historial.php';
 		$.getJSON(url,{id:id},function(data){
 			dialog.create('dlgHistorial',function(){
@@ -1966,15 +2009,15 @@ var usuarios = {
 		$('#usuarios')
 			.find('.c3').removeClass('c3').end()
 			.find('#menu'+letra).addClass('c3').end()
-			.find('tr').hide().end()
-			.find('.nom[id^='+letra.toLowerCase()+']').parent().show()
+			.find('tbody tr').hide().end()
+			.find('.name[id^='+letra.toLowerCase()+']').parent().show()
 	},
 	buscar: function (txt){
 		var txt =  normalize(txt);
 		usuarios.select(txt.toUpperCase());
 		var txt = txt.replace(/\s/g, "");
 		txt = txt.toLowerCase();
-		$("#usuarios").find(".body").fadeOut().end()
+		$("#usuarios").find(".body").hide().end()
 	},
 	validate : {
 		form : function(){
@@ -2010,6 +2053,8 @@ var usuarios = {
 	}
 }
 $(function(){
+	var ancho = $('#main .celda:visible').width();
+	$('.lbl').width(ancho-13)
 	$('body').on('click',"[name='desplazarFecha']",function(e){
 		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
 	})
@@ -2083,16 +2128,9 @@ $(function(){
 	$('#general')
 		.on('click','#btnCambiarPass',function(){
 			dialog.create('dlgCambiarPass',function(){
-				dialog.open('#dlgCambiarPass',function(e){
-					config.cambiarContraseña();
-				})
+				dialog.open('#dlgCambiarPass',config.pass)
 			})
 		})
-		.find('#generalFrm')
-			.submit(function(e){
-				e.preventDefault();
-				general.guardar($(this)); //AKI ESTO DA ERROR (NO ES UNA FUNCION)
-			});
 
 	$('#main')
 		.on('click','#mainLstDiasSemana a',function(){
@@ -2175,16 +2213,7 @@ $(function(){
 		.on('click','#btnAdd',menu.add)
 		.on('click','#btnDel',menu.del)
 		.on('click','#btnReset',menu.reset)
-		.on('click','#btnOptions #chckOpUsersDel',function(){
-
-			if ($(this).is(':checked'))
-				$('.ocultar_baja').removeClass('ocultar_baja').addClass('mostrar_baja')
-			else
-				$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja')
-
-			servicios.init();
-
-		})
+		.on('click','#btnOptions #chckOpUsersDel',menu.options)
 		.find('[name="menu[]"]').click(function(){
 			mostrarCapa($(this).data('capa'));
 			$('.app-bar-pullmenu ').hide('blind');

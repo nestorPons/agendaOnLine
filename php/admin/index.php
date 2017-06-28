@@ -1,11 +1,8 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
-if (!isset($conexion)){
+if (!isset($conn)){
 	$fecha = Date('Y-m-d');
-	require('../connect/conexion.php');
-	$conexion = conexion(true,false,true);	
+	require('../connect/clsConfig.php');
+	require('../connect/tools.php');
 }
 
 //Compilando la hoja de estilos
@@ -40,22 +37,19 @@ include 'core.php';
 </script>
 <title>Agenda onLine</title>
 
-</head><body
-	data-empresa="<?php echo CONFIG['Nombre']?>" 
->
-
-	<?php include "../../php/menus/menuAdmin.php"?>
+</head><body data-empresa="<?php echo CONFIG['Nombre']?>" >
+	<?php include "../menus/menuAdmin.php"?>
 
 	<div id='login' class='login'>
-		<section id='main' class="capasPrincipales activa"><?php include "../../php/admin/agendas/index.php"?></section>
+		<section id='main' class="capasPrincipales activa"><?php include "../../php/admin/main.php"?></section>
 		<section id='usuarios' class="capasPrincipales" data-url="../../php/admin/usuarios/index.php"></section>
 		<section id='horarios' class="capasPrincipales" data-url="../../php/admin/horarios/index.php"></section>
 		<section id='crearCita' class="capasPrincipales" data-url="../../php/admin/crearCita/index.php"></section>
 		<section id='servicios' class="capasPrincipales" data-url="../../php/admin/servicios/index.php"></section>
 		<section id='familias' class="capasPrincipales" data-url="../../php/admin/familias/index.php"></section>
-		<section id='general' class="capasPrincipales" ><?php  //include "../../php/admin/general/index.php"?></section>
-		<section id='config' class="capasPrincipales" ><?php  //include "../../php/admin/config/index.php"?></section>
-		<section id='agendas' class="capasPrincipales" ><?php  //include "../../php/admin/agendas/agendas.php"?></section>
+		<section id='general' class="capasPrincipales" data-url= "../../php/admin/general/index.php"></section>
+		<section id='config' class="capasPrincipales" data-url= "../../php/admin/config/index.php"></section>
+		<section id='agendas' class="capasPrincipales" data-url= "agendas.php"></section>
 		<section id='festivos' class="capasPrincipales" ><?php  //include "../../php/admin/festivos/index.php"?></section>
 		<section id='notas' class="capasPrincipales" ><?php// include "../../php/admin/notas.php"?></section>
 	</div>

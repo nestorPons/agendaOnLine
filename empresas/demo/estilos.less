@@ -42,7 +42,6 @@
 	user-select: none;
 }
 
-   
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -747,8 +746,8 @@ th{
 	}
 }
 .display-inline-flex{
-margin: 0 auto;
-width: 60%;
+	margin: 0 auto;
+	width: 60%;
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
@@ -882,7 +881,7 @@ width: 60%;
 		left: 0;
 		width: 100%;
 		background-color:#fff;
-		z-index:2;
+		z-index:3;
 		@media screen and (max-width: 320px) {
 			padding-left:0;
 			padding-right:0;
@@ -1068,14 +1067,10 @@ width: 60%;
 	display:table;
 	table-layout: fixed;
 	justify-content: center;
-	border-spacing: 0;
-    border-collapse: separate;
 	margin: auto;
 	width: 100%;
 	background-color: @base;
-	table{
-		height:100%;
-	}
+
 	tr{
 		height:100%;
 		text-align: left;
@@ -1085,15 +1080,14 @@ width: 60%;
 			margin: 0 5px auto;
 		}
 	}
-	td{
-		margin: 15px;
-	}
+
 	.celda{
-		display:table-cell;
 		text-align:left !important;
-		max-width: 300px;
-		padding: 0;
-		height: 100%;
+		padding : 1px;
+		height : 1em;
+		&.doble {
+			height : 3rem ;
+		}
 
 		form{
 			width:100%;
@@ -1184,7 +1178,200 @@ width: 60%;
 			margin-right: 5px;
 		}
 	}
-	&.encabezado, .encabezado {
+	.lbl{
+		@rem : 2.1rem ; 
+		@increment : 1.18 ;	
+		font-size: 0.9em;
+		position: absolute;
+		z-index : 2 ;
+		border : 2px solid @b2 ;
+		background-color : @b1;
+		.border-radius(10px,10px,10px,10px);
+		padding :5px;
+		overflow : auto;
+
+		&.row_1 {
+			height :  @rem ;
+		}
+		&.row_2 {
+			height : @rem + @increment ;
+		}
+		&.row_3 {
+			height : @rem + @increment * 2 ;
+		}
+		&.row_4 {
+			height : @rem + @increment * 3 ;
+		}
+		&.row_5 {
+			height : @rem + @increment * 4 ;
+		}
+		&.row_6 {
+			height : @rem + @increment * 5 ;
+		}
+		&.row_7 {
+			height : @rem + @increment * 6 ;
+		}
+		&.row_8 {
+			height : @rem + @increment * 7 ;
+		}
+		&.row_9 {
+			height : @rem + @increment * 8 ;
+		}
+		&.row_10 {
+			height : @rem + @increment * 9 ;
+		}
+		&.row_11 {
+			height : @rem + @increment * 10 ;
+		}
+		&.row_12 {
+			height : @rem + @increment * 11 ;
+		}
+		&.row_13 {
+			height : @rem + @increment * 12 ;
+		}
+		&.row_14 {
+			height : @rem + @increment * 13 ;
+		}
+		&.row_15 {
+			height : @rem + @increment * 14 ;
+		}
+		&.row_16 {
+			height : @rem + @increment * 15 ;
+		}
+		&.row_17 {
+			height : @rem + @increment * 16 ;
+		}
+		&.row_18 {
+			height : @rem + @increment * 17 ;
+		}
+		&.row_19 {
+			height : @rem + @increment * 18 ;
+		}
+		&.row_20 {
+			height : @rem + @increment * 19 ;
+		}
+		&.row_21 {
+			height :  @rem + @increment * 20 ;
+		}
+		&.row_22 {
+			height : @rem + @increment * 21 ;
+		}
+		&.row_23 {
+			height : @rem + @increment * 22 ;
+		}
+		&.row_24 {
+			height : @rem + @increment * 23 ;
+		}
+		&.row_25 {
+			height : @rem + @increment * 24 ;
+		}
+		&.row_26 {
+			height : @rem + @increment * 25 ;
+		}
+		&.row_27 {
+			height : @rem + @increment * 26 ;
+		}
+		&.row_28 {
+			height : @rem + @increment * 27 ;
+		}
+		&.row_29 {
+			height : @rem + @increment * 28 ;
+		}
+		&.row_30 {
+			height : @rem + @increment * 29 ;
+		}
+		&.row_31 {
+			height : @rem + @increment * 30 ;
+		}
+		&.row_32 {
+			height : @rem + @increment * 31 ;
+		}
+		&.row_33 {
+			height : @rem + @increment * 32 ;
+		}
+		&.row_34 {
+			height : @rem + @increment * 33 ;
+		}
+		&.row_35 {
+			height : @rem + @increment * 34 ;
+		}
+		&.row_36 {
+			height : @rem + @increment * 35 ;
+		}
+		&.row_37 {
+			height : @rem + @increment * 36 ;
+		}
+		&.row_38 {
+			height : @rem + @increment * 37 ;
+		}
+		&.row_39 {
+			height : @rem + @increment * 38 ;
+		}
+		&.row_40 {
+			height : @rem + @increment * 39 ;
+		}
+		&.row_41 {
+			height : @rem + @increment * 40 ;
+		}
+		&.row_42 {
+			height : @rem + @increment * 41 ;
+		}
+		&.row_43 {
+			height : @rem + @increment * 42 ;
+		}
+		&.row_44 {
+			height : @rem + @increment * 43 ;
+		}
+		&.row_45 {
+			height : @rem + @increment * 44 ;
+		}
+		&.row_46 {
+			height : @rem + @increment * 45 ;
+		}
+		&.row_47 {
+			height : @rem + @increment * 46 ;
+		}
+		&.row_48 {
+			height : @rem + @increment * 47 ;
+		}
+		&.row_49 {
+			height : @rem + @increment * 48 ;
+		}
+		&.row_50 {
+			height : @rem + @increment * 49 ;
+		}
+		&.row_51 {
+			height : @rem + @increment * 50 ;
+		}
+		&.row_52 {
+			height : @rem + @increment * 51 ;
+		}
+		&.row_53 {
+			height : @rem + @increment * 52 ;
+		}
+		&.row_54 {
+			height : @rem + @increment * 53 ;
+		}
+		&.row_55 {
+			height : @rem + @increment * 54 ;
+		}
+		&.row_56 {
+			height : @rem + @increment * 55 ;
+		}
+		&.row_57 {
+			height : @rem + @increment * 56 ;
+		}
+		&.row_58 {
+			height : @rem + @increment * 57 ;
+		}
+		&.row_59 {
+			height : @rem + @increment * 58 ;
+		}
+		&.row_60 {
+			height : @rem + @increment * 59 ;
+		}
+	}
+	&.encabezado, .enca	bezado {
 		font-family: @title-font;
 		color: @grey;
 		margin:5px;
@@ -1225,9 +1412,7 @@ width: 60%;
 	.obs{
 		width: 50px;
 	}
-	.lbl{
-		padding-left:15%;
-	}
+
 	&-none{
 		margin: auto;
 		border: 0px;
@@ -1259,13 +1444,14 @@ width: 60%;
 		}
 		tr{
 			td{
-				border: 1px solid @grey-bg;
+				border: 1px solid @grey;
 				cursor:pointer;
 			}
 		}
 		.num{
 			vertical-align: baseline;
 			border:none;
+			padding-top: 5px;
 		}
 	}
 
@@ -1919,7 +2105,9 @@ width: 60%;
 		top: 2.3rem;
 		}
 		.tablas{
-
+			.name { 
+				width : 40% ;
+			}
 		}
 	}
 	#popupHistorial{

@@ -12,4 +12,5 @@ $js['success'] = mysqli_query($conexion,$sql)?true:false;
 $js['id'] = mysqli_insert_id($conexion);
 $js['nombre'] = $nombre;
 $js['fecha']= $fecha;
+
 echo json_encode($js);

@@ -1,5 +1,5 @@
-<?php
-// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 
+<?php 
+// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 block
 $id = $row[0]??$_GET['id'] ;
 $nombre = $row[1]??$_GET['nombre'] ; 
 $email = $row[2]??$_GET['email'] ; 
@@ -17,7 +17,7 @@ $clase_estado_baja = $activa!=0?'ocultar_baja':'';
         <span name="editar[]" class= "icon-edit x6 a"  title="Editar usuario"></span>
     </td>
     <td name= "id" class="num responsive ">	<?php echo $id. " " ;?></td>
-    <td name="nom" class="nom" id="<?php echo strtolower(str_replace(' ', '_', $nombre))?>"><?php echo $nombre;?></td>
+    <td name="nom" class="name" id="<?php echo strtolower(str_replace(' ', '_', $nombre))?>"><?php echo $nombre;?></td>
     <td name="tel" class="responsive"><?php echo $tel;?></td>
     <td name="email" class="w1" data-value ="<?php echo$email?>"><?php echo $email_status?></td>
     <td name="obs" class="obs responsive" data-value ="<?php echo$obs?>"><?php echo$obs_status?></td>

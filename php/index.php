@@ -18,27 +18,28 @@ if(isset($_COOKIE["id_user"])&&!isset($_GET["closeSession"])){
 }else{
 	 if(isset($_GET["closeSession"])||isset($_GET['err'])){
 		require "../php/connect/destroysession.php";
+		session_start ();
 	}
 }
 
+$_SESSION['bd'] = $_GET['empresa'] ;
+
+require_once "connect/clsConexion.php";
+require 'connect/tools.php' ;
+
 //Compilando la hoja de estilos
-require_once "connect/conexion.php";
-$empresa_bd = $_GET['empresa'];
-$conexion = conexion(false,$empresa_bd,true);
 require_once "../css/compilaLess.php";
 compilaLess($url_css,$url_less);
 //************************************
 
-
 function srcLogo(){
-	if (file_exists("logo.png")){
-		$path = "logo.png";
-	}else if (file_exists("logo.jpg")){
-		$path = "logo.jpg";
+	$url = "../../empresas/".$_GET['empresa']."/logo.png" ;
+	if (file_exists($url)){
+		$path = $url;
 	}else{
 		$path =  "../../img/logo.png";
 	}
-	 return $path;
+	return $url;
 }
 ?>
 <!DOCTYPE html>
@@ -103,7 +104,7 @@ function srcLogo(){
 	<section class="login about">
 		<center>
 			<p class="about-author">
-				&copy; 2016 <a href="https://www.agendaonline.es" target="_blank">AgendaOnLine v2.1</a>
+				&copy; 2016 <a href="https://www.agendaonline.es" target="_blank">AgendaOnLine v5.1</a>
 				Creado por Néstor Pons
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>
