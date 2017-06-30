@@ -870,8 +870,8 @@ th{
 	padding: 5px;
 	padding-top:10px;
 	position:relative;
-	width: 100%;
-	max-width: 800px;
+	width: 90%;
+	//max-width: 800px;
 	text-align:center;
 	.border-radius;
 	.box-shadow;
@@ -1086,7 +1086,7 @@ th{
 		padding : 1px;
 		height : 1em;
 		&.doble {
-			height : 3rem ;
+			height : 3.3rem ;
 		}
 
 		form{
@@ -1179,17 +1179,33 @@ th{
 		}
 	}
 	.lbl{
-		@rem : 2.1rem ; 
+		display :block;
+		@rem : 2.3rem ; 
 		@increment : 1.18 ;	
-		font-size: 0.9em;
+		font-size: 1em;
 		position: absolute;
 		z-index : 2 ;
 		border : 2px solid @b2 ;
 		background-color : @b1;
 		.border-radius(10px,10px,10px,10px);
 		padding :5px;
-		overflow : auto;
-
+		overflow : hidden;
+		div {
+			margin  : 5px ;
+		}
+		.nombre { 
+			//display: table-caption;
+		}
+		.iconos{
+			position : absolute ;
+			top : 5px ;
+			right : 5px ;
+		}
+		.servicios {
+			div{
+				display : block ;
+			}
+		}
 		&.row_1 {
 			height :  @rem ;
 		}

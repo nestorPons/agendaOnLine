@@ -13,18 +13,16 @@ if (!empty($_GET)){
 	view($datos_agenda,$fecha_inicio,$ids_existentes);
 }
 
-//AKI :: intentando instanciar clases dentro de la funcion.
-$lbl = new Lbl($datosAgenda);
 function view($datosAgenda,$fecha_inicio,$existen_array=false){									
-global $lbl;
+
 $n = 40; //borrar
 	$primer_dia_agenda = sumarFecha($fecha_inicio,-MARGEN_DIAS/2);
 	for ($d = 0; $d <= MARGEN_DIAS; $d++){
 		$fecha = sumarFecha($primer_dia_agenda,$d);
-		$id = str_replace('-','',$fecha);
-		if (empty($existen_array)||array_search($id,$existen_array)<=0){
+		$id_fecha = str_replace('-','',$fecha);
+		if (empty($existen_array)||array_search($id_fecha,$existen_array)<=0){
 			?>
-			<div id="<?php echo $id?>" 
+			<div id="<?php echo $id_fecha?>" 
 				name="dia[]" 
 				class="dia 
 					<?php 
@@ -48,15 +46,16 @@ $n = 40; //borrar
 								<td class="<?php echo $claseHora ?> "><?php echo $hora?> </td>
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){
+									$datos = $datosAgenda[$id_fecha][$a][$h]??null ;
+									$obj_lbl[$h.$a] = new Lbl($datos);
+									$lbl = $obj_lbl[$h.$a] ;
+									
 									?>
-									<td class="celda  <?php  if( $h == 1498550400 ) echo'doble '?>" agenda="<?php echo$a?>" >
+									<td class="celda  <?php  if( $lbl->status ) echo'doble '?>" agenda="<?php echo$a?>" >
 										<?php
-										
-										if ( $h == 1498550400 ) {
 
-												
-												$lbl.paint();
-										}
+											echo $lbl->html ;
+										
 										?>
 									</td>
 									<?php

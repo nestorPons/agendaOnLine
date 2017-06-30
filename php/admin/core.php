@@ -51,7 +51,7 @@ function datosAgenda($fecha){
 		ORDER BY D.IdCita, D.Hora";
 
 	$data=$conn->all($sql,MYSQLI_ASSOC);
-	
+
 	for( $i = 0 ; $i < count($data) ; $i++ ){
 		if (!isset($datosAgenda[$data[$i]['IdCita']])){
 			$datosAgenda[$data[$i]['IdCita']] 
@@ -74,10 +74,18 @@ function datosAgenda($fecha){
 		}
 	
 	}
+	for( $i = 0 ; $i < count($datosAgenda) ; $i++ ){
+		if (!empty($datosAgenda[$i])){
+			$fecha =  str_replace('-', '', trim($datosAgenda[$i]['fecha'])) ;
+			$agenda = $datosAgenda[$i]['agenda'];
+			$hora = strtotime($datosAgenda[$i]['hora']);
+			$arr_data[$fecha][$agenda][$hora] = $datosAgenda[$i];
+		}
+	}
 
 	//RESET TABLA CITA_USER
 	$conn->query("TRUNCATE user_reg");
 	
-	return $datosAgenda??false;
+	return $arr_data??false;
 }
 $datosAgenda = datosAgenda(Date('Y-m-d')); //no creo variable session no es encesario.

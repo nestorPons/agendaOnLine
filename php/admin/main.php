@@ -11,13 +11,11 @@
 	<?php
 	include '../menus/tablasEncabezado.php';
 	
+	include 'agendas/clsLbl.php';
 	include 'agendas/view.php';
 	$fecha_inicio = date('Y-m-d');
 	
 	agendas\view($datosAgenda,$fecha_inicio);
-	
-	include 'agendas/clsLbl.php';
-	$new =  new Lbl($datosAgenda) ;
-	
+		
 	?>
 </div>	
