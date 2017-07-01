@@ -2,7 +2,7 @@
 class Lbl {
 	
     //datos
-    private $id ;
+    private $idCita ;
     private $nombre ;
     private $codigos ;
     private $idCodigos ;
@@ -22,6 +22,7 @@ class Lbl {
 	
     function __CONSTRUCT($datos){
         if (!empty($datos)){
+			$this->idCita = $datos['idCita'] ;
             $this->nombre = $datos['nombre'] ;
             $this->idCodigos = $datos['idCodigo'] ;
             $this->codigos = $datos['codigo'] ;
@@ -42,7 +43,7 @@ class Lbl {
         $this->html = "
             <div  class='lbl row_$rows'>
                 <div class='nombre'>
-                    <span class ='icon-user-1'></span> 
+                    <span class ='icon-user-1'>$this->idCita</span> 
                     <span>$this->nombre</span>
                 </div>
                 <div class='iconos aling-right'>

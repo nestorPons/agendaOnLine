@@ -15,7 +15,6 @@ if (!empty($_GET)){
 
 function view($datosAgenda,$fecha_inicio,$existen_array=false){									
 
-$n = 40; //borrar
 	$primer_dia_agenda = sumarFecha($fecha_inicio,-MARGEN_DIAS/2);
 	for ($d = 0; $d <= MARGEN_DIAS; $d++){
 		$fecha = sumarFecha($primer_dia_agenda,$d);

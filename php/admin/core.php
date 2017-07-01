@@ -39,10 +39,6 @@ function datosAgenda($fecha){
 	$fchIni =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
 	$fchFin =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
 
-//AKI :: acomodando el array para el obj lbl
-// hay que cambiar la forma de guardar los registros
-// apuntar solo la primera hora .
-
 	$sql = "SELECT D.IdCita, C.Id AS IdCodigo, A.Codigo, D.Agenda, D.IdUsuario, U.Nombre, D.Obs, D.Hora , D.Fecha ,A.Tiempo
 		FROM cita C JOIN data D ON C.IdCita = D.IdCita 
 		INNER JOIN usuarios	U ON D.IdUsuario = U.Id 
@@ -74,13 +70,12 @@ function datosAgenda($fecha){
 		}
 	
 	}
-	for( $i = 0 ; $i < count($datosAgenda) ; $i++ ){
-		if (!empty($datosAgenda[$i])){
-			$fecha =  str_replace('-', '', trim($datosAgenda[$i]['fecha'])) ;
-			$agenda = $datosAgenda[$i]['agenda'];
-			$hora = strtotime($datosAgenda[$i]['hora']);
-			$arr_data[$fecha][$agenda][$hora] = $datosAgenda[$i];
-		}
+	foreach($datosAgenda as $key => $value){
+			$fecha =  str_replace('-', '', trim($value['fecha'])) ;
+			$agenda = $value['agenda'];
+			$hora = strtotime($value['hora']);
+			$arr_data[$fecha][$agenda][$hora] = $value;
+
 	}
 
 	//RESET TABLA CITA_USER

@@ -45,7 +45,7 @@ include 'core.php';
 		<section id='usuarios' class="capasPrincipales" data-url="../../php/admin/usuarios/index.php"></section>
 		<section id='horarios' class="capasPrincipales" data-url="../../php/admin/horarios/index.php"></section>
 		<section id='crearCita' class="capasPrincipales" data-url="../../php/admin/crearCita/index.php"></section>
-		<section id='servicios' class="capasPrincipales" data-url="../../php/admin/servicios/index.php"></section>
+		<section id='servicios' class="capasPrincipales" data-url="../../php/admin/servicios.php"></section>
 		<section id='familias' class="capasPrincipales" data-url="../../php/admin/familias/index.php"></section>
 		<section id='general' class="capasPrincipales" data-url= "../../php/admin/general/index.php"></section>
 		<section id='config' class="capasPrincipales" data-url= "../../php/admin/config/index.php"></section>

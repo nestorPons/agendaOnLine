@@ -71,6 +71,7 @@ function mostrarCapa(capa,callback){
 }
 var main ={
 	status : 0 ,
+	z_index : 2 ,
 	sincronizar: function (dir,callback){
 
 		var idFecha=Fecha.id;
@@ -2133,6 +2134,15 @@ $(function(){
 		})
 
 	$('#main')
+		.on('click','.lbl',function(){
+			main.z_index +=  1 
+			$(this).css('z-index',main.z_index)
+		})
+		.on('click','.row_1',function(){
+			
+			$(this).hasClass('initial') ?  $(this).removeClass('initial') : $(this).addClass('initial') ;
+					
+		})
 		.on('click','#mainLstDiasSemana a',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 			var diaB = parseInt($(this).data('value'));

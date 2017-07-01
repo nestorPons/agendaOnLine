@@ -1187,6 +1187,7 @@ th{
 		z-index : 2 ;
 		border : 2px solid @b2 ;
 		background-color : @b1;
+
 		.border-radius(10px,10px,10px,10px);
 		padding :5px;
 		overflow : hidden;
@@ -1208,6 +1209,9 @@ th{
 		}
 		&.row_1 {
 			height :  @rem ;
+			&.initial{
+				height :initial ;
+			}
 		}
 		&.row_2 {
 			height : @rem + @increment ;
