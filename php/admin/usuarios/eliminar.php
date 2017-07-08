@@ -1,11 +1,9 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/conexion.php"; 
-$conexion = conexion();
+include "../../connect/clsConexion.php"; 
 
 $sql="UPDATE  usuarios SET dateBaja = '". date('Y-m-d H:m:s') ."' WHERE Id =".$_GET['id'];
-$jsondata['sql'] = $sql;
-$jsondata['success'] =mysqli_query($conexion, $sql)?true:false;
+$jsondata['success'] =$conn->query($sql);
 
 foreach ( $_SESSION['USUARIOS'] as $key => $value ) {
 

@@ -5,6 +5,7 @@
 @radius: ^border_radio;
 @color: ^color_main;
 @auxiliar: ^color_secon;
+
 @radio_popover: 10px;
 @base: #fff ;
 @t1:spin(@color, -30); 
@@ -240,6 +241,18 @@ th{
 		&-mini{
 			width: @width/2;
 			height: @height/2;
+		}
+		&-aux{
+			&-add{
+				margin: 0;
+				max-width: initial;
+				height: 2em;	
+				width: 270px;
+				color: @green;
+				border: 2px solid @green;
+				border-radius: 20px;
+				background-color: transparent;
+			}
 		}
 	}
 		&>.icon-load{
@@ -719,6 +732,9 @@ th{
 			color: @red;
 		}
 	}
+	.icon-plus-circled{
+		color : @green ;
+	}
 	#tblGuardarCita{
 		margin:auto;
 		border-collapse: separate;
@@ -732,6 +748,15 @@ th{
 		display: block;
 		text-align: left;
 		margin-left: 15px;
+	}
+	.lst{
+		text-align: left;
+    	margin-left: 26px;
+	}
+	#codigos{
+		div{
+			display : block ;
+		}
 	}
 	@media (max-width: 320px){
 		width:auto;
@@ -1182,20 +1207,26 @@ th{
 		display :block;
 		@rem : 2.3rem ; 
 		@increment : 1.18 ;	
-		font-size: 1em;
+		
 		position: absolute;
 		z-index : 2 ;
 		border : 2px solid @b2 ;
-		background-color : @b1;
+		background : fade(@b1, 90%);
+		
 
 		.border-radius(10px,10px,10px,10px);
 		padding :5px;
 		overflow : hidden;
 		div {
-			margin  : 5px ;
+			font-size: 1em;
+			margin : 3px ;
+			margin-bottom :4px;
 		}
 		.nombre { 
-			//display: table-caption;
+			padding-right: 50px;
+			height: 0.9rem;
+			display: inline-block;
+			overflow: 	hidden;
 		}
 		.iconos{
 			position : absolute ;
@@ -1207,11 +1238,11 @@ th{
 				display : block ;
 			}
 		}
+		.note { 
+			display: inline-flex;
+		}
 		&.row_1 {
 			height :  @rem ;
-			&.initial{
-				height :initial ;
-			}
 		}
 		&.row_2 {
 			height : @rem + @increment ;
@@ -1969,7 +2000,14 @@ th{
 
 		}
 		.note{
-			display:none;
+			.icon{
+				&-load{
+					display : none ;
+				}
+				&-ok {
+					display : none ;
+				}
+			}
 			&:first-child{
 				top: 50%;
 				position: fixed;
@@ -2029,41 +2067,38 @@ th{
 				  #fff 10px
 			  );
 				color: @text1;
-				border: none ;
 				input[type="text"]{
 					color: @text1;
 				}
 			}
-			 &.color2{
-			 background: repeating-linear-gradient(
-				  135deg,
-				  @b2,
-				  @b2 5px,
-				  #fff 5px,
-				  #fff 10px
-			  );
+			&.color2{
+				background: repeating-linear-gradient(
+					135deg,
+					@b2,
+					@b2 5px,
+					#fff 5px,
+					#fff 10px
+				);
 				color: @text2;
-				border: none ;
 				input[type="text"]{
 					color: @text2;
 				}
 			}
-			&.color-red{
+			&.color-admin{
 				@col-bg:  tint(@red,90%) ;
 				@col-text: darken(@red,30%);
-				 background: repeating-linear-gradient(
-					  135deg,
-					  @col-bg,
-					  @col-bg 5px,
-					  #fff 5px,
-					  #fff 10px
-				  );
+				background: repeating-linear-gradient(
+					135deg,
+					@col-bg,
+					@col-bg 5px,
+					#fff 5px,
+					#fff 10px
+				);
+				color: @col-text;
+				input[type="text"]{
 					color: @col-text;
-					border: none ;
-					input[type="text"]{
-						color: @col-text;
-					}
 				}
+			}
 		}
 	}
 	.dia {

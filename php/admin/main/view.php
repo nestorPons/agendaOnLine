@@ -1,11 +1,8 @@
 <?php namespace agendas;
 
-
 if (!empty($_GET)){
 	require_once "../connect/conexion.php";
 	$conexion = conexion(true,false,true);
-
-	include 'agendas/core.php';
 
 	$fecha_inicio = $_GET['f'];
 	$datos_agenda = datosAgenda($fecha_inicio);
@@ -32,36 +29,41 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 				<table class = "tablas tablas-general" >	
 					<?php
 					for($h =  strtotime(CONFIG['hora_ini']); $h <=  strtotime(CONFIG['hora_fin']) ; $h += strtotime("+15 minutes", strtotime($h))){	
+						
 						$hora = date('H:i', $h);
 						$array_horas = HORAS[date('w',strtotime($fecha))]??false;
-						if ($array_horas) {
-							$horario = (array_search($hora,$array_horas)>0)?"":"fuera_horario "; 
-							$disabled = CONFIG['ShowRow']==0&&(array_search($hora,$array_horas)<=0)?'disabled':'';
+
+						if ($array_horas) {	
+							$class = $_SESSION['esMobil']&&$a!=1?' hiddenim ':'';
+							if  (!array_search($hora,$array_horas)>0) {
+								$class .= "fuera_horario " ;  
+								$disabled = (empty(CONFIG['ShowRow']))?' disabled ' : '' ;
+							} else {
+								$disabled = '' ;
+							}
 
 							$array = explode(":",$hora);
 							$claseHora=$array[1]=='00'?"num resaltado":"num";
+							
 							?>
-							<tr id='<?php echo $h?>' class="hora h<?php echo $h . ' ' . $disabled?> " data-hour='<?php echo $hora?>'>
+							<tr id='<?php echo $h?>' class="hora h<?php echo $h . ' '.$disabled?> " data-hour='<?php echo $hora?>'>
 								<td class="<?php echo $claseHora ?> "><?php echo $hora?> </td>
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){
+									
 									$datos = $datosAgenda[$id_fecha][$a][$h]??null ;
-									$obj_lbl[$h.$a] = new Lbl($datos);
-									$lbl = $obj_lbl[$h.$a] ;
+									$lbl = new Lbl($datos);
 									
 									?>
-									<td class="celda  <?php  if( $lbl->status ) echo'doble '?>" agenda="<?php echo$a?>" >
+									<td class="celda  <?php  if( $lbl->status ) echo'doble ' ; echo $class?> " agenda="<?php echo$a?>" >
 										<?php
-
 											echo $lbl->html ;
-										
+											unset( $lbl );
 										?>
 									</td>
 									<?php
 								/*
-									$citas = $datosAgenda[$fecha][$h][$a]??0;
-									$class = $_SESSION['esMobil']&&$a!=1?' hiddenim ':'';
-									$class .=  $horario;
+
 									?>
 									<td name="celda"  class="celda agenda<?php echo$a.' '.$class?>"  data-agenda="<?php echo$a?>" >
 											<?php

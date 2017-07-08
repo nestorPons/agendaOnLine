@@ -1,12 +1,11 @@
 <?php  namespace agendas;
-class Lbl {
-	
+class Lbl {	
     //datos
-    private $idCita ;
+    private $id ;
     private $nombre ;
     private $codigos ;
     private $idCodigos ;
-
+    private $obs ; 
     //position
     private $day ;
     private $hour;
@@ -22,10 +21,12 @@ class Lbl {
 	
     function __CONSTRUCT($datos){
         if (!empty($datos)){
-			$this->idCita = $datos['idCita'] ;
+            $this->idCita = $datos['idCita'] ;
             $this->nombre = $datos['nombre'] ;
             $this->idCodigos = $datos['idCodigo'] ;
             $this->codigos = $datos['codigo'] ;
+            $this->des = $datos['des'] ;
+            $this->obs = $datos['obs'] ;
             //$this->day = $datos['dia'] ; 
             //$this->hour = $datos['hora'] ;
             $this->agenda = $datos['agenda'] ;
@@ -40,36 +41,54 @@ class Lbl {
     private function paint () {
         $rows = ceil($this->tiempo / 15) ;
         $exten = $rows>1? "extend" :'' ; 
+        $show_nota =  empty($this->obs)?'':'show' ;
         $this->html = "
-            <div  class='lbl row_$rows'>
+            <div id='".$this->idCita."' class='lbl row_$rows' >
                 <div class='nombre'>
-                    <span class ='icon-user-1'>$this->idCita</span> 
+                    <!--<span class ='icon-user-1'></span> -->
+                    <span>$this->idCita</span>
                     <span>$this->nombre</span>
                 </div>
-                <div class='iconos aling-right'>
+                <div class='iconos aling-right'>               
                     <span class ='edit icon-pencil-1'></span>  
                     <span class ='del icon-trash'></span>  
                     <span class =''></span>  
                 </div>
                 <div class='servicios $exten'>          
-                    ".$this->printArr($this->codigos)."                   
+                    ".$this->printArt($this->codigos)."                   
+                   
                 </div> 
-                <div>
-                     <span class ='icon-note'></span> 
-                     <span class =''>$rows</span>
+                <div class='note '>
+                   ". $this->printNote() ."
                 </div> 											  
             </div>
             ";
     }
 
-    private function printArr($arr){
+    private function printArt($arr){
         $str = '';
         for ($i = 0 ; $i <  count($arr) ; $i++){
-            $str .= "<div> <span class ='icon-angle-right'></span><span> ".$arr[$i]."</span></div>";
+            $str .= "<div><span class ='icon-angle-right'></span><span class='codigo' des_codigo = '". $this->des[$i]."' id_codigo = '". $this->idCodigos[$i]."' tiempo = '". $this->tiempo[$i]."'> ".$arr[$i]."</span></div>";
         }
-
+    
         return $str;
     }
 
+//AKI :: diseñando la forma de enseñar las notas
+
+    private function printNote(){
+        if (!empty($this->obs)){
+            $html = "
+                <span class ='icon-note'></span> 
+                <span class ='note'>$this->obs</span>
+                <span class='iconClass-inside icon-load  animate-spin'></span>
+                <span class='iconClass-inside icon-ok'></span>
+            " ; 
+        }else{
+            $html = '';
+        }
+
+        return $html ; 
+    }
 
 }

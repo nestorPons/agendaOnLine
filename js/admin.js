@@ -69,8 +69,8 @@ function mostrarCapa(capa,callback){
 		.find('[data-capa="'+capa+'"]').addClass('selected')
 	typeof callback == "function" && callback();
 }
-var main ={
-	status : 0 ,
+var main ={	
+	status : document.mainStatus ,
 	z_index : 2 ,
 	sincronizar: function (dir,callback){
 
@@ -250,86 +250,105 @@ var main ={
 			$('.cuerpo').fadeIn('fast')
 		})
 	},
-	eliminar: function($this){
-		dialog.create('dlgEliminarCita',function(){
-			var idCita = $this.parents('table:first').attr('idcita').replace(/\D/g,' ');
+	edit : function (idCita) {
+		var $this = $('#'+idCita+'.lbl') 
+		var cod = new Array 
+ 		var id = new Array 
+		var idCita , estado 
 
-			$('#dlgEliminarCita')
+		dialog.create('dlgEditCita',function(){
+//AKI :: Hay que generar un sistema para sumar o restar tiempo del lbl  
+			$('#dlgEditCita')
 				.data('idCita',idCita)
-				.on('click','#frmDelCita input:checkbox',function(){
-					$('#desMarkChckSer').prop('checked',false);
-				})
-				.find('input:checkbox').prop('checked',true);
-
-			var cod = new Array;
-			var id = new Array;
-
-			$('#main .ic'+idCita).each(function(){
-					 cod.push($(this).attr('codigo'));
-					 id.push($(this).attr('idCodigo'));
+				.find('#nombre')
+					.val($this.find('.nombre').text().trim())
+				.end()
+				.find('#obs')
+					.val($this.find('.note').text().trim())
+				.end()
+				.find('#fecha')
+					.val(Fecha.sql($this.parents('.dia').attr('id')))
+				.end()
+				.find('#hora')
+					.val($this.parents('tr').data('hour'))
+			
+			$this.find('.codigo').each(function(){
+				_addRow(
+					$(this).attr('id_codigo') , 
+					$(this).html() , 
+					$(this).attr('des_codigo') ,
+				)
 			})
-			cod = $.unique(cod)
-			id = $.unique(id)
-			$('#dialogs #frmDelCita').empty();
 
-			for(let i = 0; i < cod.length;i++){
-				$('#dialogs #chckSer').clone()
-					.attr('id','')
-					.find('#desMarkChckSer').attr('id','').end()
-					.find('input')
-						.attr('value',id[i])
-						.attr('id',id[i]+cod[i])
-					.end()
-					.find('label .txt').html(cod[i]).end()
-					.appendTo('#dialogs #frmDelCita')
+			$('#dlgEditCita #lstServ').change(function(){
+				var $this  = $(this).find(':selected')
+				_addRow (
+					$this.val() ,
+					$this.attr('codigo') , 
+					$this.text() , 
+					$this.attr('tiempo')
+				)
+			})
+			function _addRow (valor , codigo , descripcion ,tiempo ){
+				var tiempo = tiempo || 0; 
+				$('#dlgEditCita #template')
+					.hide()
+					.clone()
+						.attr('id','')
+						.attr('value',valor)
+						.find('.codigo')
+							.html(codigo + " => ")
+						.end()
+						.find('.descripcion')
+							.html(descripcion)
+						.end()
+						.appendTo($('#dlgEditCita').find('#codigos'))
+						.show('fade')
+
+				main.lbl.data.time += parseInt(tiempo)
+				alert(main.lbl.data.time)
 			}
-
-
-			$('#dialogs #dlgEliminarCita')
-				.on('click','#desMarkChckSer',function(){
-					var estado = $(this).prop("checked");
-					$('#frmDelCita input').each(function(){
-						$(this).prop('checked',estado)
-					})
-				})
-				.find('#lblCita').html(idCita);
-
-			dialog.open('#dlgEliminarCita',_ok,_cancel);
-
-			$('#main #lblServicio').html($this.parents('tr').attr('codigo'));
-
-			dialog.open('#dlgEliminarCita',familias.guardar,familias.eliminar);
+			dialog.open('#dlgEditCita',familias.guardar,familias.eliminar);
 		});
-
 		function _ok(){
-			var idCita = 	$('#dlgEliminarCita').data('idCita')
-			var frm =$.param( $('#frmDelCita input:checked'))+"&idCita="+idCita+'&f='+Fecha.general;
-			var url = urlPhp+'agendas/citaEliminar.php';
+
+			var idCita = $('#dlgEditCita').data('idCita')
+			var url = urlPhp+'main/delete.php';
 			var chck = new Array;
-			$('#frmDelCita input:checked').each(function (){
+
+			$('#frmEditCita input:checked').each(function (){
 				chck.push($(this).val())
 			});
 
 			$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: url,
+				url: {idCita : idCita },
 				data:frm,
 			})
 			.done(function(r){
-				if ($.isEmpty(r.err)){
-					main.lbl.eliminar(idCita, chck);
+				if ($.isEmpty(r.success)){
+					main.lbl.eliminar(idCita);
 				}
 			})
 			.fail(function(r){echo("ERROR citaEliminar =>");echo(r)})
-			.always(function(){popup.close('dlgEliminarCita')})
+			.always(function(){popup.close('dlgEditCita')})
 		}
 		function _cancel(){
 			dialog.close('.dialog',function(){
 				$('#lstChckSer').empty();
-				$('#dlgEliminarCita').removeData('idCita')
+				$('#dlgEditCita').removeData('idCita')
 			});
 		}
+	},
+	del: function(idCita){
+		var url = urlPhp+'main/delete.php'
+
+		$.getJSON(url , {idCita : idCita },function(r){
+			if (r) main.lbl.eliminar(idCita);
+			
+		})
+		.fail(function(r){echo("ERROR citaEliminar =>");echo(r)})
 	},
 	guardarNota: function($this){
 		var txt = $this.find('input').val();
@@ -357,7 +376,7 @@ var main ={
 				.find('.menulbl').html('Ocultar').end()
 				.find('.on').show().end()
 				.find('.off').hide().end()
-			$('#main .fuera_horario').parent().removeClass('disabled');
+			$('#main .disabled').removeClass('disabled');
 		}else{
 			main.status = 0 ;
 			$('#btnShow')
@@ -370,7 +389,37 @@ var main ={
 		$.get(url,{status : main.status});
 		
 	},
+		poppup:function(id){
+		dialog.create('dlgEditCita',function(){
+						
+			//EDITANDO...
+			var $this = $("#servicios #rowServicios"+id);
+
+			var cod = $this.find("[name='cod']").text();
+			var des = $this.find("[name='des']").text();
+			var time = $this.find("[name='time']").text();
+			var price = $this.find("[name='price']").data("value");
+			var fam = $this.find("[name='fam']").data("value");
+
+			$('#frmEditarServicios')
+				.find('#codigo').val(cod).end()
+				.find('#descripcion').val(des).end()
+				.find('#tiempo').val(parseInt(time)).end()
+				.find('#precio').val(price).end()
+				.find('#familia').val(fam).end()
+				.find('#eliminar').val('Eliminar');
+
+			dialog.open('#dlgServicios',servicios.guardar,servicios.eliminar);
+			if ($('#servicios #rowServicios'+ id ).hasClass('mostrar_baja')) {
+				$('#dlgServicios .aceptar').html('Activar')
+			}
+
+		});
+	},
 	lbl:{
+		data : {
+			time : 0 ,
+		},
 		crear: function(datos,todaCita,callback){
 			//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
 			
@@ -468,84 +517,74 @@ var main ={
 
 			}
 		},
-		eliminar: function(idCita,idCodigos,callback){
-
-			if (typeof (idCodigos)=="array" || typeof (idCodigos)=="object"){
-
-				var  idCod = $.unique(idCodigos);
-				for(let i = 0; i<idCod.length; i++){
-					_eliminar(idCod[i]);
-				}
-				
-			}else{
-				_eliminar (idCodigos);
+		eliminar: function(idCita,callback){
+			var $this = $('#'+idCita+'.lbl') ;
+			if (confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
+				$this
+					.parents('.celda').removeClass('doble').end()
+					.hide('explode')
+					.remove()
 			}
 
-			function _eliminar (id){
-
-				var table = $('#main .ic'+idCita+'.cod'+id);
-				var celda = table.parent();
-
-				table.each(function(){
-					table
-						.hide('explode',750)
-						.remove()
-					celda
-						.removeClass('color1 color2 color3 color-red')
-						.find('.icon-attention')
-							.each(function(){
-								$(this).hide('explode').removeClass('show')
-							})
-
-					if(celda.find('table').length>0){
-						table = celda.find('table');
-						
-						table
-							.show('fade',750)
-							.find('.icon-attention')
-								.hide()
-					}
-				})
-				
-			}
 			main.lbl.color();
 		},
 		color: function(callback){	
 			var dias= $('.dia');
-			var agendas = $('#main .cabecera').data('agendas');
+			var agendas = ($('#main thead th').length) - 1 ;
 			var idsCitas = new Array;
+			var $this ;
+			var color = 'color1';
 
 			dias.each(function(){
-				var celdas = $(this).find('.celda');
 			
 				$(this)
 					.find('color1').removeClass('color1').end()
 					.find('color2').removeClass('color2').end()
 					.find('color3').removeClass('color3').end()
 					.find('color-red').removeClass('color-red')
-					var color = 'color1';
 
 				for(let a = 1; a <= agendas; a++){
 					
 					let idCita = 0;
-					$(this).find('.agenda'+a+' .cita')
+					$(this).find('.doble[agenda="'+a+'"]')
 						.each(function(){
-							if (idCita != $(this).attr('idcita')){
-								color = color == 'color1'?'color2':'color1';
-							}
+							var $this  = $(this).find('.lbl')
+							
+							color = color == 'color1'?'color2':'color1';
+														
+							$this.removeClass('color1 color2 color3 color-admin')
+							$this.addClass(color);
 
-							$(this).data('color',color)
-							let celda = $(this).parent();
-							if (!celda.is('.color1, .color2, .color3, .color-red'))
-									celda.addClass(color);
-
-							idCita = $(this).attr('idcita');
 						})
 				}
 			})
 			typeof callback == "function" && callback();
-		}
-	},
+		},
+		draggable : function(){
+			$('.lbl').each(function(){
+				var limit = $(this).parents('.dia').attr('id')
+				$(this).draggable( {
+					containment: "#"+limit , 
+					opacity : 0.70 , 
+					zIndex: 100 , 
+
+				}) 
+			})
+		},
+		droppable : function () {
+		/*
+			$( ".celda" ).each(function(){
+				var id = $(this).parents('.dia').attr('id')
+				$(this).droppable({
+					classes: {
+						"ui-droppable-active": "ui-state-active",
+						"ui-droppable-hover": "ui-state-hover"
+					},
+				})
+			}
+		*/
+		},
+	}
 }
 var menu = {
 
@@ -2054,15 +2093,18 @@ var usuarios = {
 	}
 }
 $(function(){
-	var ancho = $('#main .celda:visible').width();
-	$('.lbl').width(ancho-13)
+
+	var ancho = $('#main th.aling-center').width()
+	$('.lbl').width(ancho-18)
 	$('body').on('click',"[name='desplazarFecha']",function(e){
 		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
 	})
 	$('.tabcontrol').tabcontrol();
-	main.lbl.color();
-	var agendas_width = $('#main .cabecera').data('agendas');
-	var widht = $('#main').css('widht')/agendas_width	;
+	main.lbl.color()
+	main.lbl.draggable()
+	main.lbl.droppable()
+	
+	var widht = $('#main').css('widht') / ($('#main thead th').length) - 1	;
 	var editarObs = "";
 	$('html')
 		.on('click','.close',function(e){popup.close()})
@@ -2136,12 +2178,25 @@ $(function(){
 	$('#main')
 		.on('click','.lbl',function(){
 			main.z_index +=  1 
-			$(this).css('z-index',main.z_index)
+			$(this).css({'z-index': main.z_index })
+				
 		})
 		.on('click','.row_1',function(){
 			
-			$(this).hasClass('initial') ?  $(this).removeClass('initial') : $(this).addClass('initial') ;
-					
+			if ($(this).hasClass('initial')){
+
+				$(this)
+					.removeClass('initial') 
+			    	.animate({	height: '2.3rem'});	
+
+			} else{
+
+				$(this)
+					.addClass('initial') 
+					.animate({height: $(this).get(0).scrollHeight});	
+			
+			}  
+
 		})
 		.on('click','#mainLstDiasSemana a',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
@@ -2154,13 +2209,9 @@ $(function(){
 			sincronizar(diaB-diaA);
 		})
 		.on('click','.icon-attention',function(e){main.citasSup($(this));e.stopPropagation()})
-		.on('click','.icon-plus',function(){
-				_hora =$(this).parents('tr').attr('id');
-
-				var a = $(this).parent().data('agenda');
-				mostrarCapa('crearCita',function(){
-					$('#crearCita').find('#agenda'+a).prop('checked',true);
-				});
+		.on('click','.edit', function(e){
+			e.stopPropagation() 
+			main.edit($(this).parents('.lbl').attr('id'))
 		})
 		.on('click','.cita',function(e){
 			$(this).parent()
@@ -2170,23 +2221,9 @@ $(function(){
 						.focus();
 
 		})
-		.on('focus','.celda .note input',function(){
-			editarObs = $(this).val();
-			$('.cuerpo')
-				.off("swipeleft")
-				.off("swiperight");
-		})
-		.on('blur','.celda .note input',function(e){
-			$('.cuerpo')
-				.on("swipeleft",function(){sincronizar(1)})
-				.on("swiperight",function(){sincronizar(-1)});
-
-			if($(this).val()=="")$(this).parent().parent().removeClass('show');
-			if(editarObs != $(this).val()){main.guardarNota($(this).parent());}
-		})
-		.on('click','.celda .icon-cancel',function(e){
+		.on('click','.lbl .icon-trash',function(e){
 			e.stopPropagation();
-			main.eliminar($(this))
+			main.del($(this).parents('.lbl').attr('id'))
 		})
 		.on('change','#selectTablasEncabezado',function(){main.responsive($(this))})
 		.find('.tile').css('width',widht+'%').end()
@@ -2283,5 +2320,7 @@ $(function(){
 		//funciones
 		cargarDatepicker();
 		colorearMenuDiasSemana();
-		main.status = $('#main .cuerpo').data('estado-inactivas');
+
+
+
 })

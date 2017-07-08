@@ -27,14 +27,15 @@ include 'core.php';
 <link rel="stylesheet" href="../../fontello/css/iconos.css">
 <link rel="stylesheet" href="../../empresas/<?php echo $_SESSION['bd']?>/estilos.css">
 
-<script  type="text/javascript" src="../../js/start.js"></script>
 <script>
 	document.festivos = <?php echo  json_encode (festivos())?>;
 	document.horarios = <?php echo  json_encode(HORAS)?>;
 	document.minTime = <?php echo  json_encode(CONFIG['MinTime'])?>;
 	document.idUser = <?php echo $_SESSION['id_usuario']?>;
 	document.margenDias  = <?php echo MARGEN_DIAS?> ; 
+	document.mainStatus = <?php echo CONFIG['ShowRow']?> ;
 </script>
+<script  type="text/javascript" src="../../js/start.js"></script>
 <title>Agenda onLine</title>
 
 </head><body data-empresa="<?php echo CONFIG['Nombre']?>" >

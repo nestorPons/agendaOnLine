@@ -29,7 +29,11 @@ class Conexion {
 		$this->result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
 		return $this->result ;
 	}
-	
+
+	public function multi_query ($sql) {
+		return mysqli_multi_query($this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+	}
+
 	public function row( $sql ){
 		return  mysqli_fetch_row($this->query($sql)) ;
 	}
@@ -45,20 +49,19 @@ class Conexion {
 	public function array( $sql ) {	
 		return  mysqli_fetch_array($this->query($sql)) ;
 	}
-	
 
 	public function id () {
 		return mysqli_insert_id($this->conexion) ;
-	}
-
-	public function error () {
-		return mysqli_error($this->conexion) ;
 	}
 
 	public function num ($sql) {
 		return mysqli_num_rows($this->query($sql)) ;
 	}
 
+	public function error () {
+		return mysqli_error($this->conexion) ;
+	}
+	
 	function __destruct() {
 		$this->conexion->close();
 	}

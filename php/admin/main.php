@@ -1,4 +1,4 @@
-<div class="cabecera" data-agendas= <?php echo CONFIG['NumAg']?>>
+<div class="cabecera">
 	<div class="cabecera-content">
 		<?php 
 			if (!$_SESSION['esMobil']){ require "../menus/diasSemana.php"; }
@@ -7,12 +7,12 @@
 		?>
 	</div>
 </div>
-<div class="cuerpo"  data-estado-inactivas=<?php echo CONFIG['ShowRow']?> >
+<div class="cuerpo" >
 	<?php
 	include '../menus/tablasEncabezado.php';
 	
-	include 'agendas/clsLbl.php';
-	include 'agendas/view.php';
+	include 'main/clsLbl.php';
+	include 'main/view.php';
 	$fecha_inicio = date('Y-m-d');
 	
 	agendas\view($datosAgenda,$fecha_inicio);

@@ -366,7 +366,9 @@ var dialog = {
 			})
 		}
 
-			typeof callback == "function" && callback();
+		$this.find('input:first').focus()
+		
+		typeof callback == "function" && callback();
 	},
 	close:function (idObj,callback){
 		var $this = $(idObj);
@@ -383,6 +385,7 @@ var dialog = {
 		var $this = $('#dialogs #'+objName);
 		if(!$this.length){
 			 var url = '../../php/admin/dialogs/'+objName+'.html'
+			 if (!existeUrl(url)) url = '../../php/admin/dialogs/'+objName+'.php'
 			 $.get(url,function(html){
 				$('#dialogs')
 					.append(html)
@@ -390,6 +393,7 @@ var dialog = {
 					.done(function(){
 						//AKI :: FALLA EL ENTER BTN PREDETERMINADO
 						 $('#dialogs #'+objName)
+				 			.draggable()
 							.keypress(function(e){
 									var code = e.keyCode ;
 					
@@ -400,16 +404,25 @@ var dialog = {
 
 							})
 							.find("form:not(.filter) :input:visible:enabled:first").focus();
-//AKI : no consigo pasar el foco 
-					typeof callback == "function" && callback();
+						typeof callback == "function" && callback();
 
 					})
 			 })
 		}else{
-			if ($this.find('form').length)
+			if ($this.find('form').length){
 				$this.find('form')[0].reset()
+			} else {
+				$this.find('input').each(function(){
+					$(this).val('')					
+				})
+				$this.find('.lst').each(function(){
+					$(this).empty()
+				})
+			}
+	
 			typeof callback == "function" && callback();
 		}
+
 	}
 }
 var notify = {

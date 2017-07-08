@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/conexion.php";
-$conexion = conexion();
+include "../../connect/clsConexion.php";
 
 $id= $_POST['id']??"";
 $id = intval(preg_replace('/[^0-9]+/', '', $id), 10);
@@ -19,15 +18,15 @@ $precio = intval(preg_replace('/[^0-9]+/', '', $precio), 10);
 }else{
 	$nuevo = true ;
 	$sql = "SELECT * FROM articulos WHERE Codigo LIKE '$codigo'";
-	$result = mysqli_query($conexion,$sql) ;
-	if (mysqli_num_rows($result)<=0){
+
+	if ($conn->num($result)<=0){
 		$sql="INSERT INTO articulos (Codigo,Descripcion,Tiempo,Precio,IdFamilia) VALUE ('$codigo','$descripcion',$tiempo,$precio,$familia);";
 	}else{
 		$sql="UPDATE articulos SET Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia, Baja = 0 WHERE Codigo LIKE '$codigo'" ;
 	}
 }
 
-if (mysqli_query($conexion,$sql)){
+if ($conn->query($sql)){
 	
 	$jsondata['codigo'] = $codigo;
 	$jsondata['descripcion'] = $descripcion;
@@ -37,7 +36,7 @@ if (mysqli_query($conexion,$sql)){
 	
 	if($nuevo){
 		//Nuevo 
-		$jsondata['id'] = mysqli_insert_id($conexion);
+		$jsondata['id'] = $conn->id();
 		$_SESSION['SERVICIOS'][]  = array($jsondata['id'] , $codigo , $descripcion , $precio , $tiempo  , $familia, 0 ) ; 
 	}else{
 		//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
@@ -58,6 +57,6 @@ if (mysqli_query($conexion,$sql)){
 }else{	
 	$jsondata['success'] = false;
 	$jsondata['sql'] = $sql;
- 	$jsondata['error'] = mysqli_error($conexion);
+ 	$jsondata['error'] = $conn->error();
 }	
 echo json_encode($jsondata);
