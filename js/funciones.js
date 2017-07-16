@@ -381,7 +381,7 @@ var dialog = {
 
 		typeof callback == "function" && callback();
 	},
-	create: function (objName,callback){
+	create: function (objName,events,callback){
 		var $this = $('#dialogs #'+objName);
 		if(!$this.length){
 			 var url = '../../php/admin/dialogs/'+objName+'.html'
@@ -404,6 +404,7 @@ var dialog = {
 
 							})
 							.find("form:not(.filter) :input:visible:enabled:first").focus();
+						typeof events == "function" && events();
 						typeof callback == "function" && callback();
 
 					})

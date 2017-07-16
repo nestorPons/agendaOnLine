@@ -252,94 +252,145 @@ var main ={
 	},
 	edit : function (idCita) {
 		var $this = $('#'+idCita+'.lbl') 
-		var cod = new Array 
- 		var id = new Array 
-		var idCita , estado 
+		var data = {
+			idCita : idCita ,
+			agenda : $this.parents('.celda').attr('agenda') ,
+			nombre : $this.find('.nombre').text().trim() ,
+			idUsuario : $this.find('.nombre').attr('id')  ,
+			fecha : Fecha.sql($this.parents('.dia').attr('id')) ,
+			hora :  $this.parents('tr').data('hour'),
+			obs :  $this.find('.note').text().trim() ,
+			codigos : new Array() ,
+			status : false 
+		}
+		
+		var tiempoTotal =  0
 
-		dialog.create('dlgEditCita',function(){
-//AKI :: Hay que generar un sistema para sumar o restar tiempo del lbl  
-			$('#dlgEditCita')
-				.data('idCita',idCita)
-				.find('#nombre')
-					.val($this.find('.nombre').text().trim())
-				.end()
-				.find('#obs')
-					.val($this.find('.note').text().trim())
-				.end()
-				.find('#fecha')
-					.val(Fecha.sql($this.parents('.dia').attr('id')))
-				.end()
-				.find('#hora')
-					.val($this.parents('tr').data('hour'))
-			
-			$this.find('.codigo').each(function(){
-				_addRow(
-					$(this).attr('id_codigo') , 
-					$(this).html() , 
-					$(this).attr('des_codigo') ,
-				)
-			})
+		var _addRow = function (id , codigo , descripcion ,tiempo ){
+				data.codigos.push(id)
 
-			$('#dlgEditCita #lstServ').change(function(){
-				var $this  = $(this).find(':selected')
-				_addRow (
-					$this.val() ,
-					$this.attr('codigo') , 
-					$this.text() , 
-					$this.attr('tiempo')
-				)
-			})
-			function _addRow (valor , codigo , descripcion ,tiempo ){
-				var tiempo = tiempo || 0; 
-				$('#dlgEditCita #template')
-					.hide()
+				$('#dlgEditCita .template')
 					.clone()
-						.attr('id','')
-						.attr('value',valor)
+						.removeClass('template')
 						.find('.codigo')
+							.attr('id_codigo',id)
 							.html(codigo + " => ")
 						.end()
 						.find('.descripcion')
 							.html(descripcion)
 						.end()
 						.appendTo($('#dlgEditCita').find('#codigos'))
-						.show('fade')
 
-				main.lbl.data.time += parseInt(tiempo)
-				alert(main.lbl.data.time)
+				tiempoTotal += parseInt(tiempo)	
+				arrServicios.push({id ,  codigo ,  descripcion , tiempo}) 
+
 			}
-			dialog.open('#dlgEditCita',familias.guardar,familias.eliminar);
-		});
-		function _ok(){
+		var event = function () {
+			$('#dlgEditCita').on('change','#lstServ',function(){
+				data.status = true 
+				var select  = $(this).find(':selected')
 
-			var idCita = $('#dlgEditCita').data('idCita')
-			var url = urlPhp+'main/delete.php';
-			var chck = new Array;
+				_addRow (
+					select.val() ,
+					select.attr('codigo') , 
+					select.text() , 
+					select.attr('tiempo')
+				)
 
-			$('#frmEditCita input:checked').each(function (){
-				chck.push($(this).val())
-			});
-
-			$.ajax({
-				type: "GET",
-				dataType: "json",
-				url: {idCita : idCita },
-				data:frm,
+				$(this).val('')
 			})
-			.done(function(r){
-				if ($.isEmpty(r.success)){
-					main.lbl.eliminar(idCita);
-				}
+
+			$('#dlgEditCita').on('change','input',function(){
+				data.status = true 
 			})
-			.fail(function(r){echo("ERROR citaEliminar =>");echo(r)})
-			.always(function(){popup.close('dlgEditCita')})
+
 		}
-		function _cancel(){
+		var _ok = function () {
+			//EDITAR SERVICIOS ¡
+			if ( data.status ) {
+
+				var url = urlPhp+'main/edit.php';
+
+				var tiempoCita = Math.ceil(tiempoTotal / 15) ; 
+				$this.find('.servicios').empty() 
+				
+				$this.removeClass(function(){
+					var clases = $(this).attr('class').split(' ')
+					var nuevaClase = '';
+					for (i = 0 ; i < clases.length ; i++) {
+							nuevaClase += (i != 1 )? clases[i] : 'row_'+ tiempoCita ;
+							nuevaClase += ' '
+						}
+
+					$(this).attr('class', nuevaClase )
+
+				}) 
+				for(let i = 0 ; i < arrServicios.length ; i++){
+					let self = arrServicios[i]
+
+					//if (!$this.find('.servicios').find('[id_codigo = '+ self.id +']').length)
+					main.lbl.crear.servicio( idCita , self.id  , self.codigo , self.descripcion , self.tiempo ) ; 
+					
+				}
+				
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: url,
+					data: data,
+				})
+				.done(function(r){
+					popup.close('dlgEditCita')
+				})
+				.fail(function(r){console.log(r)})
+			} else {
+				
+				popup.close('dlgEditCita')
+
+			}
+		}
+		var _cancel = function (){
+			/*
 			dialog.close('.dialog',function(){
 				$('#lstChckSer').empty();
 				$('#dlgEditCita').removeData('idCita')
 			});
+			*/
 		}
+
+		dialog.create('dlgEditCita',event,function(){
+			tiempoTotal= 0 
+			arrServicios = [] 
+			$('#dlgEditCita #codigos').html('') 
+
+			$('#dlgEditCita')
+				.data('idCita',idCita)
+				.find('#nombre')
+					.val(data.nombre)
+				.end()
+				.find('#obs')
+					.val(data.obs)
+				.end()
+				.find('#fecha')
+					.val(data.fecha)
+				.end()
+				.find('#hora')
+					.val(data.hora)
+			
+			$this.find('.codigo').each(function(){
+			
+				_addRow(
+					$(this).attr('id_codigo') , 
+					$(this).html() , 
+					$(this).attr('des_codigo') ,
+					$(this).attr('tiempo')
+				)
+			})
+
+			dialog.open('#dlgEditCita',_ok,_cancel);
+
+		});
+
 	},
 	del: function(idCita){
 		var url = urlPhp+'main/delete.php'
@@ -417,173 +468,188 @@ var main ={
 		});
 	},
 	lbl:{
-		data : {
-			time : 0 ,
-		},
-		crear: function(datos,todaCita,callback){
-			//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
-			
-			if($.isEmpty(datos)) return false  ;
-
-			if ($.isArray(datos[0])){
-				for(let i = 0; i<datos.length;i++){
-					_crear(datos[i]);
-				}
-			}else{
-				_crear(datos);
-			}
-
-			function  _crear(data){
-				var id = data[0];
-				var idCita = data[1];
-				var idFecha = Fecha.number(data[2]);
-				var hora = data[3];
-				var idUsuario = data[4];
-				var nombre = data[5];
-				var idCodigo = data[6];
-				var codigo = data[7];
-				var agenda  = data[9];
-				var obs = data[10];
-				
-				
-			
-				var attention = "<span class='icon-attention aling-right' title='¡ATENCION, CITAS SUPERPUESTAS!'></span>";
-				var $celda  =$('#main #'+idFecha+' .h'+ hora+' .agenda'+agenda);
-				var mostrarNotas = (!$.isEmpty(obs))?'show':'';				
-	
-				var servicio = '<table class="cita"  \
-											idcita=' + idCita+' \
-											codigo="'+codigo+'" \
-											idcodigo="'+idCodigo+'" \
-											idser = "'+id+'">';
-				var tdCodigo = "<td><span class='icon-angle-right'></span> <span class='"+codigo+"'>"+codigo+"</span></td>";
-				
-					if($('#' + idFecha + ' .ic'+idCita).length==0||todaCita){
-						
-						servicio += "<tr>";
-							servicio += "<td>";
-								servicio += "<span class='icon-user-1'>"+nombre+"</span>";
-								servicio += attention;
-								servicio += "<span class='icon-cancel aling-right '></span>";
-								servicio += "<span class='aling-right numidcita'>"+idCita+"</span>";
-							servicio += "</td>";
-							servicio += "<td class='note "+mostrarNotas+"'>";
-								servicio += "<div class='iconClass-container icon-right'>";
-									servicio +="<span class='icon-note'></span>";
-									servicio += "<input type='text' value='"+obs+"'>";
-									servicio +="<span class='iconClass-inside icon-load  animate-spin'></span>";
-									servicio += "<span class='iconClass-inside icon-ok'></span>";
-								servicio += "</div>";
-							servicio += "</td>";
-						servicio += tdCodigo;
-
-					}else{
-						
-						servicio += ($('#' + idFecha + ' .ic'+idCita + ' .'+codigo).length <=0)?tdCodigo:"<td>"+attention+"</td><td></td><td></td>";
-
-					}
-
-					servicio += "</tr></table>";
-
-					if($celda.find('.cita').length){
-						
-						if($celda.find('table').attr('idcita')!=idCita){
-							$celda
-								.append(servicio)
-								.find('tr td:first-child .icon-attention').show().end()
-								.find('table').addClass('hidden')
-								.find(".icon-user-1").length
-									?$celda.find(".icon-user-1").parents('table:first ').removeClass('hidden')
-									:$celda.find('table:first-child').removeClass('hidden')
-						 }
-
-					}else{
-						// cuando se hace referencia a tabla hay que tener encuenta que pueden ser varias
-						$celda
-							.hide()
-							.html(servicio)	
-							.fadeIn() 	
-					}
-
-
-					$celda.find('[idCita="'+idCita+'"]')
-						.addClass(' ic'+idCita+' cod'+idCodigo+' ocupada')	
-						//soluciono problema color en las celdas vacias
-
-
-					
-				main.lbl.color();
-				typeof callback == "function" && callback();
-
-			}
-		},
-		eliminar: function(idCita,callback){
-			var $this = $('#'+idCita+'.lbl') ;
-			if (confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
-				$this
-					.parents('.celda').removeClass('doble').end()
-					.hide('explode')
-					.remove()
-			}
-
-			main.lbl.color();
-		},
-		color: function(callback){	
-			var dias= $('.dia');
-			var agendas = ($('#main thead th').length) - 1 ;
-			var idsCitas = new Array;
-			var $this ;
-			var color = 'color1';
-
-			dias.each(function(){
-			
-				$(this)
-					.find('color1').removeClass('color1').end()
-					.find('color2').removeClass('color2').end()
-					.find('color3').removeClass('color3').end()
-					.find('color-red').removeClass('color-red')
-
-				for(let a = 1; a <= agendas; a++){
-					
-					let idCita = 0;
-					$(this).find('.doble[agenda="'+a+'"]')
-						.each(function(){
-							var $this  = $(this).find('.lbl')
-							
-							color = color == 'color1'?'color2':'color1';
-														
-							$this.removeClass('color1 color2 color3 color-admin')
-							$this.addClass(color);
-
+		crear: {
+			servicio : function (idCita , idCodigo  , codigo , descripcion ,tiempo ) {
+				$('<div>')
+					.append($('<span>', {
+							'class' : 'icon-angle-right' ,
 						})
-				}
-			})
-			typeof callback == "function" && callback();
-		},
-		draggable : function(){
-			$('.lbl').each(function(){
-				var limit = $(this).parents('.dia').attr('id')
-				$(this).draggable( {
-					containment: "#"+limit , 
-					opacity : 0.70 , 
-					zIndex: 100 , 
+					)
+					.append($('<span>', { 
+							'class' : 'codigo' ,
+							des_codigo : descripcion , 
+							id_codigo : idCodigo , 
+							tiempo : tiempo , 
+							text : codigo 
+						})
+					)
+					.appendTo($('#'+idCita+' .servicios'))
+			}, 
+			borrar : function(datos,todaCita,callback){
+			//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
+				
+				if($.isEmpty(datos)) return false  ;
 
-				}) 
-			})
-		},
-		droppable : function () {
-		/*
-			$( ".celda" ).each(function(){
-				var id = $(this).parents('.dia').attr('id')
-				$(this).droppable({
-					classes: {
-						"ui-droppable-active": "ui-state-active",
-						"ui-droppable-hover": "ui-state-hover"
-					},
+				if ($.isArray(datos[0])){
+					for(let i = 0; i<datos.length;i++){
+						_crear(datos[i]);
+					}
+				}else{
+					_crear(datos);
+				}
+
+				function  _crear(data){
+					var id = data[0];
+					var idCita = data[1];
+					var idFecha = Fecha.number(data[2]);
+					var hora = data[3];
+					var idUsuario = data[4];
+					var nombre = data[5];
+					var idCodigo = data[6];
+					var codigo = data[7];
+					var agenda  = data[9];
+					var obs = data[10];
+					
+					
+				
+					var attention = "<span class='icon-attention aling-right' title='¡ATENCION, CITAS SUPERPUESTAS!'></span>";
+					var $celda  =$('#main #'+idFecha+' .h'+ hora+' .agenda'+agenda);
+					var mostrarNotas = (!$.isEmpty(obs))?'show':'';				
+		
+					var servicio = '<table class="cita"  \
+												idcita=' + idCita+' \
+												codigo="'+codigo+'" \
+												idcodigo="'+idCodigo+'" \
+												idser = "'+id+'">';
+					var tdCodigo = "<td><span class='icon-angle-right'></span> <span class='"+codigo+"'>"+codigo+"</span></td>";
+					
+						if($('#' + idFecha + ' .ic'+idCita).length==0||todaCita){
+							
+							servicio += "<tr>";
+								servicio += "<td>";
+									servicio += "<span class='icon-user-1'>"+nombre+"</span>";
+									servicio += attention;
+									servicio += "<span class='icon-cancel aling-right '></span>";
+									servicio += "<span class='aling-right numidcita'>"+idCita+"</span>";
+								servicio += "</td>";
+								servicio += "<td class='note "+mostrarNotas+"'>";
+									servicio += "<div class='iconClass-container icon-right'>";
+										servicio +="<span class='icon-note'></span>";
+										servicio += "<input type='text' value='"+obs+"'>";
+										servicio +="<span class='iconClass-inside icon-load  animate-spin'></span>";
+										servicio += "<span class='iconClass-inside icon-ok'></span>";
+									servicio += "</div>";
+								servicio += "</td>";
+							servicio += tdCodigo;
+
+						}else{
+							
+							servicio += ($('#' + idFecha + ' .ic'+idCita + ' .'+codigo).length <=0)?tdCodigo:"<td>"+attention+"</td><td></td><td></td>";
+
+						}
+
+						servicio += "</tr></table>";
+
+						if($celda.find('.cita').length){
+							
+							if($celda.find('table').attr('idcita')!=idCita){
+								$celda
+									.append(servicio)
+									.find('tr td:first-child .icon-attention').show().end()
+									.find('table').addClass('hidden')
+									.find(".icon-user-1").length
+										?$celda.find(".icon-user-1").parents('table:first ').removeClass('hidden')
+										:$celda.find('table:first-child').removeClass('hidden')
+							}
+
+						}else{
+							// cuando se hace referencia a tabla hay que tener encuenta que pueden ser varias
+							$celda
+								.hide()
+								.html(servicio)	
+								.fadeIn() 	
+						}
+
+
+						$celda.find('[idCita="'+idCita+'"]')
+							.addClass(' ic'+idCita+' cod'+idCodigo+' ocupada')	
+							//soluciono problema color en las celdas vacias
+
+
+						
+					main.lbl.color();
+					typeof callback == "function" && callback();
+				}
+				}
+			},
+			eliminar: function(idCita,callback){
+				var $this = $('#'+idCita+'.lbl') ;
+				if (confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
+					$this
+						.parents('.celda').removeClass('doble').end()
+						.hide('explode')
+						.remove()
+				}
+
+				main.lbl.color();
+			},
+			color: function(callback){	
+				var dias= $('.dia');
+				var agendas = ($('#main thead th').length) - 1 ;
+				var idsCitas = new Array;
+				var $this ;
+				var color = 'color1';
+
+				dias.each(function(){
+				
+					$(this)
+						.find('color1').removeClass('color1').end()
+						.find('color2').removeClass('color2').end()
+						.find('color3').removeClass('color3').end()
+						.find('color-red').removeClass('color-red')
+
+					for(let a = 1; a <= agendas; a++){
+						
+						let idCita = 0;
+						$(this).find('.doble[agenda="'+a+'"]')
+							.each(function(){
+								var $this  = $(this).find('.lbl')
+								
+								color = color == 'color1'?'color2':'color1';
+															
+								$this.removeClass('color1 color2 color3 color-admin')
+								$this.addClass(color);
+
+							})
+					}
 				})
-			}
-		*/
-		},
+				typeof callback == "function" && callback();
+			},
+			draggable : function(){
+				$('.lbl').each(function(){
+					var limit = $(this).parents('.dia').attr('id')
+					$(this).draggable( {
+						containment: "#"+limit , 
+						opacity : 0.70 , 
+						zIndex: 100 , 
+
+					}) 
+				})
+			},
+			droppable : function () {
+			/*
+				$( ".celda" ).each(function(){
+					var id = $(this).parents('.dia').attr('id')
+					$(this).droppable({
+						classes: {
+							"ui-droppable-active": "ui-state-active",
+							"ui-droppable-hover": "ui-state-hover"
+						},
+					})
+				}
+			*/
+			},	
+		
 	}
 }
 var menu = {

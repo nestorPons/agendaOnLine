@@ -39,7 +39,7 @@ function datosAgenda($fecha){
 	$fchIni =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
 	$fchFin =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
 
-	$sql = "SELECT D.IdCita, C.Id AS IdCodigo, A.Codigo, D.Agenda, D.IdUsuario, U.Nombre, D.Obs, D.Hora , D.Fecha ,A.Tiempo, A.Descripcion
+	$sql = "SELECT D.IdCita, A.Id AS IdCodigo, A.Codigo, D.Agenda, D.IdUsuario, U.Nombre, D.Obs, D.Hora , D.Fecha ,A.Tiempo, A.Descripcion
 		FROM cita C JOIN data D ON C.IdCita = D.IdCita 
 		INNER JOIN usuarios	U ON D.IdUsuario = U.Id 
 		LEFT JOIN articulos A ON C.Servicio = A.Id  
@@ -60,17 +60,17 @@ function datosAgenda($fecha){
 					'obs'=>$data[$i]['Obs'],
 					'idUsuario'=>$data[$i]['IdUsuario'],
 					'nombre'=>$data[$i]['Nombre'],
-					'idCodigo'=>array($data[$i]['IdCodigo']),
-					'codigo'=>array($data[$i]['Codigo']),
-					'des'=>array($data[$i]['Descripcion']),
-					'tiempo'=> (int)$data[$i]['Tiempo'],
+					'tiempo_total'=> 0,
+					'servicios' => array()
 				);
-			}else{
-				$datosAgenda[$data[$i]['IdCita']]['tiempo'] += (int)$data[$i]['Tiempo'] ;
-				$datosAgenda[$data[$i]['IdCita']]['idCodigo'][]=  $data[$i]['IdCodigo'] ;
-				$datosAgenda[$data[$i]['IdCita']]['codigo'][]=  $data[$i]['Codigo'] ;
-				$datosAgenda[$data[$i]['IdCita']]['des'][]=  $data[$i]['Descripcion'] ;
 			}
+			$datosAgenda[$data[$i]['IdCita']]['tiempo_total'] += (int)$data[$i]['Tiempo'] ;
+			$datosAgenda[$data[$i]['IdCita']]['servicios'][] = array(
+				'idCodigo'=>$data[$i]['IdCodigo'],
+				'codigo'=>$data[$i]['Codigo'],
+				'des'=>$data[$i]['Descripcion'],
+				'tiempo'=> $data[$i]['Tiempo']
+			);
 		
 		}
 		foreach($datosAgenda as $key => $value){

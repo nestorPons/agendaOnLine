@@ -2,7 +2,7 @@
 <div  class="dialog" id="dlgEditCita">
 		<h1>Editando...</h1>
 		<hr>
-		<div id = "template" >
+		<div class="template" >
 			<span class="icon-cancel-circled"></span>
 			<span class='codigo'></span>
 			<span class='descripcion'></span>
@@ -21,9 +21,9 @@
 			<span class="iconClass-inside  icon-user-1"></span>
 		</div>
 		<div id= "codigos"  class="iconClass-container icon-left lst"></div>
-		<div id= "newCodigo"  class="iconClass-container icon-left lst">
+		<div id= "newCodigo"  class="iconClass-container icon-left">
 			<select name="" id="lstServ">
-				<option value='' disabled selected hidden>Añadir servicio</option>
+				<option value='' disabled selected hidden>Añadir servicios</option>
 				<?php 
 				foreach($_SESSION['SERVICIOS'] as $row){
 					?>
