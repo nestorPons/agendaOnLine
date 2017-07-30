@@ -399,7 +399,7 @@ var main ={
 			if (r) main.lbl.eliminar(idCita);
 			
 		})
-		.fail(function(r){echo("ERROR citaEliminar =>");echo(r)})
+		.fail(function( jqXHR, textStatus, errorThrown ) { echo (jqXHR.responseText) });
 	},
 	guardarNota: function($this){
 		var txt = $this.find('input').val();

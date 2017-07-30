@@ -2,10 +2,11 @@
 define ('DS'  , DIRECTORY_SEPARATOR);
 define('ROOT' ,realpath(dirname(__FILE__)). DS);
 $_SESSION['CONFIG']  = CONFIG;
+
 //HORARIOS																																																																
 include (ROOT . 'horarios/consult.php');
-define('HORAS',Horarios\horarios());
-$_SESSION['HORAS'] = HORAS;
+define('HORAS',horarios\horarios());
+//$_SESSION['HORAS'] = HORAS;
 
 define('MARGEN_DIAS',10);
 

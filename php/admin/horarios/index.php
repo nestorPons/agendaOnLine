@@ -1,6 +1,6 @@
 <?php
 include "consult.php";
-$horarios = Horarios\horarios( $return_row = true);
+$horarios = horarios\horarios( $return_row = true);
 include '../config/classAgenda.php';
 $agendas = new config\agendas; 
 $arr_agendas = $agendas->consulta();

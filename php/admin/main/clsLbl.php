@@ -1,4 +1,5 @@
-<?php  namespace agendas;
+<?php  namespace main;
+
 class Lbl {	
     //datos
     private $id ;

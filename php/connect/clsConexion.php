@@ -1,8 +1,5 @@
 <?php
-if (strlen(session_id()) < 1)
-	session_start ();
-
-//AKI :: Implementar sistema seguridad si se ha perdido variables de session hay que mandarlos al index.
+if (strlen(session_id()) < 1) session_start ();
 
 class Conexion {
 	private $server ;
@@ -26,8 +23,8 @@ class Conexion {
 	}
 
 	public function query($sql){
-		$this->result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
-		return $this->result ;
+		$result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+		return $result ;
 	}
 
 	public function multi_query ($sql) {

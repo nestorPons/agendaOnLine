@@ -2,7 +2,7 @@
 session_start ();
 $empresa =  $_POST['empresa']??$_SESSION['bd'];
 $_SESSION['bd'] = $empresa ;
-require "connect/clsConfig.php";
+require "connect/configCls.php";
 
 $_SESSION['esMobil'] = ($_POST['ancho']<=590)?1:0;
 

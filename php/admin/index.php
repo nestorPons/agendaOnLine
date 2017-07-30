@@ -1,12 +1,13 @@
 <?php
 if (!isset($conn)){
 	$fecha = Date('Y-m-d');
-	require('../connect/clsConfig.php');
+	require('../connect/configCls.php');
 	require('../connect/tools.php');
 }
 
 //Compilando la hoja de estilos
 $url_empresa = "../../empresas/".$_SESSION['bd']."/";
+
 $url_css = $url_empresa."estilos.css";
 $url_less = $url_empresa."estilos.less";
 require_once "../../css/compilaLess.php";
@@ -28,17 +29,18 @@ include 'core.php';
 <link rel="stylesheet" href="../../empresas/<?php echo $_SESSION['bd']?>/estilos.css">
 
 <script>
-	document.festivos = <?php echo  json_encode (festivos())?>;
-	document.horarios = <?php echo  json_encode(HORAS)?>;
-	document.minTime = <?php echo  json_encode(CONFIG['MinTime'])?>;
-	document.idUser = <?php echo $_SESSION['id_usuario']?>;
-	document.margenDias  = <?php echo MARGEN_DIAS?> ; 
-	document.mainStatus = <?php echo CONFIG['ShowRow']?> ;
+	document.festivos = <?=  json_encode (festivos())?>;
+	document.horarios = <?=  json_encode(HORAS)?>;
+	document.minTime = <?=  json_encode(CONFIG['MinTime'])?>;
+	document.idUser = <?= $_SESSION['id_usuario']?>;
+	document.margenDias  = <?= MARGEN_DIAS?> ; 
+	document.mainStatus = <?= CONFIG['ShowRow']?> ;
 </script>
 <script  type="text/javascript" src="../../js/start.js"></script>
 <title>Agenda onLine</title>
 
-</head><body data-empresa="<?php echo CONFIG['Nombre']?>" >
+</head><body data-empresa="<?= CONFIG['Nombre']?>" >
+
 	<?php include "../menus/menuAdmin.php"?>
 
 	<div id='login' class='login'>
