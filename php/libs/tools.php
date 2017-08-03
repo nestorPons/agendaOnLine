@@ -47,9 +47,9 @@ function normaliza($cadena){
     $cadena = strtolower($cadena);
     return utf8_encode($cadena);
 }
-function formatoFecha($fecha,$separador){
+function formatoFecha($fecha){
 		$a = explode('-',$fecha);
-		$fecha = $a[2].'/'.$a[1].'/'.date('Y');
+		$fecha = $a[2].'/'.$a[1].'/'.$a[0];
 		return $fecha;
 }
 function sumarFecha($fecha,$num){

@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/clsConexion.php";
-include "../../connect/tools.php";
+require "../../connect/conn.controller.php";
 
 // Check if image file is a actual image or fake image
 if (!Empty($_FILES["fileLogo"]["tmp_name"])){

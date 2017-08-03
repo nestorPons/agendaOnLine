@@ -1,12 +1,8 @@
 <?php 
-define ('DS'  , DIRECTORY_SEPARATOR);
-define('ROOT' ,realpath(dirname(__FILE__)). DS);
-$_SESSION['CONFIG']  = CONFIG;
-
+$_SESSION['CONFIG'] = CONFIG ;
 //HORARIOS																																																																
-include (ROOT . 'horarios/consult.php');
-define('HORAS',horarios\horarios());
-//$_SESSION['HORAS'] = HORAS;
+include (dirname(__FILE__) . '/horarios/controller.php');
+define('HORAS',$horarios->hours());
 
 define('MARGEN_DIAS',10);
 

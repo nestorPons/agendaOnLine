@@ -1,9 +1,6 @@
-<?php 
-	session_start();
-	
-?>
+
 <div class="cabecera" >
-	<?php include "../../../php/menus/menuABC.php" ?>
+	<?php include ($_SERVER['DOCUMENT_ROOT'].'/php/menus/menuABC.php') ?>
 </div>	
 
 <div class="cuerpo">
@@ -23,7 +20,7 @@
 			
 			foreach($_SESSION['USUARIOS'] as $row){
 
-				include ('row.php');			
+				include ('usuarios/row.php');			
 				
 			}?>
 		<tbody>

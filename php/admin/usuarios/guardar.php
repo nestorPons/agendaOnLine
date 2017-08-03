@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require "../../connect/clsConexion.php";
+require "../../connect/conn.controller.php";
 
 $jsondata['success'] = false;
 $id = $_POST["id"]??0;
@@ -15,7 +15,7 @@ $obs	=trim($_POST['obs'])??"";
 $admin 	= isset($_POST['admin'])?1:0;
 $block 	= isset($_POST['activa'])?1:0;
 
-$row = $conn->rows('SELECT dateBaja FROM usuarios WHERE Id = '. $id . ' LIMIT 1')[0];
+$row = $conn->row('SELECT dateBaja FROM usuarios WHERE Id = '. $id . ' LIMIT 1')[0];
 
 $fecha_baja = (isset($_POST['activa']))
 	? $row==0?date("Y-m-d H:i:s"):$row

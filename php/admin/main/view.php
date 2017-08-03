@@ -1,7 +1,7 @@
 <?php 
-if (!empty($_GET)){
+if (!empty($_GET['f'])){
 	if (strlen(session_id()) < 1) session_start ();
-	$fecha_inicio = $_GET['f'];
+	$fecha_inicio = $_GET['f'] ;
 	$datos_agenda = datosAgenda($fecha_inicio);
 	$ids_existentes = json_decode(stripslashes($_GET['ids']));
 	view($datos_agenda,$fecha_inicio,$ids_existentes);
@@ -14,8 +14,9 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 		$fecha = sumarFecha($primer_dia_agenda,$d);
 		$id_fecha = str_replace('-','',$fecha);
 		$dia_semana = date('w',strtotime($fecha)) ;
+		$array_horas = HORAS[$dia_semana]??false;
 
-		if (empty($existen_array)||array_search($id_fecha,$existen_array)<=0){
+		if (empty($existen_array)||array_search($id_fecha,$existen_array)<0){
 			?>
 			<div id="<?= $id_fecha?>" 
 				name="dia[]" 
@@ -25,17 +26,14 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 			>
 				<table class = "tablas tablas-general" >	
 					<?php 
-					for($i = 0 ; $i < count(HORAS[$dia_semana]) ; $i++){
-						$h = HORAS[$dia_semana][$i] ; 	
-						
-						$str_hora = date('H:i', strtotime($h));
-				echo ($str_hora);
-					
-						$array_horas = HORAS[date('w',strtotime($fecha))]??false;
+					$h = strtotime('06:45') ;
+					for( $i = 0 ; $i <= 96 ; $i++  ){											
+						$h =  strtotime ( '+15 minute' ,  $h )  ;
+						$str_hora = date('H:i', $h);
 
 						if ($array_horas) {	
 							$class = $_SESSION['esMobil']&&$a!=1?' hiddenim ':'';
-							if  (!array_search($str_hora,$array_horas)>0) {
+							if  (array_search($str_hora,$array_horas)===false) {
 								$class .= "fuera_horario " ;  
 								$disabled = (empty(CONFIG['ShowRow']))?' disabled ' : '' ;
 							} else {

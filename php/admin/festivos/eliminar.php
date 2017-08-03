@@ -1,10 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/conexion.php";
-$conexion = conexion();
+require "../../connect/conn.controller.php";
 
-$id = $_GET['id'];
-$sql = "DELETE FROM festivos WHERE Id =".$id;
-$js['sql'] = $sql;
-$js['success'] =mysqli_query($conexion,$sql)?true:false;
+$js['success'] = $conn->query("DELETE FROM festivos WHERE Id = " . $_GET['id']); 
 echo json_encode($js);

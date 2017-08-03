@@ -22,10 +22,10 @@ if(isset($_COOKIE["id_user"])&&!isset($_GET["closeSession"])){
 	}
 }
 
-$_SESSION['bd'] = $_GET['empresa'] ;
+$_SESSION['bd'] =  $_GET['empresa'] ;
 
-require_once "connect/clsConexion.php";
-require 'connect/tools.php' ;
+require_once "connect/conn.controller.php";
+require 'libs/tools.php' ;
 
 //Compilando la hoja de estilos
 require_once "../css/compilaLess.php";

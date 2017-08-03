@@ -1,5 +1,5 @@
 <?php
-require_once('../../connect/clsConfig.php') ;
+require "../../connect/conn.controller.php";
 
 $email = (!empty($_POST['email']))?trim($_POST['email']):"" ;
 $tel = (!empty($_POST['tel']))?trim($_POST['tel']):"" ;

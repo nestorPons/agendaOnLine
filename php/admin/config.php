@@ -1,4 +1,4 @@
-<?php require_once('../../connect/clsConfig.php') ; ?>
+
 <h1>Configuración</h1>
 <form id="frmConfig" enctype="multipart/form-data"  class="chck-container">
 		<label>

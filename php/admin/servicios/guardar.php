@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/clsConexion.php";
+require "../../connect/conn.controller.php";
+
 
 $id= $_POST['id']??"";
 $id = intval(preg_replace('/[^0-9]+/', '', $id), 10);

@@ -1,11 +1,7 @@
-<?php 
-	session_start();
-	include "../../connect/tools.php";
-?>
-<div class="contenedorServicios">
-//AKI :: 
 
-	<?php include "../../../php/menus/servicios.php" ?>
+<div class="contenedorServicios">
+
+	<?php include $_SERVER['DOCUMENT_ROOT']."/php/menus/servicios.php" ?>
 	<div class="cuerpo">
 		<table class = "tablas	">
 			<thead>
@@ -18,10 +14,10 @@
 			</thead>
 			<tbody>
 				<?php
-
+				
 				foreach($_SESSION['SERVICIOS'] as $row){
 					
-					include('row.php') ;
+					include('servicios/row.php') ;
 
 				}?>
 			</tbody>

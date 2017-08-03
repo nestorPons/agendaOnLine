@@ -1,21 +1,18 @@
 <?php namespace config;
 class agendas {
 	
-	var $nombres;
+	private $nombres;
+	private $conn ; 
 	
 	function __construct(){
-		global $conexion;
-		if(empty($conexion)){
-			require('../../connect/conexion.php');
-			$conexion = conexion(false);
-		}
+
+		$this->conn = new connect\Conexion( 'bd_' . $_SESSION['bd'] );
+	
 	}
 	
 	function consulta (){
-		global $conexion;
-		$sql = "SELECT * FROM agendas";
-		$result = mysqli_query($conexion, $sql); 
-		
-		return  mysqli_fetch_all($result); 
+			
+		return  $this->all( "SELECT * FROM agendas" ); 
+	
 	}
 }

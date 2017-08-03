@@ -1,8 +1,8 @@
 <?php
 if (!isset($conn)){
 	$fecha = Date('Y-m-d');
-	require('../connect/configCls.php');
-	require('../connect/tools.php');
+	require('../connect/config.controller.php');
+	require('../libs/tools.php');
 }
 
 //Compilando la hoja de estilos
@@ -44,16 +44,16 @@ include 'core.php';
 	<?php include "../menus/menuAdmin.php"?>
 
 	<div id='login' class='login'>
-		<section id='main' class="capasPrincipales activa"><?php include "../../php/admin/main.php"?></section>
-		<section id='usuarios' class="capasPrincipales" data-url="../../php/admin/usuarios/index.php"></section>
-		<section id='horarios' class="capasPrincipales" data-url="../../php/admin/horarios/index.php"></section>
-		<section id='crearCita' class="capasPrincipales" data-url="../../php/admin/crearCita/index.php"></section>
-		<section id='servicios' class="capasPrincipales" data-url="../../php/admin/servicios.php"></section>
-		<section id='familias' class="capasPrincipales" data-url="../../php/admin/familias/index.php"></section>
-		<section id='general' class="capasPrincipales" data-url= "../../php/admin/general/index.php"></section>
-		<section id='config' class="capasPrincipales" data-url= "../../php/admin/config/index.php"></section>
-		<section id='agendas' class="capasPrincipales" data-url= "agendas.php"></section>
-		<section id='festivos' class="capasPrincipales" ><?php  //include "../../php/admin/festivos/index.php"?></section>
+		<section id='main' class="capasPrincipales activa" ><?php include "main.php"?></section>
+		<section id='usuarios' class="capasPrincipales" ></section>
+		<section id='horarios' class="capasPrincipales" ></section>
+		<section id='crearCita' class="capasPrincipales" ></section>
+		<section id='servicios' class="capasPrincipales" ></section>
+		<section id='familias' class="capasPrincipales" ></section>
+		<section id='general' class="capasPrincipales" ></section>
+		<section id='config' class="capasPrincipales" ></section>
+		<section id='festivos' class="capasPrincipales" ></section>
+		<section id='agendas' class="capasPrincipales" ></section>
 		<section id='notas' class="capasPrincipales" ><?php// include "../../php/admin/notas.php"?></section>
 	</div>
 <div id="dialogs" class="popup-overlay"></div>

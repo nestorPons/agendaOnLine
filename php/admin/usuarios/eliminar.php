@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/clsConexion.php"; 
+require "../../connect/conn.controller.php";
 
 $sql="UPDATE  usuarios SET dateBaja = '". date('Y-m-d H:m:s') ."' WHERE Id =".$_GET['id'];
 $jsondata['success'] =$conn->query($sql);

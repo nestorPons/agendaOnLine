@@ -1,10 +1,9 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/conexion.php";
-$conexion = conexion();
+require "../../connect/conn.controller.php";
 
 $sql='UPDATE articulos  SET Baja = 1 WHERE id='.$_GET['id'] .' LIMIT 1;';
-$r['success'] =mysqli_query($conexion, $sql);
+$r['success'] =$conn->query($sql);
 
 foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {
 

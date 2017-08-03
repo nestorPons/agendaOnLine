@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require "../../connect/conexion.php";
-$conexion = conexion();
+require "../../connect/conn.controller.php";
 
 $fecha = Date('Y-m-d');
 
@@ -19,7 +18,4 @@ ORDER BY D.Fecha, D.Agenda, C.Hora";
 
 $sql = preg_replace("/\r\n+|\r+|\n+|\t+/i", "", $sql);
 
-$result= mysqli_query($conexion,$sql);
-$js = mysqli_fetch_all($result,MYSQLI_ASSOC)??false;
-
-echo json_encode($js);
+echo json_encode($conn->all($sql));

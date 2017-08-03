@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include "../../connect/conexion.php";	
-$conexion = conexion();
+require "../../connect/conn.controller.php";
 
 $id = $_POST['id'];
 $nombre=trim($_POST['nombre']);
@@ -14,7 +13,7 @@ $sql= ($id>=0)
 $jsondata['nombre'] = $nombre;
 $jsondata['mostrar'] = $mostrar;
 
-if(mysqli_query($conexion, $sql)){
+if($conn->query($sql)){
 // 0 IdFamilia 1 Nombre 2 Mostrar 3 baja
 	$jsondata['success'] = true;
 
@@ -32,7 +31,7 @@ if(mysqli_query($conexion, $sql)){
 		
 	}else{
 
-		$jsondata['id'] = mysqli_insert_id($conexion);
+		$jsondata['id'] = $conn->id($conexion);
 		$_SESSION['FAMILIAS'][]  = array($jsondata['id'] , $jsondata['nombre'] , $jsondata['mostrar'] , 0 ); 
 		
 	}
@@ -40,8 +39,8 @@ if(mysqli_query($conexion, $sql)){
 }else{
 
 	$jsondata['success'] = false;
-	$jsondata['err'] = mysqli_error($conexion);
-	$jsondata['err_num'] = mysqli_errno($conexion);
+	$jsondata['err'] = $conn->error($conexion);
+	$jsondata['err_num'] = $conn->errno($conexion);
 
 }
 echo json_encode($jsondata);

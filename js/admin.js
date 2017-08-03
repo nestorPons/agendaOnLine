@@ -30,14 +30,20 @@ function sincronizar( dias, date , callback ){
 			.datepicker("setDate",Fecha.print(fecha));
 	})
 }
-function mostrarCapa(capa,callback){
-	if($('#'+capa).is(':visible')) return false;
+function mostrarCapa(capa, refresh ,callback){
+	refres = refresh || false ;
+	data = {
+		action : capa , 
+		fecha :  Fecha.sql ,
+	}
+	if($('#'+capa).is(':visible') && refresh == false) return false;
 
 	$('#chckOpUsersDel').prop( "checked", false ) ;
 	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
 
-	if($('#'+capa).is(':empty')){
-		$.get($('#'+capa).data('url'),function(html){
+	if($('#'+capa).is(':empty') || refresh == true ){
+		var url = 'controller.php'
+		$.get(url,data,function(html){
 
 			$('#'+capa).html(html).promise().done(__INIT__);
 			function __INIT__ (){
@@ -691,7 +697,7 @@ var menu = {
 				menu.enabled(save)
 				break;
 			case 'festivos':
-				menu.enabled(save) ;
+				menu.enabled( add ) ;
 				break;
 			case 'general':
 				menu.enabled(save) ;
@@ -721,7 +727,7 @@ var menu = {
 				agendas.guardar(_loadHide);
 				break;
 			case 'festivos':
-				festivo.guardar(_loadHide);
+				festivo.guardar();
 				break;
 			case 'general':
 				general.guardar(_loadHide);
@@ -754,8 +760,11 @@ var menu = {
 				familias.mostrarPoppup(-1);
 				 break;
 			case 'horarios':
-				horario.add();
-				break;
+				horario.add()
+				break
+			case 'festivos' :
+				festivo.dialog() 
+				break
 		}
 	},
 	del: function (){
@@ -766,21 +775,16 @@ var menu = {
 		}
 	},
 	reset:function(){
+		/*
 		$('#btnReset .icon-undo')
 			.attr('class','icon-load animate-spin')
 			.show()
-
+		*/
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'main':
-				sincronizar(null,null,function(){
-					$('#btnReset .icon-load ')
-						.fadeOut(function(){
-							$(this)
-								.attr('class','icon-undo')
-								.fadeIn()
-								.css("display","inline-block")
-						})
-				});
+				mostrarCapa('main' , true  , function () {
+					$('#btnReset .icon-undo').removeClass('icon-load animate-spin')
+				}) 
 			break;
 		}
 	},
@@ -827,7 +831,7 @@ var agendas = {
 			type: "POST",
 			dataType: "json",
 			data: $('#agendas #frmAg').serialize(),
-			url: urlPhp+'config/agendasGuardar.php'
+			url: urlPhp+'agendas/guardar.php'
 		})
 		.done(function(){
 			notify.success('Los cambios han sido guardados');
@@ -1117,7 +1121,9 @@ var crearCita ={
 					.html(Fecha.print(Fecha.general)).end()
 				.find('#lblCliente').html($('#crearCita #cliente').val()).end()
 				.find('#lblSer').html(str_servicios)
-			dialog.open('#dlgGuardar',crearCita.guardar)
+			
+		},function(){
+			dialog.open('#dlgGuardar',crearCita.guardar, dialog.close)
 		})
 	},
 	guardar: function(){
@@ -1128,34 +1134,10 @@ var crearCita ={
 
 			$.post(url,data,function( rsp ){
 				if(rsp.ocupado){
-					notify.error('Ya no se puede reservar más la cita. <br> Cambie la hora seleccionada.' , ' Hora ocupada' );
+					notify.error( rsp.mns.body , rsp.mns.tile );
 				}else{	
-				//Generar un arreglo para pintar lbl
-				//index idCita
-				//C.Id, D.IdCita,  D.Fecha , C.Hora ,D.IdUsuario, U.Nombre, A.Id AS IdCodigo, A.Codigo, A.Tiempo , D.Agenda,  D.Obs 
 
-					var servicios = $('#frmCrearCita .contenedorServicios :checked') ; 					
-					var hora = parseInt($('#frmCrearCita .tblHoras input:checked').val()) ;
-					
-					var nombre = $('#frmCrearCita #cliente').val() ;
-					var idUser = crearCita.idUser();
-					var agenda = $('#frmCrearCita #selAgendas input:checked').val() ;
-					var nota  = $('#frmCrearCita #crearCitaNota').val() ;
-					var arr_datos = new Array();
-					
-			
-					$.each(servicios,function( index , $this ){
-						var time = Math.ceil(parseInt($(this).data('time'))/15) ; 
-
-						for(let i = 0 ; i <= time ; i++){	
-
-							arr_datos = [rsp.id[index], rsp.idCita , Fecha.general , hora , idUser , nombre , $this.value , $this.id , $(this).data('time') , agenda , nota ] ;
-							hora += 900;
-							main.lbl.crear(arr_datos) ;
-						}	
-					})
-						
-					mostrarCapa('main');
+					mostrarCapa('main' , true );
 						
 				}
 				dialog.close('#dlgGuardar');
@@ -1239,10 +1221,11 @@ var crearCita ={
 				typeof callback == "function" && callback();
 			}
 
-		},
-		
+		},	
 		pintar: function(id_table){
-			
+		
+		//AKI :: pintar horas ocupadas
+
 			var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
 			var tiempoServicios = _tiempoServicios();
 			var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
@@ -1275,7 +1258,6 @@ var crearCita ={
 				}
 			})
 
-
 			function _tiempoServicios(){
 				var ts = 0;
 				$('#crearCita [name="servicios[]"]:checked').each(function() {
@@ -1284,7 +1266,6 @@ var crearCita ={
 				$('#tSer').html(ts);
 				return ts;
 			}
-
 
 			function _esPasada( hora ){
 				var diff_fechas = Fecha.restar(id_table); 
@@ -1393,7 +1374,7 @@ var crearCita ={
 
 		name : function () {
 			var $this =  $('#crearCita #cliente');	
-			var cliente = $this.val();
+			var cliente = $this.val().trim();
 
 			if(cliente!=""){
 				str = normalize(cliente);
@@ -1519,6 +1500,11 @@ var general = {
 	}
 }
 var festivo = {
+	dialog : function () {
+		dialog.create('dlgFestivos',null,function(){
+			dialog.open('#dlgFestivos',festivo.guardar, festivo.eliminar);	
+		})
+	},
 	eliminar:	function ($this){
 		var id = $this.parent().parent().attr('id');
 		var f =  $this.parent().parent().find('[name="mes[]"]').text();
@@ -1533,13 +1519,24 @@ var festivo = {
 				FESTIVOS.splice(index,1)
 		});
 	},
-	guardar:	function (){
-		var data = $('#festivos form').serialize();
+	guardar:	function (callback){
+		var nombre = $('#dlgFestivos #nombre').val() ; 
+		var fecha = $('#dlgFestivos #fecha').val() ;
+
+		if ( $.isEmpty( nombre , fecha ) ){
+			notify.error('faltan rellenar los campos' , ' Error festivos') 
+
+			return false 
+		}
+
+		var data = {
+				nombre : nombre , 
+				fecha : fecha ,				
+			}
 		var url = urlPhp + 'festivos/guardar.php';
+
 		var fila = $('#tblFestivos tr:first').clone();
-		var nombre =$('#nuevo [name="nombre[]"]').val();
-		var fecha =$('#nuevo #dpFestivos').val();
-		
+
 		
 		if($.isEmpty(nombre)){
 			$('#nuevo [name="nombre[]"]').popover('show');
@@ -1554,16 +1551,17 @@ var festivo = {
 						.find('#tblFestivos').append('\
 						<tr id="'+r.id+'">\
 							<td><a name="eliminar[]"  class= "icon-cancel c5 x6"></a></td>\
-							<td  class="aling-left"><span name="nombre[]">'+nombre+'</span></td>\
-							<td> <span  name="mes[]" >'+Fecha.print(fecha)+'</span></td>\
+							<td  class="aling-left"><span name="nombre[]">'+r.nombre+'</span></td>\
+							<td> <span  name="mes[]" >'+Fecha.print(r.fecha)+'</span></td>\
 						</tr>\
 					').end()
-						.find('#frmNuevo')[0].reset();
+					
 					hideShow('#nuevo .icon-plus','#nuevo .icon-load')
 					
-					var url = urlPhp + 'config/festivosCns.php';
-					$.getJSON(url,function(d){FESTIVOS=d})
-					
+					FESTIVOS.push(Fecha.md(r.fecha)) ;
+
+					dialog.close() 
+
 				},'json').fail(function(rsp){"ERROR=>"+echo(rsp);})
 			}
 		}
@@ -2053,8 +2051,8 @@ var usuarios = {
 			.fail(function( jqXHR, textStatus, errorThrown ){alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )})
 	
 	},
-	poppup: function (id){
-		dialog.create('dlgUsuarios',function(){
+	dialog: function (id){
+		dialog.create('dlgUsuarios',null,function(){
 			$('#dlgUsuarios').find('#id').val(id)
 					
 				if (id!=0){
@@ -2161,6 +2159,7 @@ var usuarios = {
 $(function(){
 
 	var ancho = $('#main th.aling-center').width()
+
 	$('.lbl').width(ancho-18)
 	$('body').on('click',"[name='desplazarFecha']",function(e){
 		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
@@ -2224,7 +2223,7 @@ $(function(){
 	$('#crearCita')
 		.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
 		.on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
-		.on('click','[name="hora[]"]',function(){crearCita.dialog()})
+		.on('click','.hora',function(){crearCita.dialog()})
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
 		.on('blur','#cliente',crearCita.validate.name)
 		.on("swipeleft",'.tablas');
@@ -2236,7 +2235,7 @@ $(function(){
 
 	$('#general')
 		.on('click','#btnCambiarPass',function(){
-			dialog.create('dlgCambiarPass',function(){
+			dialog.create('dlgCambiarPass',null,function(){
 				dialog.open('#dlgCambiarPass',config.pass)
 			})
 		})
@@ -2328,7 +2327,12 @@ $(function(){
 		.on('click','#btnReset',menu.reset)
 		.on('click','#btnOptions #chckOpUsersDel',menu.options)
 		.find('[name="menu[]"]').click(function(){
-			mostrarCapa($(this).data('capa'));
+			var capa = $(this).data('capa') ;
+			if (capa == 'main'){
+				mostrarCapa('main' ,  true ) 
+			}else{
+				mostrarCapa($(this).data('capa'));
+			}
 			$('.app-bar-pullmenu ').hide('blind');
 		})
 
@@ -2369,7 +2373,7 @@ $(function(){
 	$("#usuarios")
 		.on('click','[name*="editar"]',function(){
 			var id = $(this).parents('tr:first').data('value')
-			usuarios.poppup(id)
+			usuarios.dialog(id)
 		})
 		.on('click',"[name^='historia']",function(e){usuarios.historial($(this))})
 		.on('click','#mainLstABC a',function(){

@@ -8,61 +8,21 @@ var nombreEmpresa = $('body').data('empresa');
 var horarios = new Array();
 var festivos = new Array();
 
-$(function(){
-	$('.time').mask('00:00');
-	$('.tel').mask('## 000 00 00 00');
-	$('.date').mask('00/00/0000');
-	
-	jQuery.each(jQuery('textarea[data-autoresize]'), function() {
-	var offset = this.offsetHeight - this.clientHeight;
 
-	var resizeTextarea = function(el) {
-		jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
-	};
-	jQuery(this).on('keyup input', function() { resizeTextarea(this); }).removeAttr('data-autoresize');
-	});
-	$(document)
-		.keyup(function(event){
-			if(event.which==27){
-				popup.close();
-				dialog.close('.dialog');
-				popup.close();
-			}
-		})
-		.on('click',".btnLoad",function(){btn.load.show($(this))})
-		.on('click','.iconClass-inside.icon-eye',function(){
-			var $this = $(this).parent().find('input:visible')
-			var tipo = $this.attr('type')
-			tipo = tipo == 'password'?'text':'password';
-			$this.attr('type',tipo)
-		})
-		
-		.on('blur','input:password',function(){validar.pass.funcion($(this))})
-		.on('change','input:password',function(){validar.pass.estado=false})
-		.on('blur','.email',function(){validar.email.funcion($(this))})
-		.on('change','.email',function(){validar.email.estado=false})
-		.on('blur','.tel',function(){validar.tel.funcion($(this))})
-		.on('change','.tel',function(){validar.tel.estado=false})
-		.on('click','.iconClass-inside.icon-cancel',function(){
-			$(this).parent().find('input').val("");
-		})
-		.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
-		.on('change','.nombre',function(){validar.nombre.estado=false}).end()
-		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
-		.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
-		.on('click','.inicio',function(){window.location.href="index.php"})
-		.on('click','#btnMenuResponsive',function(){
-			toggleMetroCharm('#mnuResponsive')
-	})
-})
-jQuery.isEmpty = function(obj){
-	var isEmpty =
-	typeof obj == 'undefined' || obj === null || obj === false|| obj <1 ||obj === ''?true:
-	typeof obj == 'number' && isNaN(obj)?true:
-	obj instanceof Date && isNaN(Number(obj))?true:
-	obj.length==0;
+jQuery.isEmpty = function(){
+	var isEmpty = false 
+	for (var i = 0; i < arguments.length; i++) {
+		let arg = arguments[i] ;
+		isEmpty =
+		typeof arg == 'undefined' || arg === null || arg === false|| arg <1 ||arg === ''?true:
+		typeof arg == 'number' && isNaN(arg)?true:
+		arg instanceof Date && isNaN(Number(arg))?true:
+		arg.length==0;
 
+		if (isEmpty) break
+	}
 	return isEmpty;
+
 }
 jQuery.serializeForm = function(form){
 	var $form = $('#'+form);
@@ -110,7 +70,7 @@ var btn = {
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
 		show : function($this, status){
-
+			btn.active = $this
 			if (btn.load.status){
 					$this.html('<span class="icon-load animate-spin"></span>');
 					btn.active = $this ;
@@ -371,7 +331,7 @@ var dialog = {
 		typeof callback == "function" && callback();
 	},
 	close:function (idObj,callback){
-		var $this = $(idObj);
+		var $this = $(idObj) || $('.dialog:visible');
 
 		//en el caso que exisan passwords formaear el diseño
 		validar.pass.reset($this) ;
@@ -423,7 +383,7 @@ var dialog = {
 	
 			typeof callback == "function" && callback();
 		}
-
+		
 	}
 }
 var notify = {
@@ -821,3 +781,52 @@ function slideDias(contenedor,dir,callback){
 		})
 
 }
+$(function(){
+	$('.time').mask('00:00');
+	$('.tel').mask('## 000 00 00 00');
+	$('.date').mask('00/00/0000');
+	
+	jQuery.each(jQuery('textarea[data-autoresize]'), function() {
+	var offset = this.offsetHeight - this.clientHeight;
+
+	var resizeTextarea = function(el) {
+		jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
+	};
+	jQuery(this).on('keyup input', function() { resizeTextarea(this); }).removeAttr('data-autoresize');
+	});
+	$(document)
+		.keyup(function(event){
+			if(event.which==27){
+				popup.close();
+				dialog.close('.dialog');
+				popup.close();
+			}
+		})
+		.on('click',"html .btnLoad",function(){
+			btn.load.show($(this))
+		})
+		.on('click','.iconClass-inside.icon-eye',function(){
+			var $this = $(this).parent().find('input:visible')
+			var tipo = $this.attr('type')
+			tipo = tipo == 'password'?'text':'password';
+			$this.attr('type',tipo)
+		})
+		
+		.on('blur','input:password',function(){validar.pass.funcion($(this))})
+		.on('change','input:password',function(){validar.pass.estado=false})
+		.on('blur','.email',function(){validar.email.funcion($(this))})
+		.on('change','.email',function(){validar.email.estado=false})
+		.on('blur','.tel',function(){validar.tel.funcion($(this))})
+		.on('change','.tel',function(){validar.tel.estado=false})
+		.on('click','.iconClass-inside.icon-cancel',function(){
+			$(this).parent().find('input').val("");
+		})
+		.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
+		.on('change','.nombre',function(){validar.nombre.estado=false}).end()
+		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
+		.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
+		.on('click','.inicio',function(){window.location.href="index.php"})
+		.on('click','#btnMenuResponsive',function(){
+			toggleMetroCharm('#mnuResponsive')
+	})
+})

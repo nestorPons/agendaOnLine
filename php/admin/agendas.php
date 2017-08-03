@@ -1,5 +1,3 @@
-<?php include "../connect/clsConfig.php"; ?>
-
 <h1>Configuracion Agendas</h1>
 <h2>Seleccione las agendas que quiere que vean los clientes:</h2>
 <form id="frmAg">
@@ -17,10 +15,10 @@
 		$checkedb = $row['Mostrar']==0?"":"checked";
 		$nomb = $disabledb=="disabled"?"":$row['Nombre'];
 		?>
-		<label id="agenda<?php echo$i?>">
-			<input id="a<?php echo$i?>" type="checkbox" name="chck[]" value='<?php echo$i?>' <?php echo$disabled." ".$checked?>>
-			<input id = "txt<?php echo$i?>" type="text" name="nombre[]" placeholder="Agenda<?php echo$i?>"
-				value="<?php echo$nom?>" <?php echo$disabled?>>
+		<label id="agenda<?=$i?>">
+			<input id="a<?=$i?>" type="checkbox" name="chck[]" value='<?=$i?>' <?= $disabled." ".$checked?>>
+			<input id = "txt<?=$i?>" type="text" name="nombre[]" placeholder="Agenda<?=$i?>"
+				value="<?=$nom?>" <?=$disabled?>>
 		</label>
 		<?php
 	}?>

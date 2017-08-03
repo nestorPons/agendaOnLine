@@ -1,8 +1,10 @@
 <?php
 session_start ();
-$empresa =  $_POST['empresa']??$_SESSION['bd'];
-$_SESSION['bd'] = $empresa ;
-require "connect/configCls.php";
+
+$_SESSION['bd']  = $_POST['empresa'] ??  $_SESSION['bd'] ; 
+
+
+require "connect/config.controller.php";
 
 $_SESSION['esMobil'] = ($_POST['ancho']<=590)?1:0;
 
@@ -29,8 +31,7 @@ if(isset($_POST["login"])&&isset($_POST['pass'])){
 }
 
 function usuarioRegistrado(&$idUsuario,&$permisoAdministrador,&$activa){
-	global $bd; 
-	global $empresa;
+ 
 	$_SESSION['id_usuario'] = $idUsuario;
 
 	if(isset($_POST['recordar'])){crearCookie($idUsuario);}
@@ -39,7 +40,7 @@ function usuarioRegistrado(&$idUsuario,&$permisoAdministrador,&$activa){
 		$_SESSION['admin_sesion']=1;
 		header ("location: admin/index.php");
 	}else{
-		$url = $activa?err('Cuenta inactiva'):"../".$empresa."/users/index.php";
+		$url = $activa?err('Cuenta inactiva'):"../".$_SESSION['bd']."/users/index.php";
 		header ("Location: $url");//REDIRIJO A USUARIOS BLOQUEADOS
 	}
 }
@@ -56,7 +57,7 @@ function crearCookie($id){
 	return true;
 }
 function err($err){
-	global $empresa;
+ 
 	include "connect/destroysession.php";
-	header("location:../empresas/$empresa?closeSession=1&err=".$err);
+	header("location:../empresas/".$_SESSION['bd']."?closeSession=1&err=".$err);
 }

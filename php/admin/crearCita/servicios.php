@@ -1,6 +1,4 @@
-<?php
-include "../../../php/menus/servicios.php";
-?>
+<?php include $_SERVER['DOCUMENT_ROOT']."/php/menus/servicios.php"; ?>
 <table class ='tablas-group  contenedorServicios' >
 	<tbody>
 		<?php

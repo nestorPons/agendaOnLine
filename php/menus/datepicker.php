@@ -4,8 +4,8 @@
 		<i name="desplazarFecha" data-action="1" class="icon-right-open x6" data-disabled=false></i>
 		<input class='datepicker date' 
 			type='text' 
-			id='<?php echo $nombreDp?>' 
-			value='<?php echo Date('d/m/Y')?>'
-			data-festivos-show=true data-min-date=<?php echo $minDate??null;?>>
+			id='<?= $nombreDp?>' 
+			value='<?= formatoFecha($fecha)??Date('Y-m-d')?>'
+			data-festivos-show=true data-min-date=<?= $minDate??null;?>>
 	</div>               
 </div>

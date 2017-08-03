@@ -5,12 +5,10 @@
 		for ($i=1;$i<=$_SESSION['CONFIG']['NumAg'];$i++){
 			$checked=($agenda[0]==$i)?"checked":"";
 			?>
-			<label  for="agenda<?php echo$i?>">
-				<input type='radio' name="agenda[]"  id="agenda<?php echo$i?>" value='<?php echo$i?>' <?php echo $checked?>>
-				<span id="lblAgenda<?php echo$i?>">
-				<?php 
-					echo empty($row[0])?"Agenda $i":$_SESSION['AGENDAS'][0]['Nombre'];
-				?>
+			<label  for="agenda<?=$i?>">
+				<input type='radio' name="agenda[]"  id="agenda<?=$i?>" value='<?=$i?>' <?= $checked?>>
+				<span id="lblAgenda<?=$i?>">
+				<?= empty($row[0])?"Agenda $i":$_SESSION['AGENDAS'][0]['Nombre'];?>
 				</span>
 			</label>
 			<?php
@@ -23,9 +21,9 @@
 		if ($row[10]==0){
 			?>
 			<option 
-				data-id="<?php echo normaliza($row[1])?>" 
-				value="<?php echo $row[1]?>" >
-				<?php echo $row[0]?>
+				data-id="<?= normaliza($row[1])?>" 
+				value="<?= $row[1]?>" >
+				<?= $row[0]?>
 			</option>
 			<?php
 		}
