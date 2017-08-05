@@ -10,11 +10,9 @@
 <div class="cuerpo" >
 	<?php
 	include '../menus/tablasEncabezado.php';
+	include 'main/controller.php' ;
 	
-	include 'main/clsLbl.php';
-	include 'main/view.php';
-	
-	view($datosAgenda,$fecha);
+	main\view($datosAgenda,$fecha);
 		
 	?>
 </div>	

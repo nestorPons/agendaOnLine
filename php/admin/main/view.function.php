@@ -1,13 +1,6 @@
-<?php 
-if (!empty($_GET['f'])){
-	if (strlen(session_id()) < 1) session_start ();
-	$fecha_inicio = $_GET['f'] ;
-	$datos_agenda = datosAgenda($fecha_inicio);
-	$ids_existentes = json_decode(stripslashes($_GET['ids']));
-	view($datos_agenda,$fecha_inicio,$ids_existentes);
-}
+<?php namespace main ;
+
 function view($datosAgenda,$fecha_inicio,$existen_array=false){									
-	include_once 'clsLbl.php' ;
 
 	$primer_dia_agenda = sumarFecha($fecha_inicio,-MARGEN_DIAS/2);
 	for ($d = 0; $d <= MARGEN_DIAS; $d++){
@@ -50,7 +43,7 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){
 									
 									$datos = $datosAgenda[$id_fecha][$a][$h]??null ;
-									$lbl = new main\Lbl($datos);
+									$lbl = new Lbl($datos);
 									
 									?>
 									<td class="celda  <?php  if( $lbl->status ) echo'doble ' ; echo $class?> " agenda="<?= $a?>" >

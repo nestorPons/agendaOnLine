@@ -85,9 +85,7 @@ var main ={
 		
 		(diaFestivo)?$('.datepicker').addClass('c-red'):$('.datepicker').removeClass('c-red');
 
-		$('#main #'+idFecha).length
-			?main.check(callback)
-			:main.crearDias(callback);
+		if (!$('#main #'+idFecha).length) main.crearDias(callback);
 
 		//no lo meto en fin de carga para avanzar mas rapido
 		if (idFecha != $('#main .dia.activa').attr('id')) _sliderDias(idFecha,dir) ; 
@@ -143,94 +141,6 @@ var main ={
 			
 			typeof callback == "function" && callback();
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
-		
-	},
-	refresh : function(arr_id_insert , arr_id_del , arr_idUser ){
-
-		var url = "agendas/refreshCns.php";	
-		var arr_data = {
-			ins : arr_id_insert,
-			del : arr_id_del,  
-		};
-		$.getJSON(url,arr_data,function(data){ 
-			if (!$.isEmpty(data)){
-				if (!$.isEmpty(data.ins)){
-					
-					$.each(data.ins,function(index,value){
-						
-						main.lbl.crear(value);
-						
-						notify.success('El cliente ' + arr_idUser[index] + ',<br> ha creado la cita ' + index ,'Guardado',true);
-						
-					})
-					
-				};
-				
-				if (!$.isEmpty(data.del)){
-					
-					$.each(data.del,function(index,value){
-
-						main.lbl.eliminar(index,value);
-
-						notify.error('El cliente ' + arr_idUser[index] + ',<br> ha eliminado la cita ' + index,'Eliminada',true);
-						
-					})
-					
-				} 
-				main.lbl.color();
-			}
-		})
-	},
-	check: function(callback){
-		
-		//var idFecha = Fecha.number(Fecha.general);
-		//$('#'+idFecha).addClass('editando')
-		//var $celdas = $('.editando .celda');
-
-		if(xhr && xhr.readystatus != 4) { xhr.abort();}
-
-		xhr =  $.ajax({
-			type:"get",
-			url: urlPhp+'agendas/refreshCheck.php',
-			dataType: 'json',
-			
-		})
-		.done(function(data){
-
-			//ASSOC
-			//id idCita status
-			
-			if(!$.isEmpty(data)){
-				var arr_id_insert  = new Array();
-				var arr_id_del  = new Array();
-				var arr_id_user  = new Array();
-				
-				$.each(data,function(i,data){
-					
-					arr_id_user[data.idCita] = data.idUser;
-					
-					if (data.status == 1){
-				
-						//ha creado cita 
-						arr_id_insert.push(data.idCita);
-						
-					}else{
-						
-						//ha eliminado la cita
-						arr_id_del.push(data.idCita);
-						
-					}
-				})
-	
-				if (!$.isEmpty(arr_id_insert) || !$.isEmpty(arr_id_del))
-					main.refresh( arr_id_insert , arr_id_del , arr_id_user); 
-
-			}else{
-				btn.load.hide();
-			}
-			typeof callback == "function" && callback();
-		})
-
 		
 	},
 	citasSup: function($this){
@@ -338,7 +248,11 @@ var main ={
 					main.lbl.crear.servicio( idCita , self.id  , self.codigo , self.descripcion , self.tiempo ) ; 
 					
 				}
-				
+
+
+				//AKI :: hay que arreglar la forma que se edita el servicio 
+
+
 				$.ajax({
 					type: "POST",
 					dataType: "json",
@@ -1160,6 +1074,7 @@ var crearCita ={
 				_bucleDias();
 			
 			function _bucleDias (){
+				 
 				$('#main .dia').each(function(){
 					var self = {
 						obj : $('#crearCita #'+$(this).attr('id')),
@@ -1168,6 +1083,7 @@ var crearCita ={
 
 					if (Fecha.restar(self.id)>=0 && !self.obj.length) 
 						crearCita.horas.crear(self.id);
+						
 				})		
 			}
 		},
@@ -1222,6 +1138,7 @@ var crearCita ={
 			}
 
 		},	
+		
 		pintar: function(id_table){
 		
 		//AKI :: pintar horas ocupadas

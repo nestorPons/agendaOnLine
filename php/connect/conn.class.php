@@ -19,7 +19,6 @@ class Conexion {
 		$this->conexion = mysqli_connect($this->server, $this->user, $this->pass , $this->bd) ;
 		@mysqli_query("SET NAMES 'utf8'") ;
 	}
-
 	public function query($sql){
 		$result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
 		return $result ;
@@ -27,6 +26,11 @@ class Conexion {
 
 	public function multi_query ($sql) {
 		return mysqli_multi_query($this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+	}
+
+	public function scape ($str) {
+		$str = $str || '' ; 
+		return mysqli_real_escape_string($this->conexion , $str) ;
 	}
 
 	public function row( $sql ){

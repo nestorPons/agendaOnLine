@@ -16,14 +16,16 @@ spl_autoload_register(
     }  
 );
 
-switch (trim($_GET['action'])){
-    case 'main' :
+if (isset($_GET['action'])){
 
-        $fecha = $_GET['fecha'] ?? Date('Y-m-d');  
-        require( 'core.php' ) ;        
+    switch (trim($_GET['action'])){
+        case 'main' :
 
-    break ; 
+            $fecha = $_GET['fecha'] ?? Date('Y-m-d');  
+            require( 'core.php' ) ;        
 
+        break ; 
+
+    }
+    require_once( $_GET['action'].'.php' ) ; 
 }
-
-require_once( $_GET['action'].'.php' ) ; 

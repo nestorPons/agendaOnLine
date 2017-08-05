@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require "../../connect/clsConexion.php";
+require_once ($_SERVER['DOCUMENT_ROOT'].'/php/connect/conn.controller.php');
 
 $id = $_POST['idCita'];
 $a = $_POST['agenda'] ; 

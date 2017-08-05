@@ -23,8 +23,6 @@ class Lbl {
 	
     function __CONSTRUCT($datos){
 
-
-
         if (!empty($datos)){
             $this->idCita = $datos['idCita'] ;
             $this->nombre = $datos['nombre'] ;
