@@ -3,7 +3,6 @@ session_start ();
 
 $_SESSION['bd']  = $_POST['empresa'] ??  $_SESSION['bd'] ; 
 
-
 require "connect/config.controller.php";
 
 $_SESSION['esMobil'] = ($_POST['ancho']<=590)?1:0;
@@ -57,7 +56,6 @@ function crearCookie($id){
 	return true;
 }
 function err($err){
- 
-	include "connect/destroysession.php";
-	header("location:../empresas/".$_SESSION['bd']."?closeSession=1&err=".$err);
+	$url = "location:../empresas/".$_SESSION['bd']."?closeSession=1&err=".$err ; 
+	header($url);
 }

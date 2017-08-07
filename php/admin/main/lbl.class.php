@@ -8,6 +8,8 @@ class Lbl {
     private $idCodigos ;
     private $obs ; 
     private $tiempo ;
+    private $servicios ;
+
     //position
     private $day ;
     private $hour;
@@ -17,31 +19,40 @@ class Lbl {
     private $width;
     private $height;
 
-    //estado
-    public $status = false ;
+    
     public $html = null;
 	
+    //conexion
+    private $conn ; 
+    
     function __CONSTRUCT($datos){
 
-        if (!empty($datos)){
-            $this->idCita = $datos['idCita'] ;
-            $this->nombre = $datos['nombre'] ;
-            $this->idUsuario = $datos['idUsuario'] ;
-            $this->servicios = $datos['servicios'] ;
-            
-            $this->obs = $datos['obs'] ;
-            $this->agenda = $datos['agenda'] ;
+        $this->idCita = $datos['idCita'] ;
+        $this->nombre = $datos['nombre'] ;
+        $this->idUsuario = $datos['idUsuario'] ;
+        $this->servicios = $datos['servicios'] ;
         
-            $this->tiempoTotal = $datos['tiempo_total'] ;
-            $this->paint() ;    
-            $this->status = true ; 
-        }else{
-            $this->status = false ; 
-        }
+        $this->obs = $datos['obs'] ;
+        $this->agenda = $datos['agenda'] ;
+
     }
 
-    private function paint () {
-        $rows = ceil($this->tiempoTotal / 15) ;
+    private function conexion() {
+        $this->conn = new \connect\Conexion( 'bd_' . $_SESSION['bd'] );
+    }
+
+    private function tiempoTotal ($arr_servicios = 0 ) {
+        $tiempoTotal = 0 ;
+
+        foreach ($this->servicios as $key => $val ){
+            $tiempoTotal += (int)$val['tiempo'] ;  
+        }
+        return $tiempoTotal ;
+    }
+
+    public function paint () {
+
+        $rows = ceil($this->tiempoTotal() / 15) ;
         $exten = $rows>1? "extend" :'' ; 
         $show_nota =  empty($this->obs)?'':'show' ;
         $this->html = "
@@ -58,13 +69,15 @@ class Lbl {
                 </div>
                 <div class='servicios $exten'>          
                     ".$this->printArt($this->servicios)."                   
-                   
+                
                 </div> 
                 <div class='note '>
-                   ". $this->printNote() ."
+                ". $this->printNote() ."
                 </div> 											  
             </div>
             ";
+        return $this->html ;
+
     }
 
     private function printArt($arr){
@@ -92,6 +105,33 @@ class Lbl {
         }
 
         return $html ; 
+    }
+
+    public function del () {
+
+        $this->conexion() ; 
+
+        $sql  = 'INSERT INTO del_data (IdCita,Agenda,IdUsuario,Fecha,Hora,Obs,UsuarioCogeCita) SELECT IdCita,Agenda,IdUsuario,Fecha,Hora,Obs,UsuarioCogeCita FROM data WHERE IdCita = '.$this->idCita.'; ';
+        $sql .= 'INSERT INTO del_cita (Id,IdCita,Servicio) SELECT Id, IdCita, Servicio FROM cita WHERE IdCita = '.$this->idCita.'; ';
+        $sql .= 'DELETE FROM data WHERE IdCita = '.$this->idCita.'; ';
+        $sql .= 'DELETE FROM cita WHERE IdCita = '.$this->idCita.'; ';
+
+        return $this->conn->multi_query($sql) ;
+    }
+
+    public function edit () {
+        
+        $this->conexion() ; 
+
+        $sql = "UPDATE data 
+            SET IdUsuario='$this->user', Obs='$this->note' , Agenda = $this->agenda , Fecha ='$this->fecha' , Hora = '$this->hora' 
+            WHERE IdCita=$this->idCita ; ";
+        $sql .=	"DELETE FROM cita WHERE idCita = $this->idCita ;" ;
+        foreach ( $ser as $key => $val ) {
+            $sql .= "INSERT INTO cita ( IdCita, Servicio ) VALUES ( $this->idCita , $val );";
+          }
+        
+        return $this->conn->multi_query($sql) ;
     }
 
 }

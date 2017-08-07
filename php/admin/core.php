@@ -61,7 +61,7 @@ function datosAgenda($fecha){
 					'servicios' => array()
 				);
 			}
-			$datosAgenda[$data[$i]['IdCita']]['tiempo_total'] += (int)$data[$i]['Tiempo'] ;
+
 			$datosAgenda[$data[$i]['IdCita']]['servicios'][] = array(
 				'idCodigo'=>$data[$i]['IdCodigo'],
 				'codigo'=>$data[$i]['Codigo'],
@@ -75,7 +75,6 @@ function datosAgenda($fecha){
 				$agenda = $value['agenda'];
 				$hora = strtotime($value['hora']);
 				$arr_data[$fecha][$agenda][$hora] = $value;
-
 		}
 
 	} else {

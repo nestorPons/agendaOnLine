@@ -42,14 +42,17 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){
 									
-									$datos = $datosAgenda[$id_fecha][$a][$h]??null ;
-									$lbl = new Lbl($datos);
-									
+									$datos = $datosAgenda[$id_fecha][$a][$h] ?? null;
+
 									?>
-									<td class="celda  <?php  if( $lbl->status ) echo'doble ' ; echo $class?> " agenda="<?= $a?>" >
+									<td class="celda  <?php  if( $datos !== null  ) echo'doble ' ; echo $class?> " agenda="<?= $a?>" >
 										<?php
-											echo $lbl->html ;
-											unset( $lbl );
+											if( $datos !== null  ){
+												$lbl = new Lbl($datos);
+												echo $lbl->paint() ; 
+												
+												unset( $lbl );
+											}
 										?>
 									</td>
 									<?php

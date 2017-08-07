@@ -125,13 +125,14 @@ var main ={
 		})
 
 		$.ajax({
-			type:"get",
-			url: urlPhp+'agendas/view.php',
+			type:"POST",
+			url: urlPhp+'main/view.function.php',
 			dataType: 'html',
 			data: {
-					f : Fecha.general ,
-					ids :JSON.stringify( ids ),
-					},
+				fecha : Fecha.general ,
+				ids :JSON.stringify( ids ),
+				action : 'view'
+			},
 			cache: false
 		})
 		.done(function(html){
@@ -176,14 +177,15 @@ var main ={
 			fecha : Fecha.sql($this.parents('.dia').attr('id')) ,
 			hora :  $this.parents('tr').data('hour'),
 			obs :  $this.find('.note').text().trim() ,
-			codigos : new Array() ,
-			status : false 
+			servicios : new Array() ,
+			status : false ,
+			action : 'edit' ,
 		}
 		
 		var tiempoTotal =  0
 
 		var _addRow = function (id , codigo , descripcion ,tiempo ){
-				data.codigos.push(id)
+				data.servicios.push(id)
 
 				$('#dlgEditCita .template')
 					.clone()
@@ -313,12 +315,16 @@ var main ={
 
 	},
 	del: function(idCita){
-		var url = urlPhp+'main/delete.php'
+		var url = urlPhp+'main/controller.php'
+		var data = {
+			idCita : idCita , 
+			action : 'del'
+		}
+		$.post(url , data ,function(r){
 
-		$.getJSON(url , {idCita : idCita },function(r){
 			if (r) main.lbl.eliminar(idCita);
-			
-		})
+	
+		},'json')
 		.fail(function( jqXHR, textStatus, errorThrown ) { echo (jqXHR.responseText) });
 	},
 	guardarNota: function($this){
@@ -340,7 +346,7 @@ var main ={
 		}
 	},
 	inactivas: function(){
-		var url = urlPhp+'agendas/estado_visible_guardar.php';
+		var url = urlPhp+'main/estado_visible_guardar.php';
 		if( main.status == 0 ){
 			main.status = 1 ;
 			$('#btnShow')

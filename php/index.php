@@ -12,12 +12,14 @@ $nombre_empresa =  ucwords(strtolower($_GET['empresa']),'_');
 $nombre_empresa = str_replace("_"," ",$nombre_empresa);
 $nombre_empresa = str_replace("/","",$nombre_empresa);
 
+require 'libs/tools.php' ;
+
 if(isset($_COOKIE["id_user"])&&!isset($_GET["closeSession"])){
 	header ("location:../php/validar.php");
 	exit;
 }else{
 	 if(isset($_GET["closeSession"])||isset($_GET['err'])){
-		require "../php/connect/destroysession.php";
+		destroySession();
 		session_start ();
 	}
 }
@@ -25,7 +27,6 @@ if(isset($_COOKIE["id_user"])&&!isset($_GET["closeSession"])){
 $_SESSION['bd'] =  $_GET['empresa'] ;
 
 require_once "connect/conn.controller.php";
-require 'libs/tools.php' ;
 
 //Compilando la hoja de estilos
 require_once "../css/compilaLess.php";

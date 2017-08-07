@@ -105,7 +105,7 @@
 	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		<span class="app-bar-divider"></span>
 		<li id="btnExit" class="no-flexible place-right">
-			<a href="../../empresas/<?php echo $_SESSION['bd']?>?closeSession=1">
+			<a href="../../empresas/<?= $_SESSION['bd']?>?closeSession=1">
 				<span id="mnuUserSalirSession" class="icon-logout"></span>
 			</a>
 		</li>

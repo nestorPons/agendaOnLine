@@ -29,8 +29,14 @@ class Conexion {
 	}
 
 	public function scape ($str) {
-		$str = $str || '' ; 
-		return mysqli_real_escape_string($this->conexion , $str) ;
+		$str = $str ?? '' ; 
+		
+		$str = trim($str); 
+		$str = str_replace('\"','',$str);
+		$str = str_replace("\'",'',$str);
+		$str = str_replace(' ','_',$str);
+
+		return $str ;
 	}
 
 	public function row( $sql ){

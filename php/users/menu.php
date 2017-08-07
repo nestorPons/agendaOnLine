@@ -6,7 +6,6 @@
 	}else{
 		$path = "../../img/logo.png";
 	}
-	 
 ?>
 <div  id= "navbar" class="app-bar" data-role="appbar">
 	<a href="<?php echo CONFIG['Web']??"www.agendaOnline.es";?>" class="app-bar-element branding">

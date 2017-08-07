@@ -7,10 +7,16 @@ $conn = new connect\Conexion( 'bd_'. $_SESSION['bd'] );
 
 if ( $_POST ) {
     foreach ($_POST as $key => $value) {
+  
         if (is_array($_POST[$key])){
+ 
             $_POST[$key][] = $conn->scape($value) ;
+
         }else{
+   
             $_POST[$key] = $conn->scape($value) ;
+
         }
+
     }
 }
