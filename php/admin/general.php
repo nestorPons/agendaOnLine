@@ -1,6 +1,6 @@
 <form id='generalFrm' action="">	
 	<div class="iconClass-container icon-left">
-		<input type='text' name='nombre' value='<?= CONFIG['Nombre']?>' placeholder='Nombre comercial'>
+		<input type='text' name='nombre' value='<?= CONFIG['Nombre']?>' placeholder='nombre comercial'>
 		<span class="iconClass-inside icon-shop"></span>
 	</div>
 		<div class="iconClass-container icon-left">
@@ -28,7 +28,7 @@
 		<span class="iconClass-inside left icon-flag-empty"></span>
 	</div>
 		<div class="iconClass-container icon-left">
-		<input type='text' 	name='cp' value='<?= CONFIG['CP']?>'	placeholder='Codigo Postal'>
+		<input type='text' 	name='cp' value='<?= CONFIG['CP']?>'	placeholder='codigo Postal'>
 		<span class="iconClass-inside left icon-mail-1"></span>
 	</div>
 	<div class="iconClass-container icon-left">

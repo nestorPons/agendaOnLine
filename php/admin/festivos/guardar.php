@@ -5,7 +5,7 @@ require "../../connect/conn.controller.php";
 $fecha = $_POST['fecha'];
 $nombre = $_POST['nombre'];
 
-$sql = "INSERT INTO festivos (Fecha,Nombre) VALUES ('$fecha','$nombre')";
+$sql = "INSERT INTO festivos (fecha,nombre) VALUES ('$fecha','$nombre')";
 $js['success'] = $conn->query($sql) ;
 
 $js['id'] = $conn->id();

@@ -31,7 +31,7 @@ try {
 <title>Menu agenda general</title>
 </head>
 <body id="user" data-iduser= <?php echo $_SESSION['id_usuario']?> 
-	data-empresa = "<?php echo CONFIG['Nombre']?>"
+	data-empresa = "<?php echo CONFIG['nombre']?>"
 	data-mintime = <?php echo CONFIG['MinTime']?>>
 <?php include '../../php/users/menu.php'?>
 <div id="login" class="login">	

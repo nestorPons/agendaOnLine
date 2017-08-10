@@ -23,16 +23,16 @@ $fecha_baja = (isset($_POST['activa']))
 
 $jsondata['fecha_baja'] = $fecha_baja;
 if ($id==0){
-	$result=$conn->query("INSERT INTO usuarios (Nombre,Email,Tel,Obs,Admin) VALUE ('$nombre','$email','$tel','$obs',$admin)");
+	$result=$conn->query("INSERT INTO usuarios (nombre,Email,Tel,obs,Admin) VALUE ('$nombre','$email','$tel','$obs',$admin)");
 	if ($result){
 		$id  = $conn->id();
 		$jsondata['id']= $id;
 		$jsondata['success'] = true;
-		// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 Block
+		// 0 Id 1 nombre 2 Email 3 Pass 4 Tel 5 Admin 6 obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 Block
 		$_SESSION['USUARIOS'][] = array($id, $nombre , $email , '' , $tel , $admin , $obs , 0 , 0 , 0 , 0 , 'es' , date("Y-m-d H:i:s") , 0);
 	}	
 }else{
-	$result=$conn->query( "UPDATE usuarios SET Nombre ='$nombre', Email ='$email', Tel ='$tel', Obs='$obs',dateBaja='$fecha_baja', Admin=$admin , Block=$block WHERE Id=$id");
+	$result=$conn->query( "UPDATE usuarios SET nombre ='$nombre', Email ='$email', Tel ='$tel', obs='$obs',dateBaja='$fecha_baja', Admin=$admin , Block=$block WHERE Id=$id");
 	if ($result){
 		$jsondata['id']= $id ;
 		$jsondata['success'] = true ;
@@ -44,7 +44,7 @@ if ($id==0){
 			}
 
 		}
-		// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 block
+		// 0 Id 1 nombre 2 Email 3 Pass 4 Tel 5 Admin 6 obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 block
 		$_SESSION['USUARIOS'][$key_id] = array( $id , $nombre , $email ,$_SESSION['USUARIOS'][$key][4] , $tel , $admin , $obs , $_SESSION['USUARIOS'][$key][7] , $_SESSION['USUARIOS'][$key][8] , $_SESSION['USUARIOS'][$key][9] , $_SESSION['USUARIOS'][$key][10] , $block) ;
 	}
 

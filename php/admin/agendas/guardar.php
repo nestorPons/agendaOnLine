@@ -8,10 +8,10 @@ for ($i=0;$i<=CONFIG['NumAg']-1;$i++){
 	$sql = "SELECT Id FROM agendas WHERE Id =". $a ;
 	$row=$conn->row($sql);
 	$mostrar = ($chck==-1)?0:in_array($a,$chck)?1:0;
-	$nombre = ($_POST['nombre'][$i])??"Agenda$a";
+	$nombre = ($_POST['nombre'][$i])??"agenda$a";
 	$sql = ($row>0)
-	?"UPDATE agendas SET Nombre ='$nombre', Mostrar=$mostrar WHERE Id=$a"
-	:"INSERT INTO agendas (Nombre,Mostrar) VALUES ('$nombre',$mostrar)";
+	?"UPDATE agendas SET nombre ='$nombre', Mostrar=$mostrar WHERE Id=$a"
+	:"INSERT INTO agendas (nombre,Mostrar) VALUES ('$nombre',$mostrar)";
 
 	$js['success']=$conn->query($sql);
 }

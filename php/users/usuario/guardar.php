@@ -40,7 +40,7 @@ function validarEmail(){
 
 if (validarEmail&&validarPass){
 	$pass =!empty($pass1)?", Pass='".$pass1. "' ,datePass = '" . date('Y-m-d') ."'":"";	
-	$SQL = "UPDATE usuarios SET Nombre ='$nombre',Email='$email',Tel ='$Tel' ".$pass." WHERE Id =$idUsuario";
+	$SQL = "UPDATE usuarios SET nombre ='$nombre',Email='$email',Tel ='$Tel' ".$pass." WHERE Id =$idUsuario";
 	$js['sql']=$SQL;
 	 if (mysqli_query($conexion,$SQL) ){
 		registrarEvento(5,0,$_SESSION["id_usuario"],0);

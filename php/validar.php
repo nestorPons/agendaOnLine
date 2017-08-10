@@ -14,7 +14,7 @@ if(isset($_POST["login"])&&isset($_POST['pass'])){
 	if ($r= $conn->assoc($sql)){
 		if($r["Pass"] === $_POST["pass"]){
 			if ($r["dateBaja"]==0){
-				usuarioRegistrado($r["Id"],$r['Admin'],$r['dateBaja'],$r["Nombre"],$r["Email"], $r["Tel"]);
+				usuarioRegistrado($r["Id"],$r['Admin'],$r['dateBaja'],$r["nombre"],$r["Email"], $r["Tel"]);
 			}else{err('Cuenta bloqueada. Consulte su email.');}
 		}else{err('La contraseña no coincide.');}
 	}else{err('Usuario no registrado.');}

@@ -3,14 +3,14 @@
 	<thead>
 		<tr>
 			<th>Editar</th>
-			<th>Nombre</th>
+			<th>nombre</th>
 			<th>Mostrar a los clientes</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php 
 		foreach ($_SESSION['FAMILIAS'] as $row){
-			// 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
+			// 0 IdFamilia 1 nombre 2 Mostrar 3 Baja
 			$class =  ($row[3] == 1 )?'ocultar_baja':'';
 				?>
 				<tr  id="rowFamilias<?= $row[0]?>" class='<?=$class ?>'>

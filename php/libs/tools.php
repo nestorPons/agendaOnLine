@@ -32,7 +32,7 @@ function registrarEvento($idEven, $idCita, $idUsuario,$agenda){
 	$idUsuario = $idUsuario??-1;
 	$idUsuario = $_SESSION['id_usuario']??$idUsuario;
 	
-	$SQL = "INSERT INTO even (IdUsuario,IdCita, IdEven, Fecha, Admin,agenda) 
+	$SQL = "INSERT INTO even (idUsuario,idCita, IdEven, fecha, Admin,agenda) 
 	VALUE ($idUsuario, $idCita,'$idEven','$fechaEvento',$admin,$agenda)";
 	 return mysqli_query($conexion,$SQL);
 }
@@ -47,12 +47,12 @@ function normaliza($cadena){
     $cadena = strtolower($cadena);
     return utf8_encode($cadena);
 }
-function formatoFecha($fecha){
+function formatofecha($fecha){
 		$a = explode('-',$fecha);
 		$fecha = $a[2].'/'.$a[1].'/'.$a[0];
 		return $fecha;
 }
-function sumarFecha($fecha,$num){
+function sumarfecha($fecha,$num){
 	$f = strtotime('+'.$num.' day',strtotime($fecha));
 	$f = date('Y-m-d',$f);
 	return $f;
@@ -60,7 +60,7 @@ function sumarFecha($fecha,$num){
 //FESTIVOS
 function festivos(){
 	global $conn;
-	$row = $conn->row("SELECT Fecha FROM festivos") ;
+	$row = $conn->row("SELECT fecha FROM festivos") ;
 
 	for ($i = 0 ; $i < count($row) ; $i++ ){
 		$date =new DateTime($row[$i]);

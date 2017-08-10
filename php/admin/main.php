@@ -1,3 +1,4 @@
+
 <div class="cabecera">
 	<div class="cabecera-content">
 		<?php 
@@ -12,7 +13,6 @@
 	include '../menus/tablasEncabezado.php';
 	include 'main/controller.php' ;
 	
-	main\view($datosAgenda,$fecha);
-		
+	main\view();
 	?>
 </div>	

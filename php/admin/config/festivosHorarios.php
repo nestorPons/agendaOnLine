@@ -10,7 +10,7 @@ $jd['horarios']=$row;
 $sql="SELECT * FROM festivos";
 $resultf = mysqli_query($conexion, $sql);
 while ($rowf=mysqli_fetch_array($resultf)){
-	$date =new DateTime($rowf['Fecha']);
+	$date =new DateTime($rowf['fecha']);
 	$date = date_format($date,"md");
 	$jd['festivos'][]=$date;	
 }

@@ -7,8 +7,8 @@
 			<thead>
 				<tr>
 					<th>Opc<span class="responsive">iones</span></th>
-					<th>Codigo </th>
-					<th>Descripcion</th>
+					<th>codigo </th>
+					<th>descripcion</th>
 					<th><i class="icon-clock"></i></th>
 				</tr>	
 			</thead>

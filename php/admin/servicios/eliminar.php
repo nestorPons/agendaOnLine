@@ -13,7 +13,7 @@ foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {
     }
 
 }	
-//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
+//	0 Id 1 codigo 2 descripcion 3 Precio 4 tiempo 5 IdFamilia 6 Baja
 $_SESSION['SERVICIOS'][$key_id][6]  =  '1' ;
 $r[$key_id] = $_SESSION['SERVICIOS'][$key_id]  ;
 echo json_encode($r);

@@ -4,13 +4,13 @@ include "../../connect/conexion.php";
 $conexion = conexion();
 
 $nota = $_POST['notas'];
-$arrayFecha =explode('/', $_POST['datepicker'] );
-$fecha = $arrayFecha[2]. "-". $arrayFecha[1] . "-". $arrayFecha[0];
-$sql="SELECT * FROM notas WHERE Fecha = '$fecha'";
+$arrayfecha =explode('/', $_POST['datepicker'] );
+$fecha = $arrayfecha[2]. "-". $arrayfecha[1] . "-". $arrayfecha[0];
+$sql="SELECT * FROM notas WHERE fecha = '$fecha'";
 $row	= mysqli_fetch_array(mysqli_query($conexion,$sql));
-$SQL= $row['Fecha']!=""
+$SQL= $row['fecha']!=""
 ?"UPDATE notas SET Nota  ='$nota' WHERE fecha = '$fecha';"
-:"INSERT INTO notas (Id,Nota,Fecha) VALUE	('','$nota','$fecha')";	
+:"INSERT INTO notas (Id,Nota,fecha) VALUE	('','$nota','$fecha')";	
 $jsondata['sql'] = $SQL;
 $jsondata['success'] =(mysqli_query($conexion,$SQL))?true:false;
 echo json_encode($jsondata);

@@ -7,14 +7,14 @@ $nombre=trim($_POST['nombre']);
 $mostrar=(!empty($_POST['mostrar']))?1:0;
 
 $sql= ($id>=0)
-	?$sql= "UPDATE familias SET Nombre = '$nombre', Mostrar = $mostrar , Baja = 0 WHERE IdFamilia = $id"
-	:$sql= "INSERT INTO familias (Nombre,Mostrar) VALUE ('$nombre',$mostrar)";
+	?$sql= "UPDATE familias SET nombre = '$nombre', Mostrar = $mostrar , Baja = 0 WHERE IdFamilia = $id"
+	:$sql= "INSERT INTO familias (nombre,Mostrar) VALUE ('$nombre',$mostrar)";
 
 $jsondata['nombre'] = $nombre;
 $jsondata['mostrar'] = $mostrar;
 
 if($conn->query($sql)){
-// 0 IdFamilia 1 Nombre 2 Mostrar 3 baja
+// 0 IdFamilia 1 nombre 2 Mostrar 3 baja
 	$jsondata['success'] = true;
 
 	if($id>=0){

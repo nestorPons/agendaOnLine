@@ -1,14 +1,14 @@
 <?php 
 	$arr_agendas = $conn->all( "SELECT * FROM agendas" );
-	$horarios = new horarios\Horarios();
+	$horarios = new horarios\horarios();
 ?>
-<h1>Horarios</h1>
+<h1>horarios</h1>
 <hr>
-<form id='frmHorario'>
+<form id='frmhorario'>
 	<table class="tablas-mini">
 		<thead>
 			<th><span>Selección<span></th>
-			<th><span>Agenda<span></th>
+			<th><span>agenda<span></th>
 			<th><span>dia semana<span></th>
 			<th><span>Inicio<span></th>
 			<th><span>Fin<span></th>

@@ -26,17 +26,17 @@ for($i=1;$i<=$num+1;$i++){
 	<div  id="capa<?php echo $i?>" class="contenedorTablas <?php if($i>1)echo"hidden"?>" >
 		<table class="aling-center">
 			<?php
-				$sql = "SELECT * FROM articulos WHERE IdFamilia = $i AND Baja = 0 ORDER BY Descripcion";
+				$sql = "SELECT * FROM articulos WHERE IdFamilia = $i AND Baja = 0 ORDER BY descripcion";
 				$resultArt= mysqli_query($conexion,$sql);
 				while($rowArt=mysqli_fetch_array($resultArt)){
 				?>
 				<tr>
 					<td>
 						<label>
-							<input type="checkbox" name="servicios[]" id ="<?php echo $rowArt["Codigo"]?>"  
-							value="<?php echo$rowArt["Id"]?>" data-time="<?php echo $rowArt["Tiempo"]?>"
-							data-descripcion="<?php echo$rowArt["Descripcion"]?>">
-							<?php echo " ".$rowArt["Descripcion"]." (".$rowArt["Tiempo"]."min.)"?>
+							<input type="checkbox" name="servicios[]" id ="<?php echo $rowArt["codigo"]?>"  
+							value="<?php echo$rowArt["Id"]?>" data-time="<?php echo $rowArt["tiempo"]?>"
+							data-descripcion="<?php echo$rowArt["descripcion"]?>">
+							<?php echo " ".$rowArt["descripcion"]." (".$rowArt["tiempo"]."min.)"?>
 						</label>
 					</td>
 				</tr>

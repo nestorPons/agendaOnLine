@@ -4,7 +4,7 @@
 		<form id="frmContact">
 			<h4>Formulario de contacto ....</h4>
 			<div class="iconClass-container icon-left">
-				<input type="text" name="nombre" placeholder="Nombre" value='<?php echo CONFIG['NomUser']?>'>
+				<input type="text" name="nombre" placeholder="nombre" value='<?php echo CONFIG['NomUser']?>'>
 				<span class="icon-user iconClass-inside"></span>
 			</div>
 			<div class="iconClass-container icon-left">
@@ -28,8 +28,8 @@
 
 	<hr>
 	<h3>o puede contactarnos por ...</h3> 
-	<a href="https://www.agendaOnLine.es" >www.AgendaOnLine.es</a>
-	<a href="mailto:nestorpons@gmail.com?Subject=Contacto AgendaOnLine" 	
+	<a href="https://www.agendaOnLine.es" >www.agendaOnLine.es</a>
+	<a href="mailto:nestorpons@gmail.com?Subject=Contacto agendaOnLine" 	
 		target="_top">
 		Nestorpons@gmail.com
 	</a>
@@ -50,7 +50,7 @@
 			<li>
 				<a id="menu0" name='menu[]' class="app-bar-element" data-capa="main">
 					<span class="icon-wallet"></span>
-					<span >Agendas</span>
+					<span >agendas</span>
 				</a>
 			</li>
 			<li>
@@ -79,9 +79,9 @@
 				<ul class="d-menu" data-role="dropdown">
 					<li><a name='menu[]' data-capa="general">Mis datos</a></li>
 					<li><a name='menu[]' data-capa="config"	>Configuración</a></li>
-					<li><a name='menu[]' data-capa="horarios" >Horarios</a></li>
+					<li><a name='menu[]' data-capa="horarios" >horarios</a></li>
 					<li><a name='menu[]' data-capa="festivos" >Festivos</a></li>
-					<li><a name='menu[]' data-capa="agendas">Agendas</a></li>	
+					<li><a name='menu[]' data-capa="agendas">agendas</a></li>	
 				</ul>
 			</li>
 			<?php

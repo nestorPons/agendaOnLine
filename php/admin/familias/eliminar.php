@@ -9,7 +9,7 @@ $sql = ($block == 1)?
     'UPDATE familias SET Baja = 1 WHERE IdFamilia = ' . $_GET['id'] ;
 
 if ($conn->query( $sql  ) == true) {
-    // 0 IdFamilia 1 Nombre 2 Mostrar 3 Baja
+    // 0 IdFamilia 1 nombre 2 Mostrar 3 Baja
 
     foreach ( $_SESSION['FAMILIAS'] as $key => $value ) {
 

@@ -19,65 +19,108 @@ class Lbl {
     private $width;
     private $height;
 
-    
+    private $data = []; 
     public $html = null;
 	
     //conexion
     private $conn ; 
     
-    function __CONSTRUCT($datos){
+    function __CONSTRUCT(){
 
-        $this->idCita = $datos['idCita'] ;
-        $this->nombre = $datos['nombre'] ;
-        $this->idUsuario = $datos['idUsuario'] ;
-        $this->servicios = $datos['servicios'] ;
-        
-        $this->obs = $datos['obs'] ;
-        $this->agenda = $datos['agenda'] ;
-
-    }
-
-    private function conexion() {
         $this->conn = new \connect\Conexion( 'bd_' . $_SESSION['bd'] );
+
     }
 
-    private function tiempoTotal ($arr_servicios = 0 ) {
+    public function loadDates($ini , $end) {
+
+	$sql = "SELECT D.idCita, A.Id AS idCodigo, A.codigo, D.agenda, D.idUsuario, U.nombre, D.obs, D.hora , D.fecha ,A.tiempo, A.descripcion
+		FROM cita C JOIN data D ON C.idCita = D.idCita 
+		INNER JOIN usuarios	U ON D.idUsuario = U.Id 
+		LEFT JOIN articulos A ON C.Servicio = A.Id  
+		WHERE D.fecha BETWEEN '$ini' AND '$end'  
+		ORDER BY D.idCita, D.hora";
+
+        $this->data($sql) ;
+    }
+
+    private function data ($sql) {
+        
+        $data=$this->conn->all($sql,MYSQLI_ASSOC);
+        if (count($data)>0) {
+
+            for( $i = 0 ; $i < count($data) ; $i++ ){
+                if (!isset($datosagenda[$data[$i]['idCita']])){
+                    $datosagenda[$data[$i]['idCita']] 
+                    = array(
+                        'idCita'=>$data[$i]['idCita'],
+                        'fecha'=>$data[$i]['fecha'],
+                        'hora'=>$data[$i]['hora'],
+                        'agenda'=>$data[$i]['agenda'],
+                        'obs'=>$data[$i]['obs'],
+                        'idUsuario'=>$data[$i]['idUsuario'],
+                        'nombre'=>$data[$i]['nombre'],
+                        'servicios' => array()
+                    );
+                }
+
+                $datosagenda[$data[$i]['idCita']]['servicios'][] = array(
+                    'idCodigo'=>$data[$i]['idCodigo'],
+                    'codigo'=>$data[$i]['codigo'],
+                    'des'=>$data[$i]['descripcion'],
+                    'tiempo'=> $data[$i]['tiempo']
+                );
+            
+            }
+
+            $this->print($datosagenda) ;
+        } 
+        //RESET TABLA CITA_USER
+        //$conn->query("TRUNCATE user_reg");
+
+    }
+
+    private function tiempoTotal ($servicios) {
+
         $tiempoTotal = 0 ;
 
-        foreach ($this->servicios as $key => $val ){
+        foreach ($servicios as $val ){
             $tiempoTotal += (int)$val['tiempo'] ;  
         }
+
         return $tiempoTotal ;
     }
 
-    public function paint () {
+    private function print ($data) {
 
-        $rows = ceil($this->tiempoTotal() / 15) ;
-        $exten = $rows>1? "extend" :'' ; 
-        $show_nota =  empty($this->obs)?'':'show' ;
-        $this->html = "
-            <div id='".$this->idCita."' class='lbl row_$rows' >
-                <div id =' $this->idUsuario ' class='nombre'>
-                    <span class ='icon-user-1'></span> 
-                    <!--<span>$this->idCita</span>-->
-                    <span>$this->nombre</span>
-                </div>
-                <div class='iconos aling-right'>               
-                    <span class ='edit icon-pencil-1'></span>  
-                    <span class ='del icon-trash'></span>  
-                    <span class =''></span>  
-                </div>
-                <div class='servicios $exten'>          
-                    ".$this->printArt($this->servicios)."                   
-                
-                </div> 
-                <div class='note '>
-                ". $this->printNote() ."
-                </div> 											  
-            </div>
-            ";
-        return $this->html ;
+        foreach ($data as $val){
 
+            $a = $val['agenda'];
+
+            $id_time = strtotime( $val['fecha'] . " " . $val['hora'] );
+
+            $rows = ceil($this->tiempoTotal($val['servicios']) / 15) ;
+            $exten = $rows>1? "extend" :'' ; 
+            $show_nota =  empty($this->obs)?'':'show' ;
+            $this->html[$id_time][$a] = "
+                <div id='".$val['idCita']."' class='lbl row_$rows' >
+                    <div id ='".$val['idUsuario']."' class='nombre'>
+                        <span class ='icon-user-1'></span> 
+                        <!--<span>".$val['idCita']."</span>-->
+                        <span>".$val['nombre']."</span>
+                    </div>
+                    <div class='iconos aling-right'>               
+                        <span class ='edit icon-pencil-1'></span>  
+                        <span class ='del icon-trash'></span>  
+                        <span class =''></span>  
+                    </div>
+                    <div class='servicios $rows'>          
+                        ".$this->printArt($val['servicios'])."                   
+                    
+                    </div> 
+                    <div class='note '>".$this->printNote($val['obs'])."</div> 											  
+                </div>
+                ";
+	    }
     }
 
     private function printArt($arr){
@@ -92,11 +135,11 @@ class Lbl {
 
 //AKI :: diseñando la forma de enseñar las notas
 
-    private function printNote(){
-        if (!empty($this->obs)){
+    private function printNote($obs){
+        if (!empty($obs)){
             $html = "
                 <span class ='icon-note'></span> 
-                <span class ='note'>$this->obs</span>
+                <span class ='note'>$obs</span>
                 <span class='iconClass-inside icon-load  animate-spin'></span>
                 <span class='iconClass-inside icon-ok'></span>
             " ; 
@@ -109,26 +152,22 @@ class Lbl {
 
     public function del () {
 
-        $this->conexion() ; 
-
-        $sql  = 'INSERT INTO del_data (IdCita,Agenda,IdUsuario,Fecha,Hora,Obs,UsuarioCogeCita) SELECT IdCita,Agenda,IdUsuario,Fecha,Hora,Obs,UsuarioCogeCita FROM data WHERE IdCita = '.$this->idCita.'; ';
-        $sql .= 'INSERT INTO del_cita (Id,IdCita,Servicio) SELECT Id, IdCita, Servicio FROM cita WHERE IdCita = '.$this->idCita.'; ';
-        $sql .= 'DELETE FROM data WHERE IdCita = '.$this->idCita.'; ';
-        $sql .= 'DELETE FROM cita WHERE IdCita = '.$this->idCita.'; ';
+        $sql  = 'INSERT INTO del_data (idCita,agenda,idUsuario,fecha,hora,obs,UsuarioCogeCita) SELECT idCita,agenda,idUsuario,fecha,hora,obs,UsuarioCogeCita FROM data WHERE idCita = '.$this->idCita.'; ';
+        $sql .= 'INSERT INTO del_cita (Id,idCita,Servicio) SELECT Id, idCita, Servicio FROM cita WHERE idCita = '.$this->idCita.'; ';
+        $sql .= 'DELETE FROM data WHERE idCita = '.$this->idCita.'; ';
+        $sql .= 'DELETE FROM cita WHERE idCita = '.$this->idCita.'; ';
 
         return $this->conn->multi_query($sql) ;
     }
 
-    public function edit () {
-        
-        $this->conexion() ; 
+    public function edit ($idCita) {
 
         $sql = "UPDATE data 
-            SET IdUsuario='$this->user', Obs='$this->note' , Agenda = $this->agenda , Fecha ='$this->fecha' , Hora = '$this->hora' 
-            WHERE IdCita=$this->idCita ; ";
+            SET idUsuario='$this->user', obs='$this->note' , agenda = $this->agenda , fecha ='$this->fecha' , hora = '$this->hora' 
+            WHERE idCita=$this->idCita ; ";
         $sql .=	"DELETE FROM cita WHERE idCita = $this->idCita ;" ;
         foreach ( $ser as $key => $val ) {
-            $sql .= "INSERT INTO cita ( IdCita, Servicio ) VALUES ( $this->idCita , $val );";
+            $sql .= "INSERT INTO cita ( idCita, Servicio ) VALUES ( $this->idCita , $val );";
           }
         
         return $this->conn->multi_query($sql) ;

@@ -15,15 +15,15 @@ $precio = intval(preg_replace('/[^0-9]+/', '', $precio), 10);
 
  if (!empty($id)){
 	$nuevo = false ;
-	$sql="UPDATE articulos SET Codigo = '$codigo',Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia , Baja = 0 WHERE Id = $id" ;
+	$sql="UPDATE articulos SET codigo = '$codigo',descripcion ='$descripcion',tiempo =$tiempo,Precio =$precio,IdFamilia =$familia , Baja = 0 WHERE Id = $id" ;
 }else{
 	$nuevo = true ;
-	$sql = "SELECT * FROM articulos WHERE Codigo LIKE '$codigo'";
+	$sql = "SELECT * FROM articulos WHERE codigo LIKE '$codigo'";
 
 	if ($conn->num($result)<=0){
-		$sql="INSERT INTO articulos (Codigo,Descripcion,Tiempo,Precio,IdFamilia) VALUE ('$codigo','$descripcion',$tiempo,$precio,$familia);";
+		$sql="INSERT INTO articulos (codigo,descripcion,tiempo,Precio,IdFamilia) VALUE ('$codigo','$descripcion',$tiempo,$precio,$familia);";
 	}else{
-		$sql="UPDATE articulos SET Descripcion ='$descripcion',Tiempo =$tiempo,Precio =$precio,IdFamilia =$familia, Baja = 0 WHERE Codigo LIKE '$codigo'" ;
+		$sql="UPDATE articulos SET descripcion ='$descripcion',tiempo =$tiempo,Precio =$precio,IdFamilia =$familia, Baja = 0 WHERE codigo LIKE '$codigo'" ;
 	}
 }
 
@@ -40,7 +40,7 @@ if ($conn->query($sql)){
 		$jsondata['id'] = $conn->id();
 		$_SESSION['SERVICIOS'][]  = array($jsondata['id'] , $codigo , $descripcion , $precio , $tiempo  , $familia, 0 ) ; 
 	}else{
-		//	0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
+		//	0 Id 1 codigo 2 descripcion 3 Precio 4 tiempo 5 IdFamilia 6 Baja
 		//Editar 
 		$jsondata['id'] = $id;
 		foreach ( $_SESSION['SERVICIOS'] as $key => $value ) {

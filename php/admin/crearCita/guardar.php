@@ -17,26 +17,26 @@ function mnsExit($mns){
 }
 function idUsuario($userName){
 	global $conn;
-	$sql = "SELECT usuarios.Id FROM usuarios WHERE usuarios.Nombre LIKE '$userName' LIMIT 1";
+	$sql = "SELECT usuarios.Id FROM usuarios WHERE usuarios.nombre LIKE '$userName' LIMIT 1";
 	$row = $conn->row($sql);
 	return $row[0];
 }
-$result = $conn->row("SELECT * FROM data WHERE Fecha = '$fecha' AND Hora =  '$hora' LIMIT 1 "  ) ;
+$result = $conn->row("SELECT * FROM data WHERE fecha = '$fecha' AND hora =  '$hora' LIMIT 1 "  ) ;
 if ($result <= 1 ){
 	$data['ocupado']=false;
-	$sql= "INSERT INTO data (Agenda,IdUsuario,Fecha,Hora,Obs,UsuarioCogeCita) VALUE ($agenda,$userId,'$fecha', '$hora' ,'$nota',".$_SESSION['id_usuario'].")";
+	$sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,UsuarioCogeCita) VALUE ($agenda,$userId,'$fecha', '$hora' ,'$nota',".$_SESSION['id_usuario'].")";
 	if ($conn->query($sql)){
 		$id_servicio = $conn->id();
 		$data['idCita'] = $id_servicio ;
 		$sql = '';
 		foreach ($servicios as $servicio ) {
-			$sql .= 'INSERT INTO cita (IdCita, Servicio) VALUE ('.$id_servicio.','. $servicio.') ; ';
+			$sql .= 'INSERT INTO cita (idCita, Servicio) VALUE ('.$id_servicio.','. $servicio.') ; ';
 		}
 		$conn->multi_query($sql) ;
 	}
 } else {
 	$data['ocupado']=true;
-	$data['mns']['tile'] = " Hora ocupada " ;
+	$data['mns']['tile'] = " hora ocupada " ;
 	$data['mns']['body'] = " No se pueden reservar dos citas en la misma hora " ;
 }
 //if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");

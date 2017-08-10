@@ -3,12 +3,12 @@ header('Content-Type: application/json');
 include "../../connect/conexion.php";
 $conexion = conexion();
 
-	$sql = "SELECT C.Id, C.IdCita, D.Fecha, C.Hora , A.Descripcion, A.Codigo
-					FROM cita C JOIN data D ON C.IdCita = D.IdCita 
-					INNER JOIN usuarios U ON D.IdUsuario = U.Id 
+	$sql = "SELECT C.Id, C.idCita, D.fecha, C.hora , A.descripcion, A.codigo
+					FROM cita C JOIN data D ON C.idCita = D.idCita 
+					INNER JOIN usuarios U ON D.idUsuario = U.Id 
 					LEFT JOIN articulos A ON C.Servicio = A.Id  
-					WHERE D.IdUsuario = ".  $_GET['user'] ." AND D.Fecha >= CURRENT_DATE() 
-					ORDER BY D.Agenda, D.Fecha, C.Hora";		
+					WHERE D.idUsuario = ".  $_GET['user'] ." AND D.fecha >= CURRENT_DATE() 
+					ORDER BY D.agenda, D.fecha, C.hora";		
 	$result= mysqli_query($conexion,$sql);
 	$data = mysqli_fetch_all($result,MYSQLI_NUM);
 

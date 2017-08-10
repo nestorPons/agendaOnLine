@@ -9,10 +9,10 @@
 			<tr>
 				<th>Opcion</th>
 				<th class="responsive">Num</th>
-				<th>Nombre</th>
+				<th>nombre</th>
 				<th>Telefono</th>
 				<th>Email</th>
-				<th class="responsive">Obs</th>
+				<th class="responsive">obs</th>
 			</tr>
 		<thead>
 		<tbody>

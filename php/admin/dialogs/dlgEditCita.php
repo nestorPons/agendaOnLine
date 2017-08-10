@@ -7,18 +7,21 @@
 			<span class='codigo'></span>
 			<span class='descripcion'></span>
 		</div>
-
+		<div class="iconClass-container icon-left">
+			<input type="text" class="txt" id="id" readonly>
+			<span class="iconClass-inside  icon-angle-right"></span>
+		</div>
 		<div class="iconClass-container icon-left">
 			<input type="text" class="txt" id="nombre" >
 			<span class="iconClass-inside  icon-user-1"></span>
 		</div>
 		<div class="iconClass-container icon-left">
 			<input type="date" class="txt" id="fecha"  >
-			<span class="iconClass-inside  icon-user-1"></span>
+			<span class="iconClass-inside  icon-calendar"></span>
 		</div>
 		<div class="iconClass-container icon-left">
 			<input type="time" class="txt" id="hora"  >
-			<span class="iconClass-inside  icon-user-1"></span>
+			<span class="iconClass-inside  icon-clock"></span>
 		</div>
 		<div id= "codigos"  class="iconClass-container icon-left lst"></div>
 		<div id= "newCodigo"  class="iconClass-container icon-left">

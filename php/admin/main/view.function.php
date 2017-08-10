@@ -1,12 +1,21 @@
 <?php namespace main ;
 
-function view($datosAgenda,$fecha_inicio,$existen_array=false){									
+function view($existen_array=false){									
+	$fecha = Date('Y-m-d') ;
+	
+	$dias = round(MARGEN_DIAS/2);
 
-	$primer_dia_agenda = sumarFecha($fecha_inicio,-MARGEN_DIAS/2);
-	for ($d = 0; $d <= MARGEN_DIAS; $d++){
-		$fecha = sumarFecha($primer_dia_agenda,$d);
+	$fecha_inicio =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
+	$fecha_fin =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
+
+	$lbl = new Lbl();
+	$lbl->loadDates( $fecha_inicio , $fecha_fin ) ; 
+
+	for ($d = 0; $d <= ($dias * 2) ; $d++){
+		$fecha =date ( 'Y-m-d', strtotime ( '+'.$d.' day' , strtotime ( $fecha_inicio ) ) );
 		$id_fecha = str_replace('-','',$fecha);
 		$dia_semana = date('w',strtotime($fecha)) ;
+
 		$array_horas = HORAS[$dia_semana]??false;
 
 		if (empty($existen_array)||array_search($id_fecha,$existen_array)<0){
@@ -14,12 +23,12 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 			<div id="<?= $id_fecha?>" 
 				name="dia[]" 
 				class="dia 
-					<?= $fecha==$fecha_inicio?'activa':'';?>" 
+					<?= $fecha== Date('Y-m-d') ?'activa':'';?>" 
 				diaSemana = "<?= $dia_semana?>" 
 			>
 				<table class = "tablas tablas-general" >	
 					<?php 
-					$h = strtotime('06:45') ;
+					$h = strtotime($fecha . ' 06:45') ;
 					for( $i = 0 ; $i <= 96 ; $i++  ){											
 						$h =  strtotime ( '+15 minute' ,  $h )  ;
 						$str_hora = date('H:i', $h);
@@ -34,25 +43,20 @@ function view($datosAgenda,$fecha_inicio,$existen_array=false){
 							}
 
 							$array = explode(":",$str_hora);
-							$claseHora=$array[1]=='00'?"num resaltado":"num";
+							$clasehora=$array[1]=='00'?"num resaltado":"num";
 							
 							?>
 							<tr id='<?= $h?>' class="hora h<?= $h . ' '.$disabled?> " data-hour='<?= $str_hora?>'>
-								<td class="<?= $claseHora ?> "><?= $str_hora?> </td>
+								<td class="<?= $clasehora ?> "><?= $str_hora?> </td>
 								<?php
 								for ($a=1;$a<=CONFIG['NumAg'];$a++){
-									
-									$datos = $datosAgenda[$id_fecha][$a][$h] ?? null;
-
+									$label = $lbl->html[$h][$a] ?? false ;
 									?>
-									<td class="celda  <?php  if( $datos !== null  ) echo'doble ' ; echo $class?> " agenda="<?= $a?>" >
+									<td class="celda  <?php  if( $label ) echo'doble ' ; echo $class?> " agenda="<?= $a?>" >
 										<?php
-											if( $datos !== null  ){
-												$lbl = new Lbl($datos);
-												echo $lbl->paint() ; 
-												
-												unset( $lbl );
-											}
+																							
+										echo $label;
+
 										?>
 									</td>
 									<?php

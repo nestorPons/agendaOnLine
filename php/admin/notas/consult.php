@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 include "../../connect/conexion.php";
-$sql = "SELECT Fecha, Nota FROM notas";
+$sql = "SELECT fecha, Nota FROM notas";
 $result	= mysqli_query($conexion,$sql);
 $array = mysqli_fetch_all($result, MYSQLI_NUM);
 foreach ($array as $clave => $valor){

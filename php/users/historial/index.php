@@ -1,12 +1,12 @@
 <table id="tableHistory" class="tablas-group">
 <?php
-	$sql = 'SELECT C.Id, C.IdCita, D.Fecha, C.Hora , A.Descripcion, C.Servicio
-					FROM cita C JOIN data D ON C.IdCita = D.IdCita 
-					INNER JOIN usuarios U ON D.IdUsuario = U.Id 
+	$sql = 'SELECT C.Id, C.idCita, D.fecha, C.hora , A.descripcion, C.Servicio
+					FROM cita C JOIN data D ON C.idCita = D.idCita 
+					INNER JOIN usuarios U ON D.idUsuario = U.Id 
 					LEFT JOIN articulos A ON C.Servicio = A.Id  
-					WHERE D.IdUsuario = '.  $_SESSION['id_usuario'] .' AND D.Fecha >= CURRENT_DATE() 
-					GROUP BY C.IdCita, C.Id 		
-					ORDER BY D.Agenda, D.Fecha, C.Hora';
+					WHERE D.idUsuario = '.  $_SESSION['id_usuario'] .' AND D.fecha >= CURRENT_DATE() 
+					GROUP BY C.idCita, C.Id 		
+					ORDER BY D.agenda, D.fecha, C.hora';
 					
 	$result= mysqli_query($conexion,$sql);
 	$data = mysqli_fetch_all($result,MYSQLI_NUM);

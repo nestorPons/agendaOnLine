@@ -5,7 +5,7 @@
 
 		foreach ($_SESSION['SERVICIOS'] as $row){
 		
-			// 0 Id 1 Codigo 2 Descripcion 3 Precio 4 Tiempo 5 IdFamilia 6 Baja
+			// 0 Id 1 codigo 2 descripcion 3 Precio 4 tiempo 5 IdFamilia 6 Baja
 			include('rowServicios.php') ;
 		}
 		?>

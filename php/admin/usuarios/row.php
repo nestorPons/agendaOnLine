@@ -1,5 +1,5 @@
 <?php 
-// 0 Id 1 Nombre 2 Email 3 Pass 4 Tel 5 Admin 6 Obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 block
+// 0 Id 1 nombre 2 Email 3 Pass 4 Tel 5 Admin 6 obs 7 cookie 8 Idioma 9 dateReg 10 dateBaja 11 block
 $id = $row[0]??$_GET['id'] ;
 $nombre = $row[1]??$_GET['nombre'] ; 
 $email = $row[2]??$_GET['email'] ; 

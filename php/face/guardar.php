@@ -9,7 +9,7 @@ $id= $_GET['id'];
 if ($email=="undefined"){
 		header ("location:../index.php");
 }else{
-	$sql="INSERT INTO usuarios (Id,Nombre,Email,Pass,Tel,Admin,Obs) VALUE ('','$nombre','$email','','','0','$id');";
+	$sql="INSERT INTO usuarios (Id,nombre,Email,Pass,Tel,Admin,obs) VALUE ('','$nombre','$email','','','0','$id');";
 	mysqli_query($conexion,$sql);
 	$sql="SELECT * FROM usuarios WHERE Email = '$email'";
 	$result=mysqli_query($conexion,$sql);

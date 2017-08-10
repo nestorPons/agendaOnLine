@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `agendas`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `agendas` (
   `Id` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Mostrar` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Id` (`Id`),
@@ -41,14 +41,14 @@ DROP TABLE IF EXISTS `articulos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `articulos` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Codigo` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT '',
-  `Descripcion` varchar(50) DEFAULT NULL,
+  `codigo` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT '',
+  `descripcion` varchar(50) DEFAULT NULL,
   `Precio` double DEFAULT '0',
-  `Tiempo` int(4) DEFAULT '0',
+  `tiempo` int(4) DEFAULT '0',
   `IdFamilia` tinyint(4) DEFAULT NULL,
   `Baja` tinyint(1) NOT NULL,
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `Codigo` (`Codigo`),
+  UNIQUE KEY `codigo` (`codigo`),
   KEY `IdFamilia` (`IdFamilia`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -62,13 +62,13 @@ DROP TABLE IF EXISTS `cita`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cita` (
   `Id` int(10) NOT NULL AUTO_INCREMENT,
-  `IdCita` int(10) NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` int(11) NOT NULL,
   PRIMARY KEY (`Id`),
-  KEY `IdCita` (`IdCita`),
+  KEY `idCita` (`idCita`),
   KEY `Servicio` (`Servicio`),
-  CONSTRAINT `DaTa` FOREIGN KEY (`IdCita`) REFERENCES `data` (`IdCita`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `DaTa` FOREIGN KEY (`idCita`) REFERENCES `data` (`idCita`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -99,14 +99,14 @@ DROP TABLE IF EXISTS `data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data` (
-  `IdCita` int(10) NOT NULL AUTO_INCREMENT,
-  `Agenda` tinyint(2) NOT NULL DEFAULT '1',
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Obs` text COLLATE utf8_spanish2_ci,
+  `idCita` int(10) NOT NULL AUTO_INCREMENT,
+  `agenda` tinyint(2) NOT NULL DEFAULT '1',
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `obs` text COLLATE utf8_spanish2_ci,
   `UsuarioCogeCita` int(11) DEFAULT NULL,
-  PRIMARY KEY (`IdCita`),
-  KEY `IdUsuario` (`IdUsuario`)
+  PRIMARY KEY (`idCita`),
+  KEY `idUsuario` (`idUsuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=281 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -119,8 +119,8 @@ DROP TABLE IF EXISTS `del_cita`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `del_cita` (
   `Id` int(10) NOT NULL DEFAULT '0',
-  `IdCita` int(10) NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` int(11) NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -134,14 +134,14 @@ DROP TABLE IF EXISTS `del_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `del_data` (
-  `IdCita` int(10) NOT NULL DEFAULT '0',
-  `Agenda` tinyint(2) NOT NULL DEFAULT '1',
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Obs` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
+  `idCita` int(10) NOT NULL DEFAULT '0',
+  `agenda` tinyint(2) NOT NULL DEFAULT '1',
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `obs` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
   `UsuarioCogeCita` int(11) DEFAULT NULL,
-  `FechaDel` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`IdCita`)
+  `fechaDel` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idCita`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -154,10 +154,10 @@ DROP TABLE IF EXISTS `even`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `even` (
   `Id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `IdUsuario` int(11) DEFAULT NULL,
-  `IdCita` int(11) DEFAULT NULL,
+  `idUsuario` int(11) DEFAULT NULL,
+  `idCita` int(11) DEFAULT NULL,
   `IdEven` tinyint(4) DEFAULT NULL,
-  `Fecha` datetime DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
   `Admin` tinyint(1) DEFAULT NULL,
   `agenda` tinyint(4) NOT NULL,
   PRIMARY KEY (`Id`),
@@ -175,7 +175,7 @@ DROP TABLE IF EXISTS `eventos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `eventos` (
   `IdEven` tinyint(4) NOT NULL,
-  `Nombre` text NOT NULL,
+  `nombre` text NOT NULL,
   PRIMARY KEY (`IdEven`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -189,7 +189,7 @@ DROP TABLE IF EXISTS `familias`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `familias` (
   `IdFamilia` tinyint(1) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(15) NOT NULL,
+  `nombre` varchar(15) NOT NULL,
   `Mostrar` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`IdFamilia`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
@@ -204,8 +204,8 @@ DROP TABLE IF EXISTS `festivos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `festivos` (
   `Id` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
-  `Fecha` date NOT NULL,
+  `nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
+  `fecha` date NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -219,9 +219,9 @@ DROP TABLE IF EXISTS `horarios`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `horarios` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` char(10) NOT NULL DEFAULT 'Horario 1',
-  `FechaIni` int(4) unsigned zerofill DEFAULT '0101',
-  `FechaFin` int(4) unsigned zerofill DEFAULT '1231',
+  `nombre` char(10) NOT NULL DEFAULT 'horario 1',
+  `fechaIni` int(4) unsigned zerofill DEFAULT '0101',
+  `fechaFin` int(4) unsigned zerofill DEFAULT '1231',
   `h11` tinyint(1) NOT NULL DEFAULT '1',
   `h12` tinyint(1) DEFAULT '1',
   `h13` tinyint(1) DEFAULT '1',
@@ -747,7 +747,7 @@ DROP TABLE IF EXISTS `notas`;
 CREATE TABLE `notas` (
   `Id` int(50) NOT NULL AUTO_INCREMENT,
   `Nota` longtext CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `Fecha` date NOT NULL,
+  `fecha` date NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -777,12 +777,12 @@ DROP TABLE IF EXISTS `usuarios`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usuarios` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Email` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `Pass` varchar(50) CHARACTER SET latin1 NOT NULL,
   `Tel` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
-  `Obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Block` tinyint(1) DEFAULT NULL,
   `Baja` tinyint(1) NOT NULL DEFAULT '0',
   `Active` tinyint(4) NOT NULL DEFAULT '0',

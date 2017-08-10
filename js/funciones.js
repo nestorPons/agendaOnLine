@@ -1,8 +1,8 @@
 var xhr= null;
 
 var ruta = window.location.pathname;
-var arrayNombre = new Array;
-arrayNombre = ruta.split("/");
+var arraynombre = new Array;
+arraynombre = ruta.split("/");
 var nombreEmpresa = $('body').data('empresa');
 
 var horarios = new Array();
@@ -39,13 +39,13 @@ jQuery.serializeForm = function(form){
 }
 var Fecha = {
 	actual: fechaActual(),
-	general: formatoFecha(fechaActual(),'sql'),
-	id:  formatoFecha(fechaActual(),'number'), //inicializo con fecha actual pero es un id.
-	sql: function(fecha){return formatoFecha(fecha,'sql')},
-	print: function(fecha){return formatoFecha(fecha,'print')},
-	md: function(fecha){return formatoFecha(fecha,'md')},
-	number: function(fecha){return formatoFecha(fecha,'number')},
-	calcular: function(dia,fecha){return calcularFecha(dia,fecha)},
+	general: formatofecha(fechaActual(),'sql'),
+	id:  formatofecha(fechaActual(),'number'), //inicializo con fecha actual pero es un id.
+	sql: function(fecha){return formatofecha(fecha,'sql')},
+	print: function(fecha){return formatofecha(fecha,'print')},
+	md: function(fecha){return formatofecha(fecha,'md')},
+	number: function(fecha){return formatofecha(fecha,'number')},
+	calcular: function(dia,fecha){return calcularfecha(dia,fecha)},
 	diaSemana: function(fecha){
 	    var fecha = Fecha.sql(fecha);
 		var mdy = fecha.split('-');
@@ -56,11 +56,11 @@ var Fecha = {
 		var f2  = $.isEmpty(f2)?this.actual:this.sql(f2);
 		var f1 = this.sql(f1);
 	
-		var aFecha1 = f1.split('-');
-		var aFecha2 = f2.split('-');
-		var fFecha1 = Date.UTC(aFecha1[0],aFecha1[1]-1,aFecha1[2]);
-		var fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha2[2]);
-		var dif = fFecha1 - fFecha2 	;
+		var afecha1 = f1.split('-');
+		var afecha2 = f2.split('-');
+		var ffecha1 = Date.UTC(afecha1[0],afecha1[1]-1,afecha1[2]);
+		var ffecha2 = Date.UTC(afecha2[0],afecha2[1]-1,afecha2[2]);
+		var dif = ffecha1 - ffecha2 	;
 
 		return Math.floor(dif / (1000 * 60 * 60 * 24));
 	},
@@ -124,7 +124,7 @@ var validar = {
 						$.Notify({
 							id: 'lbl'+$(this).attr('id'),
 							type: 'alert',
-							caption: 'Nombre de usuario',
+							caption: 'nombre de usuario',
 							content: 'El nombre tiene que tener un mínimo de 7 caracteres. ',
 							icon: "icon-user-times"
 						})
@@ -424,7 +424,7 @@ var notify = {
 		})
 	},
 }
-function formatoFecha (fechaTxt,formatOut){
+function formatofecha (fechaTxt,formatOut){
 
 	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
 
@@ -520,10 +520,10 @@ function cargarDatepicker(callback){
 		defaultDate: Fecha.print(Fecha.general)|| new Date(),
 		showAnim: 'blind',
 	});
-	$dp.each(function(){$(this).val(formatoFecha(Fecha.general,'print'))})
+	$dp.each(function(){$(this).val(formatofecha(Fecha.general,'print'))})
 	typeof callback == "function" && callback();
 };
-function calcularFecha(days, fecha){
+function calcularfecha(days, fecha){
 	var fecha = fecha||Fecha.general;
 	fecha= "undefined"==fecha?Fecha.general:fecha;
 	var mdy = fecha.split('-');
@@ -550,14 +550,14 @@ function colorearMenuDiasSemana(arg){
 	var fecha = arg||Fecha.general;
 	$('.highlighted').removeClass('highlighted');
 	var f = new Date();
-	f = formatoFecha(fecha);
+	f = formatofecha(fecha);
 	var d = f.getDay() !=0?f.getDay():7;
 	$("#mainLstDiasSemana #mainMenu"+d).addClass("highlighted");
 
 	$("#lstDiasSemana").val(d);
 
 	//coloreo rojo festivos en datepicker
-	var fes = formatoFecha(fecha,'md');
+	var fes = formatofecha(fecha,'md');
 	if(d==7||$.inArray(fes,festivos.year)!=-1)
 		$('.datepicker').css('color','#e04747')
 	else
@@ -760,7 +760,7 @@ function existeUrl(url) {
    return http.status!=404;
 }
 function slideDias(contenedor,dir,callback){
-	var idFecha = Fecha.number(Fecha.general);
+	var idfecha = Fecha.number(Fecha.general);
 	var 	dir= dir||0;
 	if (dir>0||dir=='right'){
 		var ent = 'right';

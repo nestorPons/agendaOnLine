@@ -5,7 +5,7 @@ class Conexion {
 	private $user = 'user' ;
 	private $pass = '0Z8AHyYDKN0hUYik'  ;
 	
-	private $result ; 
+	public $result ; 
 	private $conexion ; 
 
 	function __construct( $bd ) {
@@ -20,8 +20,8 @@ class Conexion {
 		@mysqli_query("SET NAMES 'utf8'") ;
 	}
 	public function query($sql){
-		$result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
-		return $result ;
+		$this->result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+		return $this->result ;
 	}
 
 	public function multi_query ($sql) {

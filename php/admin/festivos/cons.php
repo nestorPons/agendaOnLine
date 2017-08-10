@@ -6,7 +6,7 @@ $conexion = conexion();
 $sql="SELECT * FROM festivos";
 $cnsFestivos = mysqli_query($conexion, $sql);
 while ($row=mysqli_fetch_array($cnsFestivos)){
-	$date =new DateTime($row['Fecha']);
+	$date =new DateTime($row['fecha']);
 	$date = date_format($date,"md");
 	$jd[]=$date;	
 }

@@ -58,7 +58,7 @@ function add_db($bd){
 			$idioma = "ES";
 			
 			$conexion =  mysqli_connect($servername,$username,$password, "aol_accesos") or error("Error de conexion a aol_accesos");
-			$sql = "INSERT INTO empresas (Nombre,NIF,NomUser,Dir,Poblacion,Pais,CP,Email,Web,Tel,Fecha,Sector,Idioma,Plan,NumAg,Horarios,UltimoAcceso) 
+			$sql = "INSERT INTO empresas (nombre,NIF,NomUser,Dir,Poblacion,Pais,CP,Email,Web,Tel,fecha,Sector,Idioma,Plan,NumAg,horarios,UltimoAcceso) 
 				VALUE ('$empresa','$nif','$nom','$dir','$poblacion','','$cp','$email','$web','$tel','$fecha',$sector,'$idioma',1,1,1,'". date("d-m-Y H:i:s")."');";
 			if (mysqli_query($conexion,$sql)){
 				$id = mysqli_insert_id($conexion);
@@ -66,7 +66,7 @@ function add_db($bd){
 				
 				//Todas las consultas para inicializar las tablas que vienen por defecto
 				
-				$sql = "INSERT INTO usuarios (Nombre,Email,Pass,Tel,Admin,dateBaja)
+				$sql = "INSERT INTO usuarios (nombre,Email,Pass,Tel,Admin,dateBaja)
 				VALUE ('$nom','$email','$pass','$tel',1,'$fecha');";
 				$sql.= "INSERT INTO config (idEmpresa) VALUE ($id);";
 				$sql.= "INSERT INTO config_css () VALUES ();";

@@ -31,7 +31,7 @@ if (window.METRO_SHOW_TYPE === undefined) window.METRO_SHOW_TYPE = 'slide';
 if (window.METRO_DEBUG === undefined) window.METRO_DEBUG = true;
 if (window.METRO_CALENDAR_WEEK_START === undefined) window.METRO_CALENDAR_WEEK_START = 0;
 
-window.canObserveMutation = 'MutationObserver' in window;
+window.canobserveMutation = 'Mutationobserver' in window;
 
 String.prototype.isUrl = function () {
 var regexp = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
@@ -1251,7 +1251,7 @@ $.Metro.init = function(){
     $.Metro.initWidgets();
 
     if (window.METRO_AUTO_REINIT) {
-        if (!window.canObserveMutation) {
+        if (!window.canobserveMutation) {
             var originalDOM = $('body').html(),
                 actualDOM;
 
@@ -1350,7 +1350,7 @@ $.Metro.init = function(){
             };
 
             //console.log($(document));
-            observer = new MutationObserver(observerCallback);
+            observer = new Mutationobserver(observerCallback);
             observer.observe(document, observerOptions);
         }
     }

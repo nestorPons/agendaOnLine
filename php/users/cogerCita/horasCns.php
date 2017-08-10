@@ -10,7 +10,7 @@ for($d=0;$d<MARGEN_DIAS;$d++){
 	
 	$sql = "SELECT * FROM horarios WHERE '".date( 'md' ,  $fecha)."' BETWEEN horarios.fechaIni AND horarios.fechaFin";
 	$rows = mysqli_fetch_assoc(mysqli_query($conexion,$sql));
-	unset($rows['Id'],$rows['Nombre'],$rows['FechaIni'],$rows['FechaFin']);
+	unset($rows['Id'],$rows['nombre'],$rows['fechaIni'],$rows['fechaFin']);
 	
 	
 	foreach ($rows	as $clave=>$valor) {
@@ -18,7 +18,7 @@ for($d=0;$d<MARGEN_DIAS;$d++){
 			$horas[$key][substr($clave, 2)]=(int)$valor[0];
 	}		
 
-	$sql='SELECT C.Hora FROM cita C JOIN data D ON C.IdCita = D.IdCita WHERE D.Fecha = "'.date('Y-m-d',$fecha).'" AND Agenda ='.$_GET['a'];
+	$sql='SELECT C.hora FROM cita C JOIN data D ON C.idCita = D.idCita WHERE D.fecha = "'.date('Y-m-d',$fecha).'" AND agenda ='.$_GET['a'];
 	$result	= mysqli_query($conexion,$sql);
 	$datos = mysqli_fetch_all($result, MYSQLI_NUM);
 	

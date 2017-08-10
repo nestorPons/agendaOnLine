@@ -1,6 +1,6 @@
 <form id="usuarioFrm" >	
 	<?php 
-	$sql = "SELECT Nombre, Email, Tel FROM usuarios WHERE Id = " . $_SESSION['id_usuario'];
+	$sql = "SELECT nombre, Email, Tel FROM usuarios WHERE Id = " . $_SESSION['id_usuario'];
 	if($result= mysqli_query($conexion,$sql)){
 		if ($row = mysqli_fetch_row($result)){
 			$nombre = $row[0];

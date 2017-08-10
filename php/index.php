@@ -45,7 +45,7 @@ function srcLogo(){
 ?>
 <!DOCTYPE html>
 <html lang="es" ><head>
-<title>Agenda OnLine</title>
+<title>agenda OnLine</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -59,7 +59,7 @@ function srcLogo(){
 		<a href= "<?php echo CONFIG['Web']; ?>">
 			<img id="logo" src="<?php echo srcLogo()?>"  width=64>
 		</a>
-		<h1 class="heading">Agenda <?php if(isset($nombre_empresa)){echo $nombre_empresa;}?></span></h1>
+		<h1 class="heading">agenda <?php if(isset($nombre_empresa)){echo $nombre_empresa;}?></span></h1>
 
 		<form id="loginUsuario" method="post" action="../../php/validar.php"  defaultbutton="Entrar"
 			data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña."
@@ -105,7 +105,7 @@ function srcLogo(){
 	<section class="login about">
 		<center>
 			<p class="about-author">
-				&copy; 2016 <a href="https://www.agendaonline.es" target="_blank">AgendaOnLine v5.1</a>
+				&copy; 2016 <a href="https://www.agendaonline.es" target="_blank">agendaOnLine v5.1</a>
 				Creado por Néstor Pons
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>

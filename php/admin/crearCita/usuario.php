@@ -1,5 +1,5 @@
 
-<div id='selAgendas'>
+<div id='selagendas'>
 	<?php 
 		$agenda[0]=1;
 		for ($i=1;$i<=$_SESSION['CONFIG']['NumAg'];$i++){
@@ -7,8 +7,8 @@
 			?>
 			<label  for="agenda<?=$i?>">
 				<input type='radio' name="agenda[]"  id="agenda<?=$i?>" value='<?=$i?>' <?= $checked?>>
-				<span id="lblAgenda<?=$i?>">
-				<?= empty($row[0])?"Agenda $i":$_SESSION['AGENDAS'][0]['Nombre'];?>
+				<span id="lblagenda<?=$i?>">
+				<?= empty($row[0])?"agenda $i":$_SESSION['AGENDAS'][0]['nombre'];?>
 				</span>
 			</label>
 			<?php

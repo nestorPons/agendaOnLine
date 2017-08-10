@@ -3,9 +3,9 @@ include "connect/conexion.php";
 
 if (isset($_GET['idUsuario']))	$idUsuario = $_GET['idUsuario'];
 if (isset($_GET['apellidos'])) {
-	$Nombre = Trim($_GET["nombre"])  . " " . (Trim($_GET['apellidos']));
+	$nombre = Trim($_GET["nombre"])  . " " . (Trim($_GET['apellidos']));
 }else{
-	$Nombre = Trim($_GET["nombre"]) ;
+	$nombre = Trim($_GET["nombre"]) ;
 }
 $Email  = Trim($_GET["email"]);
 	
@@ -19,7 +19,7 @@ $Email  = Trim($_GET["email"]);
 		$usuario = htmlentities($_GET['usuario'], ENT_QUOTES,'UTF-8');
 		$email    = htmlentities($_GET['email'], ENT_QUOTES,'UTF-8');
 
-	if(mysqli_query($conexion,"INSERT INTO usuarios (Id,Nombre,Email,Pass,Tel,Admin,Obs) VALUE ('','$usuario','$email','i3468294979','','0','Fb');")){
+	if(mysqli_query($conexion,"INSERT INTO usuarios (Id,nombre,Email,Pass,Tel,Admin,obs) VALUE ('','$usuario','$email','i3468294979','','0','Fb');")){
 		$_SESSION['id_usuario'] = $row_login["Id"];
 		registrarEvento(3, 0, $row_login["Id"],0); 
 		header("Location: ../index.html");

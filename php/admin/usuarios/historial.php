@@ -10,11 +10,11 @@ $id = $_GET['id'];
 
 $fchIni =date ( 'Y-m-d', strtotime ( '-'.$d.' '.$t , strtotime ( $fecha ) ) );
 
-$sql = "SELECT C.Id, D.Agenda, D.IdCita, D.IdUsuario, D.Obs, C.Hora , D.Fecha , A.Codigo 
-FROM cita C JOIN data D ON C.IdCita = D.IdCita 
+$sql = "SELECT C.Id, D.agenda, D.idCita, D.idUsuario, D.obs, C.hora , D.fecha , A.codigo 
+FROM cita C JOIN data D ON C.idCita = D.idCita 
 LEFT JOIN articulos A ON C.Servicio = A.Id  
-WHERE IdUsuario = $id AND D.Fecha BETWEEN '$fchIni' AND '$fecha' 
-ORDER BY D.Fecha, D.Agenda, C.Hora"; 
+WHERE idUsuario = $id AND D.fecha BETWEEN '$fchIni' AND '$fecha' 
+ORDER BY D.fecha, D.agenda, C.hora"; 
 
 $sql = preg_replace("/\r\n+|\r+|\n+|\t+/i", "", $sql);
 

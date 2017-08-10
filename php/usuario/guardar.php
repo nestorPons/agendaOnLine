@@ -9,11 +9,11 @@ $pass2 = $_POST["pass2"]??false;
 $nombre = trim($_POST['nombre'])??false;
 $email = trim($_POST['email'])??false;
 $tel = $_POST['tel']??0;
-$empresa = CONFIG['Nombre'];
+$empresa = CONFIG['nombre'];
 $rsp['success'] = false;
 
 if ($pass1==$pass2){
-	$sql = "INSERT INTO usuarios (Nombre,Email,Pass,dateReg,Tel) VALUE ('$nombre','$email','$pass1','" . date('Y-m-d') ."','$tel');";
+	$sql = "INSERT INTO usuarios (nombre,Email,Pass,dateReg,Tel) VALUE ('$nombre','$email','$pass1','" . date('Y-m-d') ."','$tel');";
 	$rsp['sql']=$sql;
 	if(mysqli_query($conexion,$sql)){					
 		$id = mysqli_insert_id($conexion);
@@ -26,7 +26,7 @@ if ($pass1==$pass2){
 			
 			$asunto = "Confirmacion de usuario";//Puedes cambiar el asunto del mensaje desde aqui
 			//Este sería el cuerpo del mensaje
-			$mensaje = "<html><head></head><body> Email de confirmación en para la AgendaOnLine de $empresa </br>
+			$mensaje = "<html><head></head><body> Email de confirmación en para la agendaOnLine de $empresa </br>
 			Para confirmar su registro pulse en el siguiente link: </br>
 			<a href='".$_SERVER['SERVER_NAME']."/$empresa/confirmacion.html?id=$id'>Confirmacion</a>
 			</body></html>;";

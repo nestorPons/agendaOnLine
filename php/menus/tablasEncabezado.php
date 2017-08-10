@@ -1,19 +1,19 @@
 <div id="tablasEncabezado">
 	<?php
 	
-	$nombreAgenda = $conn->all("SELECT Nombre FROM agendas");
+	$nombreagenda = $conn->all("SELECT nombre FROM agendas");
 
 	if (!$_SESSION['esMobil']){ ?>
 		<table class = "tablas" >	
 			<thead>
 				<tr>
-					<th class='num'>Hora</th>
+					<th class='num'>hora</th>
 					<?php
 					for ($a=0;$a<CONFIG['NumAg'];$a++){
 						?>
 						<th class='aling-center'>
-							<span id ="nombreAgenda<?php echo$a+1?>" class ="nombreAgenda" name="nombreAgenda[]" data-agenda="<?php echo $a ?>" >
-								<?php echo empty($nombreAgenda[$a][0])?"Agenda $a":$nombreAgenda[$a][0]; ?>
+							<span id ="nombreagenda<?php echo$a+1?>" class ="nombreagenda" name="nombreagenda[]" data-agenda="<?php echo $a ?>" >
+								<?php echo empty($nombreagenda[$a][0])?"agenda $a":$nombreagenda[$a][0]; ?>
 							</span>
 						</th>
 						<?php
@@ -32,7 +32,7 @@
 					<li>
 						<a href="">
 						<?php
-						echo empty($nombreAgenda[$a-1][0])?"Agenda $a":$nombreAgenda[$a-1][0]; 
+						echo empty($nombreagenda[$a-1][0])?"agenda $a":$nombreagenda[$a-1][0]; 
 						?>
 						</a>
 					</li>

@@ -26,7 +26,7 @@ include 'core.php';
 <link rel="stylesheet" href="../../css/jquery-ui.min.css">
 <link rel="stylesheet" href="../../css/metro.css">
 <link rel="stylesheet" href="../../fontello/css/iconos.css">
-<link rel="stylesheet" href="../../empresas/<?php echo $_SESSION['bd']?>/estilos.css">
+<link rel="stylesheet" href="../../empresas/<?= $_SESSION['bd']?>/estilos.css">
 
 <script>
 	document.festivos = <?=  json_encode (festivos())?>;
@@ -37,9 +37,9 @@ include 'core.php';
 	document.mainStatus = <?= CONFIG['ShowRow']?> ;
 </script>
 <script  type="text/javascript" src="../../js/start.js"></script>
-<title>Agenda onLine</title>
+<title>agenda onLine</title>
 
-</head><body data-empresa="<?= CONFIG['Nombre']?>" >
+</head><body data-empresa="<?=$_SESSION['bd']?>" >
 
 	<?php include "../menus/menuAdmin.php"?>
 

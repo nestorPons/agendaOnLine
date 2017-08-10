@@ -19,13 +19,13 @@ $('#btnLogin').click(function(){
 		btnLoad.status = false;
 	}
 })
-$("#solicitarAgenda").submit(function( e ) {
+$("#solicitaragenda").submit(function( e ) {
 	e.preventDefault();
-	var formulario = $("#solicitarAgenda").not('#fakePass').serialize();
+	var formulario = $("#solicitaragenda").not('#fakePass').serialize();
 	$.ajax({
 		type: "POST",
 		data: formulario,
-		url: "php/crearAgenda.php",
+		url: "php/crearagenda.php",
 		dataType: "json",
 	}).done(function(mns){
 		if(mns.success){

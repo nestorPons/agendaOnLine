@@ -25,7 +25,7 @@ function srcLogo(){
 <html lang="es"><head>
 <link rel="icon" href="img/favicon.ico">
 <meta name="description" content="La agenda para los centros de belleza, peluquerias, centros de masaje, terapeuticos y más.">
-<title>Agenda On Line</title>
+<title>agenda On Line</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel='shortcut icon' href='../img/favicon.ico' >

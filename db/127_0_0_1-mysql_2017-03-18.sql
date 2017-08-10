@@ -30,7 +30,7 @@ CREATE TABLE `accesos` (
   `Id` int(11) NOT NULL,
   `Plan` tinyint(4) NOT NULL DEFAULT '1',
   `NumAg` tinyint(4) NOT NULL DEFAULT '1',
-  `Horarios` tinyint(4) NOT NULL DEFAULT '1',
+  `horarios` tinyint(4) NOT NULL DEFAULT '1',
   `UltimoAcceso` date NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -38,7 +38,7 @@ CREATE TABLE `accesos` (
 -- Dumping data for table `accesos`
 --
 
-INSERT INTO `accesos` (`Id`, `Plan`, `NumAg`, `Horarios`, `UltimoAcceso`) VALUES
+INSERT INTO `accesos` (`Id`, `Plan`, `NumAg`, `horarios`, `UltimoAcceso`) VALUES
 (1, 1, 2, 2, '0000-00-00');
 
 -- --------------------------------------------------------
@@ -49,7 +49,7 @@ INSERT INTO `accesos` (`Id`, `Plan`, `NumAg`, `Horarios`, `UltimoAcceso`) VALUES
 
 CREATE TABLE `empresas` (
   `Id` int(11) NOT NULL,
-  `Nombre` text NOT NULL,
+  `nombre` text NOT NULL,
   `NIF` text NOT NULL,
   `NomUser` text NOT NULL,
   `Dir` text NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `empresas` (
   `Email` text NOT NULL,
   `Web` text NOT NULL,
   `Tel` text NOT NULL,
-  `Fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sector` tinyint(4) NOT NULL,
   `Idioma` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -68,7 +68,7 @@ CREATE TABLE `empresas` (
 -- Dumping data for table `empresas`
 --
 
-INSERT INTO `empresas` (`Id`, `Nombre`, `NIF`, `NomUser`, `Dir`, `Poblacion`, `Pais`, `CP`, `Email`, `Web`, `Tel`, `Fecha`, `Sector`, `Idioma`) VALUES
+INSERT INTO `empresas` (`Id`, `nombre`, `NIF`, `NomUser`, `Dir`, `Poblacion`, `Pais`, `CP`, `Email`, `Web`, `Tel`, `fecha`, `Sector`, `Idioma`) VALUES
 (1, 'la_Plantilla', '', 'admin', 'ramon MAmon', '', '', '', 'admin@admin', 'www.miWeb.es', '123456789', '2017-02-04 07:24:35', 1, 1);
 
 -- --------------------------------------------------------
@@ -79,14 +79,14 @@ INSERT INTO `empresas` (`Id`, `Nombre`, `NIF`, `NomUser`, `Dir`, `Poblacion`, `P
 
 CREATE TABLE `idiomas` (
   `Id` tinyint(4) NOT NULL,
-  `Nombre` text NOT NULL
+  `nombre` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `idiomas`
 --
 
-INSERT INTO `idiomas` (`Id`, `Nombre`) VALUES
+INSERT INTO `idiomas` (`Id`, `nombre`) VALUES
 (1, 'ES'),
 (2, 'CAT'),
 (3, 'EN');
@@ -156,7 +156,7 @@ ALTER TABLE `accesos`
 
 CREATE TABLE `agendas` (
   `Id` tinyint(4) NOT NULL,
-  `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Mostrar` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -164,7 +164,7 @@ CREATE TABLE `agendas` (
 -- Dumping data for table `agendas`
 --
 
-INSERT INTO `agendas` (`Id`, `Nombre`, `Mostrar`) VALUES
+INSERT INTO `agendas` (`Id`, `nombre`, `Mostrar`) VALUES
 (1, 'Peluquería', 1),
 (2, 'Estétetica', 1);
 
@@ -176,10 +176,10 @@ INSERT INTO `agendas` (`Id`, `Nombre`, `Mostrar`) VALUES
 
 CREATE TABLE `articulos` (
   `Id` int(11) NOT NULL,
-  `Codigo` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT '',
-  `Descripcion` varchar(50) DEFAULT NULL,
+  `codigo` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT '',
+  `descripcion` varchar(50) DEFAULT NULL,
   `Precio` double DEFAULT '0',
-  `Tiempo` int(4) DEFAULT '0',
+  `tiempo` int(4) DEFAULT '0',
   `IdFamilia` tinyint(4) DEFAULT NULL,
   `Baja` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
@@ -188,7 +188,7 @@ CREATE TABLE `articulos` (
 -- Dumping data for table `articulos`
 --
 
-INSERT INTO `articulos` (`Id`, `Codigo`, `Descripcion`, `Precio`, `Tiempo`, `IdFamilia`, `Baja`) VALUES
+INSERT INTO `articulos` (`Id`, `codigo`, `descripcion`, `Precio`, `tiempo`, `IdFamilia`, `Baja`) VALUES
 (1, 'adsada', 'asdsads', 0, 23, 1, 0),
 (2, 'PAO', 'descripcion pao', 0, 50, 1, 0),
 (3, 'HOLAxcz', 'Hola des', 0, 26, 1, 0),
@@ -207,8 +207,8 @@ INSERT INTO `articulos` (`Id`, `Codigo`, `Descripcion`, `Precio`, `Tiempo`, `IdF
 
 CREATE TABLE `cita` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=604 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
@@ -216,7 +216,7 @@ CREATE TABLE `cita` (
 -- Dumping data for table `cita`
 --
 
-INSERT INTO `cita` (`Id`, `IdCita`, `Hora`, `Servicio`) VALUES
+INSERT INTO `cita` (`Id`, `idCita`, `hora`, `Servicio`) VALUES
 (1, 1, 21, 10),
 (2, 2, 41, 1),
 (23, 7, 13, 1),
@@ -615,11 +615,11 @@ INSERT INTO `config` (`idEmpresa`, `sendMailAdmin`, `sendMailUser`, `MinTime`, `
 --
 
 CREATE TABLE `data` (
-  `IdCita` int(10) NOT NULL,
-  `Agenda` tinyint(2) NOT NULL DEFAULT '1',
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Obs` text COLLATE utf8_spanish2_ci,
+  `idCita` int(10) NOT NULL,
+  `agenda` tinyint(2) NOT NULL DEFAULT '1',
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `obs` text COLLATE utf8_spanish2_ci,
   `UsuarioCogeCita` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=281 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
@@ -627,7 +627,7 @@ CREATE TABLE `data` (
 -- Dumping data for table `data`
 --
 
-INSERT INTO `data` (`IdCita`, `Agenda`, `IdUsuario`, `Fecha`, `Obs`, `UsuarioCogeCita`) VALUES
+INSERT INTO `data` (`idCita`, `agenda`, `idUsuario`, `fecha`, `obs`, `UsuarioCogeCita`) VALUES
 (1, 1, 2, '2017-03-01', 'kk de la baca', 0),
 (2, 1, 1, '2017-02-25', 's pep  sda  sdasds sds', 0),
 (4, 2, 9, '2017-02-16', 'sasa', 0),
@@ -895,8 +895,8 @@ INSERT INTO `data` (`IdCita`, `Agenda`, `IdUsuario`, `Fecha`, `Obs`, `UsuarioCog
 
 CREATE TABLE `del_cita` (
   `Id` int(10) NOT NULL DEFAULT '0',
-  `IdCita` int(10) NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -904,7 +904,7 @@ CREATE TABLE `del_cita` (
 -- Dumping data for table `del_cita`
 --
 
-INSERT INTO `del_cita` (`Id`, `IdCita`, `Hora`, `Servicio`) VALUES
+INSERT INTO `del_cita` (`Id`, `idCita`, `hora`, `Servicio`) VALUES
 (466, 236, 20, 11),
 (467, 236, 21, 9),
 (468, 236, 22, 10),
@@ -926,20 +926,20 @@ INSERT INTO `del_cita` (`Id`, `IdCita`, `Hora`, `Servicio`) VALUES
 --
 
 CREATE TABLE `del_data` (
-  `IdCita` int(10) NOT NULL DEFAULT '0',
-  `Agenda` tinyint(2) NOT NULL DEFAULT '1',
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Obs` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
+  `idCita` int(10) NOT NULL DEFAULT '0',
+  `agenda` tinyint(2) NOT NULL DEFAULT '1',
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `obs` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
   `UsuarioCogeCita` int(11) DEFAULT NULL,
-  `FechaDel` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `fechaDel` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `del_data`
 --
 
-INSERT INTO `del_data` (`IdCita`, `Agenda`, `IdUsuario`, `Fecha`, `Obs`, `UsuarioCogeCita`, `FechaDel`) VALUES
+INSERT INTO `del_data` (`idCita`, `agenda`, `idUsuario`, `fecha`, `obs`, `UsuarioCogeCita`, `fechaDel`) VALUES
 (236, 1, 4, '2017-03-16', '', 0, '2017-03-17 16:49:20'),
 (247, 1, 2, '2017-03-18', '', 0, '2017-03-17 18:04:40'),
 (250, 1, 2, '2017-03-30', '', 0, '2017-03-17 17:57:09'),
@@ -954,10 +954,10 @@ INSERT INTO `del_data` (`IdCita`, `Agenda`, `IdUsuario`, `Fecha`, `Obs`, `Usuari
 
 CREATE TABLE `even` (
   `Id` bigint(20) NOT NULL,
-  `IdUsuario` int(11) DEFAULT NULL,
-  `IdCita` int(11) DEFAULT NULL,
+  `idUsuario` int(11) DEFAULT NULL,
+  `idCita` int(11) DEFAULT NULL,
   `IdEven` tinyint(4) DEFAULT NULL,
-  `Fecha` datetime DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
   `Admin` tinyint(1) DEFAULT NULL,
   `agenda` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -970,7 +970,7 @@ CREATE TABLE `even` (
 
 CREATE TABLE `eventos` (
   `IdEven` tinyint(4) NOT NULL,
-  `Nombre` text NOT NULL
+  `nombre` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -981,7 +981,7 @@ CREATE TABLE `eventos` (
 
 CREATE TABLE `familias` (
   `IdFamilia` tinyint(1) NOT NULL,
-  `Nombre` varchar(15) NOT NULL,
+  `nombre` varchar(15) NOT NULL,
   `Mostrar` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
@@ -989,7 +989,7 @@ CREATE TABLE `familias` (
 -- Dumping data for table `familias`
 --
 
-INSERT INTO `familias` (`IdFamilia`, `Nombre`, `Mostrar`) VALUES
+INSERT INTO `familias` (`IdFamilia`, `nombre`, `Mostrar`) VALUES
 (1, 'ProbaSol', 1),
 (2, 'Prabo', 1);
 
@@ -1001,15 +1001,15 @@ INSERT INTO `familias` (`IdFamilia`, `Nombre`, `Mostrar`) VALUES
 
 CREATE TABLE `festivos` (
   `Id` tinyint(4) NOT NULL,
-  `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
-  `Fecha` date NOT NULL
+  `nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
+  `fecha` date NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `festivos`
 --
 
-INSERT INTO `festivos` (`Id`, `Nombre`, `Fecha`) VALUES
+INSERT INTO `festivos` (`Id`, `nombre`, `fecha`) VALUES
 (13, 'dia H', '2016-12-26'),
 (14, 'uno', '2016-12-28'),
 (15, 'dia D', '2017-01-27'),
@@ -1040,9 +1040,9 @@ CREATE TABLE `festivosds` (
 
 CREATE TABLE `horarios` (
   `Id` int(11) NOT NULL,
-  `Nombre` char(10) NOT NULL DEFAULT 'Horario 1',
-  `FechaIni` int(4) unsigned zerofill DEFAULT '0101',
-  `FechaFin` int(4) unsigned zerofill DEFAULT '1231',
+  `nombre` char(10) NOT NULL DEFAULT 'horario 1',
+  `fechaIni` int(4) unsigned zerofill DEFAULT '0101',
+  `fechaFin` int(4) unsigned zerofill DEFAULT '1231',
   `h11` tinyint(1) NOT NULL DEFAULT '1',
   `h12` tinyint(1) DEFAULT '1',
   `h13` tinyint(1) DEFAULT '1',
@@ -1560,9 +1560,9 @@ CREATE TABLE `horarios` (
 -- Dumping data for table `horarios`
 --
 
-INSERT INTO `horarios` (`Id`, `Nombre`, `FechaIni`, `FechaFin`, `h11`, `h12`, `h13`, `h14`, `h15`, `h16`, `h17`, `h18`, `h19`, `h110`, `h111`, `h112`, `h113`, `h114`, `h115`, `h116`, `h117`, `h118`, `h119`, `h120`, `h121`, `h122`, `h123`, `h124`, `h125`, `h126`, `h127`, `h128`, `h129`, `h130`, `h131`, `h132`, `h133`, `h134`, `h135`, `h136`, `h137`, `h138`, `h139`, `h140`, `h141`, `h142`, `h143`, `h144`, `h145`, `h146`, `h147`, `h148`, `h149`, `h150`, `h151`, `h152`, `h153`, `h154`, `h155`, `h156`, `h157`, `h158`, `h159`, `h160`, `h161`, `h162`, `h163`, `h164`, `h165`, `h166`, `h167`, `h168`, `h169`, `h170`, `h171`, `h172`, `h173`, `h21`, `h22`, `h23`, `h24`, `h25`, `h26`, `h27`, `h28`, `h29`, `h210`, `h211`, `h212`, `h213`, `h214`, `h215`, `h216`, `h217`, `h218`, `h219`, `h220`, `h221`, `h222`, `h223`, `h224`, `h225`, `h226`, `h227`, `h228`, `h229`, `h230`, `h231`, `h232`, `h233`, `h234`, `h235`, `h236`, `h237`, `h238`, `h239`, `h240`, `h241`, `h242`, `h243`, `h244`, `h245`, `h246`, `h247`, `h248`, `h249`, `h250`, `h251`, `h252`, `h253`, `h254`, `h255`, `h256`, `h257`, `h258`, `h259`, `h260`, `h261`, `h262`, `h263`, `h264`, `h265`, `h266`, `h267`, `h268`, `h269`, `h270`, `h271`, `h272`, `h273`, `h31`, `h32`, `h33`, `h34`, `h35`, `h36`, `h37`, `h38`, `h39`, `h310`, `h311`, `h312`, `h313`, `h314`, `h315`, `h316`, `h317`, `h318`, `h319`, `h320`, `h321`, `h322`, `h323`, `h324`, `h325`, `h326`, `h327`, `h328`, `h329`, `h330`, `h331`, `h332`, `h333`, `h334`, `h335`, `h336`, `h337`, `h338`, `h339`, `h340`, `h341`, `h342`, `h343`, `h344`, `h345`, `h346`, `h347`, `h348`, `h349`, `h350`, `h351`, `h352`, `h353`, `h354`, `h355`, `h356`, `h357`, `h358`, `h359`, `h360`, `h361`, `h362`, `h363`, `h364`, `h365`, `h366`, `h367`, `h368`, `h369`, `h370`, `h371`, `h372`, `h373`, `h41`, `h42`, `h43`, `h44`, `h45`, `h46`, `h47`, `h48`, `h49`, `h410`, `h411`, `h412`, `h413`, `h414`, `h415`, `h416`, `h417`, `h418`, `h419`, `h420`, `h421`, `h422`, `h423`, `h424`, `h425`, `h426`, `h427`, `h428`, `h429`, `h430`, `h431`, `h432`, `h433`, `h434`, `h435`, `h436`, `h437`, `h438`, `h439`, `h440`, `h441`, `h442`, `h443`, `h444`, `h445`, `h446`, `h447`, `h448`, `h449`, `h450`, `h451`, `h452`, `h453`, `h454`, `h455`, `h456`, `h457`, `h458`, `h459`, `h460`, `h461`, `h462`, `h463`, `h464`, `h465`, `h466`, `h467`, `h468`, `h469`, `h470`, `h471`, `h472`, `h473`, `h51`, `h52`, `h53`, `h54`, `h55`, `h56`, `h57`, `h58`, `h59`, `h510`, `h511`, `h512`, `h513`, `h514`, `h515`, `h516`, `h517`, `h518`, `h519`, `h520`, `h521`, `h522`, `h523`, `h524`, `h525`, `h526`, `h527`, `h528`, `h529`, `h530`, `h531`, `h532`, `h533`, `h534`, `h535`, `h536`, `h537`, `h538`, `h539`, `h540`, `h541`, `h542`, `h543`, `h544`, `h545`, `h546`, `h547`, `h548`, `h549`, `h550`, `h551`, `h552`, `h553`, `h554`, `h555`, `h556`, `h557`, `h558`, `h559`, `h560`, `h561`, `h562`, `h563`, `h564`, `h565`, `h566`, `h567`, `h568`, `h569`, `h570`, `h571`, `h572`, `h573`, `h61`, `h62`, `h63`, `h64`, `h65`, `h66`, `h67`, `h68`, `h69`, `h610`, `h611`, `h612`, `h613`, `h614`, `h615`, `h616`, `h617`, `h618`, `h619`, `h620`, `h621`, `h622`, `h623`, `h624`, `h625`, `h626`, `h627`, `h628`, `h629`, `h630`, `h631`, `h632`, `h633`, `h634`, `h635`, `h636`, `h637`, `h638`, `h639`, `h640`, `h641`, `h642`, `h643`, `h644`, `h645`, `h646`, `h647`, `h648`, `h649`, `h650`, `h651`, `h652`, `h653`, `h654`, `h655`, `h656`, `h657`, `h658`, `h659`, `h660`, `h661`, `h662`, `h663`, `h664`, `h665`, `h666`, `h667`, `h668`, `h669`, `h670`, `h671`, `h672`, `h673`, `h71`, `h72`, `h73`, `h74`, `h75`, `h76`, `h77`, `h78`, `h79`, `h710`, `h711`, `h712`, `h713`, `h714`, `h715`, `h716`, `h717`, `h718`, `h719`, `h720`, `h721`, `h722`, `h723`, `h724`, `h725`, `h726`, `h727`, `h728`, `h729`, `h730`, `h731`, `h732`, `h733`, `h734`, `h735`, `h736`, `h737`, `h738`, `h739`, `h740`, `h741`, `h742`, `h743`, `h744`, `h745`, `h746`, `h747`, `h748`, `h749`, `h750`, `h751`, `h752`, `h753`, `h754`, `h755`, `h756`, `h757`, `h758`, `h759`, `h760`, `h761`, `h762`, `h763`, `h764`, `h765`, `h766`, `h767`, `h768`, `h769`, `h770`, `h771`, `h772`, `h773`) VALUES
-(0, 'Horario 1q', 0601, 1231, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(1, 'Horario 2', 0101, 0531, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `horarios` (`Id`, `nombre`, `fechaIni`, `fechaFin`, `h11`, `h12`, `h13`, `h14`, `h15`, `h16`, `h17`, `h18`, `h19`, `h110`, `h111`, `h112`, `h113`, `h114`, `h115`, `h116`, `h117`, `h118`, `h119`, `h120`, `h121`, `h122`, `h123`, `h124`, `h125`, `h126`, `h127`, `h128`, `h129`, `h130`, `h131`, `h132`, `h133`, `h134`, `h135`, `h136`, `h137`, `h138`, `h139`, `h140`, `h141`, `h142`, `h143`, `h144`, `h145`, `h146`, `h147`, `h148`, `h149`, `h150`, `h151`, `h152`, `h153`, `h154`, `h155`, `h156`, `h157`, `h158`, `h159`, `h160`, `h161`, `h162`, `h163`, `h164`, `h165`, `h166`, `h167`, `h168`, `h169`, `h170`, `h171`, `h172`, `h173`, `h21`, `h22`, `h23`, `h24`, `h25`, `h26`, `h27`, `h28`, `h29`, `h210`, `h211`, `h212`, `h213`, `h214`, `h215`, `h216`, `h217`, `h218`, `h219`, `h220`, `h221`, `h222`, `h223`, `h224`, `h225`, `h226`, `h227`, `h228`, `h229`, `h230`, `h231`, `h232`, `h233`, `h234`, `h235`, `h236`, `h237`, `h238`, `h239`, `h240`, `h241`, `h242`, `h243`, `h244`, `h245`, `h246`, `h247`, `h248`, `h249`, `h250`, `h251`, `h252`, `h253`, `h254`, `h255`, `h256`, `h257`, `h258`, `h259`, `h260`, `h261`, `h262`, `h263`, `h264`, `h265`, `h266`, `h267`, `h268`, `h269`, `h270`, `h271`, `h272`, `h273`, `h31`, `h32`, `h33`, `h34`, `h35`, `h36`, `h37`, `h38`, `h39`, `h310`, `h311`, `h312`, `h313`, `h314`, `h315`, `h316`, `h317`, `h318`, `h319`, `h320`, `h321`, `h322`, `h323`, `h324`, `h325`, `h326`, `h327`, `h328`, `h329`, `h330`, `h331`, `h332`, `h333`, `h334`, `h335`, `h336`, `h337`, `h338`, `h339`, `h340`, `h341`, `h342`, `h343`, `h344`, `h345`, `h346`, `h347`, `h348`, `h349`, `h350`, `h351`, `h352`, `h353`, `h354`, `h355`, `h356`, `h357`, `h358`, `h359`, `h360`, `h361`, `h362`, `h363`, `h364`, `h365`, `h366`, `h367`, `h368`, `h369`, `h370`, `h371`, `h372`, `h373`, `h41`, `h42`, `h43`, `h44`, `h45`, `h46`, `h47`, `h48`, `h49`, `h410`, `h411`, `h412`, `h413`, `h414`, `h415`, `h416`, `h417`, `h418`, `h419`, `h420`, `h421`, `h422`, `h423`, `h424`, `h425`, `h426`, `h427`, `h428`, `h429`, `h430`, `h431`, `h432`, `h433`, `h434`, `h435`, `h436`, `h437`, `h438`, `h439`, `h440`, `h441`, `h442`, `h443`, `h444`, `h445`, `h446`, `h447`, `h448`, `h449`, `h450`, `h451`, `h452`, `h453`, `h454`, `h455`, `h456`, `h457`, `h458`, `h459`, `h460`, `h461`, `h462`, `h463`, `h464`, `h465`, `h466`, `h467`, `h468`, `h469`, `h470`, `h471`, `h472`, `h473`, `h51`, `h52`, `h53`, `h54`, `h55`, `h56`, `h57`, `h58`, `h59`, `h510`, `h511`, `h512`, `h513`, `h514`, `h515`, `h516`, `h517`, `h518`, `h519`, `h520`, `h521`, `h522`, `h523`, `h524`, `h525`, `h526`, `h527`, `h528`, `h529`, `h530`, `h531`, `h532`, `h533`, `h534`, `h535`, `h536`, `h537`, `h538`, `h539`, `h540`, `h541`, `h542`, `h543`, `h544`, `h545`, `h546`, `h547`, `h548`, `h549`, `h550`, `h551`, `h552`, `h553`, `h554`, `h555`, `h556`, `h557`, `h558`, `h559`, `h560`, `h561`, `h562`, `h563`, `h564`, `h565`, `h566`, `h567`, `h568`, `h569`, `h570`, `h571`, `h572`, `h573`, `h61`, `h62`, `h63`, `h64`, `h65`, `h66`, `h67`, `h68`, `h69`, `h610`, `h611`, `h612`, `h613`, `h614`, `h615`, `h616`, `h617`, `h618`, `h619`, `h620`, `h621`, `h622`, `h623`, `h624`, `h625`, `h626`, `h627`, `h628`, `h629`, `h630`, `h631`, `h632`, `h633`, `h634`, `h635`, `h636`, `h637`, `h638`, `h639`, `h640`, `h641`, `h642`, `h643`, `h644`, `h645`, `h646`, `h647`, `h648`, `h649`, `h650`, `h651`, `h652`, `h653`, `h654`, `h655`, `h656`, `h657`, `h658`, `h659`, `h660`, `h661`, `h662`, `h663`, `h664`, `h665`, `h666`, `h667`, `h668`, `h669`, `h670`, `h671`, `h672`, `h673`, `h71`, `h72`, `h73`, `h74`, `h75`, `h76`, `h77`, `h78`, `h79`, `h710`, `h711`, `h712`, `h713`, `h714`, `h715`, `h716`, `h717`, `h718`, `h719`, `h720`, `h721`, `h722`, `h723`, `h724`, `h725`, `h726`, `h727`, `h728`, `h729`, `h730`, `h731`, `h732`, `h733`, `h734`, `h735`, `h736`, `h737`, `h738`, `h739`, `h740`, `h741`, `h742`, `h743`, `h744`, `h745`, `h746`, `h747`, `h748`, `h749`, `h750`, `h751`, `h752`, `h753`, `h754`, `h755`, `h756`, `h757`, `h758`, `h759`, `h760`, `h761`, `h762`, `h763`, `h764`, `h765`, `h766`, `h767`, `h768`, `h769`, `h770`, `h771`, `h772`, `h773`) VALUES
+(0, 'horario 1q', 0601, 1231, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(1, 'horario 2', 0101, 0531, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1573,14 +1573,14 @@ INSERT INTO `horarios` (`Id`, `Nombre`, `FechaIni`, `FechaFin`, `h11`, `h12`, `h
 CREATE TABLE `notas` (
   `Id` int(50) NOT NULL,
   `Nota` longtext CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `Fecha` date NOT NULL
+  `fecha` date NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `notas`
 --
 
-INSERT INTO `notas` (`Id`, `Nota`, `Fecha`) VALUES
+INSERT INTO `notas` (`Id`, `Nota`, `fecha`) VALUES
 (1, '', '2016-11-06'),
 (2, '', '0000-00-00'),
 (3, '', '0000-00-00'),
@@ -1660,12 +1660,12 @@ INSERT INTO `tblreseteopass` (`id`, `idusuario`, `token`, `creado`) VALUES
 
 CREATE TABLE `usuarios` (
   `Id` int(11) NOT NULL,
-  `Nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Email` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `Pass` varchar(50) CHARACTER SET latin1 NOT NULL,
   `Tel` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
-  `Obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Block` tinyint(1) DEFAULT NULL,
   `Baja` tinyint(1) NOT NULL DEFAULT '0',
   `Active` tinyint(4) NOT NULL DEFAULT '0',
@@ -1680,7 +1680,7 @@ CREATE TABLE `usuarios` (
 -- Dumping data for table `usuarios`
 --
 
-INSERT INTO `usuarios` (`Id`, `Nombre`, `Email`, `Pass`, `Tel`, `Admin`, `Obs`, `Block`, `Baja`, `Active`, `datePass`, `cookie`, `Idioma`, `dateReg`, `dateBaja`) VALUES
+INSERT INTO `usuarios` (`Id`, `nombre`, `Email`, `Pass`, `Tel`, `Admin`, `obs`, `Block`, `Baja`, `Active`, `datePass`, `cookie`, `Idioma`, `dateReg`, `dateBaja`) VALUES
 (1, 'admin', 'admin@admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', NULL, 1, '', NULL, 0, 0, '2018-01-09', 60235081, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, 'user', 'user@user', 'd033e22ae348aeb5660fc2140aec35850c4da997', '', 0, '', 0, 0, 0, '0000-00-00', 0, 1, '2017-01-15 12:03:26', '0000-00-00 00:00:00'),
 (3, 'antonio', '', '', '', 0, '', 0, 1, 0, '0000-00-00', 0, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -1721,7 +1721,7 @@ ALTER TABLE `agendas`
 --
 ALTER TABLE `articulos`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `Codigo` (`Codigo`),
+  ADD UNIQUE KEY `codigo` (`codigo`),
   ADD KEY `IdFamilia` (`IdFamilia`);
 
 --
@@ -1729,7 +1729,7 @@ ALTER TABLE `articulos`
 --
 ALTER TABLE `cita`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `IdCita` (`IdCita`),
+  ADD KEY `idCita` (`idCita`),
   ADD KEY `Servicio` (`Servicio`);
 
 --
@@ -1743,8 +1743,8 @@ ALTER TABLE `config`
 -- Indexes for table `data`
 --
 ALTER TABLE `data`
-  ADD PRIMARY KEY (`IdCita`),
-  ADD KEY `IdUsuario` (`IdUsuario`);
+  ADD PRIMARY KEY (`idCita`),
+  ADD KEY `idUsuario` (`idUsuario`);
 
 --
 -- Indexes for table `del_cita`
@@ -1756,7 +1756,7 @@ ALTER TABLE `del_cita`
 -- Indexes for table `del_data`
 --
 ALTER TABLE `del_data`
-  ADD PRIMARY KEY (`IdCita`);
+  ADD PRIMARY KEY (`idCita`);
 
 --
 -- Indexes for table `even`
@@ -1836,7 +1836,7 @@ ALTER TABLE `cita`
 -- AUTO_INCREMENT for table `data`
 --
 ALTER TABLE `data`
-  MODIFY `IdCita` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=281;
+  MODIFY `idCita` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=281;
 --
 -- AUTO_INCREMENT for table `even`
 --
@@ -1885,7 +1885,7 @@ ALTER TABLE `usuarios`
 -- Constraints for table `cita`
 --
 ALTER TABLE `cita`
-  ADD CONSTRAINT `DaTa` FOREIGN KEY (`IdCita`) REFERENCES `data` (`IdCita`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `DaTa` FOREIGN KEY (`idCita`) REFERENCES `data` (`idCita`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `even`
@@ -1904,10 +1904,10 @@ ALTER TABLE `even`
 
 CREATE TABLE `articulos` (
   `id` int(11) NOT NULL,
-  `Codigo` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT '',
-  `Descripcion` varchar(50) DEFAULT NULL,
+  `codigo` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL DEFAULT '',
+  `descripcion` varchar(50) DEFAULT NULL,
   `Precio` double DEFAULT NULL,
-  `Tiempo` int(4) DEFAULT NULL,
+  `tiempo` int(4) DEFAULT NULL,
   `Familia` varchar(20) DEFAULT NULL,
   `IdFamilia` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=latin1;
@@ -1916,7 +1916,7 @@ CREATE TABLE `articulos` (
 -- Dumping data for table `articulos`
 --
 
-INSERT INTO `articulos` (`id`, `Codigo`, `Descripcion`, `Precio`, `Tiempo`, `Familia`, `IdFamilia`) VALUES
+INSERT INTO `articulos` (`id`, `codigo`, `descripcion`, `Precio`, `tiempo`, `Familia`, `IdFamilia`) VALUES
 (1, 'ABD', 'Abdomen', 75, 15, 'Depilación', 2),
 (2, 'AGEEXPR', 'Antiedad express', 25, 30, 'Facial', 1),
 (3, 'AHA', 'Antimanchas A.H.A.', 50, 50, 'Facial', 1),
@@ -2044,10 +2044,10 @@ INSERT INTO `articulos` (`id`, `Codigo`, `Descripcion`, `Precio`, `Tiempo`, `Fam
 
 CREATE TABLE `cita1` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=35370 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -2056,7 +2056,7 @@ CREATE TABLE `cita1` (
 -- Dumping data for table `cita1`
 --
 
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (7, 2, 9, '2014-09-16', 20, 'CEJ', 1),
 (8, 2, 9, '2014-09-16', 21, 'ENT', 1),
 (9, 3, 10, '2014-09-16', 22, 'AX', 1),
@@ -3207,7 +3207,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (1418, 404, 188, '2014-12-02', 31, 'PER', 1),
 (1419, 404, 188, '2014-12-02', 32, 'TIN', 1),
 (1420, 405, 70, '2014-11-29', 22, 'ESMPER', 1);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (1421, 405, 70, '2014-11-29', 23, 'ESMPER', 1),
 (1422, 405, 70, '2014-11-29', 24, 'ESMPER', 1),
 (1423, 405, 70, '2014-11-29', 25, 'ESMPER', 1),
@@ -4320,7 +4320,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (2827, 748, 174, '2015-02-13', 24, 'CEJ', 1),
 (2828, 749, 244, '2015-02-13', 34, 'ESMPER', 1),
 (2829, 749, 244, '2015-02-13', 35, 'ESMPER', 1);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (2830, 749, 244, '2015-02-13', 36, 'ESMPER', 1),
 (2831, 749, 244, '2015-02-13', 37, 'ESMPER', 1),
 (2832, 749, 244, '2015-02-13', 38, 'CEJ', 1),
@@ -5427,7 +5427,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (4298, 1084, 75, '2015-04-24', 44, 'PED', 0),
 (4299, 1084, 75, '2015-04-24', 45, 'PED', 0),
 (4300, 1084, 75, '2015-04-24', 46, 'PED', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (4301, 1084, 75, '2015-04-24', 47, 'PED', 0),
 (4302, 1084, 75, '2015-04-24', 48, 'AX', 0),
 (4303, 1084, 75, '2015-04-24', 49, 'BRA', 0),
@@ -6511,7 +6511,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (5701, 1443, 221, '2015-05-30', 10, 'CEJ', 0),
 (5702, 1443, 221, '2015-05-30', 11, 'LAB', 0),
 (5703, 1444, 276, '2015-06-01', 48, 'CEJ', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (5704, 1444, 276, '2015-06-01', 49, 'LAB', 0),
 (5705, 1445, 250, '2015-05-30', 9, 'ESM', 1),
 (5712, 1447, 19, '2015-06-01', 20, 'PEDPER', 0),
@@ -7602,7 +7602,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (7343, 1773, 1, '2015-08-06', 38, 'ESMPER', 0),
 (7344, 1773, 1, '2015-08-06', 39, 'ESMPER', 0),
 (7345, 1773, 1, '2015-08-06', 40, 'MANPER', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (7346, 1773, 1, '2015-08-06', 41, 'MANPER', 0),
 (7347, 1773, 1, '2015-08-06', 42, 'MANPER', 0),
 (7348, 1773, 1, '2015-08-06', 43, 'MANPER', 0),
@@ -8689,7 +8689,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (8643, 2010, 259, '2015-08-20', 14, 'PED', 0),
 (8644, 2010, 259, '2015-08-20', 15, 'PED', 0),
 (8645, 2011, 218, '2015-08-20', 16, 'CEJ', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (8646, 2012, 111, '2015-08-20', 20, 'IBRA', 0),
 (8647, 2012, 111, '2015-08-20', 21, 'IBRA', 0),
 (8648, 2013, 491, '2015-08-20', 22, 'ESMPER', 1),
@@ -9774,7 +9774,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (10162, 2323, 1, '2015-10-12', 56, 'ORO24', 0),
 (10179, 2324, 264, '2015-10-14', 31, 'HIGP', 0),
 (10180, 2324, 264, '2015-10-14', 32, 'HIGP', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (10181, 2324, 264, '2015-10-14', 33, 'HIGP', 0),
 (10182, 2324, 264, '2015-10-14', 34, 'HIGP', 0),
 (10183, 2324, 264, '2015-10-14', 35, 'HIGP', 0),
@@ -10819,7 +10819,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (11550, 2670, 1, '2015-12-07', 17, 'Cerrado 11h', 0),
 (11551, 2670, 1, '2015-12-07', 18, 'Cerrado 11h', 0),
 (11552, 2670, 1, '2015-12-07', 19, 'Cerrado 11h', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (11553, 2670, 1, '2015-12-07', 20, 'Cerrado 11h', 0),
 (11554, 2670, 1, '2015-12-07', 21, 'Cerrado 11h', 0),
 (11555, 2670, 1, '2015-12-07', 22, 'Cerrado 11h', 0),
@@ -11861,7 +11861,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (12870, 3006, 1, '2016-01-11', 34, 'Cerrado 1h', 0),
 (12871, 3006, 1, '2016-01-11', 35, 'Cerrado 1h', 0),
 (12878, 3008, 115, '2016-01-11', 9, 'FINT', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (12879, 3008, 115, '2016-01-11', 10, 'FINT', 0),
 (12880, 3009, 208, '2016-01-11', 25, 'FAX', 0),
 (12881, 3009, 208, '2016-01-11', 26, 'FENT', 0),
@@ -12893,7 +12893,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (14101, 3307, 629, '2016-02-20', 12, 'ESP', 0),
 (14102, 3307, 629, '2016-02-20', 13, 'ESP', 0),
 (14103, 3308, 423, '2016-02-25', 42, 'FPROMO', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (14104, 3308, 423, '2016-02-25', 43, 'FPROMO', 0),
 (14105, 3308, 423, '2016-02-25', 44, 'FLAB', 0),
 (14113, 3309, 585, '2016-02-23', 28, 'UÑASGEL', 0),
@@ -13930,7 +13930,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (15457, 3612, 17, '2016-04-08', 27, 'UÑASGEL', 0),
 (15458, 3612, 17, '2016-04-08', 28, 'UÑASGEL', 0),
 (15459, 3612, 17, '2016-04-08', 29, 'UÑASGEL', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (15460, 3612, 17, '2016-04-08', 30, 'CEJ', 0),
 (15468, 3614, 614, '2016-04-04', 9, 'ESTCEJ', 1),
 (15469, 3614, 614, '2016-04-04', 10, 'ESTCEJ', 1),
@@ -14977,7 +14977,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (29183, 16281, 671, '2016-05-23', 48, 'LIMP', 0),
 (29184, 16281, 671, '2016-05-23', 49, 'LIMP', 0),
 (29185, 16281, 671, '2016-05-23', 50, 'LIMP', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (29186, 16282, 561, '2016-05-20', 30, 'ESMPER', 0),
 (29187, 16282, 561, '2016-05-20', 31, 'ESMPER', 0),
 (29188, 16282, 561, '2016-05-20', 32, 'ESMPER', 0),
@@ -16010,7 +16010,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (30605, 16607, 787, '2016-06-27', 41, 'EXTCLA', 0),
 (30606, 16607, 787, '2016-06-27', 42, 'EXTCLA', 0),
 (30607, 16607, 787, '2016-06-27', 43, 'EXTCLA', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (30608, 16608, 50, '2016-06-24', 14, 'MANVIN', 0),
 (30609, 16608, 50, '2016-06-24', 15, 'MANVIN', 0),
 (30610, 16609, 724, '2016-07-01', 16, 'ESMPER', 0),
@@ -17043,7 +17043,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (31843, 16850, 819, '2016-07-12', 39, 'PED', 0),
 (31844, 16850, 819, '2016-07-12', 40, 'PED', 0),
 (31845, 16850, 819, '2016-07-12', 41, 'PED', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (31846, 16850, 819, '2016-07-12', 42, 'PED', 0),
 (31847, 16850, 819, '2016-07-12', 43, 'LAB', 0),
 (31852, 16852, 125, '2016-07-15', 30, 'CEJ', 0),
@@ -18077,7 +18077,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (33216, 17155, 264, '2016-08-31', 28, 'MANPER', 1),
 (33217, 17155, 264, '2016-08-31', 29, 'MANPER', 1),
 (33218, 17155, 264, '2016-08-31', 30, 'MANPER', 1);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (33219, 17155, 264, '2016-08-31', 31, 'CEJ', 1),
 (33220, 17156, 275, '2016-08-26', 20, 'AX', 0),
 (33221, 17156, 275, '2016-08-26', 21, 'IBRA', 0),
@@ -19109,7 +19109,7 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (34534, 17449, 1, '2016-09-27', 33, 'close15', 0),
 (34535, 17450, 64, '2016-09-28', 24, 'CEJ', 0),
 (34536, 17450, 64, '2016-09-28', 25, 'INT', 0);
-INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita1` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (34537, 17450, 64, '2016-09-28', 26, 'INT', 0),
 (34538, 17450, 64, '2016-09-28', 27, 'MUS', 0),
 (34539, 17450, 64, '2016-09-28', 28, 'MUS', 0),
@@ -19887,10 +19887,10 @@ INSERT INTO `cita1` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 
 CREATE TABLE `cita2` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=13457 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -19899,7 +19899,7 @@ CREATE TABLE `cita2` (
 -- Dumping data for table `cita2`
 --
 
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (1, 0, 0, '2014-12-17', 12, 'var', 0),
 (6, 2, 210, '2014-12-19', 26, 'ESMPER', 1),
 (7, 2, 210, '2014-12-19', 27, 'ESMPER', 1),
@@ -21056,7 +21056,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (1349, 173, 50, '2015-03-04', 40, 'MAN', 1),
 (1350, 173, 50, '2015-03-04', 41, 'MAN', 1),
 (1351, 173, 50, '2015-03-04', 42, 'PED', 1);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (1352, 173, 50, '2015-03-04', 43, 'PED', 1),
 (1353, 173, 50, '2015-03-04', 44, 'PED', 1),
 (1354, 173, 50, '2015-03-04', 45, 'PED', 1),
@@ -22180,7 +22180,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (2652, 314, 48, '2015-04-22', 16, 'ESM', 0),
 (2653, 315, 180, '2015-04-23', 35, 'AX', 0),
 (2654, 316, 350, '2015-04-23', 20, 'CEJ', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (2657, 318, 367, '2015-05-15', 12, 'MAN', 0),
 (2658, 318, 367, '2015-05-15', 13, 'MAN', 0),
 (2659, 318, 367, '2015-05-15', 14, 'PED', 0),
@@ -23298,7 +23298,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (4314, 529, 1, '2015-06-20', 23, 'PEDPER', 0),
 (4315, 529, 1, '2015-06-20', 24, 'PEDPER', 0),
 (4316, 529, 1, '2015-06-20', 25, 'PEDPER', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (4317, 529, 1, '2015-06-20', 26, 'UÑAS', 0),
 (4318, 529, 1, '2015-06-20', 27, 'UÑAS', 0),
 (4319, 529, 1, '2015-06-20', 28, 'UÑAS', 0),
@@ -24417,7 +24417,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (5625, 734, 1, '2015-09-03', 64, 'ORO24', 0),
 (5626, 734, 1, '2015-09-03', 65, 'ORO24', 0),
 (5627, 734, 1, '2015-09-03', 66, 'ORO24', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (5628, 734, 1, '2015-09-03', 67, 'ORO24', 0),
 (5629, 735, 1, '2015-09-04', 8, 'ESMPER', 0),
 (5630, 735, 1, '2015-09-04', 9, 'ESMPER', 0),
@@ -25475,7 +25475,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (6802, 824, 1, '2015-11-21', 17, 'Cerrado 4h', 0),
 (6803, 824, 1, '2015-11-21', 18, 'Cerrado 4h', 0),
 (6804, 824, 1, '2015-11-21', 19, 'Cerrado 4h', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (6805, 824, 1, '2015-11-21', 20, 'Cerrado 4h', 0),
 (6806, 824, 1, '2015-11-21', 21, 'Cerrado 4h', 0),
 (6807, 824, 1, '2015-11-21', 22, 'Cerrado 4h', 0),
@@ -26521,7 +26521,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (8122, 996, 575, '2016-04-18', 15, 'HIGP', 0),
 (8123, 996, 575, '2016-04-18', 16, 'HIGP', 0),
 (8131, 998, 196, '2016-04-22', 9, 'MAN', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (8132, 998, 196, '2016-04-22', 10, 'MAN', 0),
 (8133, 998, 196, '2016-04-22', 11, 'PED', 0),
 (8134, 998, 196, '2016-04-22', 12, 'PED', 0),
@@ -27593,7 +27593,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (9501, 1185, 742, '2016-05-28', 13, 'MAN', 0),
 (9502, 1186, 1, '2016-06-07', 24, 'close3H', 0),
 (9503, 1186, 1, '2016-06-07', 25, 'close3H', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (9504, 1186, 1, '2016-06-07', 26, 'close3H', 0),
 (9505, 1186, 1, '2016-06-07', 27, 'close3H', 0),
 (9506, 1186, 1, '2016-06-07', 28, 'close3H', 0),
@@ -28650,7 +28650,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (10805, 1343, 1, '2016-11-10', 42, 'Close11', 0),
 (10806, 1343, 1, '2016-11-10', 43, 'Close11', 0),
 (10807, 1343, 1, '2016-11-10', 44, 'Close11', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (10808, 1343, 1, '2016-11-10', 45, 'Close11', 0),
 (10809, 1343, 1, '2016-11-10', 46, 'Close11', 0),
 (10810, 1343, 1, '2016-11-10', 47, 'Close11', 0),
@@ -29695,7 +29695,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (11956, 1478, 1, '2016-09-06', 47, 'Close11', 0),
 (11957, 1478, 1, '2016-09-06', 48, 'Close11', 0),
 (11958, 1478, 1, '2016-09-06', 49, 'Close11', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (11959, 1478, 1, '2016-09-06', 50, 'Close11', 0),
 (11960, 1478, 1, '2016-09-06', 51, 'Close11', 0),
 (11961, 1479, 1, '2016-09-07', 8, 'Close11', 0),
@@ -30740,7 +30740,7 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 (13136, 1627, 935, '2016-09-30', 24, 'PED', 0),
 (13137, 1627, 935, '2016-09-30', 25, 'PED', 0),
 (13138, 1627, 935, '2016-09-30', 26, 'PED', 0);
-INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `OnLine`) VALUES
+INSERT INTO `cita2` (`Id`, `idCita`, `idUsuario`, `fecha`, `hora`, `Servicio`, `OnLine`) VALUES
 (13139, 1627, 935, '2016-09-30', 27, 'PED', 0),
 (13140, 1628, 19, '2016-09-29', 16, 'PED', 0),
 (13141, 1628, 19, '2016-09-29', 17, 'PED', 0),
@@ -30999,10 +30999,10 @@ INSERT INTO `cita2` (`Id`, `IdCita`, `IdUsuario`, `Fecha`, `Hora`, `Servicio`, `
 
 CREATE TABLE `cita3` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31015,10 +31015,10 @@ CREATE TABLE `cita3` (
 
 CREATE TABLE `cita4` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31031,10 +31031,10 @@ CREATE TABLE `cita4` (
 
 CREATE TABLE `cita5` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31047,10 +31047,10 @@ CREATE TABLE `cita5` (
 
 CREATE TABLE `cita6` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31063,10 +31063,10 @@ CREATE TABLE `cita6` (
 
 CREATE TABLE `cita7` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31079,10 +31079,10 @@ CREATE TABLE `cita7` (
 
 CREATE TABLE `cita8` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31095,10 +31095,10 @@ CREATE TABLE `cita8` (
 
 CREATE TABLE `cita9` (
   `Id` int(10) NOT NULL,
-  `IdCita` int(10) NOT NULL,
-  `IdUsuario` int(11) NOT NULL,
-  `Fecha` date NOT NULL,
-  `Hora` int(3) NOT NULL,
+  `idCita` int(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` int(3) NOT NULL,
   `Servicio` varchar(11) CHARACTER SET latin1 NOT NULL,
   `OnLine` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -31122,8 +31122,8 @@ CREATE TABLE `config` (
   `InicioT` tinyint(1) DEFAULT NULL,
   `CierreT` tinyint(1) NOT NULL,
   `CierreOtros` tinyint(1) NOT NULL,
-  `mostrarAgendas` tinyint(4) NOT NULL,
-  `numAgendas` tinyint(4) NOT NULL,
+  `mostraragendas` tinyint(4) NOT NULL,
+  `numagendas` tinyint(4) NOT NULL,
   `agenda1` tinyint(1) NOT NULL,
   `agenda2` tinyint(1) NOT NULL,
   `agenda3` tinyint(1) NOT NULL,
@@ -31140,7 +31140,7 @@ CREATE TABLE `config` (
 -- Dumping data for table `config`
 --
 
-INSERT INTO `config` (`id`, `nombre`, `dir`, `email`, `tel`, `sendMailAdmin`, `sendMailUser`, `InicioM`, `CierreM`, `InicioT`, `CierreT`, `CierreOtros`, `mostrarAgendas`, `numAgendas`, `agenda1`, `agenda2`, `agenda3`, `agenda4`, `agenda5`, `agenda6`, `agenda7`, `agenda8`, `agenda9`, `gerente`) VALUES
+INSERT INTO `config` (`id`, `nombre`, `dir`, `email`, `tel`, `sendMailAdmin`, `sendMailUser`, `InicioM`, `CierreM`, `InicioT`, `CierreT`, `CierreOtros`, `mostraragendas`, `numagendas`, `agenda1`, `agenda2`, `agenda3`, `agenda4`, `agenda5`, `agenda6`, `agenda7`, `agenda8`, `agenda9`, `gerente`) VALUES
 (1, 'Le Bouquet', 'c/ Ramon LLull 39 12005 Castellón', 'estetica@lebouquet.es', '964063959', 0, 1, 8, 0, 0, 52, 28, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 'LLedo LLobregat');
 
 -- --------------------------------------------------------
@@ -31151,10 +31151,10 @@ INSERT INTO `config` (`id`, `nombre`, `dir`, `email`, `tel`, `sendMailAdmin`, `s
 
 CREATE TABLE `even` (
   `Id` bigint(20) NOT NULL,
-  `IdUsuario` int(11) DEFAULT NULL,
-  `IdCita` int(11) DEFAULT NULL,
+  `idUsuario` int(11) DEFAULT NULL,
+  `idCita` int(11) DEFAULT NULL,
   `IdEven` tinyint(4) DEFAULT NULL,
-  `Fecha` datetime DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
   `Admin` tinyint(1) DEFAULT NULL,
   `agenda` tinyint(4) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=11319 DEFAULT CHARSET=latin1;
@@ -31163,7 +31163,7 @@ CREATE TABLE `even` (
 -- Dumping data for table `even`
 --
 
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (1, 0, 0, 0, '2015-03-17 00:00:00', 0, 0),
 (2, 1, 0, 0, '2015-03-22 05:27:09', 0, 0),
 (3, 1, 0, 0, '2015-03-22 07:19:02', 0, 0),
@@ -32250,7 +32250,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (1084, 1, 405, 1, '2015-05-19 14:30:39', 1, 0),
 (1085, 1, 406, 1, '2015-05-19 14:31:09', 1, 0),
 (1086, 1, 407, 1, '2015-05-19 14:31:30', 1, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (1087, 1, 408, 1, '2015-05-19 14:31:57', 1, 0),
 (1088, 1, 409, 1, '2015-05-19 14:33:12', 1, 0),
 (1089, 1, 410, 1, '2015-05-19 14:33:42', 1, 0),
@@ -33312,7 +33312,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (2145, 1, 1770, 1, '2015-07-10 09:29:21', 1, 0),
 (2146, 1, 1759, 2, '2015-07-10 09:29:33', 1, 0),
 (2147, 1, 1771, 1, '2015-07-10 09:29:49', 1, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (2148, 1, 1760, 2, '2015-07-10 09:30:00', 1, 0),
 (2149, 1, 1772, 1, '2015-07-10 09:30:14', 1, 0),
 (2150, 1, 1761, 2, '2015-07-10 09:30:27', 1, 0),
@@ -34376,7 +34376,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (3208, 520, 2212, 1, '2015-09-18 16:59:22', 1, 0),
 (3209, 1, 0, 0, '2015-09-19 06:45:01', 0, 0),
 (3210, 407, 2213, 1, '2015-09-19 07:07:49', 1, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (3211, 111, 2214, 1, '2015-09-19 08:26:06', 1, 0),
 (3212, 1, 2203, 2, '2015-09-19 08:26:16', 1, 0),
 (3213, 1, 0, 0, '2015-09-20 17:42:16', 0, 0),
@@ -35441,7 +35441,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (4272, 493, 2698, 1, '2015-11-25 15:22:11', 1, 0),
 (4273, 418, 2699, 1, '2015-11-25 16:18:30', 1, 0),
 (4274, 58, 2700, 1, '2015-11-25 17:58:46', 1, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (4275, 488, 2701, 1, '2015-11-25 18:00:42', 1, 0),
 (4276, 37, 2702, 1, '2015-11-25 18:57:48', 1, 0),
 (4277, 37, 2703, 1, '2015-11-25 19:01:53', 1, 0),
@@ -36502,7 +36502,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (5332, 1, 3121, 2, '2016-01-29 12:41:15', 1, 0),
 (5333, 109, 3144, 1, '2016-01-29 12:41:36', 1, 0),
 (5334, 109, 0, 5, '2016-01-29 12:42:29', 1, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (5335, 282, 3145, 1, '2016-01-29 12:43:29', 1, 0),
 (5336, 221, 907, 1, '2016-01-29 16:41:43', 1, 0),
 (5337, 407, 908, 1, '2016-01-29 16:50:25', 1, 0),
@@ -37576,7 +37576,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (6405, 2, 3564, 1, '2016-03-27 11:04:41', 1, 0),
 (6406, 443, 0, 0, '2016-03-27 11:51:01', 0, 0),
 (6407, 443, 3565, 1, '2016-03-27 11:54:37', 0, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (6408, 1, 0, 0, '2016-03-27 15:23:58', 0, 0),
 (6409, 1, 0, 0, '2016-03-27 17:05:06', 0, 0),
 (6410, 597, 0, 0, '2016-03-28 20:07:23', 0, 0),
@@ -38652,7 +38652,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (7480, 1, 1079, 1, '2016-05-04 16:29:21', 1, 2),
 (7481, 1, 0, 0, '2016-05-04 18:09:15', 0, 0),
 (7482, 1, 0, 0, '2016-05-04 18:11:07', 1, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (7483, 1, 16213, 1, '2016-05-04 18:11:46', 1, 1),
 (7484, 1, 28860, 2, '2016-05-04 18:12:00', 1, 1),
 (7485, 1, 16214, 1, '2016-05-04 18:12:24', 1, 1),
@@ -39718,7 +39718,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (8545, 1, 0, 0, '2016-06-10 07:11:28', 0, 0),
 (8546, 1, 1223, 2, '2016-06-10 07:11:54', 1, 2),
 (8547, 1, 1271, 1, '2016-06-10 07:12:41', 1, 2);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (8548, 1, 1272, 1, '2016-06-10 07:24:47', 1, 2),
 (8549, 1, 0, 0, '2016-06-10 08:03:07', 0, 0),
 (8550, 1, 0, 0, '2016-06-10 08:04:10', 1, 0),
@@ -40782,7 +40782,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (9608, 1, 16963, 1, '2016-07-23 11:25:45', 1, 1),
 (9609, 252, 0, 0, '2016-07-23 13:33:48', 0, 0),
 (9610, 638, 0, 0, '2016-07-24 11:06:23', 0, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (9611, 700, 0, 0, '2016-07-24 19:57:58', 0, 0),
 (9612, 700, 16964, 1, '2016-07-24 20:06:16', 0, 1),
 (9613, 1, 0, 0, '2016-07-24 23:44:26', 0, 0),
@@ -41833,7 +41833,7 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 (10658, 1, 17339, 1, '2016-09-13 13:55:48', 1, 1),
 (10659, 1, 17340, 1, '2016-09-13 13:56:39', 1, 1),
 (10660, 638, 0, 0, '2016-09-13 14:25:41', 0, 0);
-INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `agenda`) VALUES
+INSERT INTO `even` (`Id`, `idUsuario`, `idCita`, `IdEven`, `fecha`, `Admin`, `agenda`) VALUES
 (10661, 638, 17341, 1, '2016-09-13 14:30:24', 0, 1),
 (10662, 638, 17233, 2, '2016-09-13 14:30:43', 0, 1),
 (10663, 638, 17232, 2, '2016-09-13 14:30:46', 0, 1),
@@ -42501,14 +42501,14 @@ INSERT INTO `even` (`Id`, `IdUsuario`, `IdCita`, `IdEven`, `Fecha`, `Admin`, `ag
 
 CREATE TABLE `eventos` (
   `IdEven` tinyint(4) NOT NULL,
-  `Nombre` text NOT NULL
+  `nombre` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `eventos`
 --
 
-INSERT INTO `eventos` (`IdEven`, `Nombre`) VALUES
+INSERT INTO `eventos` (`IdEven`, `nombre`) VALUES
 (0, 'Entrada sessión'),
 (1, 'Nueva cita'),
 (2, 'Eliminar cita'),
@@ -42525,7 +42525,7 @@ INSERT INTO `eventos` (`IdEven`, `Nombre`) VALUES
 
 CREATE TABLE `familias` (
   `IdFamilia` tinyint(1) NOT NULL,
-  `Nombre` varchar(15) NOT NULL,
+  `nombre` varchar(15) NOT NULL,
   `Mostrar` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
@@ -42533,7 +42533,7 @@ CREATE TABLE `familias` (
 -- Dumping data for table `familias`
 --
 
-INSERT INTO `familias` (`IdFamilia`, `Nombre`, `Mostrar`) VALUES
+INSERT INTO `familias` (`IdFamilia`, `nombre`, `Mostrar`) VALUES
 (0, 'ManiPedi  ', 1),
 (1, 'Facial  ', 1),
 (2, 'Cera  ', 1),
@@ -42551,14 +42551,14 @@ CREATE TABLE `festivos` (
   `Id` tinyint(4) NOT NULL,
   `Dia` tinyint(4) DEFAULT NULL,
   `Mes` tinyint(4) DEFAULT NULL,
-  `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci
+  `nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci
 ) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `festivos`
 --
 
-INSERT INTO `festivos` (`Id`, `Dia`, `Mes`, `Nombre`) VALUES
+INSERT INTO `festivos` (`Id`, `Dia`, `Mes`, `nombre`) VALUES
 (0, 1, 1, 'Año nuevo '),
 (1, 6, 1, 'Reyes'),
 (3, 19, 3, 'San José'),
@@ -42583,14 +42583,14 @@ INSERT INTO `festivos` (`Id`, `Dia`, `Mes`, `Nombre`) VALUES
 CREATE TABLE `notas` (
   `Id` int(50) NOT NULL,
   `Nota` longtext CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `Fecha` date NOT NULL
+  `fecha` date NOT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `notas`
 --
 
-INSERT INTO `notas` (`Id`, `Nota`, `Fecha`) VALUES
+INSERT INTO `notas` (`Id`, `Nota`, `fecha`) VALUES
 (1, 'Mjose 9:30  /// Carlota felip la 14:00', '2014-10-10'),
 (2, 'Laura Rubert Ballester a las 9:30', '2014-10-11'),
 (3, 'Sandra Granell cej 18:15', '2014-11-27'),
@@ -42702,12 +42702,12 @@ INSERT INTO `tblreseteopass` (`id`, `idusuario`, `username`, `token`, `creado`) 
 
 CREATE TABLE `usuarios` (
   `Id` int(11) NOT NULL,
-  `Nombre` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `nombre` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Email` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `Pass` varchar(50) CHARACTER SET latin1 NOT NULL,
   `Tel` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
-  `Obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci DEFAULT NULL,
   `Block` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=957 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
@@ -42715,7 +42715,7 @@ CREATE TABLE `usuarios` (
 -- Dumping data for table `usuarios`
 --
 
-INSERT INTO `usuarios` (`Id`, `Nombre`, `Email`, `Pass`, `Tel`, `Admin`, `Obs`, `Block`) VALUES
+INSERT INTO `usuarios` (`Id`, `nombre`, `Email`, `Pass`, `Tel`, `Admin`, `obs`, `Block`) VALUES
 (1, 'Le Bouquet', 'admin@lebouquet.es', '8ecf96fa45c03b3d0bce99c84740892085c49500', '964063959', 1, '', NULL),
 (2, 'invitado', 'nestorpons@hotmail.es', 'b6902f76c449b2c8a68ebce414edfa7c741dc71b', '964063959', 0, '', NULL),
 (7, 'Dunia Campos', '', 'eca2d542fe738869fbc0f6e8d4f8feb9aabe41cf', '', 0, '', NULL),
@@ -43261,7 +43261,7 @@ INSERT INTO `usuarios` (`Id`, `Nombre`, `Email`, `Pass`, `Tel`, `Admin`, `Obs`, 
 (623, 'Diana Garcia', '', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', '', 0, '', NULL),
 (624, 'Laura Onac', '', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', '', 0, '', NULL),
 (626, 'Carla Mateos Eixau', 'carlamateos@hotmail.com', 'fd2c23d4dd025b255ab9c47aaf083c3cdbbd8e2a', '649554538', 0, '', NULL);
-INSERT INTO `usuarios` (`Id`, `Nombre`, `Email`, `Pass`, `Tel`, `Admin`, `Obs`, `Block`) VALUES
+INSERT INTO `usuarios` (`Id`, `nombre`, `Email`, `Pass`, `Tel`, `Admin`, `obs`, `Block`) VALUES
 (627, 'Lorena Aguayo', '', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', '666345845', 0, '', 0),
 (628, 'Cristina Pastor Marin', 'melopido2003@gmail.com', '4cf8cf84c2c5245130abcb4359dc63439369eb97', '620985932', 0, '', NULL),
 (629, 'Victor Zeyani', '', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', '', 0, '', NULL),
@@ -43546,7 +43546,7 @@ INSERT INTO `usuarios` (`Id`, `Nombre`, `Email`, `Pass`, `Tel`, `Admin`, `Obs`, 
 --
 ALTER TABLE `articulos`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `Codigo` (`Codigo`),
+  ADD UNIQUE KEY `codigo` (`codigo`),
   ADD KEY `IdFamilia` (`IdFamilia`);
 
 --
@@ -43655,7 +43655,7 @@ ALTER TABLE `tblreseteopass`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `Nombre` (`Nombre`);
+  ADD UNIQUE KEY `nombre` (`nombre`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -44906,15 +44906,15 @@ CREATE TABLE `pma__relation` (
 INSERT INTO `pma__relation` (`master_db`, `master_table`, `master_field`, `foreign_db`, `foreign_table`, `foreign_field`) VALUES
 ('aol_accesos', 'empresas', 'Id', 'aol_accesos', 'accesos', 'Id'),
 ('bd_la_plantilla', 'config', 'idEmpresa', 'aol_accesos', 'empresas', 'Id'),
-('bd_la_plantilla', 'cita', 'IdCita', 'bd_la_plantilla', 'data', 'IdCita'),
+('bd_la_plantilla', 'cita', 'idCita', 'bd_la_plantilla', 'data', 'idCita'),
 ('bd_la_plantilla', 'cita', 'Servicio', 'bd_la_plantilla', 'articulos', 'Id'),
 ('bd_la_plantilla', 'articulos', 'Id', 'bd_la_plantilla', 'cita', 'Servicio'),
-('bd_la_plantilla', 'data', 'IdCita', 'bd_la_plantilla', 'cita', 'IdCita'),
-('bd_la_plantilla', 'data', 'IdUsuario', 'bd_la_plantilla', 'usuarios', 'Id'),
+('bd_la_plantilla', 'data', 'idCita', 'bd_la_plantilla', 'cita', 'idCita'),
+('bd_la_plantilla', 'data', 'idUsuario', 'bd_la_plantilla', 'usuarios', 'Id'),
 ('bd_la_plantilla', 'familias', 'IdFamilia', 'bd_la_plantilla', 'articulos', 'IdFamilia'),
 ('bd_la_plantilla', 'articulos', 'IdFamilia', 'bd_la_plantilla', 'familias', 'IdFamilia'),
 ('bd_la_plantilla', 'tblreseteopass', 'idusuario', 'bd_la_plantilla', 'usuarios', 'Id'),
-('bd_la_plantilla', 'del_cita', 'IdCita', 'bd_la_plantilla', 'del_data', 'IdCita'),
+('bd_la_plantilla', 'del_cita', 'idCita', 'bd_la_plantilla', 'del_data', 'idCita'),
 ('aol_accesos', 'accesos', 'Id', 'aol_accesos', 'empresas', 'Id'),
 ('aol_accesos', 'empresas', 'Idioma', 'aol_accesos', 'idiomas', 'Id');
 
@@ -44978,7 +44978,7 @@ CREATE TABLE `pma__table_uiprefs` (
 
 INSERT INTO `pma__table_uiprefs` (`username`, `db_name`, `table_name`, `prefs`, `last_update`) VALUES
 ('root', 'bd_la_plantilla', 'even', '{"sorted_col":"`even`.`Id` DESC"}', '2017-01-15 20:27:10'),
-('root', 'bd_la_plantilla', 'cita', '{"CREATE_TIME":"2016-04-01 16:51:08","col_visib":["1","1","1","1","1","1","1"],"sorted_col":"`IdCita` ASC"}', '2017-03-17 19:16:50'),
+('root', 'bd_la_plantilla', 'cita', '{"CREATE_TIME":"2016-04-01 16:51:08","col_visib":["1","1","1","1","1","1","1"],"sorted_col":"`idCita` ASC"}', '2017-03-17 19:16:50'),
 ('root', 'bd_la_plantilla', 'usuarios', '{"sorted_col":"`Id` ASC","CREATE_TIME":"2016-04-07 21:45:22","col_visib":["1","1","1","1","1","1","1","1"]}', '2017-02-24 16:46:50'),
 ('root', 'bd_la_plantilla', 'festivos', '{"sorted_col":"`festivos`.`Id` ASC"}', '2017-01-15 20:27:10'),
 ('root', 'bd_la_plantilla', 'config', '{"CREATE_TIME":"2016-06-25 16:19:52","col_visib":["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"]}', '2017-01-15 20:27:10'),
@@ -44986,7 +44986,7 @@ INSERT INTO `pma__table_uiprefs` (`username`, `db_name`, `table_name`, `prefs`, 
 ('root', 'bd_la_plantilla', 'notas', '{"sorted_col":"`notas`.`Id` DESC"}', '2017-01-15 20:27:11'),
 ('root', 'lebouquet_es', 'usuarios', '{"sorted_col":"`usuarios`.`Id` ASC","CREATE_TIME":"2016-08-02 20:50:34","col_visib":["1","1","1","1","1","1","1","1"]}', '2016-10-12 15:15:01'),
 ('root', 'lebouquet_es', 'even', '{"sorted_col":"`even`.`Id` ASC"}', '2016-08-02 20:14:42'),
-('root', 'bd_la_plantilla', 'data', '{"sorted_col":"`data`.`IdCita` ASC"}', '2017-01-23 07:14:28'),
+('root', 'bd_la_plantilla', 'data', '{"sorted_col":"`data`.`idCita` ASC"}', '2017-01-23 07:14:28'),
 ('root', 'aol_accesos', 'empresas', '{"CREATE_TIME":"2016-12-16 08:20:38","col_visib":["1","1","1","1","1","1","1","1","1","1","1","1","1","1"],"col_order":["0","1","2","3","4","5","6","7","8","9","10","11","12","13"]}', '2016-12-16 08:24:27');
 
 -- --------------------------------------------------------

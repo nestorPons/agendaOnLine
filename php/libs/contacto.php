@@ -14,7 +14,7 @@ if($nombre != "" && $email != ''){
 	$asunto = "solicitud contacto $empresa";//Puedes cambiar el asunto del mensaje desde aqui
 	//Este sería el cuerpo del mensaje
 	$mensaje = "<html><body><table border='0' cellspacing='3' cellpadding='2'>".
-	"<tr><td width='30%' align='left' bgcolor='#f0efef'><strong>Nombre:</strong></td>".
+	"<tr><td width='30%' align='left' bgcolor='#f0efef'><strong>nombre:</strong></td>".
 		"<td width='80%' align='left'>$nombre</td></tr>".
 	"<tr><td align='left' bgcolor='#f0efef'><strong>E-mail:</strong></td>".
 		"<td align='left'>$email</td></tr>".

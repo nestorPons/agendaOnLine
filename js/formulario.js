@@ -8,11 +8,11 @@ $('.btn-danger').click(function(){window.location.href = "index.html"})
       if ($('#pass1').val() != $('#pass2').val()) return false;
       var frm = $(this).find('input:not(:password)').serialize();
 
-      $.post("php/crearAgenda.php",frm,function(r){
+      $.post("php/crearagenda.php",frm,function(r){
         if (r.success){ 
           $.Notify({
             caption: 'Guardado',
-            content: 'Se ha creado una Agenda',
+            content: 'Se ha creado una agenda',
             type: 'success',
             icon: 'icon-floppy'
           });

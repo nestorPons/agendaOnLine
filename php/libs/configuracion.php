@@ -15,8 +15,8 @@ $js['sendMailUser'] = !empty($row['sendMailUser'])?true:false;
 $js['festivosON'] = !empty($row['festivosON'])?true:false;
 $array =explode('/', $_SERVER['REQUEST_URI'] );
 $url= "/". $array[1]."/".$array[2] ."/admin/agendas/agendas.php";
-$js['url'] = $row['numAgendas']==1?$url."?a=1":$url."?a=0";
-$js['numAg']  =$row['numAgendas'];
+$js['url'] = $row['numagendas']==1?$url."?a=1":$url."?a=0";
+$js['numAg']  =$row['numagendas'];
 
 echo json_encode($js);
 ?>

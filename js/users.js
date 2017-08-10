@@ -5,9 +5,9 @@ var HORARIOS = document.horarios;
 var FESTIVOS = document.festivos;
 var AGENDA = document.agenda;
 var crearCita = {
-	crearHoras: function(fecha,callback){	
+	crearhoras: function(fecha,callback){	
 		$('#tablas table:visible').removeClass('activa');
-		var fecha = fecha||Fecha.general;	
+		var fecha = fecha||fecha.general;	
 		var agenda =	 $('#crearCita input[name="agenda[]"]:checked').val()||1;
 		var horas = new Array;
 		var ruta = urlPhp +'cogerCita/horasCns.php';
@@ -17,15 +17,15 @@ var crearCita = {
 
 		$.get(ruta,arg,function(r){
 			$.each(r,function(index, valor){	
-				Fecha.id = index;
-				if (!$('#'+Fecha.id).length){
+				fecha.id = index;
+				if (!$('#'+fecha.id).length){
 					var clone = $('#principal').clone()
 						clone
-							.attr('id',Fecha.id)
+							.attr('id',fecha.id)
 							.appendTo('#tablas')
 							.addClass('editando')
 					$.each(valor,function(i, v){
-						$this = $('#'+Fecha.id+' #h'+i);						
+						$this = $('#'+fecha.id+' #h'+i);						
 						$this.addClass('activa');
 						if (v == 2) 
 							$this
@@ -39,9 +39,9 @@ var crearCita = {
 					});
 				}
 			})
-			Fecha.id = Fecha.number($('.datepicker').val())
-			crearCita.pintarHoras();
-			$('#crearCita #'+Fecha.id).addClass('activa');
+			fecha.id = fecha.number($('.datepicker').val())
+			crearCita.pintarhoras();
+			$('#crearCita #'+fecha.id).addClass('activa');
 		},'json')
 
 		$('#crearCita [data-role="preloader"]').fadeOut('slow');
@@ -68,7 +68,7 @@ var crearCita = {
 		var url = urlPhp+"cogerCita/guardar.php";
 		var $hora = $('#cogerCitaFrm input:radio[name="hora[]"]:checked');
 		var data = $this.serialize()+
-			'&fecha='+Fecha.sql($('.datepicker').val())+
+			'&fecha='+fecha.sql($('.datepicker').val())+
 			'&usuario='+$('body').data('iduser');
 		$.getJSON(url,data,function(r,status){
 			if(r.success){
@@ -80,7 +80,7 @@ var crearCita = {
 				})
 
 				_insertarHistorial(r.data);
-				_ocuparHoras(r.hora);
+				_ocuparhoras(r.hora);
 				
 				$('#crearCita').removeAttr('style');
 				cerrarMenu('#crearCita');	
@@ -97,9 +97,9 @@ var crearCita = {
 			}
 		}).fail(function(r){console.log("ERROR=>"+r.success);})
 		
-		function _ocuparHoras(horas){
+		function _ocuparhoras(horas){
 			$.each(horas,function(i,v){
-				$('#'+Fecha.id+' #h'+v).addClass('ocupado')
+				$('#'+fecha.id+' #h'+v).addClass('ocupado')
 			})
 		}
 		
@@ -107,7 +107,7 @@ var crearCita = {
 
 			var arrHistorial = new Array()
 			var hora = $('#tablas :radio:checked').val()
-			var fecha = Fecha.sql($('.datepicker').val());
+			var fecha = fecha.sql($('.datepicker').val());
 		
 			$('#stepper1 input:checkbox:checked').each(function(i){
 				var tiempoServicio = $(this).data('time');
@@ -147,10 +147,10 @@ var crearCita = {
 			$.get(url,function(html){
 				$('#dialogs')
 					.append(html)
-					.find('#lblHora')
+					.find('#lblhora')
 						.html(hora).end()
-					.find('#lblFecha')
-						.html(Fecha.print(Fecha.general)+', ');
+					.find('#lblfecha')
+						.html(fecha.print(fecha.general)+', ');
 				dialog.open('#dlgGuardarCita',crearCita.guardarCita)
 			})			
 		}else{
@@ -183,7 +183,7 @@ var crearCita = {
 				typeof callback == "function" && callback();
 			}
 		},
-	pintarHoras: function (callback){
+	pintarhoras: function (callback){
 			var tiempoServicios = _tiempoServicios();
 			var ts = parseInt(Math.ceil(tiempoServicios/15))||0;
 			var totalTablas = $('#tablas table').length
@@ -196,7 +196,7 @@ var crearCita = {
 				var last = $this.find('td.activa:last input').attr('id');
 				var first = $this.find('td.activa:first input').attr('id');
 				var fecha = $this.attr('id');
-				var diaFestivo = $.inArray(Fecha.md(fecha),FESTIVOS)!=-1;
+				var diaFestivo = $.inArray(fecha.md(fecha),FESTIVOS)!=-1;
 
 				for(let i =  last; i >=first ; i--){
 					if(diaFestivo||_esPasada(i)){ 
@@ -259,7 +259,7 @@ var historial = {
 	eliminar: function($this){			
 		var id = $this.attr('id')
 		var $this = $this.parent();
-		var fecha =  Fecha.number($this.data('fecha'));
+		var fecha =  fecha.number($this.data('fecha'));
 		var hora = $this.data('hora');
 		var idSer = $this.attr('class');
 		var $rows = $("#historial #tableHistory ."+idSer);
@@ -359,7 +359,7 @@ var usuario = {
 	},
 }
 $(function(){	
-	$("[name='desplazarFecha']").click(function(e){
+	$("[name='desplazarfecha']").click(function(e){
 		var dir = $(this).data('action');
 		sincronizar(null,dir)
 	})	
@@ -416,24 +416,24 @@ $(function(){
 	historial.numeracion();
 });
 function sincronizar(fecha,dias,callback){
-	var fecha = fecha||Fecha.general;
+	var fecha = fecha||fecha.general;
 	if (dias)
-		fecha =  Fecha.calcular(dias, fecha);
+		fecha =  fecha.calcular(dias, fecha);
 	else
 		dias = 0;
 
-	if(Fecha.restar(fecha)<0) return false;
+	if(fecha.restar(fecha)<0) return false;
 	
-	Fecha.general = Fecha.sql(fecha);	
-	Fecha.id = Fecha.number(Fecha.general);
+	fecha.general = fecha.sql(fecha);	
+	fecha.id = fecha.number(fecha.general);
 	
 	$('.datepicker')
-			.val(Fecha.print(fecha))
-			.datepicker("setDate",Fecha.print(fecha));
+			.val(fecha.print(fecha))
+			.datepicker("setDate",fecha.print(fecha));
 			
-	if(!$('#crearCita #tablas #'+Fecha.id).length){
+	if(!$('#crearCita #tablas #'+fecha.id).length){
 		echo ('creando_las_horas_sincronizar')
-		crearCita.crearHoras();
+		crearCita.crearhoras();
 	}else{
 		var content = $('#tablas') ;
 		slideDias(content,dias,callback)		
@@ -458,7 +458,7 @@ function validarServicios(){
 			var txtSer=$(this).data('descripcion');
 			$('#crearCita #lblSer').append(txtSer+', ');
 		})
-		crearCita.pintarHoras();
+		crearCita.pintarhoras();
 		return true;
 	}
 }

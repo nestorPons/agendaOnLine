@@ -1,6 +1,6 @@
 <?php namespace horarios;
 
-class Horarios{
+class horarios{
 		private $conn;
 		public $horas_array;
 		
@@ -10,9 +10,9 @@ class Horarios{
 		
 		public function consult(){
 
-			$arrHorarios = $this->conn->all("SELECT * FROM horarios ORDER BY dia",MYSQLI_ASSOC);
+			$arrhorarios = $this->conn->all("SELECT * FROM horarios ORDER BY dia",MYSQLI_ASSOC);
 
-			foreach ($arrHorarios as $key => $value){
+			foreach ($arrhorarios as $key => $value){
 				$horarios[] = ['agenda' => $value['agenda'] ,'dia' => $value['dia'], 'inicio' => $value['inicio'] , 'fin' => $value['fin'] ];
 			}
 
@@ -31,7 +31,7 @@ class Horarios{
 			for ($d = 0 ; $d <= 6 ;$d++ ){
 				if (!empty($inicio_horarios[$d])){
 					for ($i = 0 ; $i < count($inicio_horarios[$d]); $i++){
-						for($h =  strtotime($inicio_horarios[$d][$i]); $h <=  strtotime($fin_horarios[$d][$i]) ; $h += strtotime("+15 minutes", strtotime($h))){	
+						for($h =  strtotime($inicio_horarios[$d][$i]); $h <=  strtotime($fin_horarios[$d][$i]) ; $h = strtotime("+15 minutes", ($h))){	
 							$horas_array[$d][] = date('H:i', $h);
 						} 
 					}
@@ -65,4 +65,4 @@ class Horarios{
 			echo json_encode($row);
 		}
 }
-$h = new Horarios;
+$h = new horarios;

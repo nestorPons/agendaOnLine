@@ -9,20 +9,20 @@ include $_SERVER['DOCUMENT_ROOT'].'/php/admin/main/view.function.php';
 
 if (isset ($_POST['action'])){
     switch ($_POST['action']) {
-        case 'del' :
+        case 'edit' :
             $lbl = new main\Lbl($_POST) ;
             $lbl->edit($_POST) ;
             break ;
 
         case 'view' :
-            $fecha_inicio = $_GET['fecha'] ;
-            $datos_agenda = datosAgenda($fecha_inicio);
-            $ids_existentes = json_decode(stripslashes($_GET['ids']));
+            $fecha_inicio = $_POST['fecha'] ;
+            $datos_agenda = datosagenda($fecha_inicio);
+            $ids_existentes = json_decode(stripslashes($_POST['ids']));
             main\view($datos_agenda,$fecha_inicio,$ids_existentes);
             break ;
 
         case 'del' :
-            $lbl = new main\Lbl($_GET) ;
+            $lbl = new main\Lbl($_POST) ;
             $lbl->del() ;
             break ;
     }

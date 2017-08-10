@@ -8,7 +8,7 @@ function generarLinkTemporal($idusuario, $username){
 	$token = sha1($cadena);
 	$sql = "INSERT INTO tblreseteopass (idusuario, token, creado) VALUES($idusuario,'$token','".date('Y-m-d H:i:s')."');";
 	if($resultado = mysqli_query($conexion,$sql)){
-		 $enlace = $_SERVER['SERVER_NAME']."/".$_SESSION['bd'].'/restablecer.php?e='.normaliza(CONFIG['Nombre']).'&idusuario='.sha1($idusuario).'&token='.$token;
+		 $enlace = $_SERVER['SERVER_NAME']."/".$_SESSION['bd'].'/restablecer.php?e='.normaliza(CONFIG['nombre']).'&idusuario='.sha1($idusuario).'&token='.$token;
 		return $enlace;
 	}else{
 		return false;
@@ -27,10 +27,10 @@ function enviarEmail($email,$link){
 							
 							<span>
 							AVISO LEGAL:
-							En cumplimiento de lo establecido en la L.O. 15/1999 de Protección de Datos de Carácter Personal, '.CONFIG["Nombre"].
+							En cumplimiento de lo establecido en la L.O. 15/1999 de Protección de Datos de Carácter Personal, '.CONFIG["nombre"].
 							' le informa que sus datos han sido incorporados a un fichero automatizado con la finalidad de prestar y ofrecer nuestros servicios. 
 							Los datos recogidos son almacenados bajo la confidencialidad y las medidas de seguridad legalmente establecidas y no serán cedidos ni compartidos con empresas 
-							ni entidades ajenas a '.CONFIG["Nombre"].'. Igualmente deseamos informarle que podrá ejercer los derechos de acceso, 
+							ni entidades ajenas a '.CONFIG["nombre"].'. Igualmente deseamos informarle que podrá ejercer los derechos de acceso, 
 							rectificación cancelación u oposición a través de los siguientes medios:
 							
 							• E-mail:'.CONFIG["Email"].'
@@ -41,7 +41,7 @@ function enviarEmail($email,$link){
 						
 	$cabeceras = 'MIME-Version:1.0' . "\r\n";
 	$cabeceras .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-	$cabeceras .= 'From:'. CONFIG['Nombre'].'<'.CONFIG['Email'].'>';
+	$cabeceras .= 'From:'. CONFIG['nombre'].'<'.CONFIG['Email'].'>';
 	$asunto = "Nueva contraseña";
 	$asunto = "=?UTF-8?B?".base64_encode($asunto)."=?=";
 	mail($email, $asunto, $mensaje, $cabeceras);
@@ -52,7 +52,7 @@ if( $_GET['email'] != "" ){
 	$resultado = $conexion->query($sql);
 	if($resultado->num_rows > 0){
 		$usuario = $resultado->fetch_assoc();
-		$linkTemporal = generarLinkTemporal( $usuario['Id'], $usuario['Nombre'] );
+		$linkTemporal = generarLinkTemporal( $usuario['Id'], $usuario['nombre'] );
 		if($linkTemporal){
 			enviarEmail( $_GET['email'], $linkTemporal );
 			$respuesta = "Un correo ha sido enviado a su cuenta de email con las instrucciones para restablecer la contraseña";
@@ -67,7 +67,7 @@ if( $_GET['email'] != "" ){
 <!DOCTYPE html>
 <html lang="es" >	
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Agenda OnLine</title>
+<title>agenda OnLine</title>
 <link rel='shortcut icon' href='../../img/favicon.ico' >
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

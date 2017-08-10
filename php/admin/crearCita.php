@@ -13,8 +13,8 @@
 					$nombreDp='dpCC';
 					include $_SERVER['DOCUMENT_ROOT']."/php/menus/datepicker.php" ;
 				?>
-				<h2>Tiempo total de los servicios:<span id='tSer' class="resaltado"></span> min.</h2>	
-				<div id="tablas" class="tablas tblHoras">
+				<h2>tiempo total de los servicios:<span id='tSer' class="resaltado"></span> min.</h2>	
+				<div id="tablas" class="tablas tblhoras">
 				<!--	<div data-role="preloader" data-type="cycle" data-style="color" class="margin20"></div>-->
 				</div>
 			</div>

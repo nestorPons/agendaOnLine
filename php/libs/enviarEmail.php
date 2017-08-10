@@ -14,14 +14,14 @@ if ($user= $conn->array($sql)){
 		$para = $user['Email'];
 		$cabeceras = 'MIME-Version: 1.0' . PHP_EOL;
 		$cabeceras .= 'Content-type: text/html; charset=utf-8' . PHP_EOL;
-		$cabeceras .= 'From: '.CONFIG['Nombre'].'<'.CONFIG['Email'].'>'. PHP_EOL;
+		$cabeceras .= 'From: '.CONFIG['nombre'].'<'.CONFIG['Email'].'>'. PHP_EOL;
 		$mensaje = 
 				'<html>
 				<head>
-					<title>Reserva cita en '. CONFIG['Nombre'] .'</title>
+					<title>Reserva cita en '. CONFIG['nombre'] .'</title>
 				</head>
 				<body style="text-aling:center">
-					<h1>Reserva cita en '. CONFIG['Nombre'] . '</h1>
+					<h1>Reserva cita en '. CONFIG['nombre'] . '</h1>
 					Le informamos que tiene su cita reservada para el día:
 					</br>
 					<h2>'.$fecha.' a las '.$horas.'</h2>
@@ -29,7 +29,7 @@ if ($user= $conn->array($sql)){
 					Puede proceder a la modificación o eliminación en:
 					</br>
 					<h2>
-					<a href="'.$link.'">Agenda On Line</a>
+					<a href="'.$link.'">agenda On Line</a>
 					</h2>
 					</br>
 					

@@ -6,7 +6,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(11)|No|
-|Nombre|text|No|
+|nombre|text|No|
 |NIF|text|No|
 |NomUser|text|No|
 |Dir|text|No|
@@ -16,12 +16,12 @@
 |Email|text|No|
 |Web|text|No|
 |Tel|text|No|
-|Fecha|timestamp|No|CURRENT_TIMESTAMP
+|fecha|timestamp|No|CURRENT_TIMESTAMP
 |Sector|tinyint(4)|No|
 |Idioma|tinyint(1)|No|1
 |Plan|tinyint(1)|No|1
 |NumAg|tinyint(2)|No|1
-|Horarios|tinyint(1)|No|1
+|horarios|tinyint(1)|No|1
 |UltimoAcceso|date|No|
 == Volcado de datos para la tabla empresas
 
@@ -33,7 +33,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|tinyint(4)|No|
-|Nombre|text|No|
+|nombre|text|No|
 == Volcado de datos para la tabla idiomas
 
 |1|ES
@@ -47,26 +47,26 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|tinyint(2)|No|
-|Nombre|text|No|
+|nombre|text|No|
 |Mostrar|tinyint(1)|No|0
 == Volcado de datos para la tabla agendas
 
-|1|Agenda 1|1
-|2|Agenda 2|0
-|3|Agenda 3|1
-|4|Agenda 4 |1
-|5|Agenda 5|1
-|6|Agenda 6|1
+|1|agenda 1|1
+|2|agenda 2|0
+|3|agenda 3|1
+|4|agenda 4 |1
+|5|agenda 5|1
+|6|agenda 6|1
 == Estructura de tabla para la tabla articulos
 
 |------
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(11)|No|
-|**Codigo**|varchar(15)|No|
-|Descripcion|varchar(50)|Sí|NULL
+|**codigo**|varchar(15)|No|
+|descripcion|varchar(50)|Sí|NULL
 |Precio|double|Sí|0
-|Tiempo|int(4)|Sí|0
+|tiempo|int(4)|Sí|0
 |IdFamilia|tinyint(4)|Sí|NULL
 |Baja|tinyint(1)|No|
 == Volcado de datos para la tabla articulos
@@ -81,7 +81,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|bigint(255)|No|
-|IdCita|bigint(255)|No|
+|idCita|bigint(255)|No|
 |Servicio|int(11)|No|
 == Volcado de datos para la tabla cita
 
@@ -126,12 +126,12 @@
 |------
 |Columna|Tipo|Nulo|Predeterminado
 |------
-|//**IdCita**//|bigint(255)|No|
-|Agenda|tinyint(2)|No|1
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|time|No|
-|Obs|text|Sí|NULL
+|//**idCita**//|bigint(255)|No|
+|agenda|tinyint(2)|No|1
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|time|No|
+|obs|text|Sí|NULL
 |UsuarioCogeCita|int(11)|Sí|NULL
 == Volcado de datos para la tabla data
 
@@ -143,7 +143,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|bigint(255)|No|0
-|IdCita|bigint(255)|No|
+|idCita|bigint(255)|No|
 |Servicio|int(11)|No|
 == Volcado de datos para la tabla del_cita
 
@@ -152,14 +152,14 @@
 |------
 |Columna|Tipo|Nulo|Predeterminado
 |------
-|//**IdCita**//|bigint(255)|No|0
-|Agenda|tinyint(2)|No|1
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|time|No|
-|Obs|text|Sí|NULL
+|//**idCita**//|bigint(255)|No|0
+|agenda|tinyint(2)|No|1
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|time|No|
+|obs|text|Sí|NULL
 |UsuarioCogeCita|int(11)|Sí|NULL
-|FechaDel|timestamp|No|CURRENT_TIMESTAMP
+|fechaDel|timestamp|No|CURRENT_TIMESTAMP
 == Volcado de datos para la tabla del_data
 
 == Estructura de tabla para la tabla even
@@ -168,10 +168,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|bigint(20)|No|
-|IdUsuario|int(11)|Sí|NULL
-|IdCita|int(11)|Sí|NULL
+|idUsuario|int(11)|Sí|NULL
+|idCita|int(11)|Sí|NULL
 |IdEven|tinyint(4)|Sí|NULL
-|Fecha|datetime|Sí|NULL
+|fecha|datetime|Sí|NULL
 |Admin|tinyint(1)|Sí|NULL
 |agenda|tinyint(4)|No|
 == Volcado de datos para la tabla even
@@ -182,7 +182,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**IdEven**//|tinyint(4)|No|
-|Nombre|text|No|
+|nombre|text|No|
 == Volcado de datos para la tabla eventos
 
 == Estructura de tabla para la tabla familias
@@ -191,7 +191,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**IdFamilia**//|tinyint(1)|No|
-|Nombre|varchar(15)|No|
+|nombre|varchar(15)|No|
 |Mostrar|tinyint(4)|No|1
 |Baja|tinyint(4)|No|0
 == Volcado de datos para la tabla familias
@@ -205,8 +205,8 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|tinyint(4)|No|
-|Nombre|text|Sí|NULL
-|Fecha|date|No|
+|nombre|text|Sí|NULL
+|fecha|date|No|
 == Volcado de datos para la tabla festivos
 
 |1|AÑO NUEVO|2017-01-01
@@ -235,7 +235,7 @@
 |------
 |//**Id**//|int(50)|No|
 |Nota|longtext|No|
-|Fecha|date|No|
+|fecha|date|No|
 == Volcado de datos para la tabla notas
 
 == Estructura de tabla para la tabla tblreseteopass
@@ -266,12 +266,12 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(11)|No|
-|Nombre|tinytext|No|
+|nombre|tinytext|No|
 |Email|varchar(50)|Sí|NULL
 |Pass|varchar(50)|No|
 |Tel|varchar(20)|Sí|NULL
 |Admin|tinyint(1)|No|0
-|Obs|varchar(50)|No|
+|obs|varchar(50)|No|
 |cookie|int(11)|No|
 |Idioma|tinyint(1)|No|1
 |dateReg|timestamp|No|CURRENT_TIMESTAMP
@@ -290,10 +290,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**id**//|int(11)|No|
-|**Codigo**|varchar(15)|No|
-|Descripcion|varchar(50)|Sí|NULL
+|**codigo**|varchar(15)|No|
+|descripcion|varchar(50)|Sí|NULL
 |Precio|double|Sí|NULL
-|Tiempo|int(4)|Sí|NULL
+|tiempo|int(4)|Sí|NULL
 |Familia|varchar(20)|Sí|NULL
 |IdFamilia|tinyint(4)|Sí|NULL
 == Volcado de datos para la tabla articulos
@@ -423,10 +423,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita1
@@ -25903,10 +25903,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita2
@@ -41742,10 +41742,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita3
@@ -41756,10 +41756,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita4
@@ -41770,10 +41770,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita5
@@ -41784,10 +41784,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita6
@@ -41798,10 +41798,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita7
@@ -41812,10 +41812,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita8
@@ -41826,10 +41826,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(10)|No|
-|IdCita|int(10)|No|
-|IdUsuario|int(11)|No|
-|Fecha|date|No|
-|Hora|int(3)|No|
+|idCita|int(10)|No|
+|idUsuario|int(11)|No|
+|fecha|date|No|
+|hora|int(3)|No|
 |Servicio|varchar(11)|No|
 |OnLine|tinyint(1)|No|
 == Volcado de datos para la tabla cita9
@@ -41851,8 +41851,8 @@
 |InicioT|tinyint(1)|Sí|NULL
 |CierreT|tinyint(1)|No|
 |CierreOtros|tinyint(1)|No|
-|mostrarAgendas|tinyint(4)|No|
-|numAgendas|tinyint(4)|No|
+|mostraragendas|tinyint(4)|No|
+|numagendas|tinyint(4)|No|
 |agenda1|tinyint(1)|No|
 |agenda2|tinyint(1)|No|
 |agenda3|tinyint(1)|No|
@@ -41872,10 +41872,10 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|bigint(20)|No|
-|IdUsuario|int(11)|Sí|NULL
-|IdCita|int(11)|Sí|NULL
+|idUsuario|int(11)|Sí|NULL
+|idCita|int(11)|Sí|NULL
 |IdEven|tinyint(4)|Sí|NULL
-|Fecha|datetime|Sí|NULL
+|fecha|datetime|Sí|NULL
 |Admin|tinyint(1)|Sí|NULL
 |agenda|tinyint(4)|No|
 == Volcado de datos para la tabla even
@@ -59548,7 +59548,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**IdEven**//|tinyint(4)|No|
-|Nombre|text|No|
+|nombre|text|No|
 == Volcado de datos para la tabla eventos
 
 |0|Entrada sessión
@@ -59564,7 +59564,7 @@
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**IdFamilia**//|tinyint(1)|No|
-|Nombre|varchar(15)|No|
+|nombre|varchar(15)|No|
 |Mostrar|tinyint(4)|No|1
 == Volcado de datos para la tabla familias
 
@@ -59583,7 +59583,7 @@
 |//**Id**//|tinyint(4)|No|
 |Dia|tinyint(4)|Sí|NULL
 |Mes|tinyint(4)|Sí|NULL
-|Nombre|text|Sí|NULL
+|nombre|text|Sí|NULL
 == Volcado de datos para la tabla festivos
 
 |0|1|1|Año nuevo 
@@ -59607,7 +59607,7 @@
 |------
 |//**Id**//|int(50)|No|
 |Nota|longtext|No|
-|Fecha|date|No|
+|fecha|date|No|
 == Volcado de datos para la tabla notas
 
 |1|Mjose 9:30  /// Carlota felip la 14:00|2014-10-10
@@ -59837,12 +59837,12 @@ Llamar a Talia para recordar la cita de mañanaa|2017-05-29
 |Columna|Tipo|Nulo|Predeterminado
 |------
 |//**Id**//|int(11)|No|
-|**Nombre**|varchar(50)|No|
+|**nombre**|varchar(50)|No|
 |Email|varchar(50)|Sí|NULL
 |Pass|varchar(50)|No|
 |Tel|varchar(20)|Sí|NULL
 |Admin|tinyint(1)|No|0
-|Obs|varchar(50)|Sí|NULL
+|obs|varchar(50)|Sí|NULL
 |Block|tinyint(1)|Sí|NULL
 == Volcado de datos para la tabla usuarios
 
