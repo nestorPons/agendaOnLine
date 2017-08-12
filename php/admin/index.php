@@ -15,12 +15,20 @@ compilaLess($url_css,$url_less);
 
 include 'core.php';
 
+
+
+$url_font_main = "https://fonts.googleapis.com/css?family=" .
+	str_replace(' ' ,'+' , CONFIG['font_main']) ."|" . 
+	str_replace(' ' ,'+' , CONFIG['font_tile']) ; 
 ?>
+
 <!DOCTYPE html>
 <html lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+<link href= "<?= $url_font_main ?>" rel="stylesheet">
 
 <link rel='shortcut icon' href='../../img/favicon.ico' >
 <link rel="stylesheet" href="../../css/jquery-ui.min.css">
@@ -52,6 +60,7 @@ include 'core.php';
 		<section id='familias' class="capasPrincipales" ></section>
 		<section id='general' class="capasPrincipales" ></section>
 		<section id='config' class="capasPrincipales" ></section>
+		<section id='estilos' class="capasPrincipales" ></section>
 		<section id='festivos' class="capasPrincipales" ></section>
 		<section id='agendas' class="capasPrincipales" ></section>
 		<section id='notas' class="capasPrincipales" ><?php// include "../../php/admin/notas.php"?></section>

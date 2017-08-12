@@ -71,9 +71,12 @@ function mostrarCapa(capa, callback){
 
 	$('html,body').animate({scrollTop:0}, 500);
 	$('#navbar')
-		.find('a').removeClass('selected').end()
+		.find('.selected').removeClass('selected').end()
 		.find('[data-capa="'+capa+'"]').addClass('selected')
 	typeof callback == "function" && callback();
+}
+function sliderConfigBorder ( value, slider ) {
+	estilos.test( value ) ;
 }
 var main ={	
 	status : document.mainStatus ,
@@ -532,6 +535,9 @@ var menu = {
 			case 'general':
 				menu.enabled(save) ;
 				break ;
+			case 'estilos':
+				menu.enabled(save) ;
+				break;
 		}
 		$('#navbar').resize();
 	},
@@ -561,6 +567,9 @@ var menu = {
 				break;
 			case 'general':
 				general.guardar(_loadHide);
+				break;
+			case 'estilos':
+				estilos.save(_loadHide);
 				break;
 		}
 	},
@@ -983,13 +992,8 @@ var crearCita ={
 
 	},
 	horas: {
-		iniciar: function(){		
-			if (!$('#crearCita #tablas table').length) cargarDatepicker();
-	
-			if ($('#main #'+Fecha.id).length ) 
-				_bucleDias();
-			
-			function _bucleDias (){
+		iniciar: function(){	
+			var _bucleDias = function () {
 				 
 				$('#main .dia').each(function(){
 					var self = {
@@ -997,14 +1001,20 @@ var crearCita ={
 						id : $(this).attr('id')
 					}
 
-					if (Fecha.restar(self.id)>=0 && !self.obj.length) 
+					if (Fecha.restar(self.id)>=0 && !self.obj.length) {
 						crearCita.horas.crear(self.id);
+					}
 						
-				})		
-			}
+				})	
+			}	
+
+			if (!$('#crearCita #tablas table').length) cargarDatepicker();
+	
+			if ($('#main #'+Fecha.id).length ) _bucleDias();
+			
 		},
 		crear: function (id_table, callback){
-
+/*
 			var contenedor = $('#crearCita .tblHoras');
 			
 			let table = 
@@ -1012,9 +1022,9 @@ var crearCita ={
 				id : id_table,
 			}).appendTo(contenedor);
 
-			$('#main #'+id_table).find('.hora') 
-			.each( function( ){
+			$('#main #'+id_table).find('.hora').each( function( ){
 				var cls_fuera_horario = $(this).find('.celda').hasClass('fuera_horario')?'fuera_horario':'';
+				
 				$('<tr>' , { 
 					id : 'tr' + $(this).attr('id') 
 				}).append($('<td>' , {
@@ -1032,6 +1042,7 @@ var crearCita ={
 					text : $(this).data('hour') + 'h ' 
 				})))).appendTo(table)
 			})	
+*/
 			 _ordenar(table);
 			 crearCita.horas.pintar(id_table); 
 
@@ -1056,7 +1067,7 @@ var crearCita ={
 		},	
 		
 		pintar: function(id_table){
-		
+		/*
 		//AKI :: pintar horas ocupadas
 
 			var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
@@ -1123,6 +1134,7 @@ var crearCita ={
 				return  _return;
 
 			} 
+		*/
 		},
 	},
 	reset: function(){
@@ -1989,6 +2001,46 @@ var usuarios = {
 
 	}
 }
+var estilos = {
+	border : false , 
+	load : function () {
+
+	},
+	test : function ( value ) {
+		this.border = value ;
+		$('#btnTest').css('border-radius' , value)
+	},
+	save : function () {
+		var border  = this.border || $('#sldBorderRadius').data('position')
+		var url = urlPhp + "estilos/save.php" 
+		data = {
+			color1 : $('#btnColor1').val() ,
+			color2 : $('#btnColor2').val() ,
+			border : border , 
+			text1 : $('#btnText1').val() , 
+			text2 : $('#btnText2').val() , 
+		}
+		$.post(url,data,function(r){
+			if (r) {
+				location.reload(); 
+			}
+		},'json')
+	}, 
+	_getTheColor : function  (colorVal) {
+		var theColor = "";
+		if ( colorVal < 50 ) {
+					myRed = 255;
+					myGreen = parseInt( ( ( colorVal * 2 ) * 255 ) / 100 );
+			}
+		else 	{
+					myRed = parseInt( ( ( 100 - colorVal ) * 2 ) * 255 / 100 );
+					myGreen = 255;
+			}
+		theColor = "rgb(" + myRed + "," + myGreen + ",0)"; 
+		return( theColor ); 
+	}
+
+}
 $(function(){
 
 	var ancho = $('#main th.aling-center').width()
@@ -2004,7 +2056,7 @@ $(function(){
 	main.lbl.droppable()
 
 	var widht = $('#main').css('widht') / ($('#main thead th').length) - 1	;
-	var editarObs = "";
+
 	$('html')
 		.on('click','.close',function(e){popup.close()})
 		.on('change','input',function(){$(this).removeClass('input-error')})
@@ -2221,10 +2273,7 @@ $(function(){
 			sincronizar(null, $(this).parent().parent().data('fecha'))
 		})
 
-		//funciones
-		cargarDatepicker();
-		colorearMenuDiasSemana();
-
-
-
+	//funciones
+	cargarDatepicker();
+	colorearMenuDiasSemana();
 })

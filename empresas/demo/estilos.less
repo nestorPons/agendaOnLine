@@ -1,10 +1,10 @@
-@import 'https://fonts.googleapis.com/css?family=Roboto|Open+Sans:300';
-
+//no dejar espacio detras de las variables
 @main-font: ^font_main, sans-serif;
 @title-font: ^font_tile, sans-serif;
 @radius: ^border_radio;
 @color: ^color_main;
 @auxiliar: ^color_secon;
+@text-color: ^color_text; 
 
 @radio_popover: 10px;
 @base: #fff ;
@@ -12,7 +12,6 @@
 @t2: spin(@color, 20);
 @oposite: saturate(spin(@color, -120),100%);
 @saturate: saturate(@t2,75%);
-@text: #333333;
 @text1: darken(@color,30%);
 @text2: darken(@oposite,30%);
 @b1:mix(@color, #fff, 20%);
@@ -91,7 +90,7 @@ table {
 
 input :-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
-	-webkit-text-fill-color: @text !important;
+	-webkit-text-fill-color: @text-color !important;
 }
 
 body{
@@ -111,8 +110,8 @@ body{
 
 }
 p{
-	margin-bottom: 20px;
-	text-align: center;
+	margin: 10px;
+	color: @text-color;
 }
 h1{
 	display: block;
@@ -144,11 +143,19 @@ h3{
 	color: @base;
 	margin: 5px;
 }
-hr{
-    background-color: @color;
+h4{
+	display : block ;
+	font-family: @title-font;
+	font-size: @fontSize;
+	color: @main-font;
+	margin: 15px;
+}
+
+hr{	
+	margin : 5px ;
+    background-color: @main-font;
 	height: 1px;
-	position:relative;
-	top: -10px;
+	
 }
 a,i , .a{
 	//color: #666666;
@@ -281,7 +288,7 @@ th{
 	@border: 1px 1px 1px 1px;
 	@background:@base;
 	@border-radius:@radius;
-	@border-color: @grey-bg ;
+	@border-color: @text-color ;
 	
 ){
 [type=text], [type=password], [type=email], [type=number], [type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail], select, textarea{
@@ -289,11 +296,8 @@ th{
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
 		background-color: @background;
-		border-color: #C0C0C0 #D9D9D9 #D9D9D9;
-		border-right: 1px solid #D9D9D9;
-		border-style: solid;
-		border-width: @border;
-		border-color: @border-color;
+		border: 1px solid @border-color;
+
 		font-family: @main-font ;
         width: @width;
         padding: @padding;
@@ -303,8 +307,8 @@ th{
 		vertical-align: bottom;
         position: relative;
         overflow: hidden;
-		height: 	@height;
-		color: @text;
+		height: @height;
+		color: @text-color;
 		.border-radius(@border-radius,@border-radius,@border-radius,@border-radius);
 		 @media screen and (max-width: 800px){
 			.border-radius(@border-radius+10,@border-radius+10,@border-radius+10,@border-radius+10);
@@ -486,7 +490,7 @@ th{
     transform: rotate(359deg);
   }
 }
-.app-bar{
+#navbar{
     display: block;
     width: 100%;
 	height: 50px;
@@ -586,15 +590,30 @@ th{
 		}
 	}
 	.color-menu();
-	.selected{
-		text-decoration : underline ;
+	.selected {
+		.caption {
+			
+			text-shadow: -2px -2px @color, -2px 2px @color, 2px -2px @color, 2px 2px @color;
+			background-size: 1px 1em;
+			box-shadow: inset 0 -0.175em @color, inset 0 -0.2em @base;
+			display: inline;
+
+		}
+		&:hover, &:active, &:focus{
+			.caption{
+				box-shadow: inset 0 -0.175em @base, inset 0 -0.2em @color;
+				text-shadow: -2px -2px @base, -2px 2px @base, 2px -2px @base, 2px 2px @base;
+			}
+		}
 	}
 
 	.d-menu, .active-toggle{
 		 li,a{
 			:hover{
-			.color-menu();
-		}}
+				.color-menu();
+	
+			}
+		}
 		.color-sel;
 
 	}
@@ -683,6 +702,7 @@ th{
 			width: 320px !important;
 		}
 	}
+
 }
 .contenedorDatepicker{
 	margin: 0 auto;
@@ -722,7 +742,7 @@ th{
 	padding: 20px;
 	line-height: 1.5em;
     background-color: @base;
-	color: @text;
+	color: @text-color;
     z-index: 1050;
 	text-align:center;
 	.icon-cancel{
@@ -923,6 +943,11 @@ th{
 	.cuerpo{
 		position:absolute;
 		min-height: 500px;
+		&.center {
+			position: inherit ;
+			display : inline-blocK ;
+		}
+
 	}
 	.form{
 		text-align:left;
@@ -1606,9 +1631,6 @@ th{
 		&:visited {
 			color: @grey;
 		}
-		&:hover, &:focus, &:active, &.highlighted {
-			color:@oposite;
-		}
 		i{
 			top: -10px;
 		}
@@ -1777,12 +1799,17 @@ th{
 .none{
 	border: 0 solid @color !important;
 	background-color: transparent  !important;
-	color:@text  !important;
+	color:@text-color  !important;
 	width: auto;
 	height: auto;
 	margin: 0 auto;
 }
-
+.cuerpo {
+	.caption {
+		font-family : @main-font;
+		color : @text-color;
+	}
+}
 #mnuContacto{
 	display:none;
 	#frmContact{
@@ -1794,7 +1821,7 @@ th{
 		color: @base;
 	}
 	h4{
-		color: @text;
+		color: @text-color;
 	}
 	a{
 		display: block;
@@ -2182,6 +2209,11 @@ th{
 				}
 			}
 		}
+	}
+}
+#estilos {
+	& > div  {
+		margin : 10px ;
 	}
 }
 .plantilla{
@@ -2600,7 +2632,6 @@ th{
 	}
 }
 .color-sel(){
-
 	background-color: @base !important;
 	color: @color !important;
 	li a {color: @color !important;}
@@ -2647,4 +2678,13 @@ table {
 	.mostrar_baja{
 		display:table-row;
 	}
+}
+.size-mini {
+	width : 420px ;
+	& input , & button , & span {
+		margin : 5px ;
+	}
+}
+.center {
+	text-align :  center ;
 }

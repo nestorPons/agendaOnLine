@@ -1,6 +1,6 @@
 <?php 
 	$arr_agendas = $conn->all( "SELECT * FROM agendas" );
-	$horarios = new horarios\horarios();
+	$horarios = new horarios\Horarios();
 ?>
 <h1>horarios</h1>
 <hr>

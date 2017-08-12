@@ -19,7 +19,7 @@ class Lbl {
     private $width;
     private $height;
 
-    private $data = []; 
+    public $data = []; 
     public $html = null;
 	
     //conexion
@@ -31,17 +31,18 @@ class Lbl {
 
     }
 
-    public function loadDates($ini , $end) {
-
-	$sql = "SELECT D.idCita, A.Id AS idCodigo, A.codigo, D.agenda, D.idUsuario, U.nombre, D.obs, D.hora , D.fecha ,A.tiempo, A.descripcion
-		FROM cita C JOIN data D ON C.idCita = D.idCita 
-		INNER JOIN usuarios	U ON D.idUsuario = U.Id 
-		LEFT JOIN articulos A ON C.Servicio = A.Id  
-		WHERE D.fecha BETWEEN '$ini' AND '$end'  
-		ORDER BY D.idCita, D.hora";
+    public function loadDates($ini , $end = null ) {
+        $end  = $end ?? $ini ; 
+        $sql = "SELECT D.idCita, A.Id AS idCodigo, A.codigo, D.agenda, D.idUsuario, U.nombre, D.obs, D.hora , D.fecha ,A.tiempo, A.descripcion
+            FROM cita C JOIN data D ON C.idCita = D.idCita 
+            INNER JOIN usuarios	U ON D.idUsuario = U.Id 
+            LEFT JOIN articulos A ON C.Servicio = A.Id  
+            WHERE D.fecha BETWEEN '$ini' AND '$end'  
+            ORDER BY D.idCita, D.hora";
 
         $this->data($sql) ;
     }
+
 
     private function data ($sql) {
         
@@ -59,10 +60,11 @@ class Lbl {
                         'obs'=>$data[$i]['obs'],
                         'idUsuario'=>$data[$i]['idUsuario'],
                         'nombre'=>$data[$i]['nombre'],
+                        'tiempoTotal' => 0 ,
                         'servicios' => array()
                     );
                 }
-
+                $datosagenda[$data[$i]['idCita']]['tiempoTotal'] += (int)$data[$i]['tiempo'] ;
                 $datosagenda[$data[$i]['idCita']]['servicios'][] = array(
                     'idCodigo'=>$data[$i]['idCodigo'],
                     'codigo'=>$data[$i]['codigo'],
@@ -72,6 +74,7 @@ class Lbl {
             
             }
 
+            $this->data = $datosagenda ;
             $this->print($datosagenda) ;
         } 
         //RESET TABLA CITA_USER
@@ -132,8 +135,6 @@ class Lbl {
     
         return $str;
     }
-
-//AKI :: diseñando la forma de enseñar las notas
 
     private function printNote($obs){
         if (!empty($obs)){

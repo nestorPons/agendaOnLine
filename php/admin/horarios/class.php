@@ -8,9 +8,9 @@ class horarios{
 			$this->conn = new \connect\Conexion( 'bd_' . $_SESSION['bd'] );
 		}
 		
-		public function consult(){
+		public function consult($sql){
 
-			$arrhorarios = $this->conn->all("SELECT * FROM horarios ORDER BY dia",MYSQLI_ASSOC);
+			$arrhorarios = $this->conn->all($sql,MYSQLI_ASSOC);
 
 			foreach ($arrhorarios as $key => $value){
 				$horarios[] = ['agenda' => $value['agenda'] ,'dia' => $value['dia'], 'inicio' => $value['inicio'] , 'fin' => $value['fin'] ];
@@ -19,10 +19,14 @@ class horarios{
 			return $horarios;
 		}
 		
-		public function hours(){
+		public function hours($day = 'all'){
 
-			$row =  $this->consult()  ;
+			$sql =  ($day=='all') ?
+				"SELECT * FROM horarios ORDER BY dia " :
+				"SELECT * FROM horarios WHERE dia = $day ORDER BY inicio " ;
 
+			$row = $this->consult($sql) ;  
+			
 			foreach ($row as $key => $value){
 				$inicio_horarios[$value['dia']][] = $value['inicio'];
 				$fin_horarios[$value['dia']][] = $value['fin'];
@@ -43,6 +47,16 @@ class horarios{
 		
 		}
 
+		public function days($day){
+			$row =  $this->consult("SELECT * FROM horarios WHERE dia = $day")  ;
+
+			foreach ($row as $key => $value){
+				$inicio_horarios[$value['dia']][] = $value['inicio'];
+				$fin_horarios[$value['dia']][] = $value['fin'];
+			}
+
+		}
+
 		public function add($datos){
 			
 			$sql = "INSERT INTO horarios (agenda,dia,inicio,fin) 
@@ -51,6 +65,8 @@ class horarios{
 			return $this->query($sql) ;
 		}
 		
+		
+
 		public function del(){
 			
 		}

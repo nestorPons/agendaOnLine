@@ -40,41 +40,44 @@
 	<span class="app-bar-divider"></span>
 	
 	<ul class="app-bar-menu">
-			
 			<li>
-				<a id="menu1" name='menu[]' class="app-bar-element" data-capa="crearCita">
+				<a id="menu1" name='menu[]' class="app-bar-element " data-capa="crearCita">
 					<span class="icon-edit"></span>
-					<span>Cita</span>
+					<span class="caption" >Cita</span>
 				</a>
 			</li>
 			<li>
-				<a id="menu0" name='menu[]' class="app-bar-element" data-capa="main">
+				<a id="menu0" name='menu[]' class="app-bar-element selected" data-capa="main">
 					<span class="icon-wallet"></span>
-					<span >agendas</span>
+					
+					<span class="caption ">agendas</span>
+					
 				</a>
 			</li>
 			<li>
 				<a id="menu2" name='menu[]' class="app-bar-element" data-capa="usuarios">
 					<span class="icon-users"></span>
-					<span>Clientes</span>
+					<span class="caption">Clientes</span>
 				</a>
 			</li>
 			<li>
-				<a class="dropdown-toggle">
+				<a class="dropdown-toggle" data-capa="mnuServicios">
 					<span class="icon-th-list"></span>
-					<span >Servicios</span>
+					<span class="caption">Servicios</span>
 				</a>
 				<ul class="d-menu" data-role="dropdown">
 					<li>
 						<a id="menu3" name='menu[]' data-capa="servicios" >Servicios</a>
 					</li>
-					<li><a id="menu4" name='menu[]' data-capa="familias">Familias</a></li>
+					<li>
+						<a id="menu4" name='menu[]' data-capa="familias" >Familias</a>
+					</li>
 				</ul>
 			</li>
 			<li>
 				<a id="menu8"  class="dropdown-toggle">
 					<span class="icon-cog"></span>
-					<span>Config</span>
+					<span class="caption">Config</span>
 				</a>
 				<ul class="d-menu" data-role="dropdown">
 					<li><a name='menu[]' data-capa="general">Mis datos</a></li>
@@ -82,6 +85,7 @@
 					<li><a name='menu[]' data-capa="horarios" >horarios</a></li>
 					<li><a name='menu[]' data-capa="festivos" >Festivos</a></li>
 					<li><a name='menu[]' data-capa="agendas">agendas</a></li>	
+					<li><a name='menu[]' data-capa="estilos">Estilos</a></li>	
 				</ul>
 			</li>
 			<?php

@@ -20,3 +20,18 @@ if ( $_POST ) {
 
     }
 }
+if ( $_GET ) {
+    foreach ($_GET as $key => $value) {
+  
+        if (is_array($_GET[$key])){
+ 
+            $_GET[$key][] = $conn->scape($value) ;
+
+        }else{
+   
+            $_GET[$key] = $conn->scape($value) ;
+
+        }
+
+    }
+}
