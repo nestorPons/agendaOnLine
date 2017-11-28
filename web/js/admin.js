@@ -1,10 +1,9 @@
-if ($('#navbar').is(':hidden')) $('#navbar').show('blind');
-var url = 'index'
+if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 var _hora = 0; 
 
 function sincronizar( dias, date , callback ){
-	var fecha = date||Fecha.general;
-	var datepicker = $('.datepicker')
+	var fecha = date||Fecha.general ,
+		datepicker = $('.datepicker')
 
 	if (dias)
 		fecha =  Fecha.calcular(dias, fecha);
@@ -16,12 +15,11 @@ function sincronizar( dias, date , callback ){
 
 
 	main.sincronizar(dias)
-	if (crearCita.section.find('div').length )
+	if ($('#crearCita').find('div').length )
 		crearCita.horas.sincronizar()
 
 	colorearMenuDiasSemana();
 	
-
 	var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 	$.each(datepicker, function( index , me ){
 		(diaFestivo)?$(this).addClass('c-red'):$(this).removeClass('c-red')
@@ -47,10 +45,10 @@ function mostrarCapa(capa, callback){
 
 			$('#'+capa).html(html).promise().done(__INIT__);
 			function __INIT__ (){
-				if(capa=='crearCita') crearCita.init();
-				if(capa=='servicios') servicios.init();
-				if(capa=='usuarios') usuarios.init();
-				if(capa=='estilos') estilos.init();
+				capa=='crearCita' && crearCita.init()
+				capa=='servicios' && servicios.init()
+				capa=='usuarios' && usuarios.init()
+				capa=='estilos' && estilos.init()
 			}
 
 		},'html')
@@ -80,6 +78,7 @@ function sliderConfigBorder ( value, slider ) {
 	estilos.test( value ) ;
 }
 var servicios = {
+	controller : 'servicios',
 	init : function () {
 
 		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
@@ -97,18 +96,19 @@ var servicios = {
 		$("[name*='"+txt+"']").not('.ocultar_baja').fadeIn();
 	},
 	mostrar: function(id_familia, no_validate) {
-		var id = id_familia;
-		var no_validate = no_validate || false;
+		var id = id_familia, no_validate = no_validate || false
 		
-		if (no_validate && $('#servicios .fam'+ id).is(':visible') ||$('#crearCita .fam'+ id).is(':visible')  ) return false ;
-		var contenedor = $('.capasPrincipales:visible .contenedorServicios');
+		if (no_validate && $('#servicios .fam'+ id).is(':visible') || $('#crearCita .fam'+ id).is(':visible')  ) return false ;
+
 		var id = $.isEmpty(id)?1:id;
 
-		contenedor
-			.find('tbody tr').hide(function() {
-				contenedor 
-					.find('tbody .fam'+id).show()
-			}).end()
+		$('.contenedorServicios').each(function(){
+			var $this = $(this)
+			$this.find('tbody tr').hide(function() {
+				$this.find('.fam'+id).show()		
+			})
+		})
+
 		$('.menuServicios').each(function(){
 			$(this)
 				.find('.c3').removeClass('c3').end()
@@ -116,130 +116,106 @@ var servicios = {
 		})
 
 	},
-	poppup:function(id){
-		dialog.create('dlgServicios',servicios.guardar,servicios.eliminar,function(){
-			//clono el listado de familias desde el menu crearservicios.
-			//AKI :: creando eliminanado y editando familias . cuando se crea nueva familia no se iserta en el dialog servicios
-			if ($('#dlgServicios #lstFamilias select').length==0){
+	dialog:function(id){
+		var fnLoad = function (isNew) {
+			var dlg = $('#dlgServicios')
+
+			if (dlg.find('#lstFamilias select').length==0){
 				var $lstFam = 
 					$('#servicios .menuServicios #lstSerSelect')
 						.clone(true,true)
 						.removeClass('responsiveDesing_show')
 						.appendTo('#dlgServicios #lstFamilias');
 			}
-			$("#frmEditarServicios #id").val(id);
+			dlg.find("#id").val(id);
 			
 			if (id!=0){ 
 				//EDITANDO...
-				var $this = $("#servicios #rowServicios"+id);
+				var row = $("#servicios #rowServicios"+id),	
+					cod = row.find("[name='cod']").text(),
+					des = row.find("[name='des']").text(),
+					time = row.find("[name='time']").text(),
+					price = row.find("[name='price']").data("value"),
+					fam = row.attr('familia')
 
-				var cod = $this.find("[name='cod']").text();
-				var des = $this.find("[name='des']").text();
-				var time = $this.find("[name='time']").text();
-				var price = $this.find("[name='price']").data("value");
-				var fam = $this.find("[name='fam']").data("value");
-
-				$('#frmEditarServicios')
+				dlg
 					.find('#codigo').val(cod).end()
 					.find('#descripcion').val(des).end()
 					.find('#tiempo').val(parseInt(time)).end()
 					.find('#precio').val(price).end()
 					.find('#familia').val(fam).end()
-					.find('#eliminar').val('Eliminar');
+					.find('#eliminar').val('Eliminar').end()
+					.find('h1').html('Editando...')
+
 			}else{ 
 				//NUEVO....
-				$('#dlgServicios #codigo').val($('#servicios #buscarTxt').val());
 				var idCapa = $('#servicios .c3').attr('id');
-				$('#dlgServicios #familia').val(idCapa);
-				$('#dlgServicios #btnEliminar').val('Cancelar');
+				dlg
+					.find('#id').val(0).end()
+					.find('#codigo').val($('#servicios #buscarTxt').val()).end()
+					.find('#familia').val(idCapa).end()
+					.find('#btnEliminar').val('Cancelar').end()
+					.find('h1').html('Nuevo...')
 			}
-			dialog.open('dlgServicios');
+			
 			if ($('#servicios #rowServicios'+ id ).hasClass('mostrar_baja')) {
-				$('#dlgServicios .aceptar').html('Activar')
+				dlg.find('.aceptar').html('Restaurar')
 			}
+		}
 
-		});
+		dialog.open('dlgServicios',servicios.guardar,servicios.eliminar,fnLoad)
 	},
 	guardar: function (){
-		var validate  = btn.load.show($('#dlgServicios .aceptar'),false);
-		var idFrm = $('#dlgServicios form').attr('id') ;
-		if(servicios.validate.form()){
-			var id= $('#frmEditarServicios #id').val().replace(/\D/g,' ').trim();
-
-			var data = $('#frmEditarServicios').serialize();
-
-
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				data: data,
-				url: INDEX,
-				beforeSend: function(){if (id!=0)$("#servicios #rowServicios"+id).fadeTo("slow", 0.30)}
-			})
-			.done(function(rsp){
+		var _fnOk = function (rsp , isNew){
 				if (rsp.success) {
 	
-					if (id==0){
-						if (rsp.success) servicios.crear(rsp);
-					}else{
-						servicios.actualizar(rsp);
-					}
-					servicios.mostrar(rsp.familia);
-					dialog.close('#dlgServicios');
+					isNew ?  servicios.crear(rsp)  : servicios.actualizar(rsp) 
+	
+					servicios.mostrar(rsp.idFamilia)
+					
+					dialog.close('dlgServicios')
+					
 				}else{
 					notify.error('Codigo de servicio ocupado </br> Seleccione otro codigo distinto.', 'CODIGO OCUPADO') ;
 				}
 				$("#servicios #rowServicios"+id).fadeTo("slow", 1);
 				btn.load.hide();
-			}).fail(function(r){echo ("ERROR guardar servicios =>"+r)});
+			}
+		if(servicios.validate.form()){
+			var id= $('#frmEditarServicios #id').val().replace(/\D/g,' ').trim()
+
+			servicios.sendAjax(SAVE , _fnOk)
 
 		}else{
-			btn.load.hide();
-		}
-		
+			btn.load.hide()
+		}		
 	},
 	eliminar: function() {
 
-		var id= $('#dlgServicios #id').val().trim();
+		var id= $('#dlgServicios #id').val().trim(), 
+			_fnOk = function (r) {
+
+				if (r.success == true){
+
+					var baja  = $('#chckOpUsersDel').is(':checked')? 'mostrar_baja' : 'ocultar_baja'
+
+					$("#rowServicios"+id).each(function(){
+						$(this).addClass(baja) 
+					})
+		
+				}else{
+
+					$("servicios #rowServicios"+id).fadeTo("slow", 1)
+					notify.error(r.success) 
+				}
+
+				dialog.close('dlgServicios')
+			}
 
 		if (id!=0){
-			if (confirm ("Deseas eliminar el servicio "+id+", " + $('#dlgServicios #codigo').val() + "?")) {
-				$.ajax({
-					type: "POST",
-					dataType: "json",
-					data: {id:id , controller: 'ajax' , ajax: 'service',  action: 'del'},
-					url:INDEX,
-					beforeSend: function (){
-						$("#servicios #rowServicios"+id).fadeTo("slow", 0.30);
-					},
-				})
-				.done(function(){
+			if (confirm ("Deseas eliminar el servicio "+id+", " + $('#dlgServicios #codigo').val() + "?")) 
+				servicios.sendAjax(DEL , _fnOk)
 
-					if (mns.success == true){
-						var baja ; 
-
-						if($('#chckOpUsersDel').is(':checked')){
-							baja = 'mostrar_baja' ;
-						}else{
-							baja = 'ocultar_baja' ;
-						}
-						$("#servicios  #rowServicios"+id).addClass(baja) ;
-						$("#crearCita  #rowServicios"+id).addClass(baja) ;
-					}else{
-
-						$("#servicios #rowServicios"+id).fadeTo("slow", 1) ;
-						notify.error(mns.err,'ERROR') ; 
-					}
-
-
-
-
-					dialog.close('#dlgServicios');
-				})
-				.fail(function( jqXHR, textStatus, errorThrown){
-					alert( jqXHR, textStatus, errorThrown)
-					$("#servicios #rowServicios"+id).show("fast")})
-			}
 		}else{
 			dialog.close('dlgServicios');
 		}
@@ -247,19 +223,26 @@ var servicios = {
 	actualizar: function(datos){
 
 		$('#servicios #rowServicios'+datos.id)
-			.css('class','fam'+datos.familia)
+			.css('class','fam'+datos.idFamilia)
 			.removeClass('mostrar_baja , ocultar_baja') 
 			.attr('name',normalize(datos.codigo))
-			.attr('familia',datos.familia)
+			.attr('familia',datos.idFamilia)
+			.removeAttr('class').addClass('fam'+datos.idFamilia)
 			.attr('value',datos.id)
 			.find(' td:nth-child(1)').attr('value',datos.id).end()
-			.find(' td:nth-child(2)').html(datos.codigo).end()
+			.find(' td:nth-child(2)')
+				.html(datos.codigo)
+				.attr('id', data.id)
+			.end()
 			.find(' td:nth-child(3)').html(datos.descripcion).end()
 			.find(' td:nth-child(4)').html(datos.tiempo).end()
+			.find(' td:nth-child(5)').data('value' , datos.precio).end()
+
 		
+
 		$('#crearCita #rowServicios'+datos.id)
 			.removeClass('mostrar_baja , ocultar_baja') 
-			.css('class','fam'+datos.familia)
+			.css('class','fam'+datos.idFamilia)
 			.find('label')
 				.attr('for', datos.codigo)
 				.text(datos.descripcion + ' (' + datos.tiempo +'min.)')
@@ -268,32 +251,65 @@ var servicios = {
 				id : datos.codigo , 
 				value : datos.id , 
 				'data-time' : datos.tiempo , 
-				'data-familia' : datos.familia ,
+				'data-familia' : datos.idFamilia ,
 			})
+
 		
 	},
 	crear: function(data){
+					//NUEVO
+		var mostrar = (data.mostrar==1)?'checked':'';
 
-		$.get(INDEX,data,function(html){
-			$('#servicios .tablas tbody')
-				.append(html)
-				.promise()
-				.done(function(){
-					notify.success('Se ha creado el servicio.','Nuevo servicio') ; 
-					servicios.mostrar(data.familia,true)
-				})
-		
-		},'html')
-		
-		if (!$.isEmpty($('#crearCita').html())){
+		$('#servicios').find('table tbody').append('\
+			<tr id="rowServicios'+data.id+'">\
+				<td class="ico"><a name="editar[]" class="icon-edit x6"></a></td>\
+				<td name="cod" class="aling-left cod"></td>\
+				<td name="des" class="nom"></td>\
+				<td name="time" class="ico"></td>\
+				<td name="price" class="hidden"></td>\
+			</tr>\
+		')
 
-			
-			$.get(INDEX,data,function(html){
-				$('#crearCita .contenedorServicios tbody')
-					.append(html)
-			},'html')			
-		}
+		$('#crearCita').find('.contenedorServicios tbody').append('\
+			<tr id="rowServicios'+data.id+'">\
+				<td>\
+					<label>\
+						<input type="checkbox" name="servicios[]" class="idServicios">\
+					</label>\
+				</td>\
+			</tr>\
+		')
 
+		servicios.actualizar(data)
+	
+	},
+	sendAjax: function(action , callback){
+		var dlg = $('#dlgServicios') , id = dlg.find('#id').val() ,row = dlg.find("#rowServicios"+id)
+		var	data = $("#frmEditarServicios").serializeArray()			
+			data.push({name : 'baja' , value : 0})
+			data.push({name : 'controller' , value : servicios.controller})
+			data.push({name : 'action' , value : true})
+		if (action == DEL)
+			data.push({name : 'baja' , value : 1})
+
+		var isNew = id==0
+
+		id!=0 && row.fadeTo("slow", 0.30)
+
+		$.ajax({
+			url: INDEX,
+			type: "POST",
+			dataType: "json",
+			data: data,
+		})
+		.done(function(rsp){
+			typeof callback == "function" && callback(rsp ,isNew)
+		})
+		.fail(function( jqXHR, textStatus, errorThrown ) { 
+			echo (jqXHR)
+			echo (textStatus)
+			echo (errorThrown) 
+		})
 	},
 	validate : {
 		form : function () {  
@@ -303,35 +319,22 @@ var servicios = {
 				notify.error('El campo del codigo no puede estar vacio.','ERROR CAMPO VACIO!')
 				return false ;
 			}else {
-				return servicios.validate.name(nombre) ;
-			}
-		},
-		name : function (name) {
-			var idName = $('#dlgServicios #id').val() ;
-			var obj = $('#servicios #' +  normalize(name) ) ;
-
-			if($('#servicios #' +  normalize(name) ).length == 0){
 				return true ;
-			}else{
-				if (obj.parents('tr').attr('id') != 'rowServicios'+idName){
-					notify.error('El codigo esta en uso.','Error crear servicio')  ;
-					return false ;
-				}else{
-					return true ;
-				}
 			}
 		}
 	}
 }
 var main ={	
+	xhr : new Object(), 
 	section : $("#main") , 
 	body : $('#main .cuerpo') ,
-	status : document.mainStatus ,
 	z_index : 2 ,
 	data : new Object(), 
 	arrSer : new Array(), 
 	last : new Object(),
+	idsControl : new Object(),
 	sincronizar: function (dir,callback){
+		
 		var self = main , section = main.section , body = main.body
 
 		if (!section.find('#'+Fecha.id).length) self.crearDias(callback)
@@ -346,18 +349,64 @@ var main ={
 				var ent = 'left';
 				var sal = 'right';
 			}
-			body
-				.hide("slide", { direction: sal }, 750,function(){
-					$('.dia.activa').removeClass('activa')
-					section.find('#'+ Fecha.id).addClass('activa')
-					body.show("slide", { direction: ent }, 750,);
-				})
+			body.hide("slide", { direction: sal }, 750,function(){
+				$('.dia.activa').removeClass('activa')
+				section.find('#'+ Fecha.id).addClass('activa')
+				body.show("slide", { direction: ent }, 750,);
+			})
 		} 	
+			 main.check()
+
 	},
 	activeDay : function () {
 		$('.activa').removeClass('activa')
 		$('#' + Fecha.id).addClass('activa')
 	}, 
+	check : function () {
+
+		var data = {
+			controller : 'cita' ,
+			action : 'check',
+			citas : function(){
+				var citas = new Array();
+				$('#'+Fecha.id).find('.lbl').each(function(){
+					citas[$(this).attr('idcita')] =  $(this).attr('lastmod')
+				})
+				citas.shift()
+				return citas
+			},
+			fecha : Fecha.general
+		}
+		
+		$.ajax({
+			type:"POST",
+			url: INDEX ,
+			dataType: 'json',
+			data: data,
+			cache: false, 
+			async: false
+		})
+		.done(function(r){
+	
+			if (!$.isEmpty(r.del)){
+				$.each(r.del,function(i,value){
+					main.lbl.delete(value ,true)
+				})
+			}
+
+			if (!$.isEmpty(r.add)){ 
+				var arr = r.add 
+
+				$.each(arr,function(i,value){	
+					var data = value
+					data.uTiempo = parseInt(data.tiempoTotal) / 15 
+					main.lbl.create(value)
+				})
+
+			}
+		},'json')
+		
+	},
 	crearDias: function(callback){
 
 		var self = this , section = this.section , body = this.body 
@@ -370,8 +419,9 @@ var main ={
 		$.each(dias,function(){
 			ids.push($(this).attr('id'));
 		})
-
-		$.ajax({
+		if(crearCita.xhr && crearCita.xhr.readyState != 4) xhr.abort()
+        
+		crearCita.xhr = $.ajax({
 			type:"POST",
 			url: INDEX ,
 			dataType: 'html',
@@ -381,11 +431,12 @@ var main ={
 				controller : 'main' ,
 				action : VIEW
 			},
-			cache: false
+			cache: false, 
+			async: false
 		})
 		.done(function(html){
 			body.append(html)
-			main.deleteDuplicate () 
+			main.deleteDuplicate() 
 			main.lbl.droppable()
 			typeof callback == "function" && callback()
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
@@ -425,7 +476,7 @@ var main ={
 		})
 		.done(function(r){
 			if (r.success) {
-				typeof callback == "function" && callback();
+				typeof callback == "function" && callback()
 			}else{
 				notify.error ('No se pudo guardar.')
 			}
@@ -441,11 +492,13 @@ var main ={
 			$('.cuerpo').fadeIn('fast')
 		})
 	},
-	edit : function (idCita , idCelda ) {
-		var idCita = idCita.replace('idCita_', '' )
+	edit : function (idCita, idCelda ) {
+
+		if ($.isEmpty(idCita)) return false
 		var lbl = $('#idCita_'+idCita+'.lbl')  
+
 		if ($.isEmpty(main.data[idCita])) {
-			
+	
 			main.data[idCita] = {
 				idCita : idCita ,
 				agenda : lbl.parents('.celda').attr('agenda'),
@@ -460,16 +513,17 @@ var main ={
 				tiempoTotal : 0
 			}
 			lbl.find('.codigo').each(function(i,o){
-					var id =$(this).attr('id_codigo') , 
-						codigo = $(this).html() , 
-						descripcion = $(this).attr('des_codigo') ,
-						tiempo = $(this).attr('tiempo')
+				var id =$(this).attr('id_codigo') , 
+					codigo = $(this).html() , 
+					descripcion = $(this).attr('des_codigo') ,
+					tiempo = $(this).attr('tiempo')
 
 				main.data[idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
 				main.arrSer.push({id ,  codigo ,  descripcion , tiempo}) 
 				main.data[idCita].tiempoTotal += parseInt(tiempo)	
 			})
 		}
+
 		main.last = {
 			idCita : main.data[idCita].idCita,
 			agenda : main.data[idCita].agenda,
@@ -554,15 +608,15 @@ var main ={
 				$(this).val('')
 			})
 		}
-		var _save = function (idCita) {
-			//EDITAR CITA ¡
+		var _save = function () {
+
 			var dlg = $('#dlgEditCita') , duration = 0 , arrIdSer = new Array() ,data = new Array()
 
 			dlg.find('input').each(function(i,v){
 				data[$(this).attr('id')] = $(this).val()
 			})
 
-			if (main.last.cliente.id != main.data[idCita].cliente.id ){
+			if (main.last.cliente.id != main.data[ main.last.idCita].cliente.id ){
 			}
 				let str = normalize(data['cliente'])
 				let selCli = $('#lstClientes [data-name="'+str+'"]')
@@ -570,11 +624,11 @@ var main ={
 				main.data[idCita].cliente.id =  selCli.data('id')
 				main.data[idCita].cliente.nombre =  selCli.val()
 
-			main.data[idCita].fecha = data['fecha']
-			main.data[idCita].hora = data['hora']
-			main.data[idCita].obs = data['obs']
+			main.data[ main.last.idCita].fecha = data['fecha']
+			main.data[ main.last.idCita].hora = data['hora']
+			main.data[ main.last.idCita].obs = data['obs']
 
-			$.each(main.data[idCita].servicios, function( i , v){
+			$.each(main.data[ main.last.idCita].servicios, function( i , v){
 
 				arrIdSer.push(v.id)
 
@@ -582,9 +636,9 @@ var main ={
 
 			var sendData = {
 				action : EDIT ,
-				idCita : idCita ,
-				agenda : main.data[idCita].agenda ,
-				idUsuario : main.data[idCita].cliente.id || false ,
+				idCita :  main.last.idCita ,
+				agenda : main.data[ main.last.idCita].agenda ,
+				idUsuario : main.data[ main.last.idCita].cliente.id || false ,
 				fecha :  Fecha.sql(dlg.find('#fecha').val()) ,
 				hora : dlg.find('#hora').val() ,
 				obs :  dlg.find('#obs').val(),
@@ -593,22 +647,44 @@ var main ={
 			}
 
 			main.save(sendData,function(){
-				main.lbl.edit(main.data[idCita], main.last)
+				main.lbl.edit(main.data[ main.last.idCita], main.last)
 				_addServiceToLbl(function(){
 					dialog.close('dlgEditCita')
+					if(!$.isEmpty(sendData.obs)) {
+						lbl
+							.find('.text_note').text(sendData.obs).end()
+							.find('.note').addClass('show')
+					}else{
+						lbl
+							.find('.text_note').text(sendData.obs).end()
+							.find('.note').removeClass('show')
+					}
 				})
+
 
 			})		
 		}
-		var _dialog = function () {
+
+		if (!$.isEmpty(idCelda)) { 
+
+			var decode = generateId.decode(idCelda)
+			main.data[idCita].agenda = decode.agenda
+			main.data[idCita].fecha = decode.date
+			main.data[idCita].hora = decode.hour
+
+			var edata = main.data[idCita]
+			
+			edata.action = EDIT
+
+			main.save(edata)
+
+		} else {		
 			var 
-			fnOk = function(){
-				_save(idCita)
-			},
 			fnCancel = function(){
 				main.del(main.data[idCita].idCita)
 			}, 
 			callback = function(isNew){
+
 				var section = $('#dlgEditCita')
 
 				$('#dlgEditCita #codigos').html('') 
@@ -618,13 +694,13 @@ var main ={
 					.find('#id').val(idCita).end()
 					.find('#cliente')
 						.val(main.data[idCita].cliente.nombre)
-					.end()
+						.end()
 					.find('#obs')
 						.val(main.data[idCita].obs)
-					.end()
+						.end()
 					.find('#fecha')
 						.val(main.data[idCita].fecha)
-					.end()
+						.end()
 					.find('#hora')
 						.val(main.data[idCita].hora)
 
@@ -632,43 +708,31 @@ var main ={
 					_addRow( a.id , a.codigo , a.descripcion , a.tiempo)
 				})
 
-				if (isNew) {
-					_eventAddService()
-				}
+				if (isNew) _eventAddService()
 				
 				lastTime = main.data[idCita].tiempoTotal
-			}
-			dialog.open('dlgEditCita',fnOk, fnCancel, callback)	
-		}
 
-		if (!$.isEmpty(idCelda)) { 
-			main.data[idCita].agenda = idCelda.substr( 0, 2 )
-			main.data[idCita].fecha = Fecha.sql(idCelda.substr( 2, 8 ))
-			var hora = idCelda.substr( 10 )
-			main.data[idCita].hora = hora.substr(0,2) + ':' + hora.substr(2)
+			}
+
+			dialog.open('dlgEditCita',_save, fnCancel, callback)
 			
-			var edata = main.data[idCita]
-			
-			edata.action = EDIT
-			main.save(edata)
-		} else {		
-			_dialog()
 		}
 	},
 	del: function(idCita){
 		data = {
 			id : idCita , 
 			action : 'del' , 
-			controller : 'cita'
+			controller : 'cita', 
+			fecha : Fecha.sql(Fecha.general)
 		}	
 
 		if (main.lbl.delete(idCita)){
-			$.post(url,data,function(r){
+			$.post(INDEX,data,function(r){
 
 				if 	(r.success) {
 					$('#lstChckSer').empty();
 					$('#dlgEditCita').removeData('idCita')
-					dialog.close('#dlgEditCita')
+					dialog.close('dlgEditCita')
 				}
 
 			},'json')
@@ -694,35 +758,42 @@ var main ={
 			.always($this.find('.icon-load').fadeOut());
 		}
 	},
-	inactivas: function(){
+	inactivas:{ 
+		click :	function(){
+			var status = localStorage.getItem("showRows")==1?0:1
+			main.inactivas.change(status)
+	
+		},
+		change :function (std){
+			if( std == 1 ){
+				
+				$('#btnShow')
+					.find('.menulbl').html('Ocultar').end()
+					.find('.on').show().end()
+					.find('.off').hide().end()
+				$('#main .disabled').removeClass('disabled');
+			}else{			
+				$('#btnShow')
+					.find('.menulbl').html('Mostrar').end()
+					.find('.off').show().end()
+					.find('.on').hide().end()
+				$('#main .fuera_horario').parent().addClass('disabled')
 
-		if( main.status == 0 ){
-			main.status = 1 ;
-			$('#btnShow')
-				.find('.menulbl').html('Ocultar').end()
-				.find('.on').show().end()
-				.find('.off').hide().end()
-			$('#main .disabled').removeClass('disabled');
-		}else{
-			main.status = 0 ;
-			$('#btnShow')
-				.find('.menulbl').html('Mostrar').end()
-				.find('.off').show().end()
-				.find('.on').hide().end()
-			$('#main .fuera_horario').parent().addClass('disabled');
-
-		}
-		$.get(INDEX,{status : main.status});
-		
+			}			
+			localStorage.setItem("showRows", std)		
+		}	
 	},
 	lbl:{
 		widht :  '25' ,
+		height: new Array,
 		clone : new Object(), 
 		idLastcelda : 0 , 
 		create: function(data){
+		
+			//agenda,fecha,hora,idCita,idUser,uTiempo,nota,...
 			var self = main , lbl = main.lbl ,htmlSer = '' 
 
-			var idCelda =  $.generateId( data.agenda , data.fecha , data.hora )
+			var idCelda =  generateId.encode( data.agenda , data.fecha , data.hora )
 			var celda = document.getElementById(idCelda)
 
 			$.each(data.servicios, function ( id , serv ) {
@@ -741,8 +812,8 @@ var main ={
 					.find('.text-value').html(main.data[idCita].cliente.nombre)
 			} 
 			if (data.fecha != last.fecha || data.hora != last.hora){
-				let idCell=  $.generateId( data.agenda , data.fecha , data.hora ),
-					lastCell = $.generateId( last.agenda , last.fecha , last.hora ),
+				let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
+					lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
 					clon = object.clone()
 				
 				$('#'+lastCell).removeClass('doble')
@@ -756,20 +827,22 @@ var main ={
 			}
 		},
 		container : function (data, htmlSer) {
-			
+	
 			var html = "\
-				<div id='"+data.idCita+"' class='lbl row_$rows' > \
-					<div id ='"+data.idUser+"' class='nombre'> \
+				<div id='idCita_"+data.idCita+"' idcita="+data.idCita+" class='lbl row_$rows' > \
+					<div id ='"+data.idUsuario+"' class='nombre'> \
 						<span class ='icon-user-1'></span> \
-						<span>"+data.nameCli+"</span> \
+						<span>"+data.nombre+"</span> \
 					</div> \
 					<div class='iconos aling-right'>  \
-						<span class ='edit icon-pencil-1'></span>  \
-						<span class ='del icon-trash'></span>  \
-						<span class =''></span>  \
+						<div class='icons_crud'>\
+							<span class ='fnEdit icon-pencil-1'></span>  \
+							<span class ='fnDel icon-trash'></span>  \
+						</div>\
+						<span class ='fnMove icon-move '></span>  \
 					</div> \
 					<div class='servicios "+data.uTiempo+"'>"+htmlSer+"</div> \
-					<div class='note '>"+data.nota	+"</div> \
+					<div class='note '>"+data.nota+"</div> \
 				</div> \
 			"
 			return html ;
@@ -781,7 +854,8 @@ var main ={
 			var html = "\
 				<div>\
 					<span class ='icon-angle-right'></span>\
-					<span class='codigo' des_codigo='"+data.descripcion+"' id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
+					<span class='codigo' des_codigo='"+data.descripcion+"' \
+					id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
 				</div>\
 			"
 
@@ -795,18 +869,18 @@ var main ={
 			
 			$('.lbl')
 				.css('z-index', 0)
-				.width(lbl.widht-18)
+				.width(lbl.widht-15)
 				.parent('.celda')
 					.addClass('doble')
 			lbl.color()
 		}, 
-		delete: function(idCita){
-			var $this = $('#'+idCita+'.lbl') ;
-			if (confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
+		delete: function(idCita, noMens){
+			var $this = $('#idcita_'+idCita+'.lbl') ;
+			if (noMens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
 				$this
 					.parents('.celda').removeClass('doble').end()
-					.hide('explode')
-					.remove()
+					.hide('explode',$this.remove)
+					
 				main.lbl.color();
 				return true 
 			} else {
@@ -858,7 +932,8 @@ var main ={
 					//containment: "#"+limit , 
 					disabled : false, 
 					opacity : 0.70 , 
-					zIndex: 100 , 
+					zIndex: 100 ,
+					handle :$(this).find('.fnMove'), 
 					start : function ( e, ui) {
 						$(this).draggable("option", "revert", 'invalid')
 						main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',1)
@@ -872,39 +947,39 @@ var main ={
 		
 			$( ".celda" ).each(function(){
 				$(this).droppable({
-					classes: {
-						"ui-droppable-hover": "ui-state-hover"
-					},
+					accept : ".lbl",
+					classes: {"ui-droppable-hover": "ui-state-hover"},
 					drop: function( event, ui ) {
-						
-						$(this).addClass( "ui-state-highlight" )
 
-						var posi = $(this).position()
-						var drag  = ui.draggable
-						var css_margin = 1 ;
+						if($(this).hasClass('celda')){
+							$(this).addClass( "ui-state-highlight" )
 
-						if (confirm('Desea modificar la cita ')) {
-							drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
-								//end of animation.. if you want to add some code here
-							})
-							$(this).html(main.lbl.clone)
-							
-							main.lbl.style()
+							var posi = $(this).position()
+							var drag  = ui.draggable
+							var css_margin = 1 ;
+
+							if (confirm('Desea modificar la cita ')) {
+								drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
+									//end of animation.. if you want to add some code here
+								})
+								$(this).html(main.lbl.clone)
 								
-							main.lbl.clone = null
-							
-							$('#' + main.lbl.idLastCelda).removeClass('doble').empty()
+								main.lbl.style()
+									
+								main.lbl.clone = null
+								
+								$('#' + main.lbl.idLastCelda).removeClass('doble').empty()
 
-							var idCita = drag.attr('id')
-							var idCelda = $(this).attr('id')
-							$(this).addClass('doble')
+								var idCita = drag.attr('idCita')
+								var idCelda = $(this).attr('id')
+								$(this).addClass('doble')
 
-							main.edit(idCita , idCelda )
-							
-						} else {
-							drag.draggable("option", "revert", true)	
-						}	
-
+								main.edit(idCita , idCelda )
+								
+							} else {
+								drag.draggable("option", "revert", true)	
+							}	
+						}
 					},
 
 					
@@ -912,6 +987,27 @@ var main ={
 			})
 		
 		},	
+		resize : function($this){
+			if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
+			if ($this.hasClass('initial')){
+				$this
+					.removeClass('initial') 
+					.animate({	height: main.lbl.height[$this.attr('id')] })
+					.find('.nombre').hide().end()
+				if ($this.hasClass('with_6'))
+					$this.find('.icons_crud').hide()
+			} else{
+				main.lbl.height[$this.attr('id')] = $this.height()
+
+				$this
+					.addClass('initial') 	
+					.animate({height: $this.get(0).scrollHeight})
+					.find('.nombre').show().end()
+				if ($this.hasClass('with_6'))
+					$this.find('.icons_crud').css('display','inline-block')
+			
+			}
+		}
 	
 	}
 }
@@ -963,22 +1059,22 @@ var menu = {
 				menu.enabled(save) ;
 				break;
 		}
-		$('#navbar').resize();
+		$('#navbar').resize()
 	},
 	save:function (){
-		var loadShow = function (){
+		var _loadShow = function (){
 			$('#btnSave')
 				.find('.icon-floppy').hide().end()
 				.find('.icon-load').css('display','inherit')
-		}();
+		}()
 		var _loadHide = function (){
 			$('#btnSave')
 				.find('.icon-load').hide().end()
-				.find('.icon-floppy').show();
-		};
+				.find('.icon-floppy').show()
+		}
 			switch($('.capasPrincipales:visible').attr('id')) {
 			case 'config':
-				config.guardar(_loadHide);
+				config.guardar(_loadHide)
 				break;
 			case 'horarios':
 				horario.guardar(_loadHide);
@@ -1000,7 +1096,7 @@ var menu = {
 	show: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'main':
-				main.inactivas();
+				main.inactivas.click()
 			break;
 		}
 	},
@@ -1014,13 +1110,13 @@ var menu = {
 
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'usuarios':
-				usuarios.poppup(0);
+				usuarios.dialog(0);
 				break;
 			case 'servicios':
-				 servicios.poppup(0);
+				 servicios.dialog(0);
 				break;
 			case 'familias':
-				familias.mostrarPoppup(-1);
+				familias.dialog(0);
 				 break;
 			case 'horarios':
 				horario.add()
@@ -1090,26 +1186,34 @@ var menu = {
 var agendas = {
 	change: false ,
 	guardar: function (callback){
+		var data = $('#agendas #frmAg').serializeArray() ;
+		data.push({name : 'controller' , value : 'agendas'})
+		data.push({name : 'action' , value : SAVE})
+
 		$.ajax({
 			type: "POST",
 			dataType: "json",
-			data: $('#agendas #frmAg').serialize(),
+			data: data,
 			url:INDEX
 		})
-		.done(function(){
-			notify.success('Los cambios han sido guardados');
-			agendas.change = false;
+		.done(function(r){
+			if (r) {
+				notify.success('Los cambios han sido guardados');
+				agendas.change = false;
 
-			$('#agendas #frmAg input:text').each(function(index){
-				var i = index+1;
-				var lblMain =$('#main .encabezado #nombreAgenda'+i)
-				var lblCrearCita = $('#crearCita #frmCrearCita #lblAgenda'+i)
-				var name  = $(this).val();
-				if(!$.isEmpty(name)){
-					lblMain.html(name)
-					lblCrearCita.html(name)
-				}
-			})
+				$('#agendas #frmAg input:text').each(function(index){
+					var i = index+1;
+					var lblMain =$('#main .encabezado #nombreAgenda'+i)
+					var lblCrearCita = $('#crearCita #frmCrearCita #lblAgenda'+i)
+					var name  = $(this).val();
+					if(!$.isEmpty(name)){
+						lblMain.html(name)
+						lblCrearCita.html(name)
+					}
+				})
+			} else {
+				notify.error('No se pudieron guardar los cambios')
+			}
 		})
 		.always(function(r){
 			typeof callback == "function" && callback();
@@ -1118,132 +1222,125 @@ var agendas = {
 }
 var familias = {
 	change : false , 
+	controller : 'familias', 
+	data : new Object , 
 	eliminar : function () {
-
-		btn.load.show($('#dlgFamilias .cancelar'),false)
-
-		var id = $('#dlgFamilias #id').val();
-		var nombre = $('#dlgFamilias #nombre').val();
-
-		if ( $('#rowFamilias'+id).hasClass('mostrar_baja') ){
-			var mens = 
-			"Si elimina definitivamente la familia " + nombre + " y se perderan todos los servicios y citas relacionados con esta (No se aconseja).  \n ¿Desea continuar?"  ;
-			var del = true ;
-		}else{
-			var mens = "Deseas eliminar la familia " + nombre + "?" ;
-			var del = false ; 
-		}
-			
-	
-		if (confirm (mens)) {
-			_del() ;
-		}else{
-			btn.load.hide() ; 
-		}
-
-		function _del(){
-			$.ajax({
-				type: "GET",
-				data: {id:id},
-				url: INDEX,
-				dataType: "json",
-				beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
-			})
-			.done(function(mns){
-				if (mns == true){
-					if (del){
-		
-						familias.menu.eliminar( id ) ;
+		var id = $('#dlgFamilias #id').val(), del = false
+			nombre = $('#dlgFamilias #nombre').val(),
+			_fnOk = function ( r ){
+				if (r.success == true){
+					if (del){		
+						familias.menu.eliminar( id ) 
 					}else{
-						var baja ; 
-						familias.menu.ocultar( id ) ;
 
-						if($('#chckOpUsersDel').is(':checked')){
-							baja = 'mostrar_baja' ;
-						}else{
-							baja = 'ocultar_baja' ;
-						}
-						if (id>=0) $("#rowFamilias"+id).addClass(baja) ;
+						familias.menu.ocultar( id ) 
+
+						var baja = ($('#chckOpUsersDel').is(':checked'))?'mostrar_baja' : 'ocultar_baja'
+						
+						if (id>=0) $("#rowFamilias"+id).addClass(baja) 
 					}
 				}else{
 
-					$("#familias #rowFamilias"+id).fadeTo("slow", 1) ;
-					notify.error(mns,'ERROR') ; 
-					
+					$("#familias #rowFamilias"+id).fadeTo("slow", 1)
+					notify.error( r.success ) 
+						
 				}
 				$("#rowFamilias"+id).fadeTo("fast", 1)
 
-				dialog.close('#dlgFamilias');
+				dialog.close('dlgFamilias')
 
-			}).fail(function(mns){
-				console.log("ERROR =>"+mns);
-				$("#familias #"+id).fadeTo("slow", 1);
-			});
+			}
+		btn.load.show($('#dlgFamilias .cancelar'),false)
 
-		}
+		if (confirm ('Desea eliminar la familia?')) 
+			familias.sendAjax(DEL , _fnOk)
+		else
+			btn.load.hide() 
+		
+		
 	},
 	guardar :function (){
-		btn.load.show($('#dlgFamilia .aceptar'),false);
-		
-		if (familias.validate.form()){
+		btn.load.show($('#dlgFamilia .aceptar'),false)
+		var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
+		var _fnOk = function (r) {
+			if (r.success){
+				if (id > 0){
+					//EDICION
+					$('#familias #familia_' + r.id).html(r.nombre);
+					$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+					$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+					$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
 
-			var id = $('#dlgFamilias #id').val();
+					var estado = (r.mostrar==1)?true:false;
+					var $chck = $('#familias #chck'+id);
+					$chck.prop("checked",estado);
+					$('#servicios #frmEditar #familia option[value='+id+']').html(r.nombre);
+
+					familias.menu.editar( r.id , r.nombre ) ;
+
+				}else{
+					//NUEVO
+					var mostrar = (r.mostrar==1)?'checked':'';
+					$("#familias table").append("\
+						<tr id='rowFamilias"+r.id+"'>\
+						<td><a name='editar[]' class= 'icon-edit x6' value="+r.id+"></a></td>\
+						<td id='familia_"+ r.id + "' class='nombre'>"+r.nombre+"</td>\
+						<td class='ico'>\
+						<input type='checkbox' name = 'mostrar[]' id='chck"+r.id+" class='mostrar'\
+						value="+r.id+" "+ mostrar + "></td></tr>")
+					$('#servicios #frmEditar #familia').append("<option value="+r.id+">"+r.nombre+"</option>");
+					
+					familias.menu.crear( r.id , r.nombre ) ;
+
+				}
+				
+				dialog.close('dlgFamilias');
+			}else{
+				notify.error( r.err , 'Error!! ')
+			}
+
+				$("#rowFamilias"+id).fadeTo("fast", 1);
+		}
+
+		if (id == 0 ){
+			(familias.validate.form()) ? familias.sendAjax(SAVE , _fnOk) : btn.load.hide();
+
+		}else{
+			if ($.isEmpty(dlg.find('#nombre').val()))
+				notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
+			else	
+				familias.sendAjax(SAVE , _fnOk)
+		}
+		
+	},
+	sendAjax : function(action , callback){
+			var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
+			var	data = $("#frmEditarFamilia").serializeArray()			
+				data.push({name : 'controller' , value : familias.controller})
+				data.push({name : 'action' , value : SAVE})
+
+			if (dlg.find('.aceptar').text() == 'Restaurar' && action == SAVE)
+				data.push({name : 'baja' , value : 0})
+			
+			if (action == DEL)
+				data.push({name : 'baja' , value : 1})
+			
+
 			$.ajax({
 				type: "POST",
 				dataType: "json",
-				data: $("#frmEditarFamilia").serialize(),
+				data: data, 
 				url: INDEX,
 				beforeSend: function(){if (id>=0)$("#rowFamilias"+id).fadeTo("slow", 0.30)}
 			})
-			.done(function(data){
-				if (data.success){
-					if (id>=0){
-						//EDICION
-						$('#familias #' + normalize(data.nombre) ).html(data.nombre);
-						$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-						$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-						$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-
-						var estado = (data.mostrar==1)?true:false;
-						var $chck = $('#familias #chck'+id);
-						$chck.prop("checked",estado);
-						$('#servicios #frmEditar #familia option[value='+id+']').html(data.nombre);
-
-						familias.menu.editar( data.id , data.nombre ) ;
-
-					}else{
-						//NUEVO
-						var mostrar = (data.mostrar==1)?'checked':'';
-						$("#familias table").append("\
-							<tr id='rowFamilias"+data.id+"'>\
-							<td><a name='editar[]' class= 'icon-edit x6' value="+data.id+"></a></td>\
-							<td id='"+normalize(data.nombre)+"' class='nombre'>"+data.nombre+"</td>\
-							<td class='ico'>\
-							<input type='checkbox' name = 'mostrar[]' id='chck"+data.id+" class='mostrar'\
-							value="+data.id+" "+ mostrar + "></td></tr>")
-						$('#servicios #frmEditar #familia').append("<option value="+data.id+">"+data.nombre+"</option>");
-						
-						familias.menu.crear( data.id , data.nombre ) ;
-
-					}
-					
-					dialog.close('#dlgFamilias');
-				}else{
-					notify.error( data.err , 'Error!! ')
-				}
-
-					$("#rowFamilias"+id).fadeTo("fast", 1);
-
+			.done(function(r){ 
+				typeof callback == "function" && callback(r)
 			})
 			.fail(function( jqXHR, textStatus, errorThrown){
 				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;
 			})
-		}else{
-			btn.load.hide();
-		}
-		
-	},
+		},
 	menu : {
 
 		editar : function ( id ,  nombre ){
@@ -1257,14 +1354,14 @@ var familias = {
 
 		},
 		eliminar : function( id ,callback ){
-			$("#rowFamilias"+id).remove();
+			$("#rowFamilias"+id).remove()
 			$('.menuServicios').each(function(){
-				$(this).find('#lstSerMain').find('#'+id).remove();
-				$(this).find('#lstSerSelect').find('#'+id).remove();
+				$(this).find('#lstSerMain').find('#'+id).remove()
+				$(this).find('#lstSerSelect').find('#'+id).remove()
 			})
-			$('#sevicios .fam' + id ).remove() ;
-			$('#crearCita .fam' + id ).remove() ;
-			typeof callback == "function" && callback();	
+			$('#sevicios .fam' + id ).remove() 
+			$('#crearCita .fam' + id ).remove() 
+			typeof callback == "function" && callback()
 		},
 		ocultar : function ( id ,callback ) {
 			$('.menuServicios').each(function(){
@@ -1297,21 +1394,22 @@ var familias = {
 		},
 
 	}, 
-	mostrarPoppup: function (id){
-		dialog.create('dlgFamilias',familias.guardar,familias.eliminar,function(){
+	dialog: function (id){
+		var fnLoad = function (isNew) {
+			var dlg = $('#dlgFamilias')
 			if (id!=-1){
-				$('#dlgFamilias #frmEditarFamilia')
+				dlg
 					.find ('#id').val(id).end()
 					.find("#nombre").val($('#familias #rowFamilias'+id + ' .nombre ').html()).end()
 					.find("#mostrar").attr('checked', $('#familias #chck'+id).prop('checked'));
 			}
-
-			dialog.open('dlgFamilias');
 			if ($('#familias #rowFamilias'+ id ).hasClass('mostrar_baja')) {
-				$('#dlgFamilias .aceptar').html('Activar')
+				dlg.find('.aceptar').html('Restaurar')
 			}
-			$("#dlgFamilias #frmEditarFamilia #id").val(id);
-		});
+			dlg.find("#id").val(id);
+		}
+		dialog.open('dlgFamilias',familias.guardar,familias.eliminar,fnLoad)
+
 	},
 	validate : {
 		form : function () {  
@@ -1320,30 +1418,15 @@ var familias = {
 				notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
 				return false ;
 			}else {
-				return familias.validate.name(valNom) ;
-			}
-		},
-		name : function (name) {
-			var idName = $('#dlgFamilias #id').val() ;
-			var obj = $('#familias #' +  normalize(name) ) ;
-
-			if(obj.length == 0 ){
 				return true ;
-			}else{
-				if (obj.parents('tr').attr('id') != 'rowFamilias'+idName){
-					notify.error('El nombre no puede estar repetido.','Error crear familia')  ;
-					return false ;
-				}else{
-					return true ;
-				}
 			}
 		}
+
 	},
 }
 var crearCita ={
-	section : $('#crearCita') ,
-	tiempoServicios : 0 ,
-	data : new Object() , 
+	tiempoServicios : 0,
+	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
 		if (!$.isEmpty(clase)){
@@ -1358,30 +1441,33 @@ var crearCita ={
 		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
 	}, 
 	cliente: function (){
-		
-		var nombre = $('#crearCita #cliente').val();
-		usuarios.guardar(0,nombre,btn.load.hide);
+		//guardo cliente mediante formulario crearCita
+		var $cliente = $('#crearCita #cliente'),
+			nombre = $cliente.val()
+
+		usuarios.guardar(0,nombre)	
+		dialog.close()
 	},
 	dialog: function (){
-		var self = crearCita , sec = crearCita.section , 
+		var self = crearCita , sec =  $('#crearCita') , 
 			idSer = new Array() ,
 			strServ ="" 
 
 		sec.find('[name="servicios[]"]:checked').each(function(){
-			strServ += $(this).attr('id') + ", ";
+			strServ += $(this).attr('id') + ", "
 			idSer.push($(this).val())
 		})
 
-		dialog.create('dlgGuardar',self.guardar, dialog.close,function(){
+		dialog.open('dlgGuardar',self.guardar, dialog.close,function(){
 
-			strServ = strServ.slice(0,-2);			
+			strServ = strServ.slice(0,-2)		
 			data = {
 				fecha : Fecha.general , 
-				hora : sec.find('.horas:checked').val() , 
-				nameCli : $('#crearCita #cliente').val() , 
+				hora : sec.find('.horas:checked').val(), 
+				agenda : sec.data.agenda,
+				nameCli :sec.data.nombre, 
 				servicios : idSer ,
-				agenda : sec.find('input[name="agenda[]"]:checked').val()  ,
-				nota : sec.find('#crearCitaNota').val()  ,
+				nota : sec.find('#crearCitaNota').val(),
 				uTiempo : parseInt(sec.find('#tSer').text()) / 15 
 			}
 			$.extend(crearCita.data, data)
@@ -1392,7 +1478,6 @@ var crearCita ={
 				.find('#lblCliente').html(data.nameCli).end()
 				.find('#lblSer').html(strServ)
 				
-			dialog.open('dlgGuardar')
 		})
 
 	},
@@ -1406,27 +1491,27 @@ var crearCita ={
 
 				if(rsp.ocupado){
 
-					notify.error( rsp.mns.body , rsp.mns.tile );
+					notify.error( rsp.mns.body , rsp.mns.tile )
 
 				}else{	
 
 					self.data.idCita = rsp.idCita
-					self.data.idUser = rsp.idUser
+					self.data.idUsuario = rsp.idUser
 					self.data.servicios = rsp.services
 					main.lbl.create(self.data)
 
-					mostrarCapa('main' , true );
+					mostrarCapa('main' , true )
 						
 				}
-				dialog.close('#dlgGuardar');
+				dialog.close('dlgGuardar')
 			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown){
 				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;
 			})
 		}else{
-			notify.error('Complete todos los datos');
-			return false;
+			notify.error('Complete todos los datos')
+			return false
 		}
 
 	},
@@ -1441,8 +1526,7 @@ var crearCita ={
 				crearCita.horas.crear(Fecha.number(date))
 			}
 			
-		},
-		
+		},	
 		load : function ($this) {
 			var lblTS = $('#tSer')[0]
 
@@ -1450,138 +1534,110 @@ var crearCita ={
 				crearCita.tiempoServicios += $this.data('time')
 			else 
 				crearCita.tiempoServicios -= $this.data('time')
-			
-
-			if( $this.is(':checked') ){
-				crearCita.tiempoServicios += $this.data('time')
-			} else {
-				crearCita.tiempoServicios -= $this.data('time')
-			}
 
 			crearCita.horas.pintar(Fecha.id)
 		
 			lblTS.innerHTML = crearCita.tiempoServicios;
 		} ,
-
 		crear: function (id_table, callback){
-
-			var data = {fecha:id_table , controller : 'crearCita.horas'}
+			var data = {
+				agenda: crearCita.data.agenda,
+				fecha:id_table , 
+				controller : 'crearCita.horas'}
 
 			if ($('#crearCita #'+id_table).length) $('#crearCita #'+id_table).remove()
-			var _ordenar = function( callback ){
-
-				var tr = $('#crearCita #'+id_table).find('tr');
-				var filas = tr.length;
-				var filasM = Math.round((filas/2));
-				var n= 0;
-				for ( let f = filasM; f <= filas; f++ ){
-
-					tr.eq(f)
-						.detach()
-						.find('td')
-							.addClass('secondColumn')
-							.appendTo(tr.eq(n));
-					n++;
-
-				}
-				typeof callback == "function" && callback();
-			}
-
-			$.get(INDEX,data,function(html){
-				
-				$('#crearCita #tablas')
-					.find('activa').removeClass('activa').end()
-					.fadeOut(function(){
-						$('#crearCita #tablas')
-							.append(html)
-							.fadeIn()
-							_ordenar( function () {
-								crearCita.horas.pintar(id_table); 
-							});
-					})
 			
+			
+			$.ajax({
+				type:"POST",
+				url: INDEX ,
+				dataType: 'html',
+				data: data,
+				cache: true, 
+				async: false
+			})
+			.done(function(html){
+				var m = document.getElementById('tablas')
+				m.innerHTML = html
+				crearCita.horas.pintar(id_table)				
+			})
 
-			},'html')
-
-		},	
-		
+		},		
 		pintar: function(id_table){
-			var self = crearCita, section = crearCita.section , horas = crearCita.horas
-			//$('#crearCita #id_table .reservado').removeClass('reservado')
-			var _esPasada = function( hora ) {
+
+			var self = crearCita, 	
+				section = $('#crearCita') 
+			section.find('#tablas .reservado').removeClass('reservado').find('input').attr('disabled',false)
+
+			var horas = crearCita.horas ,
+				_esPasada = function( hora ) {
 				
 	 			var diff_fechas = Fecha.restar(id_table); 
 				//sumo los minutos a la fecha actua
 				var _return = false;
 				
-				if (diff_fechas<0){
+				if ( diff_fechas<0 ){
 
-					_return = true;
+					_return = true
 					
-				}else if(diff_fechas == 0 ){
+				} else if ( diff_fechas == 0 ){
 					
 					var minTime = document.minTime * 60000;
 					var a = new Date(hora*1000);
 					var milisegundos = new Date().getTime();
 					var f = new Date(milisegundos + minTime);
 
-					_return =  (a<f);
+					_return =  (a<f)
 					
 				}
-
 				return  _return
+			},
+				ts = parseInt(Math.ceil(self.tiempoServicios/15))||0 ,
+				_reservar= ( me ) =>  me.attr('disabled',true).parent('label').addClass('reservado') ,
+				_fueraHorario  = ( me ) =>  me.hasClass('disabled') ,
+				diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS) ,
+				count = ts ,
+				horas = section.find('#'+ id_table+' .horas')
 
-			}
-			var ts = parseInt(Math.ceil(self.tiempoServicios/15))||0
-
-			//var agenda = $('#crearCita input[name="agenda[]"]:checked').val()||1;
-			var _reservar= ( me ) =>  me.attr('disabled',true).parent('label').addClass('reservado')
-			var _fueraHorario  = ( me ) =>  me.hasClass('disabled') 
-			
-			var diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS)
-			var count = ts
-			
-			var horas = section.find('#'+ id_table+' .idHoras')
-			var count = horas.length - 1 ; 
-
-			for (let i = count ; i >= 0 ; i--){
-				var $this = section.find('#'+ id_table+' #'+i)
-
+			for (let i = horas.length - 1  ; i >= 0 ; i--){
+				let $this = section.find('#'+ id_table+' #hora'+i)
+				
 				if (diaFestivo ){
 					_reservar($this) 
 				}else{
-					if( $this.parent('label').hasClass('ocupado') || $this.hasClass('cierre') ) count = ts 
+					if ( $this.hasClass('ocupado')) count = ts 
+
 					if ( count > 0 ) _reservar($this) 
 					count -- 
 				}
 			}
 		},
-
 		sincronizar: function(callback){
 
 			var context = $('#tablas')
 			var activa = context.find('.activa')
 			var activar = context.find('#'+ Fecha.id)
 
-			context.fadeOut(function () {
+			crearCita.horas.crear(Fecha.id)			
+			/*context.fadeOut(function () {
 
-				if(!activar.length) {
-					crearCita.horas.crear(Fecha.id)
-				 } else {
+				//if(!activar.length) {
+				 /*} else {
 					activa.removeClass('activa')
 					activar.addClass('activa')
-					context.fadeIn() ;
+					context.fadeIn() 
 				 }
-
 			})
+				*/
+
 		},
 	},
 	reset: function(){
 		$('.steperCapa li').hide(function(){
 			$('#step0').show()
 		});
-		_hora =0 ;
-		btn.load.reset();
+		_hora =0 
+		btn.load.reset()
 		$('#crearCita')
 			.find('.dialog').hide().end()
 			.find('.steperCapa').hide().end()
@@ -1611,17 +1667,22 @@ var crearCita ={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-			dialog.close('#dlgGuardar');
+			dialog.close('dlgGuardar');
 	},
 	stepper: function(index){
-		var $visible = $('.steperCapa:visible');
-		var $stepper = $('#stepper'+index);
+		var $visible = $('.steperCapa:visible')
+		var $stepper = $('#stepper'+index)
 		if($visible.attr('id')==$stepper.attr('id'))return false;
 		if (!$stepper.is(':visible')&&$visible.length){
-			if(index==0)_slider();
-			else if(index==1 &&crearCita.validate.name()){
+			if(index==0){
+				_slider()
 
-				_slider(servicios.init) ;
+			}else if(index==1 &&crearCita.validate.name()){
+				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
+				crearCita.data.nombre =  $('#crearCita #cliente').val() 
+				$('.tblHoras').empty()
+
+				_slider(servicios.init) 
 
 			} else if(index==2&&crearCita.validate.service()){
 				if(crearCita.validate.name())_slider(function(){
@@ -1633,20 +1694,20 @@ var crearCita ={
 			};
 		}
 		function _slider(callback){
-			var dir = $visible.data('value')>0||1;
-			var dirEntrada = index-dir<0?'right':'left';
-			var dirSalida = dirEntrada=='right'?'left':'right';
+			var dir = $visible.data('value')>0||1
+			var dirEntrada = index-dir<0?'right':'left'
+			var dirSalida = dirEntrada=='right'?'left':'right'
 
 			$('.stepper') //esto es para colorear el stepper activo
 				.find('li').removeClass('current').end()
 				.find('#step'+index).addClass('current');
-			$('#crearCita').find('.steperCapa').hide();
+			$('#crearCita').find('.steperCapa').hide()
 			$visible.hide("slide", { direction: dirSalida }, 750,function(){
 				$stepper
 					.removeClass('hidden')
 					.show("slide", { direction: dirEntrada }, 750, function(){$('.tile-active').height('auto')})
 			})
-			typeof callback == "function" && callback();
+			typeof callback == "function" && callback()
 		}
 	},
 	validate : {
@@ -1665,10 +1726,7 @@ var crearCita ={
 
 				if (selCli.length==0){
 					$this.addClass('input-error');
-
-					dialog.create('dlgCliente',crearCita.cliente, null ,function(){
-						dialog.open('dlgCliente');
-					})
+					dialog.open('dlgCliente',crearCita.cliente)
 
 				}else{
 					crearCita.data.cliente = selCli.data('id') 
@@ -1708,55 +1766,61 @@ var crearCita ={
 }
 var config ={
 	change : false,
+	controller : 'config' ,
 	pass: 	function (){ 
-		var $newPass = $('#dlgCambiarPass #newPass');
-		var $repeatPass = $('#dlgCambiarPass #repeatPass');
+		var $frm = $('#dlgCambiarPass'),
+			newPass = $frm.find('#pass').val(),
+			repeatPass = $frm.find('#repeatPass').val(),
+			oldPass =  $frm.find('#oldPass').val()
 
-		var data = {
-			oldPass : SHA1($('#dlgCambiarPass #oldPass').val().trim()),
-			newPass: SHA1($('#dlgCambiarPass #pass').val().trim()) 
-		}
-		if(general.validar()){
-			$.post(INDEX,data,function(r){
-				if(r.success){
-					notify.success('Contraseña cambiada' , 'Guardada') ;
-						
-					$('#dlgCambiarPass')[0].reset();
-
-					dialog.close('#dialogs #dlgCambiarPass');					
-
-				}else{
-					notify.error( r.respond ) ; 
+		if(repeatPass==newPass && !$.isEmpty(oldPass)){
+			var data = {
+				oldPass : SHA(oldPass),
+				newPass: SHA(newPass) ,
+				controller: config.controller, 
+				action: SAVE
 				}
-				btn.load.hide();
+			$.post(INDEX,data,function(r){
+				if(r==true){
+					notify.success('Contraseña cambiada' , 'Guardada') 
+					dialog.reset()
+					dialog.close('dlgCambiarPass')				
+				}else{
+					notify.error( r ) 
+					btn.load.hide()
+				}
 			},'json')
-			.fail(function(r){alert(r)})
+			.fail(function( jqXHR, textStatus, errorThrown ){
+				alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
+			})
 		}else{
 			btn.load.status=false;
-			notify.error('Algun dato no esta correcto, verifique el formlario.') ;
+			notify.error('Algun dato no esta correcto, /n verifique el formulario.') ;
 		}
 	},
 	guardar: function (callback){
-	
-		var formData = new FormData($("#config form")[0])
-		var std = $('#config #frmConfig #showInactivas').is(':checked')
 
+		var data = new FormData($("#config form")[0]) 
 
-		main.inactivas(std);
+		data.append("controller", config.controller )
+		data.append("action", true )
 
 		$.ajax({
 			url: INDEX,
 			type: "POST",
-			data: formData,
+			data: data,
 			contentType: false,
-			processData: false,
+			processData: false
 		})
 		.done(function(r){
-			if (r.success==true && r.err == true){
+			if (r.success){
 				notify.success('Guardado con éxito.')
-				$("#config #respuestaLogo").html(r.img) 
+				var n = ($('#showInactivas').is(":checked"))?1:0
+				main.inactivas.change(n)
+				
+				$("#config #respuestaLogo").html("<img src="+r+"/logo.png></img>") 
 			} else {	
-				notify.error(r.err)	
+				notify.error('No se ha podido guardar los datos')	
 			}
 	 		typeof callback == "function" && callback()
 		})
@@ -1771,29 +1835,44 @@ var config ={
 }
 var general = {
 	guardar: function (callback){
-		var  data = $('#general form').serialize();
-		data += '&controller=general&action=save'
+		if (general.validar()){
+			var  data = $('#general form').serializeArray()
+			data.push({name : 'controller' , value : 'general'})
+			data.push({name : 'action' , value : SAVE})
 
-		$.post(INDEX, data , function(r) {
-			if (r){
-				notify.success( 'Configuración guardada') ; 
-				typeof callback == "function" && callback();
-			}else{
-				notify.error( 'No se pudo guardar la configuración') ;
-			}
-		},'json')
-		.fail(function(r){console.log(r)})
+			$.post(INDEX, data , function(r) {
+				if (r.success){
+					notify.success( 'Configuración guardada') 
+				typeof callback == "function" && callback()
+				} else {
+					_err()
+				}		
+			},'json')
+			.fail(function(r){console.log(r)})
+		} else {
+			_err()
+		}
+		function _err(){
+			notify.error( 'No se pudo guardar los datos.<br> Compruebe todos los campos')
+			typeof callback == "function" && callback()
+		}
 	},
 	validar: function () {
-		return $('#dlgCambiarPass .input-success').length == 3 ;
+//AKI :: implementar validacion de formularios !!important
+		var r = true
+		$('#generalFrm input').each(function(){
+			let val = $(this).val() 
+			if (val=='') r = false
+		})
+		
+		return false
+		
 	}
 }
 var festivo = {
 	
 	dialog : function () {
-		dialog.create('dlgFestivos',festivo.guardar, festivo.eliminar,function(){
-			dialog.open('dlgFestivos');	
-		})
+		dialog.open('dlgFestivos',festivo.guardar, festivo.eliminar)
 	},
 	eliminar:	function ($this){
 		var self = this 
@@ -1801,22 +1880,27 @@ var festivo = {
 		var f =  $this.parent().parent().find('[name="mes[]"]').text();
 
 		$('#festivos #'+id).fadeTo("slow", 0.30);
-		$.get(INDEX,{'id':id},function(){
+		data = {
+			id : id ,
+			controller : 'festivos',
+			action : DEL
+		}
+		$.post(INDEX,data,function(){
 			$('#festivos #'+id).hide("explode")
 
-			var index = $.inArray(Fecha.md(f),FESTIVOS);
-			if (index>-1)
-				FESTIVOS.splice(index,1)
-		});
+			var index = $.inArray(Fecha.md(f),FESTIVOS)
+			if (index>-1) FESTIVOS.splice(index,1)
+		},'json');
 	},
 	guardar:	function (callback){
-		var self = this 
-		var nombre = $('#dlgFestivos #nombre').val() ; 
-		var fecha = $('#dlgFestivos #fecha').val() ;
-		var fila = $('#tblFestivos tr:first').clone();
-		var data = {}
-			data.nombre = nombre 
-			data.fecha = fecha 				
+		var nombre = $('#dlgFestivos #nombre').val() ,
+			fecha = $('#dlgFestivos #fecha').val() ,
+			fila = $('#tblFestivos tr:first').clone(),
+			data = {
+				nombre : nombre ,
+				fecha : fecha 	,			
+				controller : festivos ,
+				action : SAVE}
 
 		if ( $.isEmpty( nombre , fecha ) ){
 			notify.error('faltan rellenar los campos' , ' Error festivos') 
@@ -1836,8 +1920,8 @@ var festivo = {
 					$('#festivos')
 						.find('#tblFestivos').append('\
 						<tr id="'+r.id+'">\
-							<td><a name="eliminar[]"  class= "icon-cancel c5 x6"></a></td>\
-							<td  class="aling-left"><span name="nombre[]">'+r.nombre+'</span></td>\
+							<td><a name="eliminar[]"  class= "icon-cancel"></a></td>\
+							<td  class=""><span name="nombre[]">'+r.nombre+'</span></td>\
 							<td> <span  name="mes[]" >'+Fecha.print(r.fecha)+'</span></td>\
 						</tr>\
 					').end()
@@ -1854,7 +1938,7 @@ var festivo = {
 	},
 }
 var horario = {
-
+	controller : 'horarios' , 
 	section : $('#horarios') , 
 	activo:null,
 	editar: function (){
@@ -1906,14 +1990,14 @@ var horario = {
 					id:	me.id,
 					agenda: agenda,
 					dia: $(this).find('.dia_semana').val(),
-					ini: $(this).find('.hora_inicio').val(),
+					inicio: $(this).find('.hora_inicio').val(),
 					fin: $(this).find('.hora_fin').val()
 				})
 			})
 
 			$.ajax({
-				type:"GET",
-				data:{action : SAVE , data : data },
+				type:"POST",
+				data: { action : SAVE , data : data , controller : horario.controller },
 				url: INDEX,
 				dataType: 'json'
 			})
@@ -1957,11 +2041,11 @@ var horario = {
 		})
 		var jsonString = JSON.stringify(data);
 		
-		$.getJSON(INDEX,{ id : data , action : DEL },function(r){
+		$.post(INDEX,{ ids : data , action : DEL , controller : horario.controller },function(r){
 			if(r){
 				location.reload();
 			}
-		})
+		}, 'json')
 	},
 	_validate: function(){
 		var $time = $('#horarios #frmHorario .time');
@@ -1974,134 +2058,164 @@ var horario = {
 	},
 }
 var usuarios = {
+	controller : 'usuarios' , 
 	init : function () {
-		usuarios.select('A') ;
+		usuarios.select('A')
 	},
 	eliminar: function (id, nombre,callback) {
 		if ($('#usuarios #id').val()!=0){
 			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
-
+				var data = {
+					id: id ,
+					controller: usuarios.controller, 
+					action:DEL
+				}
 				$.ajax({
-					type: "GET",
+					type: "POST",
 					dataType: "json",
-					data: {id:id},
+					data: data,
 					url:INDEX ,
 					beforeSend: function (){
 						$("#usuarios #rowUsuarios"+id).fadeTo("slow", 0.30);
 					},
 				})
 				.done(function(){
-					$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1);
-					$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove();
+					usuarios.rows.del()
 					notify.alert('El usuario ha sido eliminado con éxito.','Usuario eliminado!!')
 				})
 				.fail(function(){
 					$("#usuarios #rowUsuarios"+id).show("fast");
 					notify.error("¡¡No se pudo borrar el registro!!",'Error!');
 				})
-
 			}
 		}
 		
 		dialog.close('dlgUsuarios');
 	},
 	guardar: function (idUsuario,nombreUsuario,callback){
-		btn.load.show($('#dlgUsuarios .aceptar',false));
 
-		
-		if (!usuarios.validate.form()){
-			btn.load.hide();
-			return false 
-		};
-			var id= idUsuario||$('#dlgUsuarios #id').val();
-			var data = $.isEmpty(nombreUsuario)
-				?$("#frmUsuarios").serialize()
-				:{nombre:nombreUsuario};
+		var frm = $.serializeForm('frmUsuarios'),
+			data = {
+				id:idUsuario||0, 
+				nombre: nombreUsuario||frm.nombre,
+				email: frm.email||'',
+				tel: frm.tel||'',
+				obs: frm.obs||'',
+				status: $.isEmpty(frm.activa)?0:2,
+				admin : $.isEmpty(frm.admin)?0:1,
+				controller: usuarios.controller,
+				action: SAVE}
+					
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			data: data,
+			url: INDEX ,
+		})
+		.done(function(rsp){
+			var $this  =$('#frmUsuarios'),
+				chckEmail =$.isEmpty(frm.email)?'No':'Si',
+				chckObs = $.isEmpty(frm.obs)?'No':'Si',
+				admin = $.isEmpty(frm.admin)?0:1,
+				activa = $.isEmpty(frm.activa)?1:0
 
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				data: data,
-				url: INDEX ,
-			})
-			.done(function(rsp){
-				var $this  =$('#frmUsuarios')
-				var frm = $.serializeForm('frmUsuarios');
-				letra = frm.nombre[0];
-				var chckEmail =frm.email==""?'No':'Si';
-				var chckObs = frm.obs==""?'No':'Si';
-				var admin = (frm.admin)?1:0;
-				var activa = (frm.activa)?1:0;
-					if (id==0){ 
-						//NUEVO ...
-						$.get('usuarios/row.php',{
-							id : rsp.id, 
-							nombre : frm.nombre , 
-							email : frm.email , 
-							tel : frm.tel , 
-							admin : admin , 
-							obs : frm.obs , 			
-							activa : activa , 
-							
-						},function(html){
-							$('#usuarios .tablas').prepend(html);
-							$('#lstClientes')
-								.append('<option data-id="'+normalize(frm.nombre)+'" value = "' + frm.nombre + '">'+rsp.id+'</option>')	
-							notify.success('Usuario guardado con éxito!.','Nuevo usuario')
-						})
-					}else{ 
-						//EDITANDO....
-						$('#rowUsuarios'+id)
-							.find(' td:nth-child(3)')
-								.html(frm.nombre)
-								.data('value',frm.nombre)
-							.end()
-							.find(' td:nth-child(4)').html(frm.tel).end()
-							.find(' td:nth-child(5)')
-								.html(chckEmail)
-								.data('value',frm.email)
-							.end()
-							.find(' td:nth-child(6)')
-								.html(chckObs)
-								.data('value',frm.obs);
-						if(frm.activa){
-							if($('#chckOpUsersDel').is(':checked'))
-								$("#rowUsuarios"+frm.id)
-									.addClass('mostrar_baja')
-									.removeClass('ocultar_baja')
-									.fadeTo("slow", 1);
-							else
-								$("#rowUsuarios"+frm.id)
-									.addClass('ocultar_baja')
-									.removeClass('mostrar_baja')
-									.hide();
-							$('#lstClientes [data-id="'+normalize(frm.nombre)+'"]').remove();
-						}else{
+				if (data.id == 0 ){ 
+					//NUEVO ...
+					data.id = rsp.id 
+					usuarios.rows.add(data)
+					notify.success('Usuario guardado con éxito!.','Nuevo usuario',false, $('#crearCita #cliente'))
+					 
+				}else{ 
+
+					//EDITANDO....
+					$('#rowUsuarios'+data.id)
+						.find(' td:nth-child(3)')
+							.html(data.nombre)
+							.data('value',data.nombre)
+						.end()
+						.find(' td:nth-child(4)').html(frm.tel).end()
+						.find(' td:nth-child(5)')
+							.html(chckEmail)
+							.data('value',frm.email)
+						.end()
+						.find(' td:nth-child(6)')
+							.html(chckObs)
+							.data('value',frm.obs)
+
+					if(frm.activa){
+						if($('#chckOpUsersDel').is(':checked'))
 							$("#rowUsuarios"+frm.id)
-								.removeClass('mostrar_baja ocultar_baja')
+								.addClass('mostrar_baja')
+								.removeClass('ocultar_baja')
 								.fadeTo("slow", 1);
-							$('#lstClientes')
-								.append('<option data-id="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
-						}	
-						notify.success('Usuario guardado con éxito!.','Usuario editado')						
-					}
-				btn.load.reset();
-				dialog.close('dlgUsuarios');
-				usuarios.select(letra);
-				
-				btn.load.hide();
-				typeof callback == "function" && callback();
+						else
+							$("#rowUsuarios"+frm.id)
+								.addClass('ocultar_baja')
+								.removeClass('mostrar_baja')
+								.hide();
+						$('#lstClientes [data-id="'+normalize(frm.nombre)+'"]').remove();
+					}else{
+						$("#rowUsuarios"+frm.id)
+							.removeClass('mostrar_baja ocultar_baja')
+							.fadeTo("slow", 1);
+						$('#lstClientes')
+							.append('<option data-id="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
+					}	
+
+					notify.success('Usuario guardado con éxito!.','Usuario editado')						
+				}
+
+			if (dialog.isOpen == 'dlgUsuarios'){
+				dialog.close('dlgUsuarios')
+				usuarios.select(frm.nombre[0])
+			}
+			
+			typeof callback == "function" && callback()
+			
+		})
+		.fail(function( jqXHR, textStatus, errorThrown ){
+				alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
 			})
-			.fail(function( jqXHR, textStatus, errorThrown ){alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )})
 	
 	},
+	rows: {
+		add : function(data, callback){
+			var $template = $('#usuarios').find('.template')
+ 			
+				$template.clone()
+						.removeClass('template')
+						.attr('id', 'rowUsuarios'+data.id)
+						.data('value',data.id)
+					.find('[name=id]').html(data.id).end()
+					.find('[name=nom]')
+						.html(data.nombre)
+						.attr('id',normalize(data.nombre))
+						.end()
+					.find('[name=tel]').html(data.tel).end()
+					.find('[name=email]')
+						.html($.isEmpty(data.email)?'No':'Si')
+						.data('value',data.email)
+						.end()
+					.find('[name=obs]')
+						.html($.isEmpty(data.obs)?'No':'Si')
+						.data('obs',data.obs)
+						.end()
+					.find('[name=admin]')
+						.html($.isEmpty(data.admin)?'No':'Si')
+						.data('value',data.admin)
+						.end()
+					.insertAfter($template)
+						
+			$('#lstClientes').append(
+				'<option data-id="'+normalize(data.nombre)+'" value = "' + data.nombre + '">'+data.id+'</option>')	
+		},
+		del : function(){
+			$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1)
+			$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove()
+		}
+	},
 	dialog: function (id){
-		dialog.create('dlgUsuarios',
-			usuarios.guardar,
-			function(){
-				usuarios.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
-			},
-			function(){
+		var _fnLoad = function (r) {
 			$('#dlgUsuarios').find('#id').val(id)
 					
 				if (id!=0){
@@ -2129,10 +2243,16 @@ var usuarios = {
 						.find("#admin").attr('checked', false).end()
 						.find('#eliminar').val('Cancelar');
 				}
-			dialog.open('dlgUsuarios')
-		})		
+		} , 
+		_fnDel = function (r) { 
+			usuarios.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
+		}
+		dialog.open('dlgUsuarios',usuarios.guardar,_fnDel,_fnLoad)
+
 	},
 	historial: function ($this){
+		alert('temporalemente inhabilitado')
+		/*
     	var id =$this.parent().parent().data('value');  
 
 		$.getJSON(INDEX,{id:id},function(data){
@@ -2154,6 +2274,7 @@ var usuarios = {
 				dialog.open('dlgHistorial');
 			});
 		})
+		*/
 	},
 	select: function (letra) {
 
@@ -2172,15 +2293,16 @@ var usuarios = {
 	},
 	validate : {
 		form : function(){
-			var value = $('#dlgUsuarios	#nombre').val() ;
+			var value = $('#dlgUsuarios	#nombre').val()
+
 			if ($.isEmpty(value)){
 				
-				notify.error('El campo nombre no puede estar vacio.','Error crear usuario')  ;
-				return false ;
+				notify.error('El campo nombre no puede estar vacio.','Error crear usuario') 
+				return false
 
 			}else{
 
-				return usuarios.validate.name(value) ;
+				return usuarios.validate.name(value)
 				
 			}
 		},
@@ -2245,16 +2367,20 @@ var estilos = {
 }
 $(function(){
 
+	cargarDatepicker()
+	colorearMenuDiasSemana()
+	main.inactivas.change(localStorage.getItem("showRows"))
 	$('body').on('click',".idDateAction",function(){
-		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
+		
+		if(!$(this).data('disabled')) {
+			sincronizar($(this).data('action'));
+		}
 	})
 	$('.tabcontrol').tabcontrol();
 
 	main.lbl.widht = $('#main th.aling-center').width()
 	main.lbl.style()
 	main.lbl.droppable()
-
-	var widht = $('#main').css('widht') / ($('#main thead th').length) - 1	;
 
 	$('html')
 		.on('click','.close',function(e){dialog.close()})
@@ -2270,21 +2396,27 @@ $(function(){
 	$('#btnContacto').click(function(){
 		var menu = $('#mnuContacto')
 		if(menu.is(':visible'))
-			menu.hide('slide',{ direction: 'right' });
+			menu.hide('slide',{ direction: 'right' })
 		else
-			menu.show('slide',{ direction: 'right' });
+			menu.show('slide',{ direction: 'right' })
 
 	})
 	$('#frmContact button')
 		.click(function(event){
-			var $this = $(this) ;
-			event.preventDefault();
-			var data = $("#frmContact").serialize();
+			
+			event.preventDefault()
+			var data = $("#frmContact").serializeArray()
+			data.push({name : 'controller' , value : 'contacto'})
 
-			$.post(INDEX,data,function(){
-				btn.load.hide();
-			})
-		});
+			$.post(INDEX,data,function(r){
+				if(r.success)
+					notify.success('Email mandado con éxito') 
+				else 
+					notify.error('No se pudo mandar el email!! <br> Compruebe que estan todos los datos')
+				
+				btn.load.hide()
+			},'json')
+		})
 
 	$(".login")
 		.on('focusout','[data-max-leght]',function(){
@@ -2314,12 +2446,12 @@ $(function(){
 		
 	$('#familias')
 		.on('click','table .icon-edit',function(){
-			familias.mostrarPoppup($(this).attr('value'));
+			familias.dialog($(this).attr('value'));
 		})
 
 	$('#general')
 		.on('click','#btnCambiarPass',function(){
-			dialog.create('dlgCambiarPass',config.pass,null,function(){
+			dialog.open('dlgCambiarPass',config.pass,null,function(){
 				dialog.open('dlgCambiarPass')
 			})
 		})
@@ -2327,26 +2459,9 @@ $(function(){
 	$('#main')
 		.on('click','.lbl',function(e){
 			main.z_index +=  1 
-			$(this).css({'z-index': main.z_index })
-				
-		})
-		.on('click','.row_1',function(){
-			
-			if ($(this).hasClass('initial')){
-
-				$(this)
-					.removeClass('initial') 
-			    	.animate({	height: '2.3rem'});	
-
-			} else{
-
-				$(this)
-					.addClass('initial') 
-					.animate({height: $(this).get(0).scrollHeight});	
-			
-			}  
-
-		})
+			$(this).css({'z-index': main.z_index })	
+			})
+		.on('click','.row_1, .row_2',function(){main.lbl.resize($(this))})
 		.on('click','#mainLstDiasSemana a',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 			var diaB = parseInt($(this).data('value'));
@@ -2363,7 +2478,7 @@ $(function(){
 		})
 		.on('click','.fnEdit', function(e){
 			e.stopPropagation() 
-			main.edit($(this).parents('.lbl').attr('id'))
+			main.edit($(this).parents('.lbl').attr('idcita'))
 		})
 		.on('click','.cita',function(e){
 			$(this).parent()
@@ -2376,12 +2491,11 @@ $(function(){
 		.on('click','.lbl .fnDel',function(e){
 			$( ".selector" ).draggable( "option", "disabled", true );
 			e.stopPropagation();
-			main.del($(this).parents('.lbl').attr('id'))
+			main.del($(this).parents('.lbl').attr('idcita'))
 		})
 		.on('change','#selectTablasEncabezado',function(){
 			main.responsive($(this))
 		})
-		.find('.tile').css('width',widht+'%').end()
 		.find('.cuerpo')
 			.on("swipeleft",function(){sincronizar(1)})
 			.on("swiperight",function(){sincronizar(-1)})
@@ -2450,8 +2564,8 @@ $(function(){
 		.on('click','a',function(){servicios.mostrar($(this).attr('id'),$('#servicios'))})
 		.on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
 		.on('change','#familia',function(){familias.change = true})
-		.on( "click", "[name*='editar']", function(e){servicios.poppup($(this).attr('value'))})
-		.find('option:first-child').attr('selected','selected');
+		.on( "click", "[name*='editar']", function(e){servicios.dialog($(this).attr('value'))})
+		.find('option:first-child').attr('selected','selected')
 		
 		$('#familias input[name*="mostrar"]')
 			.change(function(){
@@ -2478,6 +2592,5 @@ $(function(){
 		})
 
 	//funciones
-	cargarDatepicker();
-	colorearMenuDiasSemana();
+
 })

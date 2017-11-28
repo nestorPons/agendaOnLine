@@ -10,14 +10,17 @@ var error = function (mns){
 }
 
 $(function(){
-
 	$('#ancho').val(screen.width);
-	$('#alto').val(screen.height);
-
 	if ($_GET("err"))error($_GET("err"));
 
 	$('#loginUsuario').keyup(function(e){
 		if(e.keyCode == 13)$('#btnLogin').click();
+	})
+
+	$('form').submit(function(e){
+		var pass = $(this).find('#fakePass').val()
+		echo (pass)
+		$(this).find('#pass').val(SHA(pass))
 	})
 
 })

@@ -12,27 +12,29 @@ if ($_POST){
 	$nota = $_POST['nota']??"";
 
 	$r['success']=true;
-	$sql = "SELECT * FROM data WHERE fecha = '$fecha' AND hora = '$hora' ";
+	$sql = "SELECT * FROM data WHERE fecha = '$fecha' AND hora = '$hora' AND agenda= '$agenda'";
 	$result_data = $conn->row($sql) ;
 
 	if ($result_data <= 1 ){
 		$r['ocupado']=false;
 		$sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,usuarioCogeCita) VALUE ('$agenda','$userId','$fecha', '$hora' ,'$nota','".$_SESSION['id_usuario']."')";
 		if ($conn->query($sql)){
-			$id_servicio = $conn->id();
-
-			$sql = '';
 			
+			$id_servicio = $conn->id();
+			$sql = '';
+	
 			foreach ($servicios as $id ) {
-				$sql .= 'INSERT INTO cita (idCita, servicio) VALUE ('.$id_servicio.','. $id.') ; ';
+				$sql = 'INSERT INTO cita (idCita, servicio) VALUE ('.$id_servicio.','. $id.') ; ';
+				$conn->query($sql);
 				$arrSer[] = $Serv->getById($id) ;
+				$arridCitaSer[] = $conn->id();
 			}
 
-			$conn->multi_query($sql) ;
+			
 			$r['idUser'] = $userId ;
 			$r['idCita'] = $id_servicio ;
 			$r['services'] = $arrSer ;
-
+			$r['idCitaSer'] = $arridCitaSer;
 		}
 	} else {
 		$r['ocupado']=true;

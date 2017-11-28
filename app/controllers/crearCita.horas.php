@@ -1,16 +1,17 @@
 <?php
-core\Security::session() ;
-$fecha = $_GET['fecha'] ?? date('Y-m-d');
-
+$fecha = $_POST['fecha'] ?? date('Y-m-d');
+$ag = $_POST['agenda'] ?? 1;
 $id_fecha = str_replace('-','',$fecha);
 $dia_semana = date('w',strtotime($fecha)) ;
 
-$horarios = new models\Horarios ;
+$Horarios = new models\Horarios ;
+$Horarios2 =new models\Horarios ;
+
 $lbl = new models\Lbl ;
 
-$lbl->loadDates( $fecha ) ;
+$lbl->loadDates( $fecha ,$fecha , $ag ) ;
 $arr_horas_ocupadas = array_column($lbl->data, 'tiempoTotal' , 'hora') ;
-$horas = $horarios->hours($dia_semana);
+$horas = $Horarios->hours($dia_semana);
 $array_horas = $horas[$dia_semana]??false;
 
-require_once URL_VIEWS . 'crearCita/horas.php' ;
+require_once URL_VIEWS_ADMIN . 'crearCita/horas.php' ;

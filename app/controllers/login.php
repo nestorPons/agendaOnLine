@@ -1,13 +1,19 @@
 <?php
-  
-if(!isset($_COOKIE["id_user"])){
 
-    core\Security::destroy_session() ;
-    require_once(URL_SCRIPTS . 'login.php') ;
-    require_once(URL_VIEWS . 'login.php') ;
+if(!isset($_COOKIE["auth"])||isset($_GET['logout'])){
+
+    $Security->logout();
+    $Security->session_start();
+    require_once URL_VIEWS . 'login.php';
 
 } else {
 
-    //header ("location:http://".URL_SCRIPTS."/validar.php");
+    $Login = new \models\Login;
+    $action =
+        $Login->authToken($_COOKIE["auth"])
+            ? $Login->createSession()
+            :'error';
 
+
+   header('Location: ' . NAME_EMPRESA . '/' . $action);
 }

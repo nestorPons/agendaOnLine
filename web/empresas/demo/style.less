@@ -3,24 +3,35 @@
 @title-font: ^font_tile, sans-serif;
 @radius: unit(^border_radio,px);
 @color: ^color_main;
-@auxiliar: ^color_secon;
+@color_secon: ^color_secon;
 @text-color: ^color_text; 
 
 @radio_popover: 10px;
 @base: #fff ;
 @t1:spin(@color, -30); 
-@t2: spin(@color, 20);
-@oposite: saturate(spin(@color, -120),100%);
-@saturate: saturate(@t2,75%);
+@t2:spin(@color, 20);
+
+//saturados 
+@color_sat_1: saturate(@t1,75%);
+@color_sat_2: saturate(@t2,75%);
+@color_sat_3: saturate(@b2,75%);
+@color_sat_4: saturate(@b1,75%);
+//
+
 @text1: darken(@color,30%);
-@text2: darken(@oposite,30%);
-@b1:mix(@color, #fff, 20%);
-@b2: mix(@oposite, #fff, 20%);
-@red:#e04747;
-@green: desaturate(#00fa00,lightness(@color));
-@blue :desaturate(#01cbef,lightness(@color));
+@text2: darken(@color_secon,30%);
+@b1: mix(@color, #fff, 20%);
+@b2: mix(@color_secon, #fff, 20%);
+
+@auxiliar: desaturate(#F90,lightness(@text1));
+@red: desaturate(#FF0000,lightness(@text1));
+@green: desaturate(#00FF00,lightness(@text1));
+@blue :desaturate(#0000FF,lightness(@text1));
+@yellow :desaturate(#FFFF00,lightness(@text1));
+
 @grey:#8a8a7b;
 @grey-bg:#eee;
+
 @fontSize: 1rem;
 @tabla_celda_borde: mix(@grey,#fff,10%);
 @border_color : mix(@text-color, #fff, 20%); 
@@ -88,12 +99,10 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-
 input :-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
 	-webkit-text-fill-color: @text-color !important;
 }
-
 body{
    line-height: 1;
 	box-sizing: border-box;
@@ -108,6 +117,12 @@ body{
 	input[type=submit],  input[type=button], input[type=reset], button, {
 		.buttons();
 		border-radius : @radius ;
+	}
+	&.background {
+		background-image: url("../../img/background.jpg")
+	}
+	&.background-personalized {
+		background-image: url("background.jpg")
 	}
 	@media screen and (max-width: 590px) {
 		margin:0 auto;
@@ -172,7 +187,7 @@ a,i , .a{
 	-o-transition: background 0.1s;
 	transition: background 0.1s;
 	&:hover{
-		color:@oposite;
+		color:@auxiliar;
 	}
 	&.btn-danger{
 		.buttons();
@@ -306,7 +321,7 @@ th{
 	@border_color: @border_color ;
 	
 ){
-[type=text], [type=password], [type=email], [type=number], [type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail], select, textarea{
+[type=url],[type=text], [type=password], [type=email], [type=number], [type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail], select, textarea{
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -505,13 +520,16 @@ th{
     transform: rotate(359deg);
   }
 }
-
+.highlighted{
+	color : @auxiliar;
+	text-decoration: underline;
+}
 #navbar{
     display: block;
     width: 100%;
 	height: 50px;
 	position: fixed;
-	z-index:999;
+	z-index:2000;
 	padding: 0 ;
 	background-color: @base !important;
 	font-family: @main-font;
@@ -523,11 +541,10 @@ th{
 	[type=text], [type=password], [type=email], [type=number], [type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail]{
 		background-color: #fff;
 	} 
-	@media screen and (max-width: 560px) {
-		text-align: center ;
-		display: none;
+	.app-bar-menu{
+
 	}
-	&-element{
+	.app-bar-element{
 		line-height: 3.125rem;
 		padding: 2px .625rem;
 		font-size: 1rem;
@@ -544,12 +561,16 @@ th{
 				content:none;
 			}
 		}
+		&:active, &:hover{
+			color: @color;
+			background-color: #fff;
+
+		}
 	}
 	.herramientas{
-		span{
-			@media screen and (max-width: 800px) {
-				font-size: 1.2rem ;
-			}
+		li a span{
+			top: 15;
+    		position: relative;
 		}
 	}
 	.icon{
@@ -591,7 +612,6 @@ th{
 			}
 		}
 	}
-
 	.menuNull{
 		display:none !important;
 		width:40px;
@@ -599,7 +619,6 @@ th{
 		@media screen and (max-width: 590px) {display:block !important;}
 		@media screen and (max-width: 320px) {display:none !important;}
 	}
-
 	.branding{
 		@media screen and (max-width: 800px) {
 			width:50px;
@@ -622,16 +641,12 @@ th{
 			}
 		}
 	}
-
 	.d-menu, .active-toggle{
-		 li,a{
-			:hover{
-				.color-menu();
-	
-			}
+		li:hover, li:active{
+			color: #fff;
+			background-color: @color;
 		}
 		.color-sel;
-
 	}
 	&-drop-container{
 		margin: 5px;
@@ -718,7 +733,10 @@ th{
 			width: 320px !important;
 		}
 	}
-
+	@media screen and (max-width: 560px) {
+		text-align: center ;
+		display: none;
+	}
 }
 .contenedorDatepicker{
 	margin: 0 auto;
@@ -935,7 +953,6 @@ th{
 	padding-top:10px;
 	position:relative;
 	width: 90%;
-	//max-width: 800px;
 	text-align:center;
 	.border-radius;
 	.box-shadow;
@@ -945,7 +962,7 @@ th{
 		left: 0;
 		width: 100%;
 		background-color:#fff;
-		z-index:3;
+		z-index:1000;
 		@media screen and (max-width: 320px) {
 			padding-left:0;
 			padding-right:0;
@@ -967,7 +984,6 @@ th{
 	}
 	&-form {
 		border:	1px solid #bbbbbb;
-		padding: 10%;
 		text-align:center;
 		width: 350px;
 		margin: auto;
@@ -1049,7 +1065,6 @@ th{
 	}
 	input[type=checkbox], input[type=radio] {
 		cursor: pointer;
-		transform:scale(1.5);
 		margin:8px;
 	}
 	@media screen and (max-width: 800px) {
@@ -1150,15 +1165,273 @@ th{
 		&:after{content: ' )';}
 
 }
-.stepper {
-    margin:0;
-    width: 95%;
-}
 .ui-datepicker{
 	width:302px;
 	&-inline{
 		border-width :0px ;
 		display: inline ;
+	}
+}
+.lbl{
+	
+	@rem : 10 ; 
+	@increment : 3.5;	
+	@whidth_table: 88%; 
+	
+	position: absolute;
+	z-index : 2 ;
+	border : 2px solid @text1 ;
+	background : fade(@b1, 90%);
+	width: 90%;
+
+	.border-radius(10px,10px,10px,10px);
+	padding :5px;
+	overflow : hidden;
+	div {
+		font-size: 1em;
+		margin : -2;
+		margin-bottom :4px;
+		
+	}
+	.servicios {
+		div{
+			display : block ;
+		}
+	}
+	.nombre { 
+		padding-right: 50px;
+		height: 0.9rem;
+		display: inline-block;
+		overflow: 	hidden;
+	}
+	.iconos{
+		position : absolute ;
+		top : 5px ;
+		right : 5px ;
+		display: flex;
+		span:hover{
+			color : @color_sat_1;
+		}
+	}
+	.icons_crud{
+		top: 2px;
+		position: relative;
+	}
+	.note { 
+		overflow : hidden;
+		display: none;
+		width: 100%;
+	}
+	&.row_1 {
+		height :  @rem ;
+		.nombre{
+			display:none;
+		}
+		&.width_6 .icons_crud{
+			display: none;
+		}
+	}
+	&.row_2 {
+		height : (@rem * @increment)  ;
+	}
+	&.row_3 {
+		height : (@rem * @increment) * 2.3 ;
+	}
+	&.row_4 {
+		height : (@rem * @increment) * 3 ;
+	}
+	&.row_5 {
+		height : (@rem * @increment) * 4 ;
+	}
+	&.row_6 {
+		height : (@rem + @increment) * 5 ;
+	}
+	&.row_7 {
+		height : (@rem + @increment) * 6 ;
+	}
+	&.row_8 {
+		height : (@rem + @increment) * 7 ;
+	}
+	&.row_9 {
+		height : (@rem + @increment) * 8 ;
+	}
+	&.row_10 {
+		height : (@rem + @increment) * 9 ;
+	}
+	&.row_11 {
+		height : (@rem + @increment) * 10 ;
+	}
+	&.row_12 {
+		height : (@rem + @increment) * 11 ;
+	}
+	&.row_13 {
+		height : (@rem + @increment) * 12 ;
+	}
+	&.row_14 {
+		height : (@rem + @increment) * 13 ;
+	}
+	&.row_15 {
+		height : (@rem + @increment) * 14 ;
+	}
+	&.row_16 {
+		height : (@rem + @increment) * 15 ;
+	}
+	&.row_17 {
+		height : (@rem + @increment) * 16 ;
+	}
+	&.row_18 {
+		height : (@rem + @increment) * 17 ;
+	}
+	&.row_19 {
+		height : (@rem + @increment) * 18 ;
+	}
+	&.row_20 {
+		height : (@rem + @increment) * 19 ;
+	}
+	&.row_21 {
+		height :  (@rem + @increment) * 20 ;
+	}
+	&.row_22 {
+		height : (@rem + @increment) * 21 ;
+	}
+	&.row_23 {
+		height : (@rem + @increment) * 22 ;
+	}
+	&.row_24 {
+		height : (@rem + @increment) * 23 ;
+	}
+	&.row_25 {
+		height : (@rem + @increment) * 24 ;
+	}
+	&.row_26 {
+		height : (@rem + @increment) * 25 ;
+	}
+	&.row_27 {
+		height : (@rem + @increment) * 26 ;
+	}
+	&.row_28 {
+		height : (@rem + @increment) * 27 ;
+	}
+	&.row_29 {
+		height : (@rem + @increment) * 28 ;
+	}
+	&.row_30 {
+		height : (@rem + @increment) * 29 ;
+	}
+	&.row_31 {
+		height : (@rem + @increment) * 30 ;
+	}
+	&.row_32 {
+		height : (@rem + @increment) * 31 ;
+	}
+	&.row_33 {
+		height : (@rem + @increment) * 32 ;
+	}
+	&.row_34 {
+		height : (@rem + @increment) * 33 ;
+	}
+	&.row_35 {
+		height : (@rem + @increment) * 34 ;
+	}
+	&.row_36 {
+		height : (@rem + @increment) * 35 ;
+	}
+	&.row_37 {
+		height : (@rem + @increment) * 36 ;
+	}
+	&.row_38 {
+		height : (@rem + @increment) * 37 ;
+	}
+	&.row_39 {
+		height : (@rem + @increment) * 38 ;
+	}
+	&.row_40 {
+		height : (@rem + @increment) * 39 ;
+	}
+	&.row_41 {
+		height : (@rem + @increment) * 40 ;
+	}
+	&.row_42 {
+		height : (@rem + @increment) * 41 ;
+	}
+	&.row_43 {
+		height : (@rem + @increment) * 42 ;
+	}
+	&.row_44 {
+		height : (@rem + @increment) * 43 ;
+	}
+	&.row_45 {
+		height : (@rem + @increment) * 44 ;
+	}
+	&.row_46 {
+		height : (@rem + @increment) * 45 ;
+	}
+	&.row_47 {
+		height : (@rem + @increment) * 46 ;
+	}
+	&.row_48 {
+		height : (@rem + @increment) * 47 ;
+	}
+	&.row_49 {
+		height : (@rem + @increment) * 48 ;
+	}
+	&.row_50 {
+		height : (@rem + @increment) * 49 ;
+	}
+	&.row_51 {
+		height : (@rem + @increment) * 50 ;
+	}
+	&.row_52 {
+		height : (@rem + @increment) * 51 ;
+	}
+	&.row_53 {
+		height : (@rem + @increment) * 52 ;
+	}
+	&.row_54 {
+		height : (@rem + @increment) * 53 ;
+	}
+	&.row_55 {
+		height : (@rem + @increment) * 54 ;
+	}
+	&.row_56 {
+		height : (@rem + @increment) * 55 ;
+	}
+	&.row_57 {
+		height : (@rem + @increment) * 56 ;
+	}
+	&.row_58 {
+		height : (@rem + @increment) * 57 ;
+	}
+	&.row_59 {
+		height : (@rem + @increment) * 58 ;
+	}
+	&.row_60 {
+		height : (@rem + @increment) * 59 ;
+	}
+	
+	&.width_{
+		&1{
+			width: @whidth_table;
+		}
+		&2{
+			width: @whidth_table/2;
+		}
+		&3{
+			width: @whidth_table/3;
+		}
+		&4{
+			width: @whidth_table/4;
+		}
+		&5{
+			width: @whidth_table/5;
+		}
+		&6{
+			width: @whidth_table/6;	
+		}
+		&7{
+			
+		}
+
 	}
 }
 .tablas{
@@ -1180,11 +1453,12 @@ th{
 	}
 
 	.celda{
+		vertical-align: top;
 		text-align:left !important;
-		padding : 1px;
-		height : 1em;
+		height :24px;
+		
 		&.doble {
-			height : 3.3rem ;
+			//height : 1rem ;
 		}
 
 		form{
@@ -1276,225 +1550,7 @@ th{
 			margin-right: 5px;
 		}
 	}
-	.lbl{
-		display :block;
-		@rem : 2.3rem ; 
-		@increment : 1.18 ;	
-		
-		position: absolute;
-		z-index : 2 ;
-		border : 2px solid @b2 ;
-		background : fade(@b1, 90%);
-		
 
-		.border-radius(10px,10px,10px,10px);
-		padding :5px;
-		overflow : hidden;
-		div {
-			font-size: 1em;
-			margin : 3px ;
-			margin-bottom :4px;
-		}
-		.nombre { 
-			padding-right: 50px;
-			height: 0.9rem;
-			display: inline-block;
-			overflow: 	hidden;
-		}
-		.iconos{
-			position : absolute ;
-			top : 5px ;
-			right : 5px ;
-		}
-		.servicios {
-			div{
-				display : block ;
-			}
-		}
-		.note { 
-			display: inline-flex;
-		}
-		&.row_1 {
-			height :  @rem ;
-		}
-		&.row_2 {
-			height : @rem + @increment ;
-		}
-		&.row_3 {
-			height : @rem + @increment * 2 ;
-		}
-		&.row_4 {
-			height : @rem + @increment * 3 ;
-		}
-		&.row_5 {
-			height : @rem + @increment * 4 ;
-		}
-		&.row_6 {
-			height : @rem + @increment * 5 ;
-		}
-		&.row_7 {
-			height : @rem + @increment * 6 ;
-		}
-		&.row_8 {
-			height : @rem + @increment * 7 ;
-		}
-		&.row_9 {
-			height : @rem + @increment * 8 ;
-		}
-		&.row_10 {
-			height : @rem + @increment * 9 ;
-		}
-		&.row_11 {
-			height : @rem + @increment * 10 ;
-		}
-		&.row_12 {
-			height : @rem + @increment * 11 ;
-		}
-		&.row_13 {
-			height : @rem + @increment * 12 ;
-		}
-		&.row_14 {
-			height : @rem + @increment * 13 ;
-		}
-		&.row_15 {
-			height : @rem + @increment * 14 ;
-		}
-		&.row_16 {
-			height : @rem + @increment * 15 ;
-		}
-		&.row_17 {
-			height : @rem + @increment * 16 ;
-		}
-		&.row_18 {
-			height : @rem + @increment * 17 ;
-		}
-		&.row_19 {
-			height : @rem + @increment * 18 ;
-		}
-		&.row_20 {
-			height : @rem + @increment * 19 ;
-		}
-		&.row_21 {
-			height :  @rem + @increment * 20 ;
-		}
-		&.row_22 {
-			height : @rem + @increment * 21 ;
-		}
-		&.row_23 {
-			height : @rem + @increment * 22 ;
-		}
-		&.row_24 {
-			height : @rem + @increment * 23 ;
-		}
-		&.row_25 {
-			height : @rem + @increment * 24 ;
-		}
-		&.row_26 {
-			height : @rem + @increment * 25 ;
-		}
-		&.row_27 {
-			height : @rem + @increment * 26 ;
-		}
-		&.row_28 {
-			height : @rem + @increment * 27 ;
-		}
-		&.row_29 {
-			height : @rem + @increment * 28 ;
-		}
-		&.row_30 {
-			height : @rem + @increment * 29 ;
-		}
-		&.row_31 {
-			height : @rem + @increment * 30 ;
-		}
-		&.row_32 {
-			height : @rem + @increment * 31 ;
-		}
-		&.row_33 {
-			height : @rem + @increment * 32 ;
-		}
-		&.row_34 {
-			height : @rem + @increment * 33 ;
-		}
-		&.row_35 {
-			height : @rem + @increment * 34 ;
-		}
-		&.row_36 {
-			height : @rem + @increment * 35 ;
-		}
-		&.row_37 {
-			height : @rem + @increment * 36 ;
-		}
-		&.row_38 {
-			height : @rem + @increment * 37 ;
-		}
-		&.row_39 {
-			height : @rem + @increment * 38 ;
-		}
-		&.row_40 {
-			height : @rem + @increment * 39 ;
-		}
-		&.row_41 {
-			height : @rem + @increment * 40 ;
-		}
-		&.row_42 {
-			height : @rem + @increment * 41 ;
-		}
-		&.row_43 {
-			height : @rem + @increment * 42 ;
-		}
-		&.row_44 {
-			height : @rem + @increment * 43 ;
-		}
-		&.row_45 {
-			height : @rem + @increment * 44 ;
-		}
-		&.row_46 {
-			height : @rem + @increment * 45 ;
-		}
-		&.row_47 {
-			height : @rem + @increment * 46 ;
-		}
-		&.row_48 {
-			height : @rem + @increment * 47 ;
-		}
-		&.row_49 {
-			height : @rem + @increment * 48 ;
-		}
-		&.row_50 {
-			height : @rem + @increment * 49 ;
-		}
-		&.row_51 {
-			height : @rem + @increment * 50 ;
-		}
-		&.row_52 {
-			height : @rem + @increment * 51 ;
-		}
-		&.row_53 {
-			height : @rem + @increment * 52 ;
-		}
-		&.row_54 {
-			height : @rem + @increment * 53 ;
-		}
-		&.row_55 {
-			height : @rem + @increment * 54 ;
-		}
-		&.row_56 {
-			height : @rem + @increment * 55 ;
-		}
-		&.row_57 {
-			height : @rem + @increment * 56 ;
-		}
-		&.row_58 {
-			height : @rem + @increment * 57 ;
-		}
-		&.row_59 {
-			height : @rem + @increment * 58 ;
-		}
-		&.row_60 {
-			height : @rem + @increment * 59 ;
-		}
-	}
 	&.encabezado, .enca	bezado {
 		font-family: @title-font;
 		color: @grey;
@@ -1600,7 +1656,7 @@ th{
 			text-align: left;
 		}
 		.num {
-			width: 100px !important;
+			width: auto !important;
 		}
 		@media screen and (max-width: 800px) {
 			padding: 0;
@@ -1702,6 +1758,8 @@ th{
 	}
 }
 .stepper{
+	margin:0;
+    width: 97%;
 	&>ul{
 		li{
 			border-radius: 50%;
@@ -1724,14 +1782,14 @@ th{
 	}
 	.current{
 		background-color:@base !important;
-		border: 1px solid @auxiliar ;
+		border: 1px solid @color_secon ;
 		&:before{
-			color: @auxiliar !important;
+			color: @color_secon !important;
 		}
 
 		&:hover{
 			border: 1px solid @base ;
-			background-color:@auxiliar !important;
+			background-color:@color_secon !important;
 			&:before{
 				color: @base !important;
 			}
@@ -1741,8 +1799,8 @@ th{
 		margin: auto;
 	}
 }
-.ocupado, .reservado{
-	color:#ff0000;
+.ocupado , .reservado , .disabled{
+	color:@red;
 }
 .valid{
 	border-color: #00d936 ;
@@ -1826,7 +1884,7 @@ th{
     top: 0;
     width: 100%;
 	height: 2000px !important;
-    z-index: 1005;
+    z-index: 3005;
     display:none;
 
     cursor: pointer;
@@ -1887,9 +1945,7 @@ th{
 }
 #agendas{
 	input{
-		border: none;
 		.border-radius(-5px,-5px,-5px,-5px);
-		border-bottom:2px solid @grey-bg;
 	}
 	label{
 		margin: 5px;
@@ -1919,11 +1975,7 @@ th{
 				margin: 0.3rem;
 			}
 		}
-		label{
-			margin: 0 auto;
-			display:inline-blocK;
-			float:left;
-		}
+
 		#minTime{
 			width: 2em;
 		}
@@ -1933,10 +1985,6 @@ th{
 	.tablas{
 		table{
 			margin: 0 auto;
-			display:none;
-		}
-		.activa{
-			display: table;
 		}
 		td{
 			padding: 0 25px;
@@ -1976,10 +2024,6 @@ th{
 	}
 	#tSer{
 		padding: 0 5px;
-	}
-	.ocupado , .reservado{
-		color :  @red ;
-		
 	}
 
 }
@@ -2139,13 +2183,7 @@ th{
 				background:none;
 			}
 			&.color1{
-				background: repeating-linear-gradient(
-				  135deg,
-				  @b1,
-				  @b1 5px,
-				  #fff 5px,
-				  #fff 10px
-			  );
+				background: repeating-linear-gradient(135deg, @b1,@b1,@b1 5px,#fff 5px, #fff 10px);
 				color: @text1;
 				input[type="text"]{
 					color: @text1;
@@ -2244,6 +2282,9 @@ th{
 				width : 40% ;
 			}
 		}
+		tr:not(:first-of-type){
+			display : none;
+		}
 	}
 	#popupHistorial{
 		.tabla{
@@ -2286,7 +2327,7 @@ th{
 	}
 	.nuevo {
 		input , select , checkbox {
-			border-color : @auxiliar ;
+			border-color : @color_secon ;
 		}
 	}
 }
@@ -2298,7 +2339,7 @@ th{
 	    top: 3.3rem;
 	}
 
-	.tablas{
+	tbody{
 		tr{
 			display:none;
 		}
@@ -2351,7 +2392,15 @@ th{
 	top:50px;
 	position:relative;
 }
-
+.notify{
+	&-container{
+		position: fixed;
+		top: 0;
+		right: 0;
+		width: auto;
+		z-index: 5000;
+	}
+}
 .resaltado{
 	font-weight: bold;
 }
@@ -2369,7 +2418,7 @@ th{
 	&-color{background-color: @b1 !important}
 	&-c1{background-color:@b1 !important}
 	&-c2{background-color:@b2 !important}
-	&-c3{background-color:@oposite !important}
+	&-c3{background-color:@auxiliar !important}
 	&-c4{background-color:@blue !important}
 	&-c5{background-color:@red !important}
 	&-warning{
@@ -2390,7 +2439,7 @@ th{
 	&1{
 		background-color: @b1;
 		color: @text1;
-		border-color: @b1 !important;
+		border-color: @text1 !important;
 		input[type="text"]{
 			color: @text1;
 		}
@@ -2398,7 +2447,7 @@ th{
 	&2{
 		background-color: @b2 ;
 		color: @text2;
-		border-color: @b2 !important;
+		border-color: @text1 !important;
 		input[type="text"]{
 			color: @text2;
 		}
@@ -2432,10 +2481,10 @@ th{
 		color:@t2 !important;
 	}
 	&3{
-		color:@oposite !important;
+		color:@auxiliar !important;
 	}
 	&4{
-		color:@saturate !important;
+		color:@color_sat_2 !important;
 	}
 	&5{
 		color:@red !important;
@@ -2461,7 +2510,6 @@ th{
 		color:#ffffff !important;
 	}
 }
-
 .padding{
 	&0{padding:0  !important;}
 	&5{padding:5px  !important;}
@@ -2500,6 +2548,9 @@ th{
 		padding:0;
 		padding-top:25px;
 		padding-top: @espacio;
+		.icon-edit {
+			color : #fff;
+		}
 		a{
 			color: #fff;
 			&:hover{
@@ -2515,12 +2566,18 @@ th{
 		}
 		.tile{
 			display:block;
+			color : #fff;
 			cursor: pointer;
 			width: @alto;
 			height:@alto;
 			float:left;
 			margin:@espacio;
 			position:relative;
+			border-radius : @radius;
+			background-color: @green;
+			&-secon {
+				background-color: @yellow;
+			}
 			&-label {
 				position: absolute;
 				bottom: 0;
@@ -2529,38 +2586,43 @@ th{
 				z-index: 100;
 			}
 			&-badge {
+				color : #fff;
 				position: absolute;
 				bottom: 0;
 				right: .625rem;
 				padding: .25rem .625rem;
 				z-index: 99;
-				background-color: @red;
+				background-color: @color;
 			}
 			&-wide{
+				color : #fff;
 				width: @alto*2 + @espacio;
 				height: @alto;
 				margin:@espacio;
 				display: block;
 				float: left;
-				background-color: @base;
 				cursor: pointer;
 				position: relative;
 				overflow: hidden;
 				.user-select-none();
 				overflow: visible;
+				border-radius : @radius;
+				background-color: @blue;
 			}
 			&-small{
+				color : #fff;
 				width: @alto/1.9;
 				height: @alto/1.9;
 				margin:@espacio;
 				display: block;
 				float: left;
-				background-color: @base;
 				cursor: pointer;
 				position: relative;
 				overflow: hidden;
 				.user-select-none();
 				overflow: visible;
+				border-radius : @radius;
+				background-color: @red;
 					.tile-content .icon{
 						position: absolute;
 						width: @font-icon/1.5;
@@ -2630,7 +2692,7 @@ th{
 	}
 }
 .show{
-	display:block !important;
+	display:initial !important;
 	&320{
 		display:none;
 		@media (max-width: 320px){display:inline-block;}
@@ -2666,7 +2728,7 @@ th{
 			color: @base ;
 		}
 		&:hover{
-			color: @auxiliar;
+			color: @color_secon;
 		}
 
 	}
@@ -2682,22 +2744,26 @@ th{
 			.tile-container{
 				color: @base !important;
 			}
-
 		}
 	}
 }
 .color-sel(){
-	background-color: @base !important;
-	color: @color !important;
-	li a {color: @color !important;}
-		border-color: @color !important;
-		&:before {border-color: @color !important;}
+	background-color: @base;
+	color: @color;
+	li a {color: @color;}
+		border-color: @color;
+		&:before {border-color: @color;}
+	li:hover a {
+		background-color: @color;
+		color: @base;
+	}
 }
 .disabled{
+
 	display:none !important;
+
 }
 .tile();
-
 .tabcontrol {
 	.tabs {
 		border-bottom: 2px @color solid;
@@ -2745,4 +2811,7 @@ table {
 }
 .ui-widget-header{
 		background-color: @b1 ;
+}
+#lstSerMain a { 
+	color: @text-color;
 }

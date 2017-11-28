@@ -3,7 +3,7 @@
 	
 	$nombreagenda = $conn->all("SELECT nombre FROM agendas");
 
-	if (!$_SESSION['esMobil']){ ?>
+	if (!$Device->isMovile){ ?>
 		<table class = "tablas" >	
 			<thead>
 				<tr>

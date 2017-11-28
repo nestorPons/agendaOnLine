@@ -19,8 +19,8 @@ class Conexion {
 			$this->connect() ;
 		} else {
 
-			$this->error = true ;
-
+			$this->error = 2 ;
+			
 		}
 
 	}
@@ -31,6 +31,7 @@ class Conexion {
 	}
 
 	public function query($sql){
+
 		$this->result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
 		return $this->result ;
 	}
@@ -40,10 +41,19 @@ class Conexion {
 	}
 
 	public function scape ($str) {
-		$return = !$this->error ?
-			mysqli_real_escape_string($this->conexion, $str) :
-			false ;
-		return $return ;
+		
+		if(!$this->error){
+			
+			$replace = ['=',"'",'"','/','#','*',"<",">",":","{","}","?"];
+        	$str = str_replace($replace, '' , $str);
+        	$str = trim($str);        
+			return mysqli_real_escape_string($this->conexion, $str) ;
+
+		}else{
+
+			return false ;
+
+		}
 	}
 
 	public function row( $sql ){
@@ -63,6 +73,7 @@ class Conexion {
 	}
 
 	public function id () {
+
 		return mysqli_insert_id($this->conexion) ;
 	}
 

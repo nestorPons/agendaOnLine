@@ -1,7 +1,7 @@
 <?php  namespace models;
 
 class Lbl {	
-
+    //AKI :: unificar Lbl y Cita
     //datos
     private $id ;
     private $idCita ; 
@@ -21,49 +21,63 @@ class Lbl {
     private $width;
     private $height;
 
-    public $data = []; 
+    //publicas
     public $html = null;
+    public $data = []; 
+    public $ids = [];
 	
     //conexion
     private $conn ; 
     
-    //object
+    //objects
     private $dir_container = URL_TEMPLATES . 'lbl/container.php' ; 
     private $dir_row_code = URL_TEMPLATES . 'lbl/code.php' ; 
     private $dir_note =  URL_TEMPLATES . 'lbl/note.php' ; 
     
     function __CONSTRUCT(){
 
-        $this->conn = new \core\Conexion( 'bd_' . $_SESSION['bd'] );
+        $this->conn = new \core\Conexion( NAME_DB );
 
     }
+    public function getById ($value) {
+        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion
+            FROM cita C JOIN data D ON C.idCita = D.id 
+            INNER JOIN usuarios	U ON D.idUsuario = U.id 
+            LEFT JOIN servicios A ON C.servicio = A.id 
+            WHERE idCita = '$value';";
 
-    public function loadDates($ini , $end = null ) {
+        $this->data($sql) ;
+        return $this->data;
+    }
+    public function loadDates( $ini , $end = null , $agenda = null) {
         $end  = $end ?? $ini ; 
-        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha ,A.tiempo, A.descripcion
+        $filter = $agenda!=null?"D.agenda = $agenda AND":"";
+
+        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion
                 FROM cita C JOIN data D ON C.idCita = D.id 
                 INNER JOIN usuarios	U ON D.idUsuario = U.id 
                 LEFT JOIN servicios A ON C.servicio = A.id
-                WHERE D.fecha BETWEEN '$ini' AND '$end'  
-                ORDER BY D.id, D.hora";
+                WHERE $filter D.fecha BETWEEN '$ini' AND '$end'  
+                ORDER BY D.id, D.hora;";
+
 
         $this->data($sql) ;
     }
-
-
     private function data ($sql) {
-        
+        $idLast = 0 ;
         $data=$this->conn->all($sql,MYSQLI_ASSOC);
 
         if (count($data)>0) {
 
             for( $i = 0 ; $i < count($data) ; $i++ ){
+
                 if (!isset($datosagenda[$data[$i]['idCita']])){
                     $datosagenda[$data[$i]['idCita']] 
                     = array(
                         'idCita'=>$data[$i]['idCita'],
                         'fecha'=>$data[$i]['fecha'],
                         'hora'=>$data[$i]['hora'],
+                        'lastMod'=> $data[$i]['lastMod'],
                         'agenda'=>$data[$i]['agenda'],
                         'obs'=>$data[$i]['obs'],
                         'idUsuario'=>$data[$i]['idUsuario'],
@@ -79,17 +93,17 @@ class Lbl {
                     'des'=>$data[$i]['descripcion'],
                     'tiempo'=> $data[$i]['tiempo']
                 );
-            
+
+                //Se devuelven ids de la citas para control de cambios o lo que surja 
+                if($data[$i]['idCita']!=$idLast) $this->ids[$data[$i]['fecha']][] = $data[$i]['idCita'];
+                $idLast = $data[$i]['idCita'];
             }
 
             $this->data = $datosagenda ;
             $this->print($datosagenda) ;
         } 
-        //RESET TABLA CITA_USER
-        //$conn->query("TRUNCATE user_reg");
-
+        
     }
-
     private function tiempoTotal ($servicios) {
 
         $tiempoTotal = 0 ;
@@ -100,14 +114,8 @@ class Lbl {
 
         return $tiempoTotal ;
     }
-
     private function print ($data) {
-        function requireToVar ($file) {
-            
-            require $file;
-            return ob_get_clean();
-            
-        }
+
         foreach ($data as $val){
 
             $a = $val['agenda'];
@@ -125,8 +133,8 @@ class Lbl {
             $this->html[$id_time][$a] = ob_get_clean();
 
 	    }
+        
     }
-
     private function printArt($arr){
         $str = '';
 
@@ -138,7 +146,6 @@ class Lbl {
     
         return $str;
     }
-
     private function printNote($obs){
         if (!empty($obs)){
             ob_start();
@@ -149,11 +156,7 @@ class Lbl {
         }
 
         return $html ; 
-    }
-    public function add () {
-        
-    }   
-
+    } 
     public function  del ($id) {
 
         $sql  = 'INSERT INTO del_data (id,agenda,idUsuario,fecha,hora,obs,UsuarioCogeCita) SELECT id,agenda,idUsuario,fecha,hora,obs,UsuarioCogeCita FROM data WHERE id = '.$id.'; ';
@@ -163,7 +166,6 @@ class Lbl {
 
         return $this->conn->multi_query($sql) ;
     }
-
     public function edit ($idCita) {
 
         $sql = "UPDATE data 
@@ -176,5 +178,4 @@ class Lbl {
         
         return $this->conn->multi_query($sql) ;
     }
-
 }

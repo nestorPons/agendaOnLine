@@ -1,10 +1,31 @@
 <?php 
-session_start() ;
+//Establecemos zona horaria por defecto
+date_default_timezone_set('Europe/Madrid');
+//Se inicia session que esta en clase segurity
+$url_base = str_replace('web', '' , $_SERVER['DOCUMENT_ROOT'] ) ;
+//configuracion general 
+require_once $url_base . 'app/conf/constants.php' ;
+require_once $url_base . 'app/conf/autoload.php' ;
 
-$arr = explode('/', $_SERVER['DOCUMENT_ROOT'] ) ;
-require_once( str_replace(array_pop($arr),'',$_SERVER['DOCUMENT_ROOT']) . '/app/conf/config.php' );
+$Security = new \core\Security;
 
-include_once URL_SOURCES . 'compilaLess.php' ;
+require_once $url_base . 'app/conf/config.php' ;
+require_once URL_SOURCES . 'compilaLess.php' ;
 
-$controller = $_REQUEST['controller'] ?? 'login' ;
-require_once URL_CONTROLLERS . $controller . '.php' ;
+$controller = isset($_REQUEST['controller'])
+    ?$_REQUEST['controller']
+    :'login' ;
+$controller = $Security->checkSession($controller)
+    ?$controller
+    :'error';
+//echo $_SESSION['count']++ ;
+
+$urlController = URL_CONTROLLERS . $controller . '.php';
+
+if (file_exists($urlController)){
+
+        require $urlController;
+}else{
+    $Security->logout();
+    header("HTTP/1.0 404 Not Found");
+}

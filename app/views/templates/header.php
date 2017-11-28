@@ -3,7 +3,7 @@
 $url_font_main = "https://fonts.googleapis.com/css?family=" .
 	str_replace(' ' ,'+' ,CONFIG['font_main']) ."|" . 
 	str_replace(' ' ,'+' ,CONFIG['font_tile']) ; 
-
+    
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,7 +13,7 @@ $url_font_main = "https://fonts.googleapis.com/css?family=" .
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
-        <link rel='shortcut icon' href='<?= $url_logo_ico?>' >
+        <link rel='shortcut icon' href='<?=URL_LOGO?>' >
         <link rel='shortcut icon' href='/img/favicon.ico' >
         <link rel="stylesheet"  type="text/css" href="/css/jquery-ui.min.css">
         <link rel="stylesheet"  type="text/css" href="/css/metro.css">
@@ -21,5 +21,4 @@ $url_font_main = "https://fonts.googleapis.com/css?family=" .
         <link rel="stylesheet"  type="text/css" href="/empresas/<?=$_GET['empresa']?>/style.css">
         <link href="<?=$url_font_main?>" rel="stylesheet">
         <script  type="text/javascript" src="/js/start.js" async defer></script>
-
-    </head>
+          

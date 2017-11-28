@@ -1,26 +1,28 @@
 <?php 
-include URL_TEMPLATES . '/header.php' ;
-$url_form = 'http://' . $_SERVER['SERVER_NAME'] .'/'. NAME_DB .'/'. 'validar';
-?>
-<body data-empresa="<?= $nombre_empresa?>" background="<?=  backgroundImage() ?>" >
+	include URL_TEMPLATES . '/header.php' ;
+	$url_form = 'http://' . $_SERVER['SERVER_NAME'] .'/'. NAME_EMPRESA .'/'. 'validar';
+	?>
+	<script  type="text/javascript" src="/js/start.js" async defer></script>
+	<title>Agenda Online zona login</title>
+</head>
+<body data-empresa="<?=NAME_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
 
-	<div class="login-form login-principal">
-		<a href= "<?=CONFIG['Web']??''?>">
-			<img id="logo" src="<?= srcLogo()?>"  width=64>
+	<div class="login login-form ">
+		<a href= "<?=CONFIG['web']??''?>" >
+			<img id="logo" src=<?=URL_LOGO?> alt="logo image"/>
 		</a>
-		<h1 class="heading">agenda <?= isset($nombre_empresa)?$nombre_empresa : '' ?></span></h1>
+		<h1 class="heading">Agenda <?= ucwords(NAME_EMPRESA) ?></span></h1>
 
 		<form id="loginUsuario" method="post" action='<?= $url_form ?>' defaultbutton="Entrar"
 			data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña."
 			data-popover-background="bg-red" data-popover-color="fg-white">
 			<input type="hidden"  id="ancho" name="ancho">
-			<input type="hidden"  id="alto" name="alto">
 			<div class="iconClass-container icon-left">
 				<input type="email" class= "email" id="login" name="login" placeholder="Introduzca su Email" value="<?php if(isset($email_demo)){echo $email_demo;}?>" require>
 				<span class="iconClass-inside icon-mail-1"></span>
 			</div>
 			<div class="iconClass-container icon-left">
-				<input type="password" id="fakePass" name="fakePass" placeholder="Introduzca su contraseña" value="<?php if(isset($pass_demo)){echo $pass_demo;}?>" require>
+				<input type="password" id="fakePass" placeholder="Introduzca su contraseña" value="<?php if(isset($pass_demo)){echo $pass_demo;}?>" require>
 				<input type="hidden" id="pass" name="pass" value="<?= isset($pass_sha1_demo) ? $pass_sha1_demo : '' ?>">
 				<span class="iconClass-inside icon-eye"></span>
 			</div>
@@ -43,7 +45,7 @@ $url_form = 'http://' . $_SERVER['SERVER_NAME'] .'/'. NAME_DB .'/'. 'validar';
 		<div class="login-help">
 			<p>
 				¿Olvidaste la contraseña?
-				<a href="../../php/recuperarPass/forgetPass.php?empresa=<?= NAME_DB?>">Pulsa aquí</a>.
+				<a href="../../php/recuperarPass/forgetPass.php?empresa=<?= NAME_EMPRESA?>">Pulsa aquí</a>.
 			</p>
 			<p>
 				<a href="nuevo.php">Crear nuevo usuario.</a>.

@@ -1,6 +1,6 @@
 <div class="menu diassemana">
 	<?php 
-	if (!$_SESSION['esMobil']){
+	if (!$Device->isMovile){
 		?>
 		<ul id="mainLstDiasSemana" class="lstMenu">
 			<a id="mainMenu1" data-value=1>Lun</a>

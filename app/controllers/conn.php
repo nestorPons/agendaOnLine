@@ -1,6 +1,4 @@
 <?php
-if (strlen(session_id()) < 1){ session_start (); }
-
 require_once( URL_CONFIG . 'conn.conf.php' ); 
 
 $conn = new core\Conexion;
@@ -26,9 +24,8 @@ if ( $_REQUEST ) {
             }
 
         }else{
-   
-            $_REQUEST[$key] = $conn->scape($value) ;
-
+           $_REQUEST[$key] = $conn->scape($value) ;
+  
         }
 
     }

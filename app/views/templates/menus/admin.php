@@ -106,10 +106,10 @@
 			
 	</ul>
 <!--menu herramientas-->
-	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		<span class="app-bar-divider"></span>
-		<li id="btnExit" class="no-flexible place-right">
-			<a href="<?= $_SERVER['HTTP_HOST'] . '/' . $_SESSION['bd'] . '/sessionClose'?>">
+	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
+		<li id="btnExit" class="app-bar-element no-flexible place-right">
+			<a href="/<?=NAME_EMPRESA?>?logout=true">
 				<span id="mnuUserSalirSession" class="icon-logout"></span>
 			</a>
 		</li>
@@ -117,7 +117,7 @@
 			<span  class="icon-search"></span>
 			<span  class="menulbl">Buscar</span>
 		</div>
-		<li id="btnOptions" class="disabled">
+		<div id="btnOptions" class="app-bar-element no-flexible place-right disabled">
 			<a class="dropdown-toggle no-flexible place-right  ">
 				<span class="icon-cog"></span>
 				<span  class="menulbl">Opciones</span>
@@ -129,7 +129,7 @@
 				</li>
 
 			</ul>
-		</li>
+		</div>
 
 		 <div id="btnReset" class="app-bar-element no-flexible place-right">
 			<span  class="icon-undo"></span>

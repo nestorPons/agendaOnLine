@@ -1,6 +1,4 @@
 <?php 
-
-
 require_once URL_FUNCTIONS  . 'tools.php';
 require_once URL_CLASS      . 'Lbl.php';
 require_once URL_FUNCTIONS  . 'main.view.php';
@@ -11,6 +9,6 @@ if (isset ($_POST['action'])){
 
 } else {
 
-    require_once URL_VIEWS      . 'main.php';
+    require_once URL_VIEWS_ADMIN . 'main.php';
     
 }

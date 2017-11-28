@@ -20,7 +20,7 @@
 			<span class="iconClass-inside  icon-calendar"></span>
 		</div>
 		<div class="iconClass-container icon-left">
-			<input type="time" class="txt" id="hora"  >
+			<input type="time" class="txt" id="hora" step="900" >
 			<span class="iconClass-inside  icon-clock"></span>
 		</div>
 		<div class="iconClass-container icon-left">
@@ -34,17 +34,16 @@
 			<select name="" id="lstServ">
 				<option value='' disabled selected hidden>Añadir servicios</option>
 				<?php 
-				$class_servicios = new core\BaseClass('servicios') ;
-				$servicies = $class_servicios->getAll( '*' , MYSQLI_ASSOC) ;
-				foreach($servicies as $service){
+				foreach($_SESSION['SERVICIOS'] as $ser){
+					// 0 Id 1 codigo 2 descripcion 3 Precio 4 tiempo 5 IdFamilia 6 Baja
 					?>
-					<option value="<?=$service['id'] ?>" codigo ="<?=$service['codigo'] ?>" tiempo="<?=$service['tiempo']?>"> <?=$service['descripcion'] ?></option>
+					<option value="<?=$ser[0] ?>" codigo ="<?=$ser[1] ?>" tiempo="<?=$ser[4]?>"> <?=$ser[2] ?></option>
 					<?php
 				}
 				?>
 			</select>
 		</div>
-		<button type="button" class="btn-danger btnLoad" data-value="Eliminar"></button>
-		<button type="button" class="btn-success btnLoad" data-value="Guardar"></button>
+		<button type="button" class="btn-danger btnLoad" data-value="Eliminar">Eliminar</button>
+		<button type="button" class="btn-success btnLoad" data-value="Guardar">Guardar</button>
 	</div>
 </div>

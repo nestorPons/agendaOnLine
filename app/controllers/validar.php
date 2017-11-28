@@ -1,19 +1,15 @@
 <?php 
+$action = 'login' ;
+$Login = new \models\Login;
 
-if ( $_POST ){
-    
-    $return = include URL_SCRIPTS . 'validar.php' ;
+$return = include URL_SCRIPTS . 'validar.php' ;
 
-    if ( !empty($return['action']) ) {
+if ( !empty($return['action']) ) {
 
-        $args = isset($return['args']) ? '/' . $return['args'] :  '' ; 
-        $action = $return['action'] . $args ;
-
-    }
-
-} else {
-
-    $action = 'login' ;
+    $args = isset($return['args']) ? '/' . $return['args'] :  '' ; 
+    $action = $return['action'] . $args ;
 
 }
+
+//var_dump ($return);
 header('Location: ' . $action);

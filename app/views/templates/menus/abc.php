@@ -1,7 +1,7 @@
 <div id="menuABC" class="menu abc">
  	<?php
 	$abecedario = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
-	if (!$_SESSION['esMobil']){
+	if (!$Device->isMovile){
 		?>
 		<ul id='mainLstABC' class='lstMenu responsiveDesing_hidden'>
 			<li>
