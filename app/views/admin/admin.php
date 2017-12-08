@@ -6,11 +6,11 @@
 		
 		document.minTime = <?=json_encode(CONFIG['minTime'])?>;
 		document.idUser = <?=$_SESSION['id_usuario']?>;
-		document.margenDias  = <?=CONFIG['margen_dias'] ?> ; 
+		document.margenDias  = <?=MARGIN_DAYS?> ; 
 	</script>
 	<title>AgendaOnline zona admin</title>
 </head>
-	<body data-empresa="<?=$_SESSION['bd']?>" class="<?=$Device->type?>">
+	<body data-empresa="<?=NAME_EMPRESA?>" class="<?=$Device->type?>">
 
 		<?php include URL_TEMPLATES . "menus/admin.php"?>
 

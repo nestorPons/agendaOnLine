@@ -3,28 +3,37 @@ define('SAVE', 'save') ;
 define('DEL', 'del') ;
 define('EDIT', 'edit') ;
 define('ADD', 'add') ;
+define('MARGIN_DAYS',6);
 
-require_once URL_CONTROLLERS.'conn.php'; 
-require_once URL_CONFIG .'session.php';
-
+$conn = new \core\Conexion(NAME_DB , 2); 
 if ($conn->error == false ) {
 
     $confP = $conn->assoc('SELECT * FROM config ') ;
-    $configCSS = $conn->assoc('SELECT * FROM config_css ') ;
 
-    $conf = new core\Conexion( 'aol_accesos' ) ;
-    $confG =  $conf->assoc( 'SELECT * FROM empresas WHERE id = '.$confP['idEmpresa'] .' LIMIT 1' );
-    $browsers =  $conf->all( 'SELECT code , name FROM browsers' );
+    if(!empty($confP['idEmpresa'])){
+        
+        $configCSS = $conn->assoc('SELECT * FROM config_css ') ;
+        $conf = new \core\Conexion('aa_db' , 2);    
+    
+        $confG =  $conf->assoc( 'SELECT * FROM empresas WHERE id = '.$confP['idEmpresa'] .' LIMIT 1' );
+        $browsers =  $conf->all( 'SELECT code , name FROM browsers' );
 
-    foreach($browsers as $browser){
-        $browsers_arr['BROWSERS'][$browser [0]] = $browser [1];
+        foreach($browsers as $browser){
+            $browsers_arr['BROWSERS'][$browser [0]] = $browser [1];
+        }
+        $confUser =  $conf->assoc( 'SELECT * FROM usuarios WHERE id = '.$confP['idEmpresa'] .' LIMIT 1' );
+        $arrConf =  array_merge($confG,$confP,$configCSS,$browsers_arr, $confUser);
+
+    } else {
+        
+        die ('Error 001  : No se puede cargar la configuración');
+        $arrConf = FALSE;
     }
 
-   define('CONFIG' , array_merge($confG,$confP,$configCSS,$browsers_arr) );
-
+    define('CONFIG', $arrConf );
 } else {
 
-    include_once URL_CONTROLLERS . 'error.php';
+    include_once URL_VIEWS . 'error.php';
     exit ;
     
 }

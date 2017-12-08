@@ -3,7 +3,7 @@
 		document.festivos = <?=json_encode (FESTIVOS)?>;
 		document.minTime = <?=json_encode(CONFIG['minTime'])?>;
 		document.idUser = <?=$_SESSION['id_usuario']?>;
-		document.margenDias  = <?=CONFIG['margen_dias'] ?> ; 
+		document.margenDias  = <?=MARGIN_DAYS?> ; 
 	</script>
     <title>Menu agenda On line zona usuarios</title>
 </head>

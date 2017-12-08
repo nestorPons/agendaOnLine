@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-for($d=0;$d<CONFIG['margen_dias'];$d++){
+for($d=0;$d<MARGIN_DAYS;$d++){
 	$fecha = strtotime ( '+'. $d .' day' , strtotime ( date($_POST['f']) ) ) ;
 	$diaSemana =  date("N",strtotime($fecha));
 	$key = date('Ymd',$fecha);

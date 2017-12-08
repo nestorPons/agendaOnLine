@@ -1,0 +1,18 @@
+Options +FollowSymLinks -MultiViews -Indexes 
+RewriteEngine On
+AddDefaultCharset UTF-8
+
+ErrorDocument 404 error404.php
+
+RewriteRule ^css/(.*)$ - [L]
+RewriteRule ^img/(.*)$ - [L]
+RewriteRule ^js/(.*)$ - [L]
+RewriteRule ^font/(.*)$ - [L]
+RewriteRule ^empresas/^([0-9a-z_-]+)/(.*)$ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+
+
+RewriteRule ^([0-9a-z_-]+)/([^/]+)/([^/]+)/?$ app.php?empresa=$1&controller=$2&args=$3 [L,QSA]
+RewriteRule ^([0-9a-z_-]+)/([^/]+)/?$ app.php?empresa=$1&controller=$2 [L,QSA]
+RewriteRule ^([0-9a-z_-]+)/?$ app.php?empresa=$1 [L,QSA]

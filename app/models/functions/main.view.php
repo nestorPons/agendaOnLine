@@ -5,7 +5,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 		
 date_default_timezone_set('UTC');			
 	$fecha = $fecha_inicio??Date('Y-m-d') ;
-	$dias = round(CONFIG['margen_dias']/2);
+	$dias = round(MARGIN_DAYS/2);
 
 	$fecha_inicio =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
 	$fecha_fin =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
@@ -27,10 +27,8 @@ date_default_timezone_set('UTC');
 			<div id="<?=$id_fecha?>" name="dia[]" class="dia <?= $fecha== Date('Y-m-d') ?'activa':'';?>" diaSemana = "<?= $dia_semana?>" >
 				<table class = "tablas tablas-general" >	
 					<?php 
-			echo $id_fecha;
 					$h = strtotime($fecha . ' 06:45') ;
 					for( $i = 0 ; $i <= 96 ; $i++  ){							
-			
 						$h =  strtotime ( '+15 minute' ,  $h  )  ;
 						$str_hora = date('H:i', $h);
 

@@ -6,13 +6,14 @@ spl_autoload_register(function ($classname) {
     $namespace = $arr_explode[0];
     $className = $arr_explode[1];
 
+
     if ( $namespace == 'models' ){
         $filename = URL_CLASS . $className . '.php' ;
     } else {
         $classname = str_replace ('\\', '/', $classname);
-        $filename = URL_ROOT . 'app/' . $classname .".php";
+        $filename =  APP_FOLDER . $classname .".php";
     }
 
-    require_once($filename);
+    include($filename);
 
 });

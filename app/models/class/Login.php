@@ -10,6 +10,7 @@ class Login extends \core\BaseClass {
     public function findUserById(int $id){
         $this->user = parent::getById($id);
         $this->loadData();
+        
     }
     public function findUserBy($column, $value){
         if ($id = parent::getOneBy($column, $value,'id')){
@@ -122,6 +123,6 @@ class Login extends \core\BaseClass {
         $this->attempts(0);
         if ($remember) $this->authByCookie();
 
-        return ($this->admin==1)?'admin':'users' ;
+        return ($this->admin!=1)?'admin':'users' ;
     }
 }

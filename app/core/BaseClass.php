@@ -5,9 +5,21 @@ class BaseClass{
     protected $conn, $sql = ''; 
     private $table, $db ; 
     
-    public function __construct($table , $bd = null) {
+    public function __construct($table , $bd = null, $user = 0 ) {
         $this->table = (string)$table ;
-        $this->conn = new Conexion($bd);
+        $this->conn = new Conexion($bd, $user);
+    }
+    public function validate ($posts, $exception =  [], $uniques){
+        foreach ($posts as $key => $post) {
+            if (isEmpty($post) && !in_array($key,$exception)) return false;
+            $str = strpos($key, );
+        }
+        foreach ($uniques as $uniq){
+            $result = $this->getOneBy($uniq,$posts[$uniq],'*',MYSQLI_NUM);
+            if ($result) return false;
+        }
+
+
     }
     public function getConnect () {
         return $this->conn ;
@@ -55,6 +67,7 @@ class BaseClass{
 
         $query = $this->conn->query($sql);
         $result = $query->fetch_all($type); 
+
 
         if ($return != '*' && count(explode(',', $return)) <= 1){
             $result = $this->converToArray($result);
@@ -120,18 +133,30 @@ class BaseClass{
             $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
 
         } else {
-            $str = ''; 
-            foreach ($args as $column => $value ) {
-
-                $str .=  $column . ' ="' . $value . '",' ; 
-            }
-
-            $str = trim( $str , ',') ; 
-            $this->sql .= "UPDATE {$this->table} SET $str WHERE id = $id;" ;
+            $this->sql .= $this->updateSql($args , $id);
         }
 
         if(!$this->multi_query)
             return $this->query();
+    }
+    public function saveAll ( array $args = null ){
+        $this->sql .= $this->updateSql($args , $id);
+
+        if(!$this->multi_query)
+            return $this->query();
+    }
+    private function updateSql(array $args = null, int $id = null){
+        $str = ''; 
+        foreach ($args as $column => $value ) {
+
+            $str .=  $column . ' ="' . $value . '",' ; 
+        }
+
+        $str = trim( $str , ',') ; 
+        $str .= (!empty($id))?" WHERE id = $id":'';
+        $sql = "UPDATE {$this->table} SET $str ;" ;
+
+        return $sql;
     }
     public function deleteById ( $id ) {
         $this->sql .= "DELETE FROM {$this->table} WHERE id =  $id ; ";

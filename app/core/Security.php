@@ -99,6 +99,35 @@ class Security {
     private static function cookieToken($salt){
         setcookie("token", $salt , 0,'/');
     }
+    public static function requestScape($request, $conn){
+        
+        foreach ($request as $key => $value) {
+
+            if (is_array($value)){
+                foreach ( $value as $k => $val ) { 
+                    if (is_array($val)){
+                        foreach ( $val as $h => $v ) { 
+                            
+                            $request[$key][$k][$h] = $conn->scape($v) ;
+
+                        }
+
+                    }else{
+
+                        $request[$key][$k] = $conn->scape($val) ;
+
+                    }
+
+                }
+
+            }else{
+            $request[$key] = $conn->scape($value) ;
+    
+            }
+
+        }
+        
+    }
     function  __destruct(){       
     }
 }

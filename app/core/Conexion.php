@@ -1,47 +1,75 @@
 <?php namespace core ;
 
-class Conexion {
-	private $bd , $server , $user , $pass ;
-
-	public $result ; 
-	public $error = false ;
-
+class Conexion extends \conf\UserConn {
 	private $conexion ; 
 
-	function __construct( $bd = null ) {
-		$config = include (URL_CONFIG . 'conn.conf.php')	; 
+	public $result, $error = false, $mQCount, $mQResult;
 
-		if ($config) {
-			$this->bd = $bd ?? $config['db'] ;
-			$this->server = $config['server'] ;
-			$this->user = $config['user'] ;
-			$this->pass = $config['pass'] ;
-			$this->connect() ;
-		} else {
+	function __construct( $db = null, $user = 0 ) {
+		switch($user){
+			case 0:
+				$this->user();
+				break;
+			case 1:
+				$this->create();
+				break;
+			case 2:
+				$this->select();
+				break;
+		}
 
-			$this->error = 2 ;
-			
+		$this->db = $db ?? NAME_DB;
+
+		if (!$this->connect()) {
+			$this->error = 'error parametros conexion =>' . $this->server . "/" . $this->user; 
 		}
 
 	}
+	private function connect(){
+	
+			$this->conexion = (empty($this->db))
+				? mysqli_connect($this->server, $this->user, $this->pass) 
+				: mysqli_connect($this->server, $this->user, $this->pass , $this->db) ;
+			@mysqli_query("SET NAMES 'utf8'") ;
 
-	public function connect( ){
-		$this->conexion = mysqli_connect($this->server, $this->user, $this->pass , $this->bd) ;	
-		@mysqli_query("SET NAMES 'utf8'") ;
+			return $this->conexion??header("HTTP/1.0 404 Not Found");
+	
 	}
-
+	public function selectDb(string $db){
+		
+		return mysqli_select_db ( $this->conexion, $db );
+	}
 	public function query($sql){
 
-		$this->result = mysqli_query( $this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+		$this->result = mysqli_query( $this->conexion, $sql);
+		if (!$this->result) 
+			die(mysqli_error($this->conexion));
+
 		return $this->result ;
+	
 	}
-
 	public function multi_query ($sql) {
-		return mysqli_multi_query($this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+		$return = mysqli_multi_query($this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+		while(mysqli_more_results($this->conexion) && mysqli_next_result($this->conexion)){
+			$result = mysqli_store_result($this->conexion);
+			if(is_object($result)){ $result->free(); }
+			unset($result);
+		}
+		return $return ;
 	}
-
-	public function scape ($str) {
+	public function multiQuery(string $sql){
+		$arr = explode(';',$sql);
+		array_pop($arr);
+		$this->mQCount = count($arr);
 		
+		for($i = 0; $i < $this->mQCount ; $i++ ){
+			if (!empty($arr[$i]))
+				$this->mQResult[$i] = $this->query($arr[$i]);
+		}
+		return $this->mQResult[$this->mQCount-1];
+	}
+	public function scape ($str) {
+
 		if(!$this->error){
 			
 			$replace = ['=',"'",'"','/','#','*',"<",">",":","{","}","?"];
@@ -55,41 +83,34 @@ class Conexion {
 
 		}
 	}
-
 	public function row( $sql ){
 		return  mysqli_fetch_row($this->query($sql)) ;
 	}
-
 	public function assoc( $sql ) {	
 		return  mysqli_fetch_assoc($this->query( $sql )) ;
 	}
-
 	public function all( $sql , $type = MYSQLI_NUM ) {	
 		return mysqli_fetch_all($this->query($sql),$type);
 	}
-
 	public function array( $sql ) {	
 		return  mysqli_fetch_array($this->query($sql)) ;
 	}
-
 	public function id () {
 
 		return mysqli_insert_id($this->conexion) ;
 	}
-
 	public function num ($sql) {
 		return mysqli_num_rows($this->query($sql)) ;
 	}
-
 	public function error () {
 		return mysqli_error($this->conexion) ;
 	}
 	public function errno () {
 		return mysqli_errno($this->conexion) ;
 	}
-	
 	function __destruct() {
-		$this->conexion->close();
+		if($this->error!=false) echo $this->error;
+		if($this->conexion) $this->conexion->close();
 	}
 
 }

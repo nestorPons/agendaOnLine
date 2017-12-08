@@ -1,5 +1,5 @@
 <?php 
-require_once $_SESSION['FILE_CONFIG']  ;
+require_once URL_ROOT . 'app/conf/config.php'  ;
 require_once URL_FUNCTIONS . 'tools.php'  ;
 
 $Agendas = new core\BaseClass('agendas') ;

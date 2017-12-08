@@ -8,7 +8,7 @@
 				<span class="icon-user iconClass-inside"></span>
 			</div>
 			<div class="iconClass-container icon-left">
-				<input type="text" name="empresa" placeholder="Empresa" value='<?=CONFIG['nombre']?>'>
+				<input type="text" name="empresa" placeholder="Empresa" value='<?=CONFIG['nombre_empresa']?>'>
 				<span class="icon-shop  iconClass-inside"></span>
 			</div>
 			<div class="iconClass-container icon-left">

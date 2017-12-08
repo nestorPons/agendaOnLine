@@ -1,10 +1,10 @@
 <form id='generalFrm'>	
 	<div class="iconClass-container icon-left">
-		<input type='text' name='nombre' value='<?= CONFIG['nombre']?>' placeholder='nombre comercial' require>
+		<input type='text' name='nombre_usuario' value='<?= CONFIG['nombre_usuario']?>' placeholder='nombre comercial' require>
 		<span class="iconClass-inside icon-shop"></span>
 	</div>
 		<div class="iconClass-container icon-left">
-		<input type='number' name='nif' value='<?= CONFIG['nif']?>'	placeholder='NIF' min="11111" max="999999" require>
+		<input type='text' name='dni' value='<?= CONFIG['dni']?>'	placeholder='NIF' require>
 		<span class="iconClass-inside icon-vcard"></span>
 	</div>
 	<div class="iconClass-container icon-left">
@@ -21,6 +21,10 @@
 	</div>
 	<div class="iconClass-container icon-left">
 		<input type='text' 	name='poblacion' value='<?= CONFIG['poblacion']?>'	placeholder='Poblacion' require>
+		<span class="iconClass-inside left icon-home"></span>
+	</div>
+	<div class="iconClass-container icon-left">
+		<input type='text' 	name='provincia' value='<?= CONFIG['provincia']?>'	placeholder='Provincia' require>
 		<span class="iconClass-inside left icon-home"></span>
 	</div>
 	<div class="iconClass-container icon-left">
