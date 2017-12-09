@@ -41,10 +41,8 @@ class Conexion extends \conf\UserConn {
 	}
 	public function query($sql){
 
-		$this->result = mysqli_query( $this->conexion, $sql);
-		if (!$this->result) 
-			die(mysqli_error($this->conexion));
-
+		$this->result = mysqli_query( $this->conexion, $sql) or die(mysqli_error($this->conexion));
+		
 		return $this->result ;
 	
 	}
@@ -72,7 +70,7 @@ class Conexion extends \conf\UserConn {
 
 		if(!$this->error){
 			
-			$replace = ['=',"'",'"','/','#','*',"<",">",":","{","}","?"];
+			$replace = ['=',"'",'"','/','#','*',"<",">",":","{","}","?","|","&"];
         	$str = str_replace($replace, '' , $str);
         	$str = trim($str);        
 			return mysqli_real_escape_string($this->conexion, $str) ;

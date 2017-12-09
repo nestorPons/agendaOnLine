@@ -3,7 +3,8 @@
 class Error {
     const E001 = "No se pudo crear la conexion a la base de datos" ;
     const E003 = "No se pudo guardar el registro";
-
+    const E004 = "Registro duplicado";
+    
     // Errores create
     const E011 = "Nombre ocupado" ;
     const E012 = "No se pudo validar el formulario";
@@ -14,8 +15,12 @@ class Error {
 
     //login 
     const E021 = "";
+
+    //Formularios
+    const E030 = "Error guardando datos";
 	function __construct( ) {
-        
+    
+    
     }
 
 }

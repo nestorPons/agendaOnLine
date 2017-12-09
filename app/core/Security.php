@@ -1,14 +1,72 @@
 <?php namespace core ; 
 
 class Security {
-    
+    const ISINT = 1 , ISBOOL = 2, ISSTR = 3, ISDATE = 4, ISEMAIL = 5;
     private $value, $status, $browser, $idUser, $keyPass ="undato" ;
     public $attempt;
     //private check exceptions
     private $pageExcep = ['validar','login'];
+    private  $rules =  [
+                'agenda'    => [self::ISINT,2],
+                'action'    => [self::ISSTR,6],
+                'controler' => [self::ISSTR,16],
+                'cp'        => [self::ISINT,6],
+                'dir'       => [self::ISSTR,50],
+                'dni'       => [self::ISSTR,10],
+                'email'     => [self::ISEMAIL,50],
+                'fecha'     => [self::ISDATE,10],
+                'nombre'    => [self::ISSTR,50],
+                'cliente'   => [self::ISSTR,50],  
+                'poblacion' => [self::ISSTR,30],
+                'provincia' => [self::ISSTR,30],
+                'pais'      => [self::ISSTR,30],
+                'tel'       => [self::ISSTR,15], 
+                'web'       => [self::ISSTR,50],
+            ];
 
     function __construct(){
         $this->session_start();
+    }
+      
+    public static function sanitize($post){
+        if(isset($post['controller'])) unset($post['controller']);
+        if(isset($post['action'])) unset($post['action']);
+        return $post;
+    }
+    public function validateForm ($post,$exceptions = []){
+
+        foreach($post as $key => $value){
+            if (empty($value) && !in_array($key, $exceptions)) return false;
+            foreach ($this->rules as $kRule => $vRule){
+                if (strstr($key,$kRule)){
+                    
+                    if(strlen($value)>$vRule[1]) return false;
+
+                    switch($vRule[0]){
+                        case self::ISSTR:
+                            
+                            break;
+                        case self::ISINT:
+                            if(!filter_var($value, FILTER_VALIDATE_INT)) return false;
+                            break;
+                        case self::ISDATE:
+                            if (!$this->isDate($value)) return false;
+                            break;
+                        case self::ISEMAIL:
+                            if (!filter_var($value, FILTER_SANITIZE_EMAIL)) return false;
+                            break;
+                    }   
+                     
+                    break;
+                }
+            
+            }
+        }
+        return true;
+    }  
+    public static function isDate($strDate){
+        $arr = explode('-',$strDate);
+        return checkdate($arr[1],$arr[2],$arr[0]);
     }
     public function checkSession($pageIn){
   

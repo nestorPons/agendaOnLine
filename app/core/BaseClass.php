@@ -3,23 +3,10 @@ class BaseClass{
 
     public  $type = MYSQLI_ASSOC, $names, $multi_query = false;
     protected $conn, $sql = ''; 
-    private $table, $db ; 
-    
+    private $table, $db;
     public function __construct($table , $bd = null, $user = 0 ) {
         $this->table = (string)$table ;
         $this->conn = new Conexion($bd, $user);
-    }
-    public function validate ($posts, $exception =  [], $uniques){
-        foreach ($posts as $key => $post) {
-            if (isEmpty($post) && !in_array($key,$exception)) return false;
-            $str = strpos($key, );
-        }
-        foreach ($uniques as $uniq){
-            $result = $this->getOneBy($uniq,$posts[$uniq],'*',MYSQLI_NUM);
-            if ($result) return false;
-        }
-
-
     }
     public function getConnect () {
         return $this->conn ;

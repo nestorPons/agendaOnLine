@@ -1,6 +1,7 @@
 <?php
 require_once $url_base . 'app/conf/autoload.php' ;
 $Security = new \core\Security;
+
 //compruebo que sea dir app
 
 $controller = isset($_REQUEST['controller'])
@@ -31,4 +32,5 @@ if (isset($_GET['empresa'])){
 
     require_once URL_SCRIPTS . $controller. '.php';
 }
+//AKI :: implementar seguridad por eventos
 //echo $_SESSION['count']++ ;

@@ -15,7 +15,7 @@
             
             $cls_status_1 = $Horarios->out_time($h,$id_fecha, CONFIG['minTime'])
                 ?'ocupado'
-                :$Horarios->cls_status($hh, $arr_horas_ocupadas,'ocupado');
+                :$Horarios->cls_status($h, $arr_horas_ocupadas,'ocupado');
             $cls_status_2 =  $Horarios->out_time($h,$id_fecha, CONFIG['minTime'])
                 ?'ocupado':
                 $Horarios2->cls_status($hh, $arr_horas_ocupadas,'ocupado');

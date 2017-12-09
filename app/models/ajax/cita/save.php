@@ -1,6 +1,6 @@
 <?php
-
-if ($_POST){
+$Security::sanitizePost();
+if ($Security->validateForm($_POST)){
 
 	$userId = $_POST['cliente'];
 
@@ -9,7 +9,6 @@ if ($_POST){
 
 	$servicios = $_POST['servicios']??mnsExit('No se han pasado servicios');
 	$agenda =  $_POST['agenda'][0]??mnsExit('Sin agenda');
-	$nota = $_POST['nota']??"";
 
 	$r['success']=true;
 	$sql = "SELECT * FROM data WHERE fecha = '$fecha' AND hora = '$hora' AND agenda= '$agenda'";
@@ -17,37 +16,45 @@ if ($_POST){
 
 	if ($result_data <= 1 ){
 		$r['ocupado']=false;
-		$sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,usuarioCogeCita) VALUE ('$agenda','$userId','$fecha', '$hora' ,'$nota','".$_SESSION['id_usuario']."')";
-		if ($conn->query($sql)){
+		if($Data->saveById(0,[
+				'agenda' => $agenda,
+				'idUsuario' => $userId,
+				'fecha' => $fecha,
+				'hora' => $hora, 
+				'obs' => $_POST['nota']??"", 
+				'usuarioCogeCita' => $_SESSION['id_usuario']
+			])){
 			
-			$id_servicio = $conn->id();
+			$id_servicio = $Data->getId();
 			$sql = '';
 	
 			foreach ($servicios as $id ) {
-				$sql = 'INSERT INTO cita (idCita, servicio) VALUE ('.$id_servicio.','. $id.') ; ';
-				$conn->query($sql);
-				$arrSer[] = $Serv->getById($id) ;
-				$arridCitaSer[] = $conn->id();
-			}
+					$Cita->saveById(0,[
+							'idCita' =>$id_servicio, 
+							'servicio'=> $id
+						]);
 
-			
+					$arrSer[] = $Serv->getById($id) ;
+					$arridCitaSer[] = $conn->id();
+				}
+
 			$r['idUser'] = $userId ;
 			$r['idCita'] = $id_servicio ;
 			$r['services'] = $arrSer ;
 			$r['idCitaSer'] = $arridCitaSer;
-		}
+			}
 	} else {
 		$r['ocupado']=true;
 		$r['mns']['tile'] = " hora ocupada " ;
 		$r['mns']['body'] = " No se pueden reservar dos citas en la misma hora " ;
-	}
+		}
 
 } else {
-	$r = false ;
-}
+		$r = false ;
+	}
+//AKI :: hay que implementar los email de aviso
 //if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
 //registrarEvento(1, $idServicio,$_SESSION['id_usuario'],$agenda);
-
 
 function mnsExit($mns){
 	echo($mns);

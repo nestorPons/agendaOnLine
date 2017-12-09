@@ -21,8 +21,8 @@ if ($conn->error == false ) {
         foreach($browsers as $browser){
             $browsers_arr['BROWSERS'][$browser [0]] = $browser [1];
         }
-        $confUser =  $conf->assoc( 'SELECT * FROM usuarios WHERE id = '.$confP['idEmpresa'] .' LIMIT 1' );
-        $arrConf =  array_merge($confG,$confP,$configCSS,$browsers_arr, $confUser);
+        $adminConf =  $conf->assoc( 'SELECT * FROM admin WHERE id = '.$confG['idAdmin'] .' LIMIT 1' );
+        $arrConf =  array_merge($confG,$confP,$configCSS,$browsers_arr, $adminConf);
 
     } else {
         
@@ -43,4 +43,3 @@ if ($conn->error == false ) {
 if( isset($_POST['ancho']) ) $_SESSION['width'] = $_POST['ancho'];
 //Si voy a admin o otro lado creo la clase dispositivo 
 if (isset($_SESSION['width'])) $Device = new \models\Device($_SESSION['width']);
-

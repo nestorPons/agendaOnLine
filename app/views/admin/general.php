@@ -1,7 +1,7 @@
 <form id='generalFrm'>	
 	<div class="iconClass-container icon-left">
-		<input type='text' name='nombre_usuario' value='<?= CONFIG['nombre_usuario']?>' placeholder='nombre comercial' require>
-		<span class="iconClass-inside icon-shop"></span>
+		<input type='text' name='nombre_usuario' value='<?= CONFIG['nombre_usuario']?>' placeholder='nombre usuario' require>
+		<span class="iconClass-inside icon-user"></span>
 	</div>
 		<div class="iconClass-container icon-left">
 		<input type='text' name='dni' value='<?= CONFIG['dni']?>'	placeholder='NIF' require>

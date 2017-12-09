@@ -11,6 +11,7 @@ $lbl = new models\Lbl ;
 
 $lbl->loadDates( $fecha ,$fecha , $ag ) ;
 $arr_horas_ocupadas = array_column($lbl->data, 'tiempoTotal' , 'hora') ;
+
 $horas = $Horarios->hours($dia_semana);
 $array_horas = $horas[$dia_semana]??false;
 
