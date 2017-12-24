@@ -1,7 +1,9 @@
 <?php
-$Security::sanitizePost();
-if ($Security->validateForm($_POST)){
+$Forms = new models\Forms;
+$Forms::sanitize($_POST);
 
+if ($Forms->validateForm($_POST,['nota'])){
+	$r['success']=true;
 	$userId = $_POST['cliente'];
 
 	$fecha =$_POST['fecha']??mnsExit('Sin fecha');
@@ -42,15 +44,15 @@ if ($Security->validateForm($_POST)){
 			$r['idCita'] = $id_servicio ;
 			$r['services'] = $arrSer ;
 			$r['idCitaSer'] = $arridCitaSer;
-			}
+		 }
 	} else {
 		$r['ocupado']=true;
 		$r['mns']['tile'] = " hora ocupada " ;
 		$r['mns']['body'] = " No se pueden reservar dos citas en la misma hora " ;
-		}
+	 }
 
 } else {
-		$r = false ;
+		$r =  core\Error::array(core\Error::getLast());
 	}
 //AKI :: hay que implementar los email de aviso
 //if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");

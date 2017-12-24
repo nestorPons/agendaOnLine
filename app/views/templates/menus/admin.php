@@ -28,10 +28,10 @@
 
 	<hr>
 	<h3>o puede contactarnos en ...</h3> 
-	<a href="https://www.agendaOnLine.es" >www.agendaOnLine.es</a>
-	<a href="mailto:nestorpons@gmail.com?Subject=Contacto agendaOnLine" 	
+	<a href="<?=AOL_WEB?>" >www.agendaOnLine.es</a>
+	<a href="mailto:<?=AOL_EMAIL?>?Subject=Contacto agendaOnLine" 	
 		target="_top">
-		Nestorpons@gmail.com
+		<?=AOL_EMAIL?>
 	</a>
 </div>
 
@@ -109,7 +109,7 @@
 		<span class="app-bar-divider"></span>
 	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
-			<a href="/<?=NAME_EMPRESA?>?logout=true">
+			<a href="/<?=NAME_EMPRESA?>/logout">
 				<span id="mnuUserSalirSession" class="icon-logout"></span>
 			</a>
 		</li>

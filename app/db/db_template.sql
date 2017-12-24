@@ -112,9 +112,8 @@ CREATE TABLE `servicios` (
 
 CREATE TABLE `tblreseteopass` (
   `id` int(11) UNSIGNED NOT NULL,
-  `idusuario` int(11) NOT NULL,
   `token` varchar(64) NOT NULL,
-  `creado` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `usuarios` (
@@ -128,8 +127,9 @@ CREATE TABLE `usuarios` (
   `idioma` tinyint(1) NOT NULL DEFAULT '1',
   `dateReg` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dateBaja` datetime DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
   `attempts` tinyint(4) NOT NULL DEFAULT '0'
+  `pin` SMALLINT(4) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 ALTER TABLE `agendas`
@@ -191,11 +191,12 @@ ALTER TABLE `servicios`
 
 ALTER TABLE `tblreseteopass`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idusuario` (`idusuario`);
+  ADD UNIQUE KEY `idUser` (`idUser`);
 
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`);
-
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+  
 ALTER TABLE `agendas`
   MODIFY `id` tinyint(2) NOT NULL AUTO_INCREMENT;
 
@@ -224,33 +225,33 @@ ALTER TABLE `servicios`
   MODIFY `id` smallint(3) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `tblreseteopass`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL;
 
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `auth_tokens`
-  ADD CONSTRAINT `auth_tokens_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `TOK_IDU_FK` FOREIGN KEY (`idUser`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `cita`
-  ADD CONSTRAINT `id_ser_fk` FOREIGN KEY (`servicio`) REFERENCES `servicios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `ID_SER_FK` FOREIGN KEY (`servicio`) REFERENCES `servicios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
   
 ALTER TABLE `data`
-  ADD CONSTRAINT `data_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `DAT_IDU_FK` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `del_cita`
-  ADD CONSTRAINT `del_cita_ibfk_2` FOREIGN KEY (`servicio`) REFERENCES `servicios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `del_cita_ibfk_3` FOREIGN KEY (`idCita`) REFERENCES `del_data` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `DCT_SER_FK` FOREIGN KEY (`servicio`) REFERENCES `servicios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `DCT_IDC_FK` FOREIGN KEY (`idCita`) REFERENCES `del_data` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `del_data`
-  ADD CONSTRAINT `del_data_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `DDA_IDU_FK` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `horarios`
-  ADD CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`agenda`) REFERENCES `agendas` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `HOR_AGE_FK` FOREIGN KEY (`agenda`) REFERENCES `agendas` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `servicios`
   ADD CONSTRAINT `SER_FAM_FK` FOREIGN KEY (`idFamilia`) REFERENCES `familias` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `tblreseteopass`
-  ADD CONSTRAINT `tblreseteopass_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `RPS_ID_FK` FOREIGN KEY (`id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;

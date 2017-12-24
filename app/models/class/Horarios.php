@@ -12,7 +12,7 @@ class Horarios extends \core\BaseClass {
 		
 		parent::__construct($this->table);
 
-	}
+	 }
 	public function consult($sql){
 
 		$arrhorarios = $this->conn->all($sql,MYSQLI_ASSOC);
@@ -22,10 +22,10 @@ class Horarios extends \core\BaseClass {
 		}
 
 		return $horarios??false;
-	}
+	 }
 	public function all(){
 		return $this->consult("SELECT * FROM horarios ORDER BY dia") ;  
-	}
+	 }
 	public function hours($day = 'all'){
 
 		$sql =  ($day=='all') ?
@@ -58,7 +58,7 @@ class Horarios extends \core\BaseClass {
 
 		return $horas_array??false;
 	
-	}
+	 }
 	public function days($day){
 		$row =  $this->consult("SELECT * FROM horarios WHERE dia = $day")  ;
 
@@ -67,14 +67,14 @@ class Horarios extends \core\BaseClass {
 			$fin_horarios[$value['dia']][] = $value['fin'];
 		}
 
-	}
+	 }
 	public function add ( $datos ){
 		
 		$sql = "INSERT INTO horarios (agenda,dia,inicio,fin) 
 		VALUES (".$datos[0].",".$datos[1].",".$datos[2].",".$datos[2].")";
 		
 		return $this->query($sql) ;
-	}
+	 }
 	public function save_horarios ( $data_arr ) {
 		$sql = "" ;
 
@@ -90,14 +90,14 @@ class Horarios extends \core\BaseClass {
 			}
 		}
 		return $this->conn->multi_query($sql);
-	}
+	 }
 	public function del_horarios($arr_id){
 		$sql = '';
 		foreach ($arr_id as $id){
 			$sql .= 'DELETE FROM horarios WHERE id = '. $id . ';';
 		}
 		return $this->conn->multi_query($sql);
-	}	
+	 }	
 	public function cls_status($hour  , $arr_busy_hours , $exit_cls = 'busy'){
 		//return to class
 		$str_h =  $hour . ':00';
@@ -111,21 +111,21 @@ class Horarios extends \core\BaseClass {
 		$this->uniTime != 0 ? $this->uniTime -= 1 : 0 ;
 
 		return  $cls;
-	}	
+	 }	
 	public function out_time($hour, $date, $minTime){
-
 		$date = $date . ' ' . $hour;
-		$date = date('Ymd H:i',strtotime($date . "+".$minTime." minutes"));
-		return (strtotime("now") > strtotime($date));
+		$date = date('Ymd H:i',strtotime($date));
 
-	}
+		return (strtotime("+".$minTime." minutes now")  > strtotime($date));
+
+     }
 	public function cls_close($week_day) {
 		//return to class
 		return in_array($h , $this->close_hours[$week_day])?'cierre':'';
-	}
+    	}
 	public function ajax($action){
 		header('Content-Type: application/json');
 			
 		echo json_encode($row);
-	}
+	 }
 }

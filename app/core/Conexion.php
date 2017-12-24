@@ -24,7 +24,7 @@ class Conexion extends \conf\UserConn {
 			$this->error = 'error parametros conexion =>' . $this->server . "/" . $this->user; 
 		}
 
-	}
+	 }
 	private function connect(){
 	
 			$this->conexion = (empty($this->db))
@@ -34,18 +34,18 @@ class Conexion extends \conf\UserConn {
 
 			return $this->conexion??header("HTTP/1.0 404 Not Found");
 	
-	}
+	 }
 	public function selectDb(string $db){
 		
 		return mysqli_select_db ( $this->conexion, $db );
-	}
+	 }
 	public function query($sql){
 
 		$this->result = mysqli_query( $this->conexion, $sql) or die(mysqli_error($this->conexion));
 		
 		return $this->result ;
 	
-	}
+	 }
 	public function multi_query ($sql) {
 		$return = mysqli_multi_query($this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
 		while(mysqli_more_results($this->conexion) && mysqli_next_result($this->conexion)){
@@ -54,7 +54,7 @@ class Conexion extends \conf\UserConn {
 			unset($result);
 		}
 		return $return ;
-	}
+	 }
 	public function multiQuery(string $sql){
 		$arr = explode(';',$sql);
 		array_pop($arr);
@@ -65,9 +65,8 @@ class Conexion extends \conf\UserConn {
 				$this->mQResult[$i] = $this->query($arr[$i]);
 		}
 		return $this->mQResult[$this->mQCount-1];
-	}
+	 }
 	public function scape ($str) {
-
 		if(!$this->error){
 			
 			$replace = ['=',"'",'"','/','#','*',"<",">",":","{","}","?","|","&"];
@@ -80,35 +79,35 @@ class Conexion extends \conf\UserConn {
 			return false ;
 
 		}
-	}
+	 }
 	public function row( $sql ){
 		return  mysqli_fetch_row($this->query($sql)) ;
-	}
+	 }
 	public function assoc( $sql ) {	
 		return  mysqli_fetch_assoc($this->query( $sql )) ;
-	}
+	 }
 	public function all( $sql , $type = MYSQLI_NUM ) {	
 		return mysqli_fetch_all($this->query($sql),$type);
-	}
+	 }
 	public function array( $sql ) {	
 		return  mysqli_fetch_array($this->query($sql)) ;
-	}
+	 }
 	public function id () {
 
 		return mysqli_insert_id($this->conexion) ;
-	}
+	 }
 	public function num ($sql) {
 		return mysqli_num_rows($this->query($sql)) ;
-	}
+	 }
 	public function error () {
 		return mysqli_error($this->conexion) ;
-	}
+	 }
 	public function errno () {
 		return mysqli_errno($this->conexion) ;
-	}
+	 }
 	function __destruct() {
 		if($this->error!=false) echo $this->error;
 		if($this->conexion) $this->conexion->close();
-	}
+	 }
 
 }

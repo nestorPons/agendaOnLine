@@ -3,34 +3,39 @@
 class User extends \core\BaseClass {
 	
 	private $user, $pass, $table = 'usuarios' ;
-	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs;
+	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $token = 'undefined';
 	
-	public function __construct( $id ){
-		
+	public function __construct( $id , $email = false ){
 		parent::__construct($this->table);
+		$this->user = ($id)
+			? parent::getById($id)
+		 	: $this->user = parent::getOneBy('email', $email);
 
-		$this->user = parent::getById($id);
+		if ( $this->user ){
+			$this->id = $this->user['id'];
+			$this->nombre = $this->user['nombre'];
+			$this->email = $this->user['email'];
+			$this->pass = $this->user['pass'];
+			$this->tel = $this->user['tel'];
+			$this->dateBaja = $this->user['dateBaja'];
+			$this->dateReg = $this->user['dateReg'];
+			$this->idioma = $this->user['idioma'];
+			$this->admin = $this->user['admin'];
+			$this->status = $this->user['status'];
+		} else {
+			die('no encontrado');
+		}
 		
-		$this->id = $id ;
-		$this->nombre = $this->user['nombre'];
-		$this->email = $this->user['email'];
-		$this->pass = $this->user['pass'];
-		$this->tel = $this->user['tel'];
-		$this->dateBaja = $this->user['dateBaja'];
-		$this->dateReg = $this->user['dateReg'];
-		$this->idioma = $this->user['idioma'];
-		$this->admin = $this->user['admin'];
-		$this->status = $this->user['status'];
-	}
+	 }
 	public function get($args){
 		return self::getById($this->id, $args);
-	}
+	 }
 	public function set($args){
 		return self::saveByID($this->id, $args);
-	}
+	 }
     public function validatePass( $pass ){
        return $this->pass === $pass ;
-    }
+     }
 	public function validateEmail( string $email ){
 		$email = trim( $email ) ;
 
@@ -44,7 +49,7 @@ class User extends \core\BaseClass {
 		}
 
 		return $return ;
-	}
+	 }
 	public function getHistory(){
 		$sql = 'SELECT C.id, D.id as idCita, D.fecha, D.hora , S.descripcion , S.id as idSer 
 				FROM cita C JOIN data D ON C.idCita = D.id 
@@ -53,24 +58,44 @@ class User extends \core\BaseClass {
 				ORDER BY D.fecha, D.hora ';
 
 		return  $this->conn->all($sql , MYSQLI_ASSOC ) ;
-	}
-	public function attempts(int $args = null){
-		$attempts = self::get('attempts');
-		if (is_null($args)){
-			return $attempts;
-		}else if($args > 0){
-			$attempts += $args;
-			$data = array('attempts'=>$attempts);
-		}else{
-			$data = array('attempts'=>0);
-		}
-
-		$this->set($data);	
-		return $attempts;
-	}
+	 }
 	public function status(int $arg = null) {
 		return (empty($arg))
 			? $this->get('status')
 			: $this->set(array('status'=>$arg));
+	 }
+	public function getToken(){
+        if ($this->token == 'undefined'){
+			$cadena = $this->id.$this->nombre.rand(1,9999999).date('Y-m-d');
+			$this->token = sha1($cadena) . str_pad($this->id, 4, "0", STR_PAD_LEFT); 
+			
+			$Token = new \core\BaseClass('tblreseteopass');
+			if( !$Token->saveByID(0,[
+				'id'=> $this->id , 
+				'token' => $this->token 	
+			]))
+			return false;
+		}
+		return $this->token;
+     }
+	public function checkToken($token){
+		$Token = new \core\BaseClass('tblreseteopass'); 
+		$tbl = $Token->getOneBy('id', $this->id);
+		$actualDate = (strtotime(date("Y-m-d H:i:00",time())));
+		$saveDate = (strtotime('+30 minute' , strtotime($tbl['date'])));
+
+		if($actualDate > $saveDate) return \core\Error::set('E061');
+		if($tbl['token'] != $token) return \core\Error::set('E062');
+		return true;
+	 }
+	private function removeToken(){
+		$Token = new \core\BaseClass('tblreseteopass'); 
+		return $Token->deleteById($this->id);
 	}
-}
+	public function activate($get){
+		if (!$this->checkToken($get['args'])) return false;
+		if ($this->set(['status'=> 0]))
+			return $this->removeToken();
+
+	 }
+ }

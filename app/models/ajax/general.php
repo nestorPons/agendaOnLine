@@ -1,10 +1,11 @@
-<?php 
-$_POST = $Security->sanitize($_POST);
+<?php
+$Forms = new models\Forms; 
+$_POST = $Forms->sanitize($_POST);
 
 $Admin = new core\BaseClass('admin', 'aa_db');
 $Empresa = new core\BaseClass('empresas','aa_db') ;
 $err = false; 
-if ($Security->validateForm($_POST)){
+if ($Forms->validateForm($_POST)){
 
 	$email = $_POST['email'];
 	$tel = $_POST['tel'];

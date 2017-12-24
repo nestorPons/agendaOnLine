@@ -1,19 +1,34 @@
 <?php
 
-if(!isset($_COOKIE["auth"])||isset($_GET['logout'])){
+if (isset($_POST['action'])){
+    header('Content-Type: application/json');
+    $Forms = new models\Forms;
+    $action = $_POST['action'];
+    $_POST = $Forms->sanitize($_POST);
+    if ($Forms->validateForm($_POST,['args'])){
 
-    $Security->logout();
-    $Security->session_start();
-    require_once URL_VIEWS . 'login.php';
-
+        require_once URL_AJAX . 'login/' . $action . '.php' ;    
+        
+    } else return core\Error::array(core\Error::getLast());
+    
+    echo json_encode($r);
+}else if (isset($_POST['view'])){
+    require_once URL_VIEWS . 'login/' . $_POST['view'] . '.php';
 } else {
 
-    $Login = new \models\Login;
-    $action =
-        $Login->authToken($_COOKIE["auth"])
-            ? $Login->createSession()
-            :'error';
+    if(!isset($_COOKIE["auth"])||isset($_GET['logout'])){
+    
+        require_once URL_VIEWS . 'login.php';
+        
+    } else {
 
-
-   header('Location: ' . NAME_EMPRESA . '/' . $action);
+        $Login = new \models\Login;
+        if ($action = $Login->authToken($_COOKIE["auth"])){
+            $Login->createSession();
+             require_once URL_VIEWS . '/login/pinpass.php';
+        }else{
+            header('Location: ' . NAME_EMPRESA . '/logout');
+        }    
+        
+    }
 }

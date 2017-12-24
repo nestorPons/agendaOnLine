@@ -1,43 +1,42 @@
 <?php
 //check cita
-$citasBd = array();
-$citasView = $_POST['citas'] ?? null;
+$dataPost = $_POST['citas'] ?? false;
 
-$result = $Data->getBy('fecha' , $_POST['fecha'] , 'id, lastMod');
+$data = $Data->getBy('fecha' , $_POST['fecha']);
+//Arreglo primer array
+foreach($data as $value){
 
-foreach($result as $value){
-    $citasBd[$value['id']] = $value['lastMod'];
-}
-//AKI :: comparando arrays para refrescar el main 
-var_dump($citasView);
-echo "************";
-var_dump($citasBd);
-echo "************";
-//$result = compareArray($citasBd , $citasView);
+    $id = $value['id'];
+    $dataDb[$id] = $value;
+    //Busco añadidos 
+    if (!$dataPost||!in_array($id, array_column($dataPost, 'id')))
+        $r['add'][] = _getCita($id, $value);
+} 
 
-var_dump($result);
-/*
-foreach ($views as $key => $view){
-    
-    $dbs[]
-
-    $ids[] = $value['ids'];
-    $lastMods = $value['lastMod'];
-}
-
-var_dump($ids);
-
-
-if ($result['val']>=1){
-    $r['del'] = $result['comp2'];
+if ($dataPost){
+    //Arreglo segundo array
+    foreach($dataPost as $value){
+        $id = $value['id'];
+        //busco borrados
+        if (isset($dataDb[$id])){
+            // Busco editados 
+            if($value['lastMod'] != $dataDb[$id]['lastMod'])
+                $r['edit'][] =  _getCita($id,$dataDb[$id]);
+        } else {
+            $r['del'][] = $id;
+        } 
+    } 
 }
 
-if ($result['val']>=2){
+function _getCita($id,$data){
+    global $Cita, $Serv, $Users;
+    $cita = $Cita->getBy('idCita', $id );
+    $data['nombre'] = $Users->getById((int)$data['idUsuario'], 'nombre');
 
-    foreach($result['comp1'] as $value){
-        $r['add'] = $Lbl->getById($value);
+    foreach($cita as $key => $val){
+        $serv = $Serv->getById($val['servicio']);
+        $mCita[] = array_merge($val,$serv); 
     }
-
-}
-// check services 
-*/
+    
+    return [$data,$mCita];   
+ }

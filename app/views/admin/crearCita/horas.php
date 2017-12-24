@@ -1,8 +1,5 @@
 
 <table class = "dia activa" id="<?=$id_fecha?>" >
-    <tr>
-        <th><?=$id_fecha?></th>
-    </tr>
     <?php 
 
     if ( $array_horas ) {
@@ -16,7 +13,7 @@
             $cls_status_1 = $Horarios->out_time($h,$id_fecha, CONFIG['minTime'])
                 ?'ocupado'
                 :$Horarios->cls_status($h, $arr_horas_ocupadas,'ocupado');
-            $cls_status_2 =  $Horarios->out_time($h,$id_fecha, CONFIG['minTime'])
+            $cls_status_2 =  $Horarios->out_time($hh,$id_fecha, CONFIG['minTime'])
                 ?'ocupado':
                 $Horarios2->cls_status($hh, $arr_horas_ocupadas,'ocupado');
             $std_radio_1 =  empty($cls_status_1) ? '' :'disabled';

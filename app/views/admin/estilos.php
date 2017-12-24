@@ -1,5 +1,5 @@
 <div class="cuerpo center" >   
-    <div class = 'size-mini' >
+    <div class = '' >
         <h1 id='tlConfigCss'>Configuración de estilo</h1>
 
         <div class="aling-left">

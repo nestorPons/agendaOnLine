@@ -7,25 +7,25 @@ class BaseClass{
     public function __construct($table , $bd = null, $user = 0 ) {
         $this->table = (string)$table ;
         $this->conn = new Conexion($bd, $user);
-    }
+     }
     public function getConnect () {
         return $this->conn ;
-    }
+     }
     public function db () {
         return $this->db ; 
-    }
+     }
     protected function query(){
         $sql = $this->sql;
         $this->sql = '';
         return $this->conn->query($sql) ;
-    }
+     }
     public function getAll ( string $return = '*' , $type = MYSQLI_NUM ) {
 
         $query = $this->conn->query("SELECT $return FROM {$this->table} ORDER BY id ASC") ;
 
        return $query->fetch_all( $type );
         
-    }
+     }
     public function getById ( int $id , string $return = '*') {
 
         $sql = "SELECT $return FROM {$this->table} WHERE id = $id LIMIT 1" ;
@@ -34,7 +34,7 @@ class BaseClass{
 
         return  $this->format($result);
     
-    }
+     }
     public function getBy ( $column , $value , string $return = '*', $type = MYSQLI_ASSOC ) {
         //varios valores ponerlos en un array
         $filters = '';
@@ -56,13 +56,15 @@ class BaseClass{
         $result = $query->fetch_all($type); 
 
 
-        if ($return != '*' && count(explode(',', $return)) <= 1){
+        if ($return != '*' && count(explode(',', $return)) <= 1)
             $result = $this->converToArray($result);
+        /*/
         }else if (count($result) == 1) {
             $result = $result[0];
         }
+        */
         return $result ; 
-    }
+     }
     public function getBySQL ( string $sql , $type = MYSQLI_ASSOC ) {
 
         $sql = "SELECT * FROM {$this->table} WHERE " . $sql;
@@ -70,40 +72,41 @@ class BaseClass{
         $result = $query->fetch_all($type); 
              
         return $result ; 
-    }
+     }
     public function getId () {
         return $this->conn->id();
-    }
-    public function getOneBy ( $column, $value, string $return = '*', $type = 'assoc' ) {
+     }
+    public function getOneBy ( $column, $value, string $return = '*', $typeNum = false, $desc = false) {
+        $order = $desc?'ORDER BY "id" DESC':'';
 
         $value = $this->conn->scape($value) ;
-        $sql = "SELECT $return FROM {$this->table} WHERE $column = '$value' LIMIT 1 " ;
+        $sql = "SELECT $return FROM {$this->table} WHERE $column = '$value' $order LIMIT 1  ;" ;
         $query = $this->conn->query($sql) ;
 
        if ($return != '*'){
             $result = $query->fetch_row();
             if(count($result)<=1)$result = $result[0];
         }else{
-            $result = $type == 'assoc' ? $query->fetch_assoc() : $query->fetch_row() ; 
+            $result = $typeNum? $query->fetch_row(): $query->fetch_assoc() ; 
         }          
         
         return $result;
-    }
+     }
     public function getRowById ( $value ){
         $sql = "SELECT * FROM {$this->table} WHERE id = '$value' " ;
         return $this->conn->row($sql) ;
-    }
+     }
     public function getRowBy ( $column , $value ){
         $sql = "SELECT * FROM {$this->table} WHERE $column = '$value' " ;
         return $this->conn->row($sql) ;
-    }
+     }
     public function multi_query(){
 
         $r = $this->conn->multi_query($this->sql);
         $this->sql = '';
         $this->multi_query = false;
         return $r;
-    }
+     }
     public function saveByID ( int $id , array $args = null  ) {
 
         $columns = '' ; 
@@ -125,13 +128,13 @@ class BaseClass{
 
         if(!$this->multi_query)
             return $this->query();
-    }
+     }
     public function saveAll ( array $args = null ){
-        $this->sql .= $this->updateSql($args , $id);
+        $this->sql .= $this->updateSql($args);
 
         if(!$this->multi_query)
             return $this->query();
-    }
+     } 
     private function updateSql(array $args = null, int $id = null){
         $str = ''; 
         foreach ($args as $column => $value ) {
@@ -144,19 +147,19 @@ class BaseClass{
         $sql = "UPDATE {$this->table} SET $str ;" ;
 
         return $sql;
-    }
+     }
     public function deleteById ( $id ) {
         $this->sql .= "DELETE FROM {$this->table} WHERE id =  $id ; ";
 
          if(!$this->multi_query)
             return $this->query();
-    }
+     }
     public function deleteBy ( $column , $value ) {
         $this->sql .= "DELETE FROM {$this->table} WHERE $column = $value;";
            
          if(!$this->multi_query)
            return $this->query();
-    }
+     }
     public function copyTableById($target , $id  ){
         $cols = '';
         $sql = "SELECT * FROM {$this->table}";
@@ -172,7 +175,7 @@ class BaseClass{
         if(!$this->multi_query)
            return $this->query();
 
-    }
+     }
     public function copyTableBy($target , $column , $value ){
         $cols = '';
         $sql = "SELECT * FROM {$this->table};";
@@ -188,7 +191,7 @@ class BaseClass{
         if(!$this->multi_query)
            return $this->query();
         
-    }
+     }
     private function converToArray($multi){
         $array = array();
         foreach ($multi as $key => $value){
@@ -196,7 +199,7 @@ class BaseClass{
             $array[] = $value[0] ;
         }
         return $array;
-    }
+     }
     private function format($result){
 
         if (count($result) == 1) {
@@ -205,5 +208,5 @@ class BaseClass{
             }
         }
         return $result;
-    }
+     }
 }

@@ -1,17 +1,16 @@
 <?php namespace models;
 
 class Login extends \core\BaseClass {
-	private $num, $selector, $validator, $user, $pass, $table = 'usuarios';
-	public $email, $id, $dateBaja, $admin;
-	
-	public function __construct(  ){
+	private $num, $selector, $validator,  $pass, $table = 'usuarios';
+	public $email, $id, $dateBaja, $admin, $user;	
+	public function __construct(){
 		parent::__construct($this->table);		
-	}
+	 }
     public function findUserById(int $id){
         $this->user = parent::getById($id);
         $this->loadData();
         
-    }
+     }
     public function findUserBy($column, $value){
         if ($id = parent::getOneBy($column, $value,'id')){
             $this->user = parent::getById($id);
@@ -19,7 +18,7 @@ class Login extends \core\BaseClass {
         }
 
         return !is_null($id) ;
-    }
+     }
     private function loadData(){
             $this->id = $this->user['id'] ;
             $this->email = $this->user['email'];
@@ -27,16 +26,16 @@ class Login extends \core\BaseClass {
             $this->dateBaja = $this->user['dateBaja'];
             $this->admin = $this->user['admin'];
             $this->status = $this->user['status'];
-    }
+     }
     public function get($args){
 		return self::getById($this->id, $args);
-	}
+	 }
 	public function set($args){
-		return self::saveByID($this->id, $args);
-	}
+		return self::saveById($this->id, $args);
+	 }
     public function validatePass( $pass ){
         return password_verify ($pass, $this->pass);
-    }
+     }
     public function validateEmail( string $email ){
 		$email = trim( $email ) ;
 
@@ -50,8 +49,9 @@ class Login extends \core\BaseClass {
 		}
 
 		return $return ;
-	}
+    	}
     public function attempts(int $args = null){
+echo $args;
 		$attempts = self::get('attempts');
 		if (is_null($args)){
 			return $attempts;
@@ -62,14 +62,14 @@ class Login extends \core\BaseClass {
 			$data = array('attempts'=>0);
 		}
 
-		$this->set($data);	
-		return $attempts;
-	}
+		return $this->set($data);	
+		
+     }
 	public function status(int $arg = null) {
 		return (empty($arg))
 			? $this->get('status')
 			: $this->set(array('status'=>$arg));
-	}
+	 }
     public function codeToken(){
       
         $this->num = rand(1,4);
@@ -78,7 +78,7 @@ class Login extends \core\BaseClass {
         $this->num *= 2;
 
         return $this->validator.$this->selector.$this->num;
-    }
+     }
     public function decodeToken($token){
 
         $this->num = substr($token, -1);
@@ -87,10 +87,10 @@ class Login extends \core\BaseClass {
 
         return array($this->num,$this->selector,$this->validator);
         
-    }
+     }
     private function generateRandomString(int $length = 10) { 
         return bin2hex(random_bytes($length)); 
-    } 
+     } 
     public function authByCookie(){
 
         $token = $this->codeToken();
@@ -103,7 +103,7 @@ class Login extends \core\BaseClass {
                 'validator'=>$this->validator, 
                 'idUser' => $this->id
             ]);
-    }
+     }
     public function authToken($tokenByPost){
         $Auth = new \core\BaseClass('auth_tokens');
         $this->decodeToken($tokenByPost);
@@ -111,7 +111,7 @@ class Login extends \core\BaseClass {
         $this->findUserById((int)$auth['idUser']);
 
         return ($auth['validator'] === $this->validator)?$this->id:false;
-    }
+     }
     public function createSession(bool $remember = false){
         global $Security;
 
@@ -123,6 +123,33 @@ class Login extends \core\BaseClass {
         $this->attempts(0);
         if ($remember) $this->authByCookie();
 
-        return ($this->admin!=1)?'admin':'users' ;
+        return ($this->admin>0)?'admin':'users' ;
+     }
+    public static function logout() {
+
+        // Borra la cookie que almacena la sesión 
+        foreach($_COOKIE as $key => $val){
+            setcookie($key, '', time() - 3600, '/');    
+        }
+        
+        // Borra todas las variables de sesión 
+
+        $_COOKIE = array();
+        $_SESSION = array();
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+
+        // Finalmente, destruye la sesión 
+        session_destroy(); 
+        
+     }
+    public function recover (){
+        
     }
 }

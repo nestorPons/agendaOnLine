@@ -432,17 +432,7 @@ dl.horizontal dt {
 dl.horizontal dd {
   margin-left: 11.25rem;
 }
-hr {
-  border: 0;
-  height: 2px;
-  background-color: #88b9e3;
-}
-hr.thin {
-  height: 1px;
-}
-hr.fat {
-  height: 3px;
-}
+
 .tag {
   display: inline-block;
   line-height: 1.1;

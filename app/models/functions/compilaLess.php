@@ -1,7 +1,7 @@
 <?php 
 
 //Compilando la hoja de estilos
-
+// los css fijos 
 $url_css = URL_EMPRESA . "style.css";
 $url_less = URL_EMPRESA . "style.less";
 
@@ -14,6 +14,14 @@ $url_less = URL_CSS . "main.less";
 
 compilaLess($url_css,$url_less);
 
+// css variables segun zona 
+
+if ($controller == 'login') {
+	$url_css = URL_CSS . "login.css";
+	$url_less = URL_CSS . "login.less";
+
+	compilaLess($url_css,$url_less);
+}
 
 function compilaLess($style_css,$style_less){
 	global $conn ; 

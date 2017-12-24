@@ -4,6 +4,13 @@ define('DEL', 'del') ;
 define('EDIT', 'edit') ;
 define('ADD', 'add') ;
 define('MARGIN_DAYS',6);
+const EMAIL_FROM = 'nestorpons@gmail.com';
+const EMAIL_NAME = 'AOL TEAM';
+const EMAIL_HOST = 'smtp.gmail.com';
+const EMAIL_USER = 'nestorpons@gmail.com';
+const EMAIL_PASS = 'PP09ol.__';
+const EMAIL_PORT = 25;
+const BR = '<br>'; //variable para desarrollo
 
 $conn = new \core\Conexion(NAME_DB , 2); 
 if ($conn->error == false ) {

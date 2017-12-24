@@ -12,7 +12,7 @@ if (isset($_POST['action'])) {
 
         switch ($action){
             case SAVE:
-                $r['success'] = $Users->SaveById( $data['id'] , $data ) ; 
+                $r['success'] = $Users->saveById( $data['id'] , $data ) ; 
                 $r['id'] = $Users->getId(); 
                 break;
             case DEL:

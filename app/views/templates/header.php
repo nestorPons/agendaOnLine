@@ -19,6 +19,13 @@ $url_font_main = "https://fonts.googleapis.com/css?family=" .
         <link rel="stylesheet"  type="text/css" href="/css/metro.css">
         <link rel="stylesheet"  type="text/css" href="/css/iconos.css">
         <link rel="stylesheet"  type="text/css" href="/css/main.css">
+        <?php 
+            if ($controller == 'login'){
+                ?>
+                <link rel="stylesheet"  type="text/css" href="/css/login.css">
+                <?php
+            }
+        ?>
         <link rel="stylesheet"  type="text/css" href="/empresas/<?=NAME_EMPRESA?>/style.css">
 
         <link href="<?=$url_font_main?>" rel="stylesheet">

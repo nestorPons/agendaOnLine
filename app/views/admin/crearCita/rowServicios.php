@@ -1,5 +1,4 @@
 <?php
-
 // 0 Id 1 codigo 2 descripcion 3 Precio 4 tiempo 5 IdFamilia 6 Baja
 $id = $ser[0]??$_POST['id'];
 $codigo = $ser[1]??$_POST['codigo'];

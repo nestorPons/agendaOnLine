@@ -1,12 +1,11 @@
 <div id='selagendas'>
-	<?php 
-	
-		foreach ($agendas as $key => $agenda){
-			if ($key>=CONFIG['num_ag']) break;
-			$id = $agenda[0];
-			$nombre = $agenda[1];
-			$mostrar = $agenda[2];
-			$checked=($key==0)?"checked":"";
+	<?php 	
+	foreach ($agendas as $key => $agenda){
+		if ($key>=CONFIG['num_ag']) break;
+		$id = $agenda[0]??-1;
+		$nombre = $agenda[1]??'';
+		$mostrar = $agenda[2]??'';
+		$checked=($key==0)?"checked":"";
 			?>
 			<label  for="agenda<?=$id?>">
 				<input type='radio' name="agenda[]"  id="agenda<?=$id?>" value='<?=$id?>' <?= $checked?>>
@@ -30,7 +29,7 @@
 	<textarea id="crearCitaNota" name='nota' class="txt" rows=1 placeholder='Nota para la cita'  data-autoresize ></textarea>
 	<span class="iconClass-inside icon-note"></span>
 </div>
-
-<button type="button" class="btn-danger cancelar">Cancelar</button>
-<button type="button" class="btn-success siguiente">Siguiente<i class="icon-angle-right"></i></button>
-
+<p>
+	<button type="button" class="btn-success siguiente">Siguiente<i class="icon-angle-right"></i></button>
+	<button type="button" class="btn-danger cancelar">Cancelar</button>
+</p>

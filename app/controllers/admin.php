@@ -12,7 +12,7 @@ $Servicios = new core\BaseClass('servicios') ;
 $_SESSION['SERVICIOS'] = $Servicios->getAll() ;
 
 $Fam = new core\BaseClass('familias') ;
-$_SESSION['FAMILIAS'] = $Fam->getAll( ) ;
+$_SESSION['FAMILIAS'] = $Fam->getAll() ;
 
 $action =  $_REQUEST['action'] ?? 'main' ;
 $fecha = $_GET['fecha'] ?? Date('Y-m-d');  

@@ -4,26 +4,26 @@ $Security = new \core\Security;
 
 //compruebo que sea dir app
 
-$controller = isset($_REQUEST['controller'])
+$controller = isset($_REQUEST['controller'])&&$_REQUEST['controller']!='err'
     ?$_REQUEST['controller']
     :'login' ;
 
 if (isset($_GET['empresa'])){
 
     if (file_exists(URL_EMPRESA)){
-
+    
         require_once $url_base . 'app/conf/config.php' ;
         require_once URL_FUNCTIONS . 'compilaLess.php' ;
-        $controller = $Security->checkSession($controller)
-            ?$controller
-            :'error';
-        $urlController = URL_CONTROLLERS . $controller . '.php';
-        require $urlController;
+        if(!$Security->checkSession($controller)) {
+            $controller = 'logout';
+            $mensErr = \core\Error::E010;
+        }
+    
+        require  URL_CONTROLLERS . $controller . '.php';
 
     }else{
 
-        $Security->logout();
-
+        models\Login::logout();
         include(PUBLIC_FOLDER . "error404.php");
 
     }

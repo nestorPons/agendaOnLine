@@ -93,6 +93,6 @@ $data = array(
 );
 $Config  = new core\BaseClass('config') ;
 
-$js['success'] = $Config->saveByID( 1, $data);
+$js['success'] = $Config->saveAll($data);
 
 echo json_encode($js);

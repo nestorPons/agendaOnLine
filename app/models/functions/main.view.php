@@ -33,7 +33,8 @@ date_default_timezone_set('UTC');
 						$str_hora = date('H:i', $h);
 
 						if ($array_horas) {	
-							$class = $Device->isMovile&&$a!=1?' hiddenim ':'';
+							//AKI :: si es movil hay que poner pestañas
+							//$class = $Device->isMovile&&$a!=1?' hidden_responsive ':'';
 							if  (array_search($str_hora,$array_horas)===false) {
 								$class .= "fuera_horario " ;  
 								$disabled = (empty(CONFIG['ShowRow']))?' disabled ' : '' ;

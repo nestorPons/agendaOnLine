@@ -26,8 +26,8 @@
 		<i class="iconClass-inside icon-eye"></i>
 	</div>
 	<p>
-		<input type="button" class="btn-danger cerrar" name="cancelar" value="Cancelar"> 
 		<button type="submit" class="btn-success btnLoad" id="btnGuardarCita" data-value="Guardar">Guardar</button>
+		<input type="button" class="btn-danger cerrar" name="cancelar" value="Cancelar"> 
 	</p>
 </form>
 

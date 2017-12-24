@@ -102,11 +102,14 @@ class Create{
         for ($i = 0; $i<=6; $i++){
             $sql .= "INSERT INTO horarios (agenda, dia, inicio, fin) VALUES (1,$i,'9:00','20:00');";
         }
-
+        
         if(!$this->cConn->multiQuery($sql))
             throw new \Exception(\core\Error::E016, 16);
+        
+        Functions::sendMail($this->post['email'],$this->user['nombre_usuario']);
+
         return true;
-    }
+     }
     public function createFolder(){
         try {
             $source = URL_EMPRESAS . 'template';
@@ -116,5 +119,6 @@ class Create{
         } catch (\Exception $e){
             throw new \Exception(\core\Error::E017, 17);     
         }
-    }
+     }
+
 }

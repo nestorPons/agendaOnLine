@@ -23,11 +23,11 @@
 @b1: mix(@color, #fff, 20%);
 @b2: mix(@color_secon, #fff, 20%);
 
-@auxiliar: desaturate(#F90,lightness(@text1));
-@red: desaturate(#FF0000,lightness(@text1));
-@green: desaturate(#00FF00,lightness(@text1));
-@blue :desaturate(#0000FF,lightness(@text1));
-@yellow :desaturate(#FFFF00,lightness(@text1));
+@auxiliar: desaturate(#F90,lightness(@color));
+@red: desaturate(#FF0000,lightness(@color));
+@green: desaturate(#00FF00,lightness(@color));
+@blue :desaturate(#0000FF,lightness(@color));
+@yellow :desaturate(#FFFF00,lightness(@color));
 
 @grey:#8a8a7b;
 @grey-bg:#eee;
@@ -53,139 +53,46 @@
 	-ms-user-select: none;
 	user-select: none;
 }
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-	font-size: @fontSize;
-	font: inherit;
-    vertical-align: baseline;
-}
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-    display: block;
-	margin: 0;
-	padding: 0;
-	border:none;
-	outline:none;
-	vertical-align: baseline;
-	text-decoration:none;
-}
-ol, ul {
-    list-style: none;
-}
-blockquote, q {
-    quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
-}
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
 input :-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px white inset;
 	-webkit-text-fill-color: @text-color !important;
 }
 body{
-   line-height: 1;
-	box-sizing: border-box;
-	overflow-x: hidden;
-	background-attachment: fixed;
 	background-color: @base;
 	.inputs();
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
 	input[type=submit],  input[type=button], input[type=reset], button, {
 		.buttons();
 		border-radius : @radius ;
 	}
-	&.background {
-		background-image: url("../../img/background.jpg")
-	}
-	&.background-personalized {
-		background-image: url("background.jpg")
-	}
-	@media screen and (max-width: 590px) {
-		margin:0 auto;
-		background-color:#fff !important;
-	}
-
+}
+&.background-personalized {
+	background-image: url("background.jpg")
 }
 p{
-	margin: 10px;
 	color: @text-color;
 }
 h1{
-	display: block;
-	margin: 2% auto;
-	padding: 5px;
 	font-family:@title-font;
-	line-height: 32px;
-	height: 40px;
 	font-size:@fontSize + 0.5;
-	font-weight: normal;
-	text-align: center;
 	.border-radius;
-	color: @color;
-	span{
-		font-size:inherit
-		}
-}
+ }
 h2{
 	font-family: @title-font;
-	margin: 5px;
-	line-height: 40px;
 	font-size: @fontSize + 0.2;
-	color: #555;
-	text-align: center;
-}
+ }
 h3{
 	font-family: @title-font;
 	font-size: @fontSize + 0.1;
 	color: @base;
-	margin: 5px;
-}
+ }
 h4{
-	display : block ;
 	font-family: @title-font;
 	font-size: @fontSize;
 	color: @main-font;
-	margin: 15px;
 }
 hr{	
-	margin : 5px ;
-    background-color: @main-font;
-	height: 1px;
-	
+    background-color: @color;
 }
 a,i , .a{
-	//color: #666666;
-	cursor: pointer;
-	//text-decoration: none;
-	border-radius: 2px;
-	-webkit-transition: background 0.1s;
-	-moz-transition: background 0.1s;
-	-o-transition: background 0.1s;
-	transition: background 0.1s;
 	&:hover{
 		color:@auxiliar;
 	}
@@ -193,50 +100,19 @@ a,i , .a{
 		.buttons();
 	}
 }
-img{
-
-    /* height: auto; */
-   // vertical-align: middle;
-    border: 0;
-}
-input[type="radio"], [type="checkbox"] {
-	position: relative;
-	margin: 0.8rem;
-  @media screen and (max-width: 800px){
-    transform:scale(1.5,1.5);
-  }
-}
-span.icon-plus{
-	cursor: pointer;
-}
-th{
-	text-decoration : underline ; 
-	
-}
-.text-shadow {
-  text-shadow: -2px -2px @base, -2px 2px @base, 2px -2px @base, 2px 2px @base;
-}
-.underline {
-	
-	background-size: 1px 1em;
+.underline {	
 	box-shadow: inset 0 -0.175em @base, inset 0 -0.2em @color;
-	
 }
 .buttons(
-	@width: 250px;
 	@height: 35px;
 	@padding:0 ;
-	@margin: 12px;
 	@fontSize: 1em;
 	@background:transparent
 	){
 	font-family: @main-font;
 	border-width: 1px;
 	color: @grey;
-	width: @width;
-	max-width: 125px;
 	padding: @padding;
-	margin: @margin;
 	height: @height;
 	font-size: @fontSize - 0.1 ;
 	background-color: @background;
@@ -275,10 +151,6 @@ th{
 			min-width: 15px;
 			}
 		}
-		&-mini{
-			width: @width/2;
-			height: @height/2;
-		}
 		&-aux{
 			&-add{
 				margin: 0;
@@ -309,7 +181,6 @@ th{
 	 }
 }
 .inputs(
-	@width:277px;
 	@height: 35px;
 	@padding: 0px  2px 0px 10px;
 	@margin: 0;
@@ -329,7 +200,6 @@ th{
 		border: 1px solid @border_color;
 
 		font-family: @main-font ;
-        width: @width;
         padding: @padding;
         margin:@margin;
         font-size: @fontSize;
@@ -738,53 +608,15 @@ th{
 		display: none;
 	}
 }
-.contenedorDatepicker{
-	margin: 0 auto;
-	text-align: center;
-	@media (max-width: 425px){
-		width: 100%;
-	}
-	i{
-		color: @grey;
-		position: absolute;
-		z-index:10;
-		top: 26%;
-	}
-	.icon-left-open{
-		left: 0.5em;
-	}
-	.icon-right-open{
-		right: 0.5em;
-	}
-	.datepicker{
-		text-align:center;
-		width:100%;
-		padding: 0;
-		font-size: 1.1em;
-	}
-}
 #ui-datepicker-div{
 		right: 33% !important;
 }
 .dialog{
 	font-family: @main-font;
 	.border-radius (@radio_popover,@radio_popover,@radio_popover,@radio_popover);
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-	display:none;
-	width: 320px;
-    margin: 55px auto;
-	padding: 20px;
-	line-height: 1.5em;
     background-color: @base;
 	color: @text-color;
-    z-index: 1050;
-	text-align:center;
 	.icon-cancel{
-	    color: #777777;
-		float: right;
-		top: -15px;
-		position: relative;
-		right: -10px;
 		&:hover{
 			color: @red;
 		}
@@ -793,38 +625,7 @@ th{
 		color : @green ;
 	}
 	#tblGuardarCita{
-		margin:auto;
-		border-collapse: separate;
-		border-spacing: 5px;
 		td:first-child {font-size:@fontSize - 0.1}
-	}
-	button{
-	    margin-top: 20px;
-	}
-	label{
-		display: block;
-		text-align: left;
-		margin-left: 15px;
-	}
-	.lst{
-		text-align: left;
-    	margin-left: 26px;
-	}
-	#codigos{
-		div{
-			display : block ;
-		}
-	}
-	@media (max-width: 320px){
-		width:auto;
-		.iconClass-container{
-			width:auto;
-			&.icon-left{
-				.iconClass-inside{
-					left: 10px;
-				}			
-			}
-		}
 	}
 }
 .display-inline-flex{
@@ -945,79 +746,33 @@ th{
 .load{
 	margin: 50px auto;
 }
+.cabecera{
+	position:fixed;
+	top:50px;
+	left: 0;
+	width: 100%;
+	background-color:#fff;
+	z-index:1000;
+	@media screen and (max-width: 320px) {
+		padding-left:0;
+		padding-right:0;
+	}
+	&-content{
+		position:relative;
+		margin: auto;
+		max-width: 800px;
+	}
+	}
 .login{
-	background-color: #fff; 
 	font-family: @main-font;
-	margin: auto;
-	padding: 5px;
-	padding-top:10px;
-	position:relative;
-	width: 90%;
-	text-align:center;
 	.border-radius;
 	.box-shadow;
-	.cabecera{
-		position:fixed;
-		top:50px;
-		left: 0;
-		width: 100%;
-		background-color:#fff;
-		z-index:1000;
-		@media screen and (max-width: 320px) {
-			padding-left:0;
-			padding-right:0;
-		}
-		&-content{
-			position:relative;
-			margin: auto;
-			max-width: 800px;
-		}
-	}
-	.cuerpo{
-		position:absolute;
-		min-height: 500px;
-		&.center {
-			position: inherit ;
-			display : inline-blocK ;
-		}
-
-	}
 	&-form {
-		border:	1px solid #bbbbbb;
-		text-align:center;
-		width: 350px;
-		margin: auto;
-		margin-top:20px;
-		background-color: #ffffff;
 		.border-radius;
 		.box-shadow;
-		.info{
-			font-size: 1em ;
-		}
-		@media screen and (max-width: 590px) {
-
-			text-align:center;
-			width: auto;
-			position: inherit;
-			top: auto;
-			margin-top: 0;
-			left: auto;
-			margin-left: 0;
-			margin: auto;
-			border: none;
-		}
-		@media screen and (max-width: 320px) {
-			padding: 20px 0;
-		}
-	}
+	 }
 	.form{
-		text-align:left;
 		.inputs(@width: 55%);
-		label {
-			display: inline-block;
-			width: 30%;
-			padding-right: 20px;
-		}
 	}
 	.frm{
 		display: inline-block;
@@ -1040,12 +795,6 @@ th{
 		&-title{
 
 		}
-	}
-	input[type=image]{
-		cursor: pointer ;
-	}
-	hr{
-		color: grey;
 	}
 	&-help {
 		margin: 20px 0;
@@ -1078,17 +827,9 @@ th{
 	@media screen and (max-width: 490px) {
 		top: 0;
 		margin-top: 0;
-
-		h1{
-			width: auto;
-		}
 		input[type="radio"], [type="checkbox"] {
 			transform:scale(1.5,1.5);
 		}
-	}
-	.submit{
-		text-align: center;
-		margin: 5px;
 	}
 	.capasPrincipales{
 		display:none;
@@ -2053,58 +1794,16 @@ th{
 	}
 }
 #frameSocialMedia{
-	padding:10px;
 	button{
-		cursor: pointer;
-		color:#fff;
-		margin: auto;
-		width: 45px;
-		height: 45px;
 		border-radius: @radius;
-		@media (max-width: 800px){
-			width: 77%;
-			height: 25px;
-		}
-		@media (max-width: 320px){
-			width: 35px;
-			height: 35px;
-			border-radius:50px;
-		}
 	}
 	hr{
-	    border: 0;
-		height: 1px;
-		width: 100%;
 		background-color: @grey-bg;
-		margin: 0 0 20px 0;
 	}
 	#tile{
 		font-family: @main-font;
 		font-size: @fontSize;
 		color: @grey;
-		position: relative;
-		top: 7px;
-		background-color: #fff;
-		padding: 10px;
-		text-align: center;
-		margin: auto;
-
-	}
-	.facebook{
-		@colorFacebook: #3B5998;
-		background-color:  @colorFacebook;
-		border: 1px solid @colorFacebook;
-		&:hover{
-			border: solid 2px @colorFacebook;
-		}
-	}
-	.google{
-		@colorGoogle: #dd5044;
-		background-color:  @colorGoogle;
-		border: 1px solid @colorGoogle;
-		&:hover{
-			border: solid 2px @colorGoogle;
-		}
 	}
 }
 #main{
@@ -2307,9 +2006,6 @@ th{
 		margin : 10px ;
 	}
 }
-.plantilla{
-	display:none;
-}
 #horarios{
 	.tablas{
 		&-general{
@@ -2349,7 +2045,6 @@ th{
 		#lstSerSelect{
 			width:100%
 		}
-
 	}
 }
 #user{
@@ -2382,25 +2077,11 @@ th{
 		}
 	}
 }
-#nuevoUsuario{
-	.login-form{
-		top: 0;
-		margin-top: 20px;
-	}
-}
 #contenedorMenuPrincipal{
 	top:50px;
 	position:relative;
 }
-.notify{
-	&-container{
-		position: fixed;
-		top: 0;
-		right: 0;
-		width: auto;
-		z-index: 5000;
-	}
-}
+
 .resaltado{
 	font-weight: bold;
 }
@@ -2510,35 +2191,6 @@ th{
 		color:#ffffff !important;
 	}
 }
-.padding{
-	&0{padding:0  !important;}
-	&5{padding:5px  !important;}
-	&10{padding:10px  !important;}
-	&20{padding:20px  !important;}
-	&30{padding:30px  !important;}
-}
-.aling{
-	&-left{text-align: left !important;}
-	&-right{
-		text-align: right !important;
-		float:right;
-	}
-	&-center{
-		text-align: center;
-		margin: 0 auto;
-		input[type=submit], input[type=button]{
-			margin: 10px;
-		}
-		tr{
-			text-align: left;
-			margin: 0 30%;
-		}
-	}
-}
-.noBorder{
-	border-width:0px !important;
- }
-
 .tile(@alto:186.5px ,@espacio: 6px, @font-icon: 64px){
 	.tile-container{
 		width:100%+@espacio;
@@ -2676,21 +2328,7 @@ th{
 		}
 	}
 }
-.hidden{
-	display:none;
-	&im{
-		display:none !important;
-	}
-	&320{
-		@media (max-width: 320px){display:none;}
-	}
-	&490{
-		@media (max-width: 490px){display:none;}
-	}
-	&590{
-		@media (max-width: 590px){display:none;}
-	}
-}
+
 .show{
 	display:initial !important;
 	&320{
@@ -2758,41 +2396,24 @@ th{
 		color: @base;
 	}
 }
-.disabled{
 
-	display:none !important;
-
-}
 .tile();
 .tabcontrol {
 	.tabs {
 		border-bottom: 2px @color solid;
 		li{
 			a{
-				display: block;
-				float: left;
-				padding: 8px 24px;
 				color: @grey;
-				font-size: .6875rem;
-				text-transform: uppercase;
-				position: relative;
-				white-space: nowrap;
 			}
 			&.active{
 				a{
 					background-color: @color;
-					text-shadow:none;
 				}
 			}
 		}
 	}
-
-}
-.ocultar_baja{
-	display:none !important;
 }
 .mostrar_baja{
-	display:initial;
 	color: @red;
 }
 table {

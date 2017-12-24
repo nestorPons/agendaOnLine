@@ -35,7 +35,7 @@ class Tools{
         {
             return $e->getMessage();	
         }
-    }
+     }
     public static function normalize($cadena){
         $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ
         ßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
@@ -46,5 +46,33 @@ class Tools{
         $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
         $cadena = strtolower($cadena);
         return utf8_encode($cadena);
-    }
+     }
+    public static function getIp() {
+ 
+        if (isset($_SERVER["HTTP_CLIENT_IP"]))
+        {
+            return $_SERVER["HTTP_CLIENT_IP"];
+        }
+        elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+        {
+            return $_SERVER["HTTP_X_FORWARDED_FOR"];
+        }
+        elseif (isset($_SERVER["HTTP_X_FORWARDED"]))
+        {
+            return $_SERVER["HTTP_X_FORWARDED"];
+        }
+        elseif (isset($_SERVER["HTTP_FORWARDED_FOR"]))
+        {
+            return $_SERVER["HTTP_FORWARDED_FOR"];
+        }
+        elseif (isset($_SERVER["HTTP_FORWARDED"]))
+        {
+            return $_SERVER["HTTP_FORWARDED"];
+        }
+        else
+        {
+            return $_SERVER["REMOTE_ADDR"];
+        }
+
+     }
 }

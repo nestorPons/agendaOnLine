@@ -29,7 +29,7 @@ function sincronizar( dias, date , callback ){
 			.datepicker("setDate",Fecha.print(fecha));
 	})
 
-}
+	}
 function mostrarCapa(capa, callback){
 	data = { 
 		controller : capa ,  
@@ -73,10 +73,10 @@ function mostrarCapa(capa, callback){
 		.find('.selected').removeClass('selected').end()
 		.find('[data-capa="'+capa+'"]').addClass('selected')
 	typeof callback == "function" && callback();
-}
+	}
 function sliderConfigBorder ( value, slider ) {
 	estilos.test( value ) ;
-}
+	}	
 var servicios = {
 	controller : 'servicios',
 	init : function () {
@@ -87,14 +87,14 @@ var servicios = {
 			servicios.mostrar(clase_id) ;
 		}
 		
-	},
+		},
 	buscar: function(){
 		$('#servicios .capaServicios').fadeIn();
 		$("#servicios tr").fadeOut();
 		$("#servicios .encabezado:first").fadeIn();
 		var txt = normalize($('#txtBuscar').val());
 		$("[name*='"+txt+"']").not('.ocultar_baja').fadeIn();
-	},
+		},
 	mostrar: function(id_familia, no_validate) {
 		var id = id_familia, no_validate = no_validate || false
 		
@@ -115,7 +115,7 @@ var servicios = {
 				.find('#'+id).addClass('c3');
 		})
 
-	},
+		},
 	dialog:function(id){
 		var fnLoad = function (isNew) {
 			var dlg = $('#dlgServicios')
@@ -164,7 +164,7 @@ var servicios = {
 		}
 
 		dialog.open('dlgServicios',servicios.guardar,servicios.eliminar,fnLoad)
-	},
+		},
 	guardar: function (){
 		var _fnOk = function (rsp , isNew){
 				if (rsp.success) {
@@ -175,7 +175,7 @@ var servicios = {
 					
 					dialog.close('dlgServicios')
 					
-				}else{
+				}else{ 
 					notify.error('Codigo de servicio ocupado </br> Seleccione otro codigo distinto.', 'CODIGO OCUPADO') ;
 				}
 				$("#servicios #rowServicios"+id).fadeTo("slow", 1);
@@ -189,7 +189,7 @@ var servicios = {
 		}else{
 			btn.load.hide()
 		}		
-	},
+		},
 	eliminar: function() {
 
 		var id= $('#dlgServicios #id').val().trim(), 
@@ -219,7 +219,7 @@ var servicios = {
 		}else{
 			dialog.close('dlgServicios');
 		}
-	},
+		},
 	actualizar: function(datos){
 
 		$('#servicios #rowServicios'+datos.id)
@@ -255,7 +255,7 @@ var servicios = {
 			})
 
 		
-	},
+		},
 	crear: function(data){
 					//NUEVO
 		var mostrar = (data.mostrar==1)?'checked':'';
@@ -282,7 +282,7 @@ var servicios = {
 
 		servicios.actualizar(data)
 	
-	},
+		},
 	sendAjax: function(action , callback){
 		var dlg = $('#dlgServicios') , id = dlg.find('#id').val() ,row = dlg.find("#rowServicios"+id)
 		var	data = $("#frmEditarServicios").serializeArray()			
@@ -310,7 +310,7 @@ var servicios = {
 			echo (textStatus)
 			echo (errorThrown) 
 		})
-	},
+		},
 	validate : {
 		form : function () {  
 			var nombre = $('#dlgServicios #codigo').val(); 
@@ -322,8 +322,8 @@ var servicios = {
 				return true ;
 			}
 		}
+		}
 	}
-}
 var main ={	
 	xhr : new Object(), 
 	section : $("#main") , 
@@ -357,27 +357,47 @@ var main ={
 		} 	
 			 main.check()
 
-	},
+	 },
 	activeDay : function () {
 		$('.activa').removeClass('activa')
 		$('#' + Fecha.id).addClass('activa')
-	}, 
+	 }, 
 	check : function () {
-
-		var data = {
-			controller : 'cita' ,
-			action : 'check',
-			citas : function(){
+		var _citas = function(){
 				var citas = new Array();
 				$('#'+Fecha.id).find('.lbl').each(function(){
-					citas[$(this).attr('idcita')] =  $(this).attr('lastmod')
+					//if (!$.isEmpty($(this).attr('lastmod') ))
+						citas.push({
+							'id':$(this).attr('idcita'),
+							'lastMod':$(this).attr('lastmod')
+						 })
 				})
-				citas.shift()
+				
 				return citas
-			},
-			fecha : Fecha.general
-		}
-		
+			 },
+			data = {
+				controller : 'cita' ,
+				action : 'check',
+				citas : _citas(),
+		 		fecha : Fecha.general
+			  },
+			_getData = function(arr, isDel ,isAdd ){
+				$.each(arr,function(i,dataEdit){
+					var data = dataEdit[0] , tt = 0 
+					//Se declaran dos variables para adecuarlo al antiguo formato
+					data.idCita = data.id
+					data.nota = data.obs
+
+					data.servicios = dataEdit[1]
+					$.each(data.servicios, function( index, $this ){
+						tt += parseInt($this.tiempo)
+					})
+					data.uTiempo = Math.ceil(tt / 15)  
+					if (isDel) main.lbl.delete(data.idCita ,true)
+					if (isAdd) main.lbl.create(data)
+				})
+			}
+
 		$.ajax({
 			type:"POST",
 			url: INDEX ,
@@ -387,26 +407,22 @@ var main ={
 			async: false
 		})
 		.done(function(r){
-	
+			
 			if (!$.isEmpty(r.del)){
 				$.each(r.del,function(i,value){
 					main.lbl.delete(value ,true)
 				})
-			}
-
+			 }
 			if (!$.isEmpty(r.add)){ 
-				var arr = r.add 
-
-				$.each(arr,function(i,value){	
-					var data = value
-					data.uTiempo = parseInt(data.tiempoTotal) / 15 
-					main.lbl.create(value)
-				})
-
-			}
+				_getData(r.add, false, true)
+			 }
+			if (!$.isEmpty(r.edit)){
+				_getData(r._edit, true, true)
+			 }
+			
 		},'json')
 		
-	},
+	 },
 	crearDias: function(callback){
 
 		var self = this , section = this.section , body = this.body 
@@ -441,7 +457,7 @@ var main ={
 			typeof callback == "function" && callback()
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
 		
-	},
+	 },
 	citasSup: function($this){
 		var $celda = $this.parents('.celda');
 		var idCita = new Array();
@@ -456,7 +472,7 @@ var main ={
 					.removeClass('color1 color2')
 					.addClass($this.data('color'));
 			})
-	},
+	 },
 	deleteDuplicate: function(){
 		var section = $('#main')
 		section.find('.dia').each(function( i , self ){
@@ -464,8 +480,9 @@ var main ={
 			var num = days.length
 			if (num > 1)  $('#main #'+ self.id).first().remove()
 		})
-	},
+	 },
 	save: function(data, callback){
+
 		data.controller= 'cita'
 		
 		$.ajax({
@@ -483,7 +500,7 @@ var main ={
 		})
 		.fail(function(r){console.log(r)})
 
-	},
+	 },
 	responsive: function($this){
 		var a = $this.val();
 		$('.cuerpo').fadeOut('fast',function(){
@@ -491,7 +508,7 @@ var main ={
 			$('#main .agenda'+a).removeClass('hiddenim')
 			$('.cuerpo').fadeIn('fast')
 		})
-	},
+	 },
 	edit : function (idCita, idCelda ) {
 
 		if ($.isEmpty(idCita)) return false
@@ -642,11 +659,12 @@ var main ={
 				fecha :  Fecha.sql(dlg.find('#fecha').val()) ,
 				hora : dlg.find('#hora').val() ,
 				obs :  dlg.find('#obs').val(),
-				idServicios : arrIdSer ,
+				servicios : arrIdSer ,
 				status : false 
 			}
 
 			main.save(sendData,function(){
+
 				main.lbl.edit(main.data[ main.last.idCita], main.last)
 				_addServiceToLbl(function(){
 					dialog.close('dlgEditCita')
@@ -666,19 +684,29 @@ var main ={
 		}
 
 		if (!$.isEmpty(idCelda)) { 
-
-			var decode = generateId.decode(idCelda)
+			// se ha editado arrastrando label
+			let decode = generateId.decode(idCelda)
 			main.data[idCita].agenda = decode.agenda
 			main.data[idCita].fecha = decode.date
 			main.data[idCita].hora = decode.hour
-
-			var edata = main.data[idCita]
 			
+			//Hay que adecuar el array servicios para mandar solo los id 
+			let edata = main.data[idCita],
+				len = main.data[idCita].servicios.length,
+				ser = main.data[idCita].servicios
+			
+			edata.servicios = new Array ;
+			edata.idUsuario =edata.cliente['id']
+			delete edata['cliente']
+			for (let i = 0; i < len; i++) {
+				edata.servicios.push(ser[i].id)
+			}
 			edata.action = EDIT
 
 			main.save(edata)
 
 		} else {		
+
 			var 
 			fnCancel = function(){
 				main.del(main.data[idCita].idCita)
@@ -717,7 +745,7 @@ var main ={
 			dialog.open('dlgEditCita',_save, fnCancel, callback)
 			
 		}
-	},
+	 },
 	del: function(idCita){
 		data = {
 			id : idCita , 
@@ -739,7 +767,7 @@ var main ={
 			.fail(function( jqXHR, textStatus, errorThrown ) { echo (jqXHR.responseText) });
 		}
 
-	},
+	 },
 	guardarNota: function($this){
 		var txt = $this.find('input').val();
 		var id = $this.parents(':eq(3)').attr('idcita')
@@ -757,7 +785,7 @@ var main ={
 			})
 			.always($this.find('.icon-load').fadeOut());
 		}
-	},
+		},
 	inactivas:{ 
 		click :	function(){
 			var status = localStorage.getItem("showRows")==1?0:1
@@ -782,7 +810,7 @@ var main ={
 			}			
 			localStorage.setItem("showRows", std)		
 		}	
-	},
+		},
 	lbl:{
 		widht :  '25' ,
 		height: new Array,
@@ -790,227 +818,214 @@ var main ={
 		idLastcelda : 0 , 
 		create: function(data){
 		
-			//agenda,fecha,hora,idCita,idUser,uTiempo,nota,...
+			//agenda,fecha,hora,idCita,idUsuario,uTiempo,nota,servicios.id
 			var self = main , lbl = main.lbl ,htmlSer = '' 
 
 			var idCelda =  generateId.encode( data.agenda , data.fecha , data.hora )
 			var celda = document.getElementById(idCelda)
-
 			$.each(data.servicios, function ( id , serv ) {
 				htmlSer += lbl.service(serv)
 			})
 
 			celda.innerHTML = lbl.container(data , htmlSer)
 			lbl.style()
-		},
+		 },
 		edit: function (data, last){
 			var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
 
 			if (data.cliente.id != last.cliente.id){
-				object.find('.nombre')
-					.attr('id', main.data[idCita].cliente.id)
-					.find('.text-value').html(main.data[idCita].cliente.nombre)
-			} 
+					object.find('.nombre')
+						.attr('id', main.data[idCita].cliente.id)
+						.find('.text-value').html(main.data[idCita].cliente.nombre)
+				} 
 			if (data.fecha != last.fecha || data.hora != last.hora){
-				let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
-					lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
-					clon = object.clone()
-				
-				$('#'+lastCell).removeClass('doble')
-				
-				object.remove()
-				clon.appendTo('#'+idCell)
-				main.lbl.style()
-			}
-			if (data.obs != last.obs){
-				object.find('#obs').val(data.obs)
-			}
-		},
-		container : function (data, htmlSer) {
-	
-			var html = "\
-				<div id='idCita_"+data.idCita+"' idcita="+data.idCita+" class='lbl row_$rows' > \
-					<div id ='"+data.idUsuario+"' class='nombre'> \
-						<span class ='icon-user-1'></span> \
-						<span>"+data.nombre+"</span> \
-					</div> \
-					<div class='iconos aling-right'>  \
-						<div class='icons_crud'>\
-							<span class ='fnEdit icon-pencil-1'></span>  \
-							<span class ='fnDel icon-trash'></span>  \
-						</div>\
-						<span class ='fnMove icon-move '></span>  \
-					</div> \
-					<div class='servicios "+data.uTiempo+"'>"+htmlSer+"</div> \
-					<div class='note '>"+data.nota+"</div> \
-				</div> \
-			"
-			return html ;
-	
+					let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
+						lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
+						clon = object.clone()
 					
-		}, 
+					$('#'+lastCell).removeClass('doble')
+					
+					object.remove()
+					clon.appendTo('#'+idCell)
+					main.lbl.style()
+				}
+			if (data.obs != last.obs) object.find('#obs').val(data.obs)
+				
+			},
+		container : function (data, htmlSer) {	
+				var html = "\
+					<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+data.uTiempo+"'> \
+						<div id ='"+data.idUsuario+"' class='nombre'> \
+							<span class ='icon-user-1'></span> \
+							<span>"+data.nombre+"</span> \
+						</div> \
+						<div class='iconos aling-right'>  \
+							<div class='icons_crud'>\
+								<span class ='fnEdit icon-pencil-1'></span>  \
+								<span class ='fnDel icon-trash'></span>  \
+							</div>\
+							<span class ='fnMove icon-move '></span>  \
+						</div> \
+						<div class='servicios "+data.uTiempo+"'>"+htmlSer+"</div> \
+						<div class='note '>"+data.nota+"</div> \
+					</div> \
+				"
+				return html ;					
+			}, 
 		service : function (data) {
 
-			var html = "\
-				<div>\
-					<span class ='icon-angle-right'></span>\
-					<span class='codigo' des_codigo='"+data.descripcion+"' \
-					id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
-				</div>\
-			"
+				var html = "\
+					<div>\
+						<span class ='icon-angle-right'></span>\
+						<span class='codigo' des_codigo='"+data.descripcion+"' \
+						id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
+					</div>\
+				"
 
-			return html
-			
-		}, 
-		style : function() {
-			var self = main , lbl = main.lbl 
+				return html
 				
-			lbl.draggable()
-			
-			$('.lbl')
-				.css('z-index', 0)
-				.width(lbl.widht-15)
-				.parent('.celda')
-					.addClass('doble')
-			lbl.color()
-		}, 
+			}, 
+		style : function() {
+				var self = main , lbl = main.lbl 
+					
+				lbl.draggable()
+				
+				$('.lbl')
+					.css('z-index', 0)
+					.width(lbl.widht-15)
+					.parent('.celda')
+						.addClass('doble')
+				lbl.color()
+			}, 
 		delete: function(idCita, noMens){
-			var $this = $('#idcita_'+idCita+'.lbl') ;
-			if (noMens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
-				$this
-					.parents('.celda').removeClass('doble').end()
-					.hide('explode',$this.remove)
-					
-				main.lbl.color();
-				return true 
-			} else {
-				return false 
-			}
 
+				var $this = $('#idCita_'+idCita)
+				if (noMens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
+					$this.hide('explode',function(){$this.remove()})
+					main.lbl.color()
+					return true 
+				} else 	return false 
 
-		},
+			},
 		color: function(callback){	
-			var dias= $('.dia');
-			var agendas = ($('#main thead th').length) - 1 ;
-			var idsCitas = new Array;
-			var $this ;
-			var color = 'color1';
+				var dias= $('.dia');
+				var agendas = ($('#main thead th').length) - 1 ;
+				var idsCitas = new Array;
+				var $this ;
+				var color = 'color1';
 
-			dias.each(function(){
-			
-				$(this)
-					.find('color1').removeClass('color1').end()
-					.find('color2').removeClass('color2').end()
-					.find('color3').removeClass('color3').end()
-					.find('color-red').removeClass('color-red')
+				dias.each(function(){
+				
+					$(this)
+						.find('color1').removeClass('color1').end()
+						.find('color2').removeClass('color2').end()
+						.find('color3').removeClass('color3').end()
+						.find('color-red').removeClass('color-red')
 
-				for(let a = 1; a <= agendas; a++){
-					
-					let idCita = 0;
-					$(this).find('.doble[agenda="'+a+'"]')
-						.each(function(){
-							var $this  = $(this).find('.lbl')
-							
-							color = color == 'color1'?'color2':'color1';
-														
-							$this.removeClass('color1 color2 color3 color-admin')
-							$this.addClass(color);
-
-						})
-				}
-			})
-			typeof callback == "function" && callback();
-		},
-		draggable : function(){
-			$('.lbl').each(function(){
-				var dia = $(this).parents('.dia')
-				var limit = dia.attr('id')
-				var c = dia.find('#05201709111200')
-				var posi = c.position()
+					for(let a = 1; a <= agendas; a++){
+						
+						let idCita = 0;
+						$(this).find('.doble[agenda="'+a+'"]')
+							.each(function(){
+								var $this  = $(this).find('.lbl')
 								
-				$(this).draggable( {
-					//containment: "#"+limit , 
-					disabled : false, 
-					opacity : 0.70 , 
-					zIndex: 100 ,
-					handle :$(this).find('.fnMove'), 
-					start : function ( e, ui) {
-						$(this).draggable("option", "revert", 'invalid')
-						main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',1)
-						main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
-						$(this).parent('.celda').removeClass('doble')
-					},
-				}) 
-			})
-		},
-		droppable : function () {
-		
-			$( ".celda" ).each(function(){
-				$(this).droppable({
-					accept : ".lbl",
-					classes: {"ui-droppable-hover": "ui-state-hover"},
-					drop: function( event, ui ) {
+								color = color == 'color1'?'color2':'color1';
+															
+								$this.removeClass('color1 color2 color3 color-admin')
+								$this.addClass(color);
 
-						if($(this).hasClass('celda')){
-							$(this).addClass( "ui-state-highlight" )
-
-							var posi = $(this).position()
-							var drag  = ui.draggable
-							var css_margin = 1 ;
-
-							if (confirm('Desea modificar la cita ')) {
-								drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
-									//end of animation.. if you want to add some code here
-								})
-								$(this).html(main.lbl.clone)
-								
-								main.lbl.style()
-									
-								main.lbl.clone = null
-								
-								$('#' + main.lbl.idLastCelda).removeClass('doble').empty()
-
-								var idCita = drag.attr('idCita')
-								var idCelda = $(this).attr('id')
-								$(this).addClass('doble')
-
-								main.edit(idCita , idCelda )
-								
-							} else {
-								drag.draggable("option", "revert", true)	
-							}	
-						}
-					},
-
-					
+							})
+					}
 				})
-			})
-		
-		},	
-		resize : function($this){
-			if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
-			if ($this.hasClass('initial')){
-				$this
-					.removeClass('initial') 
-					.animate({	height: main.lbl.height[$this.attr('id')] })
-					.find('.nombre').hide().end()
-				if ($this.hasClass('with_6'))
-					$this.find('.icons_crud').hide()
-			} else{
-				main.lbl.height[$this.attr('id')] = $this.height()
+				typeof callback == "function" && callback();
+			},
+		draggable : function(){
+				$('.lbl').each(function(){
+					var dia = $(this).parents('.dia')
+					var limit = dia.attr('id')
+					var c = dia.find('#05201709111200')
+					var posi = c.position()
+									
+					$(this).draggable( {
+						//containment: "#"+limit , 
+						disabled : false, 
+						opacity : 0.70 , 
+						zIndex: 100 ,
+						handle :$(this).find('.fnMove'), 
+						start : function ( e, ui) {
+							$(this).draggable("option", "revert", 'invalid')
+							main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',1)
+							main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
+							$(this).parent('.celda').removeClass('doble')
+						},
+					}) 
+				})
+			},
+		droppable : function () {
+				$( ".celda" ).each(function(){
+					$(this).droppable({
+						accept : ".lbl",
+						classes: {"ui-droppable-hover": "ui-state-hover"},
+						drop: function( event, ui ) {
 
-				$this
-					.addClass('initial') 	
-					.animate({height: $this.get(0).scrollHeight})
-					.find('.nombre').show().end()
-				if ($this.hasClass('with_6'))
-					$this.find('.icons_crud').css('display','inline-block')
-			
+							if($(this).hasClass('celda')){
+								$(this).addClass( "ui-state-highlight" )
+
+								var posi = $(this).position()
+								var drag  = ui.draggable
+								var css_margin = 1 ;
+
+								if (confirm('Desea modificar la cita ')) {
+									drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
+										//end of animation.. if you want to add some code here
+									})
+									$(this).html(main.lbl.clone)
+									
+									main.lbl.style()
+										
+									main.lbl.clone = null
+									
+									$('#' + main.lbl.idLastCelda).removeClass('doble').empty()
+
+									var idCita = drag.attr('idCita')
+									var idCelda = $(this).attr('id')
+									$(this).addClass('doble')
+
+									main.edit(idCita , idCelda )
+									
+								} else {
+									drag.draggable("option", "revert", true)	
+								}	
+							}
+						},				
+					})
+				})	
+			},	
+		resize : function($this){
+				if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
+				if ($this.hasClass('initial')){
+					$this
+						.removeClass('initial') 
+						.animate({	height: main.lbl.height[$this.attr('id')] })
+						.find('.nombre').hide().end()
+					if ($this.hasClass('with_6'))
+						$this.find('.icons_crud').hide()
+					} 
+				else
+					{
+					main.lbl.height[$this.attr('id')] = $this.height()
+
+					$this
+						.addClass('initial') 	
+						.animate({height: $this.get(0).scrollHeight})
+						.find('.nombre').show().end()
+					if ($this.hasClass('with_6'))
+						$this.find('.icons_crud').css('display','inline-block')
+				
+					}
 			}
 		}
-	
-	}
-}
+	 }
 var menu = {
 
 	status: function (capa){
@@ -1182,7 +1197,7 @@ var menu = {
 
 		servicios.init();	
 	},
-}
+	}
 var agendas = {
 	change: false ,
 	guardar: function (callback){
@@ -1219,7 +1234,7 @@ var agendas = {
 			typeof callback == "function" && callback();
 		})
 	}
-}
+	}
 var familias = {
 	change : false , 
 	controller : 'familias', 
@@ -1423,7 +1438,7 @@ var familias = {
 		}
 
 	},
-}
+	}
 var crearCita ={
 	tiempoServicios : 0,
 	data : new Object(), 
@@ -1468,7 +1483,7 @@ var crearCita ={
 				nameCli :sec.data.nombre, 
 				servicios : idSer ,
 				nota : sec.find('#crearCitaNota').val(),
-				uTiempo : parseInt(sec.find('#tSer').text()) / 15 
+				uTiempo : Math.ceil(parseInt(sec.find('#tSer').text()) / 15) 
 			}
 			$.extend(crearCita.data, data)
 
@@ -1488,23 +1503,27 @@ var crearCita ={
 
 		if(self.validate.form()){
 			$.post(INDEX,crearCita.data,function( rsp ){
+				if(rsp.success){
+					if(rsp.ocupado){
 
-				if(rsp.ocupado){
+						notify.error( rsp.mns.body , rsp.mns.tile )
 
-					notify.error( rsp.mns.body , rsp.mns.tile )
+					}else{	
 
-				}else{	
+						self.data.idCita = rsp.idCita
+						self.data.idUsuario = rsp.idUser
+						self.data.servicios = rsp.services
+						main.lbl.create(self.data)
 
-					self.data.idCita = rsp.idCita
-					self.data.idUsuario = rsp.idUser
-					self.data.servicios = rsp.services
-					main.lbl.create(self.data)
-
-					mostrarCapa('main' , true )
-						
+						mostrarCapa('main' , true )
+							
+					}
+				} else {
+					echo(rsp)
+					notify.error('Error inesperado')
 				}
 				dialog.close('dlgGuardar')
-			},'json')
+			},JSON)
 			.fail(function( jqXHR, textStatus, errorThrown){
 				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;
@@ -1763,7 +1782,7 @@ var crearCita ={
 		}
 	},
 
-}
+	}
 var config ={
 	change : false,
 	controller : 'config' ,
@@ -1797,7 +1816,7 @@ var config ={
 			btn.load.status=false;
 			notify.error('Algun dato no esta correcto, /n verifique el formulario.') ;
 		}
-	},
+		},
 	guardar: function (callback){
 
 		var data = new FormData($("#config form")[0]) 
@@ -1830,9 +1849,9 @@ var config ={
 		})
 
 		config.change = false
-	},
+		},
 
-}
+	}
 var general = {
 	guardar: function (callback){
 
@@ -1869,7 +1888,7 @@ var general = {
 		
 		return r
 	}
-}
+	}
 var festivo = {
 	
 	dialog : function () {
@@ -1937,7 +1956,7 @@ var festivo = {
 			}
 		}
 	},
-}
+	}
 var horario = {
 	controller : 'horarios' , 
 	section : $('#horarios') , 
@@ -1951,9 +1970,9 @@ var horario = {
 		})
 
 		var cargarHoras = (function(callback){
-			main.section.find('div.plantilla')
+			main.section.find('div.template')
 				.clone()
-				.removeClass('plantilla')
+				.removeClass('template')
 				.addClass('editando');
 
 			main.section.find(".editando")
@@ -2057,12 +2076,12 @@ var horario = {
 		
 		return return_function;
 	},
-}
+	}
 var usuarios = {
 	controller : 'usuarios' , 
 	init : function () {
 		usuarios.select('A')
-	},
+	 },
 	eliminar: function (id, nombre,callback) {
 		if ($('#usuarios #id').val()!=0){
 			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
@@ -2092,7 +2111,7 @@ var usuarios = {
 		}
 		
 		dialog.close('dlgUsuarios');
-	},
+	 },
 	guardar: function (idUsuario,nombreUsuario,callback){
 
 		var frm = $.serializeForm('frmUsuarios'),
@@ -2178,7 +2197,7 @@ var usuarios = {
 				alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
 			})
 	
-	},
+	 },
 	rows: {
 		add : function(data, callback){
 			var $template = $('#usuarios').find('.template')
@@ -2214,7 +2233,7 @@ var usuarios = {
 			$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1)
 			$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove()
 		}
-	},
+	 },
 	dialog: function (id){
 		var _fnLoad = function (r) {
 			$('#dlgUsuarios').find('#id').val(id)
@@ -2244,13 +2263,13 @@ var usuarios = {
 						.find("#admin").attr('checked', false).end()
 						.find('#eliminar').val('Cancelar');
 				}
-		} , 
+		 } , 
 		_fnDel = function (r) { 
 			usuarios.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
-		}
-		dialog.open('dlgUsuarios',usuarios.guardar,_fnDel,_fnLoad)
+		 }
+		dialog.open('dlgUsuarios',function(){usuarios.guardar(id)},_fnDel,_fnLoad)
 
-	},
+	 },
 	historial: function ($this){
 		alert('temporalemente inhabilitado')
 		/*
@@ -2276,7 +2295,7 @@ var usuarios = {
 			});
 		})
 		*/
-	},
+	 },
 	select: function (letra) {
 
 		$('#usuarios')
@@ -2284,14 +2303,14 @@ var usuarios = {
 			.find('#menu'+letra).addClass('c3').end()
 			.find('tbody tr').hide().end()
 			.find('.name[id^='+letra.toLowerCase()+']').parent().show()
-	},
+	 },
 	buscar: function (txt){
 		var txt =  normalize(txt);
 		usuarios.select(txt.toUpperCase());
 		var txt = txt.replace(/\s/g, "");
 		txt = txt.toLowerCase();
 		$("#usuarios").find(".body").hide().end()
-	},
+	 },
 	validate : {
 		form : function(){
 			var value = $('#dlgUsuarios	#nombre').val()
@@ -2306,7 +2325,7 @@ var usuarios = {
 				return usuarios.validate.name(value)
 				
 			}
-		},
+		 },
 		name : function (name) {
 			var idName = $('#dlgUsuarios #id').val() ;
 			var obj = $('#usuarios #' +  normalize(name) ) ;
@@ -2321,11 +2340,11 @@ var usuarios = {
 					return true ;
 				}
 			}
-		},	
+		 },	
 		
 
-	}
-}
+	 }
+ }
 var estilos = {
 	border : false , 
 	init : function () {
@@ -2365,7 +2384,7 @@ var estilos = {
 		return( theColor ); 
 	}
 
-}
+	}
 $(function(){
 
 	cargarDatepicker()
@@ -2594,4 +2613,4 @@ $(function(){
 
 	//funciones
 
-})
+	})

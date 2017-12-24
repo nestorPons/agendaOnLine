@@ -1,6 +1,7 @@
 "use strict"
 
-var SAVE = 'save', DEL = 'del', EDIT = 'edit', ADD = 'add', VIEW = 'view', INDEX = 'index', AJAX = 'ajax'
+var SAVE = 'save', DEL = 'del', EDIT = 'edit', ADD = 'add', VIEW = 'view', INDEX = 'index', AJAX = 'ajax' , 
+LEFT = 'left' , RIGHT = 'right', JSON = 'json'
 
 var HORARIOS = document.horarios
 var FESTIVOS = document.festivos
@@ -42,10 +43,10 @@ jQuery.serializeForm = function(form){
 	return arr_return;
 }
 var $_GET = {};
-document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 function decode(s) {
 	return decodeURIComponent(s.split("+").join(" "));
 }
+document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 $_GET[decode(arguments[1])] = decode(arguments[2]);
 });
 var Fecha = {
@@ -133,43 +134,44 @@ var generateId = {
 }
 var btn = {
 	active : null , 
+	caption : null,
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
 		show : function($this, status){
-	
-			if (btn.load.status){
-				$this.html('<span class="icon-load animate-spin"></span>');
+			var $btn = $this.find('.icon-load')
+			if (btn.load.status && !$btn.length){
+				btn.caption = $this.html()
+				$this.prepend('<span class="icon-load animate-spin"></span>');
 				btn.active = $this ;
+			} else {
+				$btn.show()
 			}
 			
 			btn.load.status = true;	
 
-		},
-		hide : function(btnClass){
-			var $this = btn.active||$('.icon-load:visible').parent();
-			var caption = $this.data('value');
-			
-			$this.html(caption);	
-			
-			$(btn.active).hide()
-			btn.active = null ;		
-			
-		},
+			},
+		hide : function(){
+				var $this = btn.active||$('.icon-load:visible').parent();
+				var caption = $this.data('value');
+				setTimeout(function() {
+					$('.animate-spin').hide()
+				 }, 1000);
+			},
 		reset :	function (callback){
 			$('.btnLoad').each(function(){
 				$(this).html($(this).data('value'))
 			});
 			btn.active = null ;
 			typeof callback == "function" && callback();
-		}
-	},
+			}
+		},
 	save : {
 		show : function (){
 			$('#btnSave')
 				.find('.icon-floppy').show().end()
 				.find('.icon-load').hide()
 		}
-	},
+		},
 }
 var validar = {
 	nombre: {
@@ -250,19 +252,20 @@ var validar = {
 		colorear: true,
 	},
 	tel:{
-		funcion:function ($this){
+		funcion:function ($this){ 
 			var tel = $this.val();
 			if(!$.isEmpty(tel)){
 				if(tel.length>=8){
 					$this.addClass('input-success')
 					validar.tel.estado =  true;
+					var r = true
 				}else{
 					$this.addClass('input-error')
 					validar.tel.estado =  false;
+					var r = false
 				}
-			}else{
-				$this.val('');
 			}
+			return r
 		},
 		estado: true,
 	},
@@ -270,13 +273,12 @@ var validar = {
 		//AKI :: blur solo para mensajes keyup para ir verificando
 		estado: false,
 		funcion:function($this){
-			if ($this.val()!=""){
+			var pass = SHA($this.val())
+		   	$this.siblings('input:hidden').val(pass)
+	
+			if (!$.isEmpty($this.val())){				
+				if($this.val().length>6){
 					
-				var pass = $this.val();
-				if(pass.length>6){
-					var pass = SHA($this.val());
-					var $hidden_pass = $this.siblings('input:hidden');
-					$hidden_pass.val(pass);
 					$this.addClass('input-success');
 
 					var $pass = $(':password');
@@ -319,8 +321,8 @@ var validar = {
 		}
 	},	
 	form : function(idFrm){
-//AKI :: personalizando mensaje de error 
-//AKI :: cambiar forma de validar el formulario
+	//AKI :: personalizando mensaje de error 
+	//AKI :: cambiar forma de validar el formulario
 		var frm = $('#'+idFrm);
 
 		if (frm[0].checkValidity() != false){
@@ -481,7 +483,7 @@ var notify = {
 	error: function(mns,cptn,keep, $input){
 		var keepOpen = keep||false;
 		var cptn = cptn||'Error';
-		var mns = mns||'Ha sucedido un error';
+		var mns = mns||'Ha ocurrido un error';
 		$.Notify({
 			type: 'alert',
 			caption: cptn,
@@ -658,31 +660,6 @@ function normalize(string){
 	return res;
 
 }
-function $_GET_FRIEND_URL(param){
-
-		/* Obtener la url completa */
-		var url_html = document.URL;
-
-		var arr_url = url_html.split('/')
-
-		var last = arr_url.length 
-		if ( arr_url[5] ){
-			var gets = arr_url[5]
-			gets = gets.split('&')
-
-			let x = 0;
-			while (x < gets.length){
-				let p = gets[x].split("=");
-
-				if (p[0] == param)
-				{
-					return decodeURIComponent(p[1]);
-				}
-				x++;
-			}
-		}
-}
-
 function echo(d){
 	console.log(d);
 }
@@ -994,8 +971,9 @@ function pad (n, length) {
 }
 $(function(){
 	$('.time').mask('00:00');
-	$('.tel').mask('## 000 00 00 00');
+	$('.tel').mask('##000000000');
 	$('.date').mask('00/00/0000');
+	$('.pin').mask('0000');
 	
 	jQuery.each(jQuery('textarea[data-autoresize]'), function() {
 	var offset = this.offsetHeight - this.clientHeight;
@@ -1011,9 +989,7 @@ $(function(){
 				dialog.close('.dialog');
 			}
 		})
-		.on('click',"html .btnLoad",function(){
-			btn.load.show($(this))
-		})
+		.on('click',"html .btnLoad",function(){btn.load.show($(this))})
 		.on('click','.icon-eye',function(e){
 			var $pass = $(this).siblings('input:password'),
 				$text = $(this).siblings('input:text')
@@ -1022,11 +998,12 @@ $(function(){
 					$text.attr('type','password')
 				else
 					$pass.attr('type','text')
-			e.stoppropagation()
+			e.stopPropagation()
 		})
-		
-		.on('blur','input:password',function(){validar.pass.funcion($(this))})
-		.on('change','input:password',function(){validar.pass.estado=false})
+		.on('change','input:password',function(){
+			validar.pass.estado=false
+			validar.pass.funcion($(this))
+		})
 		.on('blur','.email',function(){validar.email.funcion($(this))})
 		.on('change','.email',function(){validar.email.estado=false})
 		.on('blur','.tel',function(){validar.tel.funcion($(this))})
@@ -1043,6 +1020,7 @@ $(function(){
 			toggleMetroCharm('#mnuResponsive')
 	})
 	if(!$.isEmpty($_GET['err'])){
-		notify.error($_GET['err'], 'ERROR:' + pad($_GET['cod'],3));
+		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''
+		notify.error($_GET['err'], 'ERROR:' + code)
 	}
 })

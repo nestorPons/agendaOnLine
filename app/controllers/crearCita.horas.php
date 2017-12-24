@@ -1,5 +1,6 @@
 <?php
 $fecha = $_POST['fecha'] ?? date('Y-m-d');
+
 $ag = $_POST['agenda'] ?? 1;
 $id_fecha = str_replace('-','',$fecha);
 $dia_semana = date('w',strtotime($fecha)) ;

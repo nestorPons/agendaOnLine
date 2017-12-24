@@ -1,37 +1,34 @@
 <?php
 header('Content-Type: application/json');
+$Forms = new models\Forms;
+$data = $Forms->sanitize($_POST);
+if ($Forms->validateForm($data,['tel'])){
+	$id = $_SESSION["id_usuario"] ;
 
-$data = $_POST ;
-$id = $_SESSION["id_usuario"] ;
-$action = $_POST['action'];
-unset($data['controller']);
-unset($data['action']);
+	switch ($_POST['action']) {
+		case 'save' :
+			if (isset($data['npass'])) {
+				
+				if ( $User->validatePass($data['npass']) && $User->validateEmail($data['email'])){
+					$data['pass'] =  $data['npass'];
+					unset($data['npass']);
+					unset($data['opass']);
+					
+				} else {
+					$r = false ;
+				}
 
-switch ($action) {
-	case 'add' :
-		if (isset($data['npass'])) {
-			
-			if ( $User->validatePass($data['npass']) && $User->validateEmail($data['email'])){
-				$data['pass'] =  $data['npass'];
-				unset($data['npass']);
-				unset($data['opass']);
-
-				$r = $User->saveById($id , $data) ;
-			} else {
-				$r = false ;
-			}
-
-		} else {
+			} 
 			$r = $User->saveById($id , $data) ;
-		}
 
-		break;
-	case 'del':
+			break;
+		case 'del':
 
-		$delCita = new core\BaseClass('del_cita') ;
-		$id = $_POST['id'] ;
-		$User->SaveById();
-		break;
+			$delCita = new core\BaseClass('del_cita') ;
+			$id = $data['id'] ;
+			$User->saveById();
+			break;
+	}
+
+	echo json_encode($r);
 }
-
-echo json_encode($r);
