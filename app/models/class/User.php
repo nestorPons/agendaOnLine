@@ -65,6 +65,7 @@ class User extends \core\BaseClass {
 			: $this->set(array('status'=>$arg));
 	 }
 	public function getToken(){
+		$this->removeToken();
         if ($this->token == 'undefined'){
 			$cadena = $this->id.$this->nombre.rand(1,9999999).date('Y-m-d');
 			$this->token = sha1($cadena) . str_pad($this->id, 4, "0", STR_PAD_LEFT); 
@@ -91,11 +92,9 @@ class User extends \core\BaseClass {
 	private function removeToken(){
 		$Token = new \core\BaseClass('tblreseteopass'); 
 		return $Token->deleteById($this->id);
-	}
+	 }
 	public function activate($get){
 		if (!$this->checkToken($get['args'])) return false;
-		if ($this->set(['status'=> 0]))
-			return $this->removeToken();
-
+		return $this->set(['status'=> 0]);
 	 }
  }

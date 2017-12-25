@@ -352,11 +352,14 @@ var dialog = {
 		dialog.isOpen = objName
 		var $this = dialog.section.find('#'+objName), 
 			loads = dialog.loads,
-			_open = function($this){
-				$this
-					.show()
-					.find('input:first').focus()
+			_open = function($this, callback){
+				$this.show('fade','fast',function(){
+					$(this).find('.iconClass-container input').first().focus()
+				})
+					
+
 				$('.popup-overlay').fadeIn()
+				typeof callback == "function" && callback(false)			
 			}
 
 		if(loads.indexOf(objName)==-1){
@@ -364,17 +367,17 @@ var dialog = {
 			loads.push(objName)	
 			dialog.create(objName,fnOk,fnCancel,function(){
 
-				_open( $('#dialogs #'+objName) )
-				typeof callback == "function" && callback(true)
+				_open( $('#dialogs #'+objName) , callback )
+				
 
 			})
 
 		}else{
 	
 			dialog.reset(objName)
-			_open($this)
-
-			typeof callback == "function" && callback(false)
+			_open($this , callback)
+			
+			
 		}
 	},
 	close:function (objName,callback){
@@ -421,7 +424,7 @@ var dialog = {
 										$this.find('.aceptar').click()
 
 							})
-							.find("form:not(.filter) input:visible:enabled:first").focus()
+							
 				})
 				
 

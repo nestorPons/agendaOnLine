@@ -1,8 +1,8 @@
 <?php
+$Forms = new models\Forms;
 
 if (isset($_POST['action'])){
     header('Content-Type: application/json');
-    $Forms = new models\Forms;
     $action = $_POST['action'];
     $_POST = $Forms->sanitize($_POST);
     if ($Forms->validateForm($_POST,['args'])){
@@ -24,11 +24,10 @@ if (isset($_POST['action'])){
 
         $Login = new \models\Login;
         if ($action = $Login->authToken($_COOKIE["auth"])){
-            $Login->createSession();
-             require_once URL_VIEWS . '/login/pinpass.php';
-        }else{
+            require_once URL_VIEWS . '/login/pinpass.php';
+        }else{ 
             header('Location: ' . NAME_EMPRESA . '/logout');
-        }    
+        }      
         
     }
 }

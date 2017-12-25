@@ -67,6 +67,7 @@ class Conexion extends \conf\UserConn {
 		return $this->mQResult[$this->mQCount-1];
 	 }
 	public function scape ($str) {
+	
 		if(!$this->error){
 			
 			$replace = ['=',"'",'"','/','#','*',"<",">",":","{","}","?","|","&"];

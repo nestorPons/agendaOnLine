@@ -11,7 +11,7 @@ const EMAIL_USER = 'nestorpons@gmail.com';
 const EMAIL_PASS = 'PP09ol.__';
 const EMAIL_PORT = 25;
 const BR = '<br>'; //variable para desarrollo
-
+include (URL_CONFIG . 'admin.php');
 $conn = new \core\Conexion(NAME_DB , 2); 
 if ($conn->error == false ) {
 

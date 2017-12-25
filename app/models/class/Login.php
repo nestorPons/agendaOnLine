@@ -51,7 +51,6 @@ class Login extends \core\BaseClass {
 		return $return ;
     	}
     public function attempts(int $args = null){
-echo $args;
 		$attempts = self::get('attempts');
 		if (is_null($args)){
 			return $attempts;
@@ -70,6 +69,14 @@ echo $args;
 			? $this->get('status')
 			: $this->set(array('status'=>$arg));
 	 }
+    public function statusReset(){
+        $this->attempts(0);
+        
+        $Mail = new Mail;
+        $Mail->url_menssage = URL_SOURCES . 'mailActive.php';
+        $User = new User($this->id);
+        $Mail->send($User);
+     }
     public function codeToken(){
       
         $this->num = rand(1,4);
@@ -98,11 +105,14 @@ echo $args;
 
         $auth = new \core\BaseClass('auth_tokens');
 
-        return $auth->saveById(0,[
+        if ($auth->saveById(0,[
                 'selector'=> $this->selector,
                 'validator'=>$this->validator, 
                 'idUser' => $this->id
-            ]);
+            ])){
+                return $this->codeToken();
+            } else return false;
+
      }
     public function authToken($tokenByPost){
         $Auth = new \core\BaseClass('auth_tokens');
@@ -150,6 +160,6 @@ echo $args;
         
      }
     public function recover (){
-        
+     //AKI :: Hay que hacer el recodar contraseña
     }
 }

@@ -9,10 +9,6 @@ class Security {
     function __construct(){
         $this->session_start();
      }
-
-  
-
-
     public function checkSession($pageIn){
         return !in_array($pageIn, $this->pageExcep)      
             ?isset($_SESSION)
@@ -22,7 +18,7 @@ class Security {
                 &&$_SESSION['ip'] == $_SERVER['REMOTE_ADDR']   
                 &&$_SESSION['device'] == self::getDevice()
             :true;  
-         
+            
      }
     public function getDevice(){
         return sha1($_SERVER['HTTP_USER_AGENT'] . $_SERVER["HTTP_USER_AGENT"]);
@@ -108,5 +104,8 @@ class Security {
         }
         
      }
+    public static function cookieDestroy($name_cookie){
+        return setcookie($name_cookie, "", time()-3600);
+    }
     function  __destruct(){}
  }

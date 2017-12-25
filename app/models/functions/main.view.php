@@ -3,7 +3,7 @@
 function view($fecha_inicio = null, $existen_array = false ){	
 	global $Device;
 		
-date_default_timezone_set('UTC');			
+    date_default_timezone_set('UTC');			
 	$fecha = $fecha_inicio??Date('Y-m-d') ;
 	$dias = round(MARGIN_DAYS/2);
 
@@ -35,6 +35,7 @@ date_default_timezone_set('UTC');
 						if ($array_horas) {	
 							//AKI :: si es movil hay que poner pestañas
 							//$class = $Device->isMovile&&$a!=1?' hidden_responsive ':'';
+							$class="";
 							if  (array_search($str_hora,$array_horas)===false) {
 								$class .= "fuera_horario " ;  
 								$disabled = (empty(CONFIG['ShowRow']))?' disabled ' : '' ;

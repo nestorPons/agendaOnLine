@@ -4,7 +4,7 @@
 		<form id="frmContact">
 			<h4>Formulario de contacto ....</h4>
 			<div class="iconClass-container icon-left">
-				<input type="text" name="nombre" placeholder="nombre" value='<?=CONFIG['user']?>'>
+				<input type="text" name="nombre" placeholder="nombre" value='<?=CONFIG['nombre_usuario']?>'>
 				<span class="icon-user iconClass-inside"></span>
 			</div>
 			<div class="iconClass-container icon-left">

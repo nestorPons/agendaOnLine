@@ -14,9 +14,10 @@
 							$return = err('Usuario o contraseña incorrectos.',5);
 						}	
 				}else{
-					//bloqueado por demasiados intentos
-					$return = err(\core\Error::E024,4) ;
-					$Login->status(0);
+					//bloqueado por demasiados intentos					
+					$Login->status(1);
+        			$Login->statusReset();
+					$return = err(\core\Error::E024,4);
 				}
 			} else {
 				//Si esta bloqueado
