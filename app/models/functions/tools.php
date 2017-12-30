@@ -25,11 +25,6 @@ function normaliza($cadena){
     $cadena = strtolower($cadena);
     return utf8_encode($cadena);
 }
-function formatofecha($fecha){
-		$a = explode('-',$fecha);
-		$fecha = $a[2].'/'.$a[1].'/'.$a[0];
-		return $fecha;
-}
 function sumarfecha($fecha,$num){
 	$f = strtotime('+'.$num.' day',strtotime($fecha));
 	$f = date('Y-m-d',$f);

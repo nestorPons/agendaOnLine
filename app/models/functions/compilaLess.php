@@ -25,6 +25,7 @@ if ($controller == 'login') {
 
 function compilaLess($style_css,$style_less){
 	global $conn ; 
+	global $configCSS; // se crea en config.php
 	
 	include_once URL_CLASS . "lessc.inc.php";
 	$less = new lessc;
@@ -35,8 +36,8 @@ function compilaLess($style_css,$style_less){
 
 	try {
 
-		if ($config = $conn->assoc("SELECT * FROM config_css"))
-			$less->arrPHP = $config;
+		//if ($config = $conn->assoc("SELECT * FROM config_css"))
+			$less->arrPHP = $configCSS;
 			
 
 		$less->checkedCompile($style_less,$style_css);

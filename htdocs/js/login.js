@@ -71,19 +71,18 @@ recover = {
 			email : $('#recover').find('#email').val(),
 			controller : 'login',
 			action : 'recover'
-		}
+	  	 }
 		$.post(URL, data,function (r) {
 			if (r.success) {
 				notify.success('Siga las instrucciones del email', 'Email enviado')
-
 			} else {
 				notify.error(r.err, 'Error: '+ r.code)
 				echo(r);
 			 }	
 			btn.load.hide()
 			typeof callback == "function" && callback()
-		},JSON);	
-	}
+		 },JSON)	
+	 }
  }, 
 user = {
 	save : function () {
@@ -148,7 +147,7 @@ $(function(){
 		 })
 		.on('click','#forgotPass',function(){
 			general.toggle($('#recover'))
-		})
+		 })
 		.on('submit','#recover form',function(e){
 			e.preventDefault()
 			recover.send(
@@ -184,6 +183,6 @@ $(function(){
 
 	
 	//para poder recoger los get en el login se muestran en la 5 barra de la url amigable
-	if(error.get()) notify.error(error.mns)
+	//if(error.get()) notify.error(error.mns)
 	$('input#pinpass').focus()
  })

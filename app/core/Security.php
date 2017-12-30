@@ -10,6 +10,7 @@ class Security {
         $this->session_start();
      }
     public function checkSession($pageIn){
+
         return !in_array($pageIn, $this->pageExcep)      
             ?isset($_SESSION)
                 &&isset($_SESSION['SKey'])
@@ -106,6 +107,6 @@ class Security {
      }
     public static function cookieDestroy($name_cookie){
         return setcookie($name_cookie, "", time()-3600);
-    }
+     }
     function  __destruct(){}
  }

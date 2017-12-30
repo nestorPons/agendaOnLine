@@ -1,7 +1,7 @@
 <?php include URL_TEMPLATES . '/header.php'?>
 	
 	<script>
-		document.festivos = <?=json_encode ($_SESSION['FESTIVOS'])?>;
+		document.festivos = <?=json_encode ($_SESSION['FESTIVOS']??'')?>;
 		document.horarios = <?=json_encode($_SESSION['HORAS'])?>;
 		
 		document.minTime = <?=json_encode(CONFIG['minTime'])?>;
@@ -26,7 +26,8 @@
 			<section id='estilos' class="capasPrincipales" ></section>
 			<section id='festivos' class="capasPrincipales" ></section>
 			<section id='agendas' class="capasPrincipales" ></section>
-			<section id='notas' class="capasPrincipales" ><?php// include "../../php/admin/notas.php"?></section>
+			<section id='notas' class="capasPrincipales" ></section>
+			<section id='history' class="capasPrincipales" ></section>
 		</div>
 		<div id="dialogs" class="popup-overlay"></div>
 	</body>

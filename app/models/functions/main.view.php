@@ -54,7 +54,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 									$label = $lbl->html[$h][$a] ?? false ;
 									
 									?>
-									<td id = "<?= generateId($fecha , $str_hora, $a) ?>" class="celda <?php  if( $label ) echo'doble ' ; echo $class?> " agenda="<?= $a?>" >
+									<td id = "<?= generateId($fecha , $str_hora, $a) ?>" class="celda <?php  if( $label ); echo $class?> " agenda="<?= $a?>" >
 										<?php
 																							
 										echo $label;

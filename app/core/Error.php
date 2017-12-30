@@ -32,7 +32,7 @@ class Error {
     const E010 = "Ha expirado la sessión" ;
     
     //Tokens 
-    const E061 = "Su token a expirado";
+    const E061 = "Su token ha expirado";
     const E062 = "Los tokens no coinciden";
 
     //Formularios
@@ -57,15 +57,17 @@ class Error {
             return ['success'=>false , 'code' => 'E000' , 'err' => $err] ;
     }
     public static function set($err){
-        self::$last = (defined ('self::'.$err)) 
-            ? constant('self::'.$err)
-            : self::$last = $err;
-
+        self::$last = $err;
         return false;
     }
     public static function getLast(){
         $err = self::$last;
         self::$last = false;
         return $err;
+    }
+    public static function die($err = null){
+        $err = $err??self::getLast();
+        
+        die(var_dump(self::array($err)));
     }
 }

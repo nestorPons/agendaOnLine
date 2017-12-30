@@ -1,15 +1,10 @@
 <?php
-$Forms = new models\Forms;
-
 if (isset($_POST['action'])){
     header('Content-Type: application/json');
     $action = $_POST['action'];
     $_POST = $Forms->sanitize($_POST);
-    if ($Forms->validateForm($_POST,['args'])){
 
-        require_once URL_AJAX . 'login/' . $action . '.php' ;    
-        
-    } else return core\Error::array(core\Error::getLast());
+    require_once URL_AJAX . 'login/' . $action . '.php' ;     
     
     echo json_encode($r);
 }else if (isset($_POST['view'])){

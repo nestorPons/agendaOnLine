@@ -1,7 +1,7 @@
 "use strict"
 
-var SAVE = 'save', DEL = 'del', EDIT = 'edit', ADD = 'add', VIEW = 'view', INDEX = 'index', AJAX = 'ajax' , 
-LEFT = 'left' , RIGHT = 'right', JSON = 'json'
+var SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index', AJAX = 'ajax' , 
+LEFT = 'left' , RIGHT = 'right', JSON = 'json', GET = 'get'
 
 var HORARIOS = document.horarios
 var FESTIVOS = document.festivos
@@ -45,7 +45,7 @@ jQuery.serializeForm = function(form){
 var $_GET = {};
 function decode(s) {
 	return decodeURIComponent(s.split("+").join(" "));
-}
+ }
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 $_GET[decode(arguments[1])] = decode(arguments[2]);
 });
@@ -86,11 +86,11 @@ var Fecha = {
 
 		return  year+"-"+month+"-"+day
 
-	},
+	 },
 	diaSemana: function(fecha){
 	    var fecha = Fecha.array(fecha);
 		return fecha.getDay();
-	},
+	 },
 	restar: function (f1,f2){
 		var f2  = $.isEmpty(f2)?this.actual:this.sql(f2);
 		var f1 = this.sql(f1);
@@ -102,14 +102,14 @@ var Fecha = {
 		var dif = ffecha1 - ffecha2 	;
 
 		return Math.floor(dif / (1000 * 60 * 60 * 24));
-	},
+	 },
 	array : function ( fecha ) {
 		var fecha = fecha||Fecha.general
 		var fecha = Fecha.sql(fecha)
 		var mdy = fecha.split('-')
 		return new Date(mdy[0], mdy[1]-1, mdy[2])
-	}
-}
+	 }
+ }
 var generateId = {
 	encode : function (a , f , h) {
 		a = ("0" + a).slice(-2)
@@ -131,7 +131,7 @@ var generateId = {
 
 		return result
 	}
-}
+ }
 var btn = {
 	active : null , 
 	caption : null,
@@ -172,7 +172,7 @@ var btn = {
 				.find('.icon-load').hide()
 		}
 		},
-}
+ }
 var validar = {
 	nombre: {
 		funcion:function($this){
@@ -270,11 +270,11 @@ var validar = {
 		estado: true,
 	},
 	pass: {
-		//AKI :: blur solo para mensajes keyup para ir verificando
+
 		estado: false,
 		funcion:function($this){
 			var pass = SHA($this.val())
-		   	$this.siblings('input:hidden').val(pass)
+		   	$this.siblings('#pass').val(pass)
 	
 			if (!$.isEmpty($this.val())){				
 				if($this.val().length>6){
@@ -333,7 +333,7 @@ var validar = {
 		}		
 
 	},
-}
+ }
 var input = {
 	success : function ($input) {
 		if($.isEmpty()) return false
@@ -343,7 +343,7 @@ var input = {
 		if($.isEmpty()) return false
 		$input.removeClass('input-success').addClass('input-error')
 	}
-}
+ }
 var dialog = {
 	loads: new Array,
 	section : $('#dialogs') , 
@@ -352,14 +352,14 @@ var dialog = {
 		dialog.isOpen = objName
 		var $this = dialog.section.find('#'+objName), 
 			loads = dialog.loads,
-			_open = function($this, callback){
+			_open = function($this){
 				$this.show('fade','fast',function(){
 					$(this).find('.iconClass-container input').first().focus()
 				})
 					
 
 				$('.popup-overlay').fadeIn()
-				typeof callback == "function" && callback(false)			
+			
 			}
 
 		if(loads.indexOf(objName)==-1){
@@ -367,19 +367,19 @@ var dialog = {
 			loads.push(objName)	
 			dialog.create(objName,fnOk,fnCancel,function(){
 
-				_open( $('#dialogs #'+objName) , callback )
-				
+				_open( $('#dialogs #'+objName))
+				typeof callback == "function" && callback(true)	
 
 			})
 
 		}else{
 	
 			dialog.reset(objName)
-			_open($this , callback)
-			
+			_open($this)
+			typeof callback == "function" && callback(false)	
 			
 		}
-	},
+	 },
 	close:function (objName,callback){
 
 		var $this = $('#'+objName) || $('.dialog:visible');
@@ -467,7 +467,7 @@ var dialog = {
 		}
 
 	}
-}
+ }
 var notify = {
 	success: function(mns,cptn, keep, $input){
 		var keepOpen = keep||false;
@@ -508,8 +508,8 @@ var notify = {
 			keepOpen: keep,
 		})
 	},
-}
-function formatofecha (fechaTxt,formatOut){
+ }
+function formatofecha (fechaTxt,formatOut){ 
 
 	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
 
@@ -559,8 +559,8 @@ function formatofecha (fechaTxt,formatOut){
 	}
 
 	return (fch); 
-}
-function fechaActual(arg){
+ }
+function fechaActual(arg){ 
 	var arg = arg||null;
 	var fecha_actual = new Date();
 	var mes = fecha_actual.getMonth()+1;
@@ -571,14 +571,13 @@ function fechaActual(arg){
 
 
 	return  r;
-}
+ }
 function cargarDatepicker(callback){
 	var $dp = $('.datepicker');
 	var format = $dp.data('format')||"dd/mm/yy";
 	var fesOn = $dp.data('festivos-show');
 	var minDate = $dp.data('min-date');
-	
-	
+
 	$.datepicker.regional['es'] = {
 		closeText: 'Cerrar',
 		prevText: '<Ant',
@@ -619,7 +618,7 @@ function cargarDatepicker(callback){
 	$dp.each(function(){$(this).val(Fecha.print())})
 	
 	typeof callback == "function" && callback();
-}
+ }
 function colorearMenuDiasSemana(arg){
 	var fecha = arg||Fecha.general;
 	$('.highlighted').removeClass('highlighted');
@@ -638,13 +637,13 @@ function colorearMenuDiasSemana(arg){
 		$('.datepicker').css('color','inherit')
 	
 
-}
+ }
 function hideShow(param){
 	for (var i = 0; i < arguments.length; ++i) {
 			let $obj = $(arguments[i])
 			$obj.toggle();
 	}
-}
+ }
 function normalize(string){
 	var str = string.split(" ").join("_");
 	if ($.isEmpty(str))return false;
@@ -662,15 +661,15 @@ function normalize(string){
 		.trim();
 	return res;
 
-}
+ } 
 function echo(d){
 	console.log(d);
-}
+ }
 function SHA(str) {
  /*
-*  Secure Hash Algorithm (SHA512)
-*  http://www.happycode.info/
-*/ 	
+	*  Secure Hash Algorithm (SHA512)
+	*  http://www.happycode.info/
+	*/ 	
 
   function int64(msint_32, lsint_32) {
     this.highOrder = msint_32;
@@ -937,13 +936,13 @@ function SHA(str) {
   }
   
   return binb2hex(binarray);
-}
+ }
 function existeUrl(url) {
    var http = new XMLHttpRequest();
    http.open('HEAD', url, false);
    http.send();
    return http.status!=404;
-}
+ }
 function slideDias(contenedor,dir,callback){
 	var idfecha = Fecha.number(Fecha.general);
 	var 	dir= dir||0;
@@ -965,13 +964,13 @@ function slideDias(contenedor,dir,callback){
 				});
 		})
 
-}
+ }
 function pad (n, length) {
     var  n = n.toString();
     while(n.length < length)
          n = "0" + n;
     return n;
-}
+ }
 $(function(){
 	$('.time').mask('00:00');
 	$('.tel').mask('##000000000');

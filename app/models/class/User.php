@@ -31,8 +31,16 @@ class User extends \core\BaseClass {
 		return self::getById($this->id, $args);
 	 }
 	public function set($args){
-		return self::saveByID($this->id, $args);
+		return self::saveById((int)$this->id, $args);
 	 }
+	public function password($pass){
+		if (!empty($pass)) {
+			$pass = password_hash($pass,PASSWORD_BCRYPT);
+			return $this->set(['pass'=>$pass]);
+		} else {
+			return $this->get('pass');
+		}
+	}
     public function validatePass( $pass ){
        return $this->pass === $pass ;
      }
@@ -71,7 +79,7 @@ class User extends \core\BaseClass {
 			$this->token = sha1($cadena) . str_pad($this->id, 4, "0", STR_PAD_LEFT); 
 			
 			$Token = new \core\BaseClass('tblreseteopass');
-			if( !$Token->saveByID(0,[
+			if( !$Token->saveById(0,[
 				'id'=> $this->id , 
 				'token' => $this->token 	
 			]))
@@ -82,6 +90,7 @@ class User extends \core\BaseClass {
 	public function checkToken($token){
 		$Token = new \core\BaseClass('tblreseteopass'); 
 		$tbl = $Token->getOneBy('id', $this->id);
+
 		$actualDate = (strtotime(date("Y-m-d H:i:00",time())));
 		$saveDate = (strtotime('+30 minute' , strtotime($tbl['date'])));
 

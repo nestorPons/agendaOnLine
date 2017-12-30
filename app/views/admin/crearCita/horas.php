@@ -1,4 +1,3 @@
-
 <table class = "dia activa" id="<?=$id_fecha?>" >
     <?php 
 

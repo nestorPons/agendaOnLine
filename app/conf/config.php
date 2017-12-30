@@ -1,9 +1,12 @@
 <?php 
+$conn = new \core\Conexion(NAME_DB , 2); 
 define('SAVE', 'save') ;
 define('DEL', 'del') ;
 define('EDIT', 'edit') ;
-define('ADD', 'add') ;
+define('GET', 'get') ;
 define('MARGIN_DAYS',6);
+define('FESTIVOS' , include_once (URL_SCRIPTS . 'festivos.php') );
+
 const EMAIL_FROM = 'nestorpons@gmail.com';
 const EMAIL_NAME = 'AOL TEAM';
 const EMAIL_HOST = 'smtp.gmail.com';
@@ -12,7 +15,7 @@ const EMAIL_PASS = 'PP09ol.__';
 const EMAIL_PORT = 25;
 const BR = '<br>'; //variable para desarrollo
 include (URL_CONFIG . 'admin.php');
-$conn = new \core\Conexion(NAME_DB , 2); 
+
 if ($conn->error == false ) {
 
     $confP = $conn->assoc('SELECT * FROM config ') ;

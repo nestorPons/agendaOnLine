@@ -11,7 +11,7 @@
 		<li><span class="app-bar-divider"></li>
 		<li><div  class="responsive " id="reloj"></div></li>
 		<li>
-			<a href="?destroy=true">
+			<a href="/<?=NAME_EMPRESA?>?destroy=true">
 				<span id="mnuUserSalirSession" class="icon-link-ext">Cerrar sesión</span>
 			</a>
 		</li>

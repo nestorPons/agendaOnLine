@@ -42,17 +42,16 @@ var crearCita ={
 		usuarios.guardar(0,nombre,btn.load.hide);
 	 },
 	dialog: function (){
-		var self = crearCita , sec =  $('#crearCita') , 
+		var self = crearCita , sec =  $('#frmCrearCita') , 
 			idSer = new Array() ,
 			strServ ="" 
 
 		sec.find('[name="servicios[]"]:checked').each(function(){
-			strServ += $(this).attr('id') + ", ";
+			strServ += $(this).siblings('label').find('.descripcion').text() + ", ";
 			idSer.push($(this).val())
 		})
 
 		dialog.open('dlgGuardar',self.guardar, dialog.close,function(){
-
 			strServ = strServ.slice(0,-2);			
 			data = {
 				fecha : Fecha.general , 
@@ -61,16 +60,15 @@ var crearCita ={
 				nameCli :sec.data.nombre, 
 				servicios : idSer ,
 				nota : sec.find('#crearCitaNota').val()  ,
-				uTiempo : parseInt(sec.find('#tSer').text()) / 15 
+				uTiempo : Math.ceil(parseInt(sec.find('#tSer').text()) / 15) 
 			}
 			$.extend(crearCita.data, data)
 
 			$('#dlgGuardar')
-				.find('#lblHora').html(data.hora).end()
-				.find('#lblFecha').html(Fecha.print()).end()
-				.find('#lblCliente').html(data.nameCli).end()
-				.find('#lblSer').html(strServ)
-				
+				.find('#lblhora').html(crearCita.data.hora).end()
+				.find('#lblfecha').html(crearCita.data.fecha).end()
+				.find('#lblCliente').parent('p').html('Reserva la cita')
+				$('#lblSer').parent('p').empty()//html(strServ).end()
 		})
 
 	 },
@@ -95,6 +93,8 @@ var crearCita ={
 					cerrarMenu()
 
 				}
+
+				$('.dia').remove()
 				dialog.close('dlgGuardar');
 			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown){

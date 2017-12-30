@@ -9,29 +9,22 @@ $args = [
     'border_radio' => $_POST['border']??2 , 
     'font_main' => $_POST['text1']??'Roboto' , 
     'font_tile' => $_POST['text2']??'Raleway'
-    ];
+ ];
 
-$r = $conf_css->saveAll($args );
+$r = $conf_css->saveAll($args);
 
-if ($config = $conf_css->getByAll()){
+if ($config = $conf_css->getAll()){
+    $url_css = URL_EMPRESA . "style.css";
+    $url_less = URL_EMPRESA . "style.less";
 
-    $inputFile = URL_EMPRESA . "style.less";
-    $outputFile = URL_EMPRESA . "style.css";
+    require_once( URL_FUNCTIONS . 'compilaLess.php') ; 
+    compilaLess($url_css,$url_less);
 
-    $less = new \models\Lessc;
-    $less->arrPHP = $config;
 
-    // create a new cache object, and compile
-    $cache = $less->cachedCompile($inputFile);
+    $url_css = URL_CSS . "main.css";
+    $url_less = URL_CSS . "main.less";
 
-    file_put_contents($outputFile, $cache["compiled"]);
-
-    // the next time we run, write only if it has updated
-    $last_updated = $cache["updated"];
-    $cache = $less->cachedCompile($cache);
-    if ($cache["updated"] > $last_updated) {
-        file_put_contents($outputFile, $cache["compiled"]);
-    }
+    compilaLess($url_css,$url_less);
 
 }
 

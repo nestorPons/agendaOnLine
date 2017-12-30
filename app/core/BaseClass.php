@@ -1,9 +1,15 @@
 <?php namespace core ;
 class BaseClass{
 
-    public  $type = MYSQLI_ASSOC, $names, $multi_query = false;
+    public $names,
+        $type = MYSQLI_ASSOC,
+         $multi_query = false;
     protected $conn, $sql = ''; 
-    private $table, $db;
+    private $table, $db , 
+        $log = false, 
+        $return = false,  
+        $logs = ['data','usuarios'];
+
     public function __construct($table , $bd = null, $user = 0 ) {
         $this->table = (string)$table ;
         $this->conn = new Conexion($bd, $user);
@@ -21,7 +27,7 @@ class BaseClass{
      }
     public function getAll ( string $return = '*' , $type = MYSQLI_NUM ) {
 
-        $query = $this->conn->query("SELECT $return FROM {$this->table} ORDER BY id ASC") ;
+        $query = $this->conn->query("SELECT $return FROM {$this->table}") ;
 
        return $query->fetch_all( $type );
         
@@ -100,6 +106,10 @@ class BaseClass{
         $sql = "SELECT * FROM {$this->table} WHERE $column = '$value' " ;
         return $this->conn->row($sql) ;
      }
+    public function getBetween ( $column, $val1, $val2 ){
+        $sql = "SELECT * FROM {$this->table} WHERE $column BETWEEN '$val1' AND '$val2';" ;
+        return $this->conn->row($sql) ;
+     }
     public function multi_query(){
 
         $r = $this->conn->multi_query($this->sql);
@@ -107,38 +117,65 @@ class BaseClass{
         $this->multi_query = false;
         return $r;
      }
-    public function saveByID ( int $id , array $args = null  ) {
+    public function saveById ( int $id , array $args = null  ) {
 
         $columns = '' ; 
         $values = '' ;
 
         if ( $id == 0 ) {
-
             foreach ($args as $column => $value ) {
                 $columns .=  $column . ',' ;
                 $values .= '"' . $value . '",' ; 
-            }
+             }
             $columns = trim( $columns , ',' ) ;
             $values = trim( "'" . $values , "'," ) ;
             $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
 
         } else {
+
             $this->sql .= $this->updateSql($args , $id);
         }
-
-        if(!$this->multi_query)
-            return $this->query();
+        
+      if(!$this->multi_query){
+            $this->return = $this->query();
+            return $this->return;
+      }
      }
-    public function saveAll ( array $args = null ){
+    public function saveBy(array $filter , array $args){
+        $columns = "";
+        $values ="";
+        $fName = key($filter);
+        $fValue = $filter[$fName];
+
+        foreach ($args as $column => $value ) {
+            $columns .=  $column . ',' ;
+            $values .= '"' . $value . '",' ; 
+         } 
+        $columns = trim( $columns , ',' ) ;
+        $values = trim( "'" . $values , "'," ) ;
+
+        if ($id = $this->getOneBy($fName , $fValue, 'id')) 
+            $this->sql .= $this->updateSql($args , $id);
+        else 
+            $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
+
+      if(!$this->multi_query){
+            $this->return = $this->query();
+            return $this->return;
+       }
+     }
+    public function saveAll( array $args = null ){
         $this->sql .= $this->updateSql($args);
 
-        if(!$this->multi_query)
-            return $this->query();
+      if(!$this->multi_query){
+            $this->return = $this->query();
+            return $this->return;
+       }
      } 
     private function updateSql(array $args = null, int $id = null){
+       
         $str = ''; 
         foreach ($args as $column => $value ) {
-
             $str .=  $column . ' ="' . $value . '",' ; 
         }
 
@@ -147,18 +184,23 @@ class BaseClass{
         $sql = "UPDATE {$this->table} SET $str ;" ;
 
         return $sql;
+
      }
     public function deleteById ( $id ) {
         $this->sql .= "DELETE FROM {$this->table} WHERE id =  $id ; ";
 
-         if(!$this->multi_query)
-            return $this->query();
+      if(!$this->multi_query){
+            $this->return = $this->query();
+            return $this->return;
+       }
      }
     public function deleteBy ( $column , $value ) {
         $this->sql .= "DELETE FROM {$this->table} WHERE $column = $value;";
            
-         if(!$this->multi_query)
-           return $this->query();
+      if(!$this->multi_query){
+            $this->return = $this->query();
+            return $this->return;
+       }
      }
     public function copyTableById($target , $id  ){
         $cols = '';
@@ -209,4 +251,10 @@ class BaseClass{
         }
         return $result;
      }
+
+    public function __destruct() {
+echo $this->table ;
+        
+    }
+    //AKI :: BUSCO DOS VECES USUARIOS AL ABRIR CREAR CITA
 }

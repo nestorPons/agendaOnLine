@@ -7,7 +7,7 @@ $zoneUsers = true ;
 if (isset($_POST['action'])) {
     require_once URL_AJAX . $_POST['controller'] . '.php' ;
 } else {
-    define('FESTIVOS' , include_once (URL_SCRIPTS . 'festivos.php') );
+    
 
     $Servicios = new core\BaseClass('servicios') ;
      $_SESSION['SERVICIOS'] = $Servicios->getBy('baja',0 ,'*',MYSQLI_NUM) ;

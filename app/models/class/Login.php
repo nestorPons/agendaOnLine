@@ -7,17 +7,22 @@ class Login extends \core\BaseClass {
 		parent::__construct($this->table);		
 	 }
     public function findUserById(int $id){
-        $this->user = parent::getById($id);
-        $this->loadData();
-        
+        if ($this->user = parent::getById($id))
+            $this->loadData();
+        return $this->user;
      }
     public function findUserBy($column, $value){
-        if ($id = parent::getOneBy($column, $value,'id')){
-            $this->user = parent::getById($id);
+        if ($this->user = parent::getOneBy($column, $value))
             $this->loadData();
-        }
-
-        return !is_null($id) ;
+        
+        return !is_null($this->user) ;
+     }
+    public function user(User $User){   
+        $this->user = $User;
+        $this->id = $User->id;
+        $this->email = $User->email;
+        $this->admin = $User->admin;
+                
      }
     private function loadData(){
             $this->id = $this->user['id'] ;
@@ -26,11 +31,14 @@ class Login extends \core\BaseClass {
             $this->dateBaja = $this->user['dateBaja'];
             $this->admin = $this->user['admin'];
             $this->status = $this->user['status'];
+            $this->attempts = $this->user['attempts'];
      }
     public function get($args){
+
 		return self::getById($this->id, $args);
 	 }
 	public function set($args){
+
 		return self::saveById($this->id, $args);
 	 }
     public function validatePass( $pass ){
@@ -51,17 +59,18 @@ class Login extends \core\BaseClass {
 		return $return ;
     	}
     public function attempts(int $args = null){
-		$attempts = self::get('attempts');
+        if (!$this->user)
+            die('no se ha encotrado el usuario');
+               
 		if (is_null($args)){
-			return $attempts;
+			return $this->attempts;
 		}else if($args > 0){
-			$attempts += $args;
-			$data = array('attempts'=>$attempts);
+			$this->attempts += $args;
 		}else{
-			$data = array('attempts'=>0);
+            $this->attempts = 0;
 		}
 
-		return $this->set($data);	
+		return $this->set(['attempts'=>$this->attempts]);	
 		
      }
 	public function status(int $arg = null) {
@@ -124,13 +133,13 @@ class Login extends \core\BaseClass {
      }
     public function createSession(bool $remember = false){
         global $Security;
-
         $Security->loadSession(
             $this->id,
             $_REQUEST['empresa'],
             $this->admin
 	    );
         $this->attempts(0);
+echo "AKI";
         if ($remember) $this->authByCookie();
 
         return ($this->admin>0)?'admin':'users' ;
@@ -159,7 +168,5 @@ class Login extends \core\BaseClass {
         session_destroy(); 
         
      }
-    public function recover (){
-     //AKI :: Hay que hacer el recodar contraseña
-    }
+
 }

@@ -2,20 +2,22 @@
 $action = 'login' ;
 
 $Login = new \models\Login;
-$Forms = new \models\Forms;
+//var_dump($_POST);
 
 $_POST = $Forms->sanitize($_POST);
-if ($Forms->validateForm($_POST)){
-    
-    $script  =  (isset($_POST['pinpass']))?'validarPin.php':'validar.php' ;
-    $return = include URL_SCRIPTS . $script;
 
-} else {
-    $return = core\Error::array(core\Error::getLast());
-}
+	$script  =  (isset($_POST['token']))
+		?'newpass.php'
+		:(isset($_POST['pinpass'])
+			?'pinpass.php'
+			:'loginpass.php' );
+		
+	$return = include URL_SCRIPTS . 'validates/' . $script;
 
-$args = isset($return['args']) ? '?' . $return['args'] :  '' ; 
-$action = $return['action'] . $args ;
+if (isset($return['action'])){
+	$args = isset($return['args']) ? '?' . $return['args'] :  '' ; 
+	$action = $return['action']. $args ;
+} else $action = 'login';
 
 //var_dump ($return);
 header('Location: ' . $action);

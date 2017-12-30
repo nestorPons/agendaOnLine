@@ -75,4 +75,9 @@ class Tools{
         }
 
      }
+    public static function  formatofecha($fecha){
+		$a = explode('-',$fecha);
+		$fecha = $a[2].'/'.$a[1].'/'.$a[0];
+		return $fecha;
+     }
 }

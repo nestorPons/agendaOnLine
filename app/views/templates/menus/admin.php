@@ -88,20 +88,15 @@
 					<li><a name='menu[]' data-capa="estilos">Estilos</a></li>	
 				</ul>
 			</li>
-			<?php
-			if(CONFIG['plan']>1){
-				?>
-				<li>
-					<a id="menu5"  name='menu[]'  data-capa="notas">
-						<i id="icon-info-circled"></i>
-						Notas
-					</a>
-				</li>
-				<li>
-					<a id="menu9" name='menu[]'   data-capa="historia">Historia</a>
-				 </li>
-				 <?php 
-			}?>
+			<li>
+				<a id="menu5"  name='menu[]'  data-capa="notas">
+					<i id="icon-info-circled"></i>
+					Notas
+				</a>
+			</li>
+			<li>
+				<a id="menu9" name='menu[]'   data-capa="historia">Historia</a>
+			</li>
 
 			
 	</ul>

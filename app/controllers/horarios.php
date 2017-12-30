@@ -1,7 +1,4 @@
 <?php 
-
-
-
 require_once (URL_CLASS.'Horarios.php');
 
 $Horarios = new models\Horarios();

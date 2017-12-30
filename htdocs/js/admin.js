@@ -15,6 +15,7 @@ function sincronizar( dias, date , callback ){
 
 
 	main.sincronizar(dias)
+	notas.sync()
 	if ($('#crearCita').find('div').length )
 		crearCita.horas.sincronizar()
 
@@ -27,16 +28,15 @@ function sincronizar( dias, date , callback ){
 		$(this)
 			.val(Fecha.print(fecha))
 			.datepicker("setDate",Fecha.print(fecha));
-	})
+	 })
 
-	}
+ }
 function mostrarCapa(capa, callback){
 	data = { 
 		controller : capa ,  
 		fecha :  Fecha.sql ,
-	}
+	 }
 	if($('#'+capa).is(':visible')) return false;
-
 	$('#chckOpUsersDel').prop( "checked", false ) ;
 	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
 
@@ -49,30 +49,31 @@ function mostrarCapa(capa, callback){
 				capa=='servicios' && servicios.init()
 				capa=='usuarios' && usuarios.init()
 				capa=='estilos' && estilos.init()
+				capa=='notas' && notas.init()
 			}
 
 		},'html')
-	}
+	 }
 	
 	if($('#config').is(':visible')&&config.change) config.guardar();
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
 	if($('#crearCita').is(':visible')) crearCita.reset();
 
 
-	$('.capasPrincipales').hide();
-	$('#'+capa).fadeIn();
+	$('.capasPrincipales').hide()
+	$('#'+capa).fadeIn()
 
-	menu.status(capa);
+	menu.status(capa)
 
-	if(capa=='main') $('#'+Fecha.id).show();
+	if(capa=='main') $('#'+Fecha.id).show()
 
-	btn.load.reset();
+	btn.load.reset()
 
-	$('html,body').animate({scrollTop:0}, 500);
+	$('html,body').animate({scrollTop:0}, 500)
 	$('#navbar')
 		.find('.selected').removeClass('selected').end()
 		.find('[data-capa="'+capa+'"]').addClass('selected')
-	typeof callback == "function" && callback();
+	typeof callback == "function" && callback()
 	}
 function sliderConfigBorder ( value, slider ) {
 	estilos.test( value ) ;
@@ -333,6 +334,34 @@ var main ={
 	arrSer : new Array(), 
 	last : new Object(),
 	idsControl : new Object(),
+	setData : function (idCita){
+		var lbl = $('#idCita_'+idCita+'.lbl')
+
+			main.data[idCita] = {
+				idCita : idCita ,
+				agenda : lbl.parents('.celda').attr('agenda'),
+				cliente :  { 
+					id : lbl.find('.nombre').attr('id') , 
+					nombre : lbl.find('.nombre').text().trim()
+				},
+				fecha :  Fecha.sql(lbl.parents('.dia').attr('id')) ,
+				hora : lbl.parents('tr').data('hour') ,
+				obs :  lbl.find('.note').text().trim() ,
+				servicios : new Array() ,
+				tiempoTotal : 0
+			 }
+			lbl.find('.codigo').each(function(i,o){
+				var id =$(this).attr('id_codigo') , 
+					codigo = $(this).html() , 
+					descripcion = $(this).attr('des_codigo') ,
+					tiempo = $(this).attr('tiempo')
+
+				main.data[idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
+				main.arrSer.push({id ,  codigo ,  descripcion , tiempo}) 
+				main.data[idCita].tiempoTotal += parseInt(tiempo)	
+			 })
+		
+	 },
 	sincronizar: function (dir,callback){
 		
 		var self = main , section = main.section , body = main.body
@@ -443,7 +472,7 @@ var main ={
 			dataType: 'html',
 			data: {
 				fecha : Fecha.general ,
-				ids :JSON.stringify( ids ),
+				ids : ids ,
 				controller : 'main' ,
 				action : VIEW
 			},
@@ -513,33 +542,7 @@ var main ={
 
 		if ($.isEmpty(idCita)) return false
 		var lbl = $('#idCita_'+idCita+'.lbl')  
-
-		if ($.isEmpty(main.data[idCita])) {
-	
-			main.data[idCita] = {
-				idCita : idCita ,
-				agenda : lbl.parents('.celda').attr('agenda'),
-				cliente :  { 
-					id : lbl.find('.nombre').attr('id') , 
-					nombre : lbl.find('.nombre').text().trim()
-				},
-				fecha :  Fecha.sql(lbl.parents('.dia').attr('id')) ,
-				hora : lbl.parents('tr').data('hour') ,
-				obs :  lbl.find('.note').text().trim() ,
-				servicios : new Array() ,
-				tiempoTotal : 0
-			}
-			lbl.find('.codigo').each(function(i,o){
-				var id =$(this).attr('id_codigo') , 
-					codigo = $(this).html() , 
-					descripcion = $(this).attr('des_codigo') ,
-					tiempo = $(this).attr('tiempo')
-
-				main.data[idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
-				main.arrSer.push({id ,  codigo ,  descripcion , tiempo}) 
-				main.data[idCita].tiempoTotal += parseInt(tiempo)	
-			})
-		}
+		main.setData(idCita)
 
 		main.last = {
 			idCita : main.data[idCita].idCita,
@@ -553,7 +556,7 @@ var main ={
 			},
 			obs : main.data[idCita].obs 
 		}
-
+		
 		var _addServiceToLbl = function (callback){
 			var arrSer = main.data[idCita].servicios
 			var lblSer = lbl.find('.servicios') , html = ''
@@ -580,7 +583,7 @@ var main ={
 				lbl.removeClass('row_'+l).addClass('row_'+t)
 			}
 			typeof callback == "function" && callback();
-		}
+		 }
 		var _delRow = function(div){
 			var cod = div.find('.codigo')
 			var idCod = cod.attr('id_codigo')
@@ -593,7 +596,7 @@ var main ={
 			main.data[idCita].servicios.splice(index, 1)
 			div.fadeOut('fast').remove()
 
-		}
+		 }
 		var _addRow = function (id , codigo , descripcion ,tiempo ){
 
 			$('#dlgEditCita .template')
@@ -612,7 +615,7 @@ var main ={
 						_delRow($(this).parent())
 					})
 
-		}
+		 }
 		var _eventAddService = function () {
 			$('#dlgEditCita').on('change','#lstServ',function(){
 				var select  = $(this).find(':selected')
@@ -624,7 +627,7 @@ var main ={
 
 				$(this).val('')
 			})
-		}
+		 }
 		var _save = function () {
 
 			var dlg = $('#dlgEditCita') , duration = 0 , arrIdSer = new Array() ,data = new Array()
@@ -681,7 +684,7 @@ var main ={
 
 
 			})		
-		}
+		 }
 
 		if (!$.isEmpty(idCelda)) { 
 			// se ha editado arrastrando label
@@ -710,7 +713,7 @@ var main ={
 			var 
 			fnCancel = function(){
 				main.del(main.data[idCita].idCita)
-			}, 
+			 }, 
 			callback = function(isNew){
 
 				var section = $('#dlgEditCita')
@@ -740,9 +743,9 @@ var main ={
 				
 				lastTime = main.data[idCita].tiempoTotal
 
-			}
+			 }
 
-			dialog.open('dlgEditCita',_save, fnCancel, callback)
+			dialog.open('dlgEditCita',_save, fnCancel,  callback)
 			
 		}
 	 },
@@ -843,8 +846,6 @@ var main ={
 						lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
 						clon = object.clone()
 					
-					$('#'+lastCell).removeClass('doble')
-					
 					object.remove()
 					clon.appendTo('#'+idCell)
 					main.lbl.style()
@@ -894,7 +895,6 @@ var main ={
 					.css('z-index', 0)
 					.width(lbl.widht-15)
 					.parent('.celda')
-						.addClass('doble')
 				lbl.color()
 			}, 
 		delete: function(idCita, noMens){
@@ -925,21 +925,20 @@ var main ={
 					for(let a = 1; a <= agendas; a++){
 						
 						let idCita = 0;
-						$(this).find('.doble[agenda="'+a+'"]')
+						$(this).find('.lbl')
 							.each(function(){
-								var $this  = $(this).find('.lbl')
-								
+														
 								color = color == 'color1'?'color2':'color1';
 															
-								$this.removeClass('color1 color2 color3 color-admin')
-								$this.addClass(color);
+								$(this).removeClass('color1 color2 color3 color-admin')
+								$(this).addClass(color);
 
 							})
 					}
 				})
 				typeof callback == "function" && callback();
 			},
-		draggable : function(){
+		draggable : function($this){
 				$('.lbl').each(function(){
 					var dia = $(this).parents('.dia')
 					var limit = dia.attr('id')
@@ -951,55 +950,66 @@ var main ={
 						disabled : false, 
 						opacity : 0.70 , 
 						zIndex: 100 ,
+						revert: function(ob){
+								if (ob == false){
+									$('.ui-draggable-dragging').remove()
+									$('#'+main.lbl.idLastCelda)
+										.html(main.lbl.clone)
+									main.lbl.draggable()
+									return true
+								}
+							}, 
+						revertDuration: 500,
 						handle :$(this).find('.fnMove'), 
+						stop : function(e, ui){
+						},
 						start : function ( e, ui) {
-							$(this).draggable("option", "revert", 'invalid')
 							main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',1)
 							main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
-							$(this).parent('.celda').removeClass('doble')
 						},
 					}) 
 				})
 			},
 		droppable : function () {
-				$( ".celda" ).each(function(){
-					$(this).droppable({
-						accept : ".lbl",
-						classes: {"ui-droppable-hover": "ui-state-hover"},
-						drop: function( event, ui ) {
+			$( ".celda" ).droppable({
+					accept : ".lbl",
+					classes: {"ui-droppable-hover": "ui-state-hover"},
+					drop: function( event, ui ) {
 
-							if($(this).hasClass('celda')){
-								$(this).addClass( "ui-state-highlight" )
 
-								var posi = $(this).position()
-								var drag  = ui.draggable
-								var css_margin = 1 ;
+							var posi = $(this).position()
+							var drag  = ui.draggable
+							var css_margin = 1 ;
 
-								if (confirm('Desea modificar la cita ')) {
-									drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
-										//end of animation.. if you want to add some code here
-									})
-									$(this).html(main.lbl.clone)
-									
-									main.lbl.style()
-										
-									main.lbl.clone = null
-									
-									$('#' + main.lbl.idLastCelda).removeClass('doble').empty()
+							if (confirm('Desea modificar la cita ')) {
+								drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
+									//end of animation.. if you want to add some code here
+								})
+								$(this).html(main.lbl.clone)
+								
+								main.lbl.style()
 
-									var idCita = drag.attr('idCita')
-									var idCelda = $(this).attr('id')
-									$(this).addClass('doble')
+								$('#' + main.lbl.idLastCelda).empty()
+								var idCita = drag.attr('idcita')
+								var idCelda = $(this).attr('id')
 
-									main.edit(idCita , idCelda )
-									
-								} else {
-									drag.draggable("option", "revert", true)	
-								}	
-							}
-						},				
-					})
-				})	
+								main.edit(idCita , idCelda )
+								
+							} else {
+								//aki :: error arrastrando el dragable y cancelando
+								drag.draggable("option", "revert", true)	
+								$('.ui-draggable-dragging').remove()
+								$('#'+main.lbl.idLastCelda)
+									.html(main.lbl.clone)
+								main.lbl.draggable()
+								
+							}	
+							main.lbl.clone = null
+						
+
+					},				
+				})
+
 			},	
 		resize : function($this){
 				if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
@@ -1027,7 +1037,6 @@ var main ={
 		}
 	 }
 var menu = {
-
 	status: function (capa){
 		var add = $('#btnAdd');
 		var reset = $('#btnReset');
@@ -1073,21 +1082,24 @@ var menu = {
 			case 'estilos':
 				menu.enabled(save) ;
 				break;
-		}
+			case 'notas':
+				menu.enabled(save)
+				break;
+		}	
 		$('#navbar').resize()
-	},
+	 },
 	save:function (){
 		var _loadShow = function (){
 			$('#btnSave')
 				.find('.icon-floppy').hide().end()
 				.find('.icon-load').css('display','inherit')
-		}()
+		 }()
 		var _loadHide = function (){
 			$('#btnSave')
 				.find('.icon-load').hide().end()
 				.find('.icon-floppy').show()
-		}
-			switch($('.capasPrincipales:visible').attr('id')) {
+		 }
+		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'config':
 				config.guardar(_loadHide)
 				break;
@@ -1098,7 +1110,7 @@ var menu = {
 				agendas.guardar(_loadHide);
 				break;
 			case 'festivos':
-				festivo.guardar();
+				festivo.guardar(_loadHide);
 				break;
 			case 'general':
 				general.guardar(_loadHide);
@@ -1106,21 +1118,24 @@ var menu = {
 			case 'estilos':
 				estilos.save(_loadHide);
 				break;
-		}
-	},
+			case 'notas':
+				notas.save(_loadHide)
+				break;
+		 }
+	 },
 	show: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'main':
 				main.inactivas.click()
 			break;
 		}
-	},
+	 },
 	edit: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case '':
 			break;
 		}
-	},
+ 	 },
 	add: function (){
 
 		switch($('.capasPrincipales:visible').attr('id')) {
@@ -1140,14 +1155,14 @@ var menu = {
 				festivo.dialog() 
 				break
 		}
-	},
+	 },
 	del: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'horarios':
 				horario.del();
 				break;
 		}
-	},
+	 },
 	reset:function(){
 		/*
 		$('#btnReset .icon-undo')
@@ -1161,15 +1176,15 @@ var menu = {
 				}) 
 			break;
 		}
-	},
+	 },
 	disabled:function (){
 		for(let i = 0; i < arguments.length; i++)
 			arguments[i].addClass('disabled')
-	},
+	 },
 	enabled: function (){
 		for(let i = 0; i < arguments.length; i++)
 			arguments[i].removeClass('disabled')
-	},
+	 },
 	load:function (){
 		if($('#txtBuscar').val()!=""){
 			switch($('.capasPrincipales:visible').attr('id')) {
@@ -1182,13 +1197,13 @@ var menu = {
 			}
 		}
 		menu.exit();
-	},
+	 },
 	exit: function (){
 			$('#txtBuscar')
 			.val("")
 			.parent()
 				.hide('slide',{direction:'right'})
-	},
+	 },
 	options : function($this){
 		if ($('#btnOptions #chckOpUsersDel').is(':checked'))
 			$('.ocultar_baja').removeClass('ocultar_baja').addClass('mostrar_baja') ;
@@ -1196,8 +1211,8 @@ var menu = {
 			$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
 
 		servicios.init();	
-	},
-	}
+	 },
+ }
 var agendas = {
 	change: false ,
 	guardar: function (callback){
@@ -1234,8 +1249,8 @@ var agendas = {
 			typeof callback == "function" && callback();
 		})
 	}
-	}
-var familias = {
+ }, 
+familias = {
 	change : false , 
 	controller : 'familias', 
 	data : new Object , 
@@ -1273,7 +1288,7 @@ var familias = {
 			btn.load.hide() 
 		
 		
-	},
+	 },
 	guardar :function (){
 		btn.load.show($('#dlgFamilia .aceptar'),false)
 		var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
@@ -1327,7 +1342,7 @@ var familias = {
 				familias.sendAjax(SAVE , _fnOk)
 		}
 		
-	},
+	 },
 	sendAjax : function(action , callback){
 			var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
 			var	data = $("#frmEditarFamilia").serializeArray()			
@@ -1408,7 +1423,7 @@ var familias = {
 
 		},
 
-	}, 
+	 }, 
 	dialog: function (id){
 		var fnLoad = function (isNew) {
 			var dlg = $('#dlgFamilias')
@@ -1425,7 +1440,7 @@ var familias = {
 		}
 		dialog.open('dlgFamilias',familias.guardar,familias.eliminar,fnLoad)
 
-	},
+	 },
 	validate : {
 		form : function () {  
 			var valNom = $('#dlgFamilias #nombre').val(); 
@@ -1435,11 +1450,11 @@ var familias = {
 			}else {
 				return true ;
 			}
-		}
+		 }
 
-	},
-	}
-var crearCita ={
+	 },
+ },
+crearCita ={
 	tiempoServicios : 0,
 	data : new Object(), 
 	init : function(){
@@ -1449,12 +1464,12 @@ var crearCita ={
 			servicios.mostrar(clase_id) ;
 		}
 		cargarDatepicker();
-	},
+	 },
 	idUser : function () {
 		var cli = $('#crearCita #cliente').val();
 		var  nombre = normalize(cli);
 		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
-	}, 
+	 }, 
 	cliente: function (){
 		//guardo cliente mediante formulario crearCita
 		var $cliente = $('#crearCita #cliente'),
@@ -1462,7 +1477,7 @@ var crearCita ={
 
 		usuarios.guardar(0,nombre)	
 		dialog.close()
-	},
+	 },
 	dialog: function (){
 		var self = crearCita , sec =  $('#crearCita') , 
 			idSer = new Array() ,
@@ -1495,7 +1510,7 @@ var crearCita ={
 				
 		})
 
-	},
+	 },
 	guardar: function(){
 		var self = crearCita 
 		self.data.controller = 'cita'
@@ -1533,7 +1548,7 @@ var crearCita ={
 			return false
 		}
 
-	},
+	 },
 	horas: {
 		iniciar: function(){	
 
@@ -1545,7 +1560,7 @@ var crearCita ={
 				crearCita.horas.crear(Fecha.number(date))
 			}
 			
-		},	
+		 },	
 		load : function ($this) {
 			var lblTS = $('#tSer')[0]
 
@@ -1557,7 +1572,7 @@ var crearCita ={
 			crearCita.horas.pintar(Fecha.id)
 		
 			lblTS.innerHTML = crearCita.tiempoServicios;
-		} ,
+		 } ,
 		crear: function (id_table, callback){
 			var data = {
 				agenda: crearCita.data.agenda,
@@ -1581,7 +1596,7 @@ var crearCita ={
 				crearCita.horas.pintar(id_table)				
 			})
 
-		},		
+		 },		
 		pintar: function(id_table){
 
 			var self = crearCita, 	
@@ -1630,7 +1645,7 @@ var crearCita ={
 					count -- 
 				}
 			}
-		},
+		 },
 		sincronizar: function(callback){
 
 			var context = $('#tablas')
@@ -1649,8 +1664,8 @@ var crearCita ={
 			})
 				*/
 
-		},
-	},
+		 },
+	 },
 	reset: function(){
 		$('.steperCapa li').hide(function(){
 			$('#step0').show()
@@ -1687,7 +1702,7 @@ var crearCita ={
 			.find('#lblCliente').empty()
 
 			dialog.close('dlgGuardar');
-	},
+	 },
 	stepper: function(index){
 		var $visible = $('.steperCapa:visible')
 		var $stepper = $('#stepper'+index)
@@ -1728,7 +1743,7 @@ var crearCita ={
 			})
 			typeof callback == "function" && callback()
 		}
-	},
+	 },
 	validate : {
 		form : function (){
 			return $('#crearCita [name="servicios[]"]:checked').length!==0
@@ -1780,10 +1795,10 @@ var crearCita ={
 				return true;
 			}
 		}
-	},
+	 },
 
-	}
-var config ={
+ },
+config ={
 	change : false,
 	controller : 'config' ,
 	pass: 	function (){ 
@@ -1851,8 +1866,8 @@ var config ={
 		config.change = false
 		},
 
-	}
-var general = {
+  },
+general = {
 	guardar: function (callback){
 
 		if (general.validar()){
@@ -1869,15 +1884,14 @@ var general = {
 				}		
 			},'json')
 			.fail(function(r){console.log(r)})
-		} else {
-			_err()
-		}
+		} else _err()
+
 		function _err(input){
 			notify.error( 'No se pudo guardar los datos.<br> Compruebe todos los campos')
 			if(input) $('#general form').find('[name='+input+']').addClass('input-error')
 			typeof callback == "function" && callback()
-		}
-	},
+		 }
+	 },
 	validar: function () {
 		//AKI :: implementar validacion de formularios !!important
 		var r = true
@@ -1887,9 +1901,9 @@ var general = {
 		})
 		
 		return r
-	}
-	}
-var festivo = {
+	 }
+ },
+festivo = {
 	
 	dialog : function () {
 		dialog.open('dlgFestivos',festivo.guardar, festivo.eliminar)
@@ -1956,8 +1970,8 @@ var festivo = {
 			}
 		}
 	},
-	}
-var horario = {
+ },
+horario = {
 	controller : 'horarios' , 
 	section : $('#horarios') , 
 	activo:null,
@@ -2076,8 +2090,8 @@ var horario = {
 		
 		return return_function;
 	},
-	}
-var usuarios = {
+ },
+usuarios = {
 	controller : 'usuarios' , 
 	init : function () {
 		usuarios.select('A')
@@ -2344,8 +2358,8 @@ var usuarios = {
 		
 
 	 }
- }
-var estilos = {
+ },
+estilos = {
 	border : false , 
 	init : function () {
 		this.border = $('#sldBorderRadius').data('position') ;
@@ -2383,10 +2397,78 @@ var estilos = {
 		theColor = "rgb(" + myRed + "," + myGreen + ",0)"; 
 		return( theColor ); 
 	}
+ }, 
+notas = {
+	dir : 'right',
+	init : function(){
+		cargarDatepicker();
+	 },
+	save : function(callback){
 
-	}
+		data =  {
+			nota : $('#txtNotas').val(),
+			fecha : Fecha.sql, 
+			controller : 'notas', 
+			action : SAVE
+		}
+		$.post(INDEX, data,
+			function (r, textStatus, jqXHR) {
+				if (r.success) {
+					notify.success('Su nota ha sido guardada')
+				} else{
+					notify.error('No se ha podido guardar la nota')
+					echo (r)
+				} 
+				typeof callback == "function" && callback();
+			},
+			JSON
+		)
+	 }, 
+	delete : function(callback){
+		data = {
+			controller : 'notas' , 
+			action : DEL , 
+			fecha : Fecha.sql
+		}
+		$.post(INDEX, data,
+			function (r, textStatus, jqXHR) {
+				if (!r.success) {
+					notify.error('No se ha podido eliminar la nota')
+					echo (r)
+				} 
+				typeof callback == "function" && callback();
+			},
+			JSON
+		)
+	 },
+	sync : function(){
+		notas.slide()
+		if (!$('#txtNotas').length) return false
+		data = {
+			controller : 'notas' , 
+			action : GET , 
+			fecha : Fecha.sql
+		}
+		$.post(INDEX, data,
+			function (r, textStatus, jqXHR) {
+				var html = (r.success) ? r.data : '' 				
+				$('#txtNotas').html(html)
+			},
+			JSON
+		)
+		return true
+	 },
+	slide : function(){
+		var lastDate = $('.datepicker').val()
+		notas.dir = (Date.parse(Fecha.general) > Date.parse(Fecha.sql(lastDate)))?'left':'right'
+		$('#txtNotas').hide('slide',{ direction: notas.dir },750, function(){
+			notas.dir =  (notas.dir=='right')?'left':'right'
+			$('#txtNotas').show('slide',{direction:notas.dir},750)	
+		})
+	 }
+ }
+
 $(function(){
-
 	cargarDatepicker()
 	colorearMenuDiasSemana()
 	main.inactivas.change(localStorage.getItem("showRows"))
@@ -2420,7 +2502,7 @@ $(function(){
 		else
 			menu.show('slide',{ direction: 'right' })
 
-	})
+	 })
 	$('#frmContact button')
 		.click(function(event){
 			
@@ -2560,12 +2642,7 @@ $(function(){
 			$('.app-bar-pullmenu ').hide('blind');
 		})
 
-	$("#notas")
-		.find('#eliminar').click(function(){eliminarNota})
-		.find('#frmNotas').submit(function(e){
-			e.preventDefault();
-			main.guardarNotas();
-		})
+
 
 	$("#festivos")
 		.on('click',"[name='eliminar[]']",function(){festivo.eliminar($(this))})
@@ -2598,19 +2675,24 @@ $(function(){
 		.on('click','[name*="editar"]',function(){
 			var id = $(this).parents('tr:first').data('value')
 			usuarios.dialog(id)
-		})
+		 })
 		.on('click',"[name^='historia']",function(e){usuarios.historial($(this))})
 		.on('click','#mainLstABC a',function(){
 			usuarios.select($(this).html());
-		})
+		 })
 		.on('change','#lstABC',function(){usuarios.select($(this).val())})
 		.on('click','.icon-search',function(){
 			$('#popupHistorial').hide()
 			$('.popup-overlay').hide()
 			mostrarCapa('main')
 			sincronizar(null, $(this).parent().parent().data('fecha'))
-		})
+		 })
+	$('#notas')
+		.on('submit', function(e){
+			e.preventDefault()
+			notas.save()
+		 })
+		.on('click','.fnDel', notas.delete)
 
-	//funciones
 
-	})
+ })
