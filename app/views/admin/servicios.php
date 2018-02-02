@@ -13,11 +13,11 @@
 				</tr>	
 			</thead>
 			<tbody>
-				<?php
-				foreach($_SESSION['SERVICIOS'] as $key => $serv){
-
-					require URL_TEMPLATES . 'row.servicios.php';
-
+				<?php			
+				$len = count($_SESSION['SERVICIOS']);
+				for($i = 0; $i < $len ; $i++){
+					$serv = $_SESSION['SERVICIOS'][$i];
+					include URL_TEMPLATES . 'row.servicios.php';
 				}?>
 			</tbody>
 		</table>

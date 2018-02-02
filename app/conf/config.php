@@ -5,7 +5,11 @@ define('DEL', 'del') ;
 define('EDIT', 'edit') ;
 define('GET', 'get') ;
 define('MARGIN_DAYS',6);
+define('DEFAULT_HISTORY_DAYS',1);
 define('FESTIVOS' , include_once (URL_SCRIPTS . 'festivos.php') );
+
+define('AOL_WEB','http://www.aol.com');
+define('AOL_EMAIL', 'nestorpons@gmail.com');
 
 const EMAIL_FROM = 'nestorpons@gmail.com';
 const EMAIL_NAME = 'AOL TEAM';
@@ -13,7 +17,9 @@ const EMAIL_HOST = 'smtp.gmail.com';
 const EMAIL_USER = 'nestorpons@gmail.com';
 const EMAIL_PASS = 'PP09ol.__';
 const EMAIL_PORT = 25;
+
 const BR = '<br>'; //variable para desarrollo
+
 include (URL_CONFIG . 'admin.php');
 
 if ($conn->error == false ) {
@@ -52,4 +58,14 @@ if ($conn->error == false ) {
 //Si coy a validar existe un Post->ancho 
 if( isset($_POST['ancho']) ) $_SESSION['width'] = $_POST['ancho'];
 //Si voy a admin o otro lado creo la clase dispositivo 
-if (isset($_SESSION['width'])) $Device = new \models\Device($_SESSION['width']);
+$Device = new \models\Device($_SESSION['width']??false);
+
+define('CLASS_BACKGROUND', classBackGround());
+function classBackground(){
+    global $Device;
+    return $Device->isMovile
+        ?""
+        :file_exists(URL_EMPRESA ."background.jpg")
+                ?"background-personalized"
+                :"background";
+}

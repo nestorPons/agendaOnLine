@@ -21,17 +21,16 @@ class Conexion extends \conf\UserConn {
 		$this->db = $db ?? NAME_DB;
 
 		if (!$this->connect()) {
-			$this->error = 'error parametros conexion =>' . $this->server . "/" . $this->user; 
+			 throw new \Exception(\core\Error::E051,51 );
 		}
 
 	 }
 	private function connect(){
-	
 			$this->conexion = (empty($this->db))
 				? mysqli_connect($this->server, $this->user, $this->pass) 
 				: mysqli_connect($this->server, $this->user, $this->pass , $this->db) ;
 			@mysqli_query("SET NAMES 'utf8'") ;
-
+			
 			return $this->conexion??header("HTTP/1.0 404 Not Found");
 	
 	 }
@@ -106,7 +105,9 @@ class Conexion extends \conf\UserConn {
 		return mysqli_errno($this->conexion) ;
 	 }
 	function __destruct() {
-		if($this->error!=false) echo $this->error;
+		if($this->error!=false){
+			echo $this->error;
+		}
 		if($this->conexion) $this->conexion->close();
 	 }
 

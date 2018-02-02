@@ -525,114 +525,21 @@ th{
 	text-decoration: underline;
 }
 #navbar{
-    display: block;
-    width: 100%;
-	height: 50px;
-	position: fixed;
-	z-index:2000;
-	padding: 0 ;
+ 
 	background-color: @base !important;
 	font-family: @main-font;
-	overflow: visible;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-    -ms-user-select: none;
-	user-select: none;
-	[type=text], [type=password], [type=email], [type=number], [type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail]{
-		background-color: #fff;
-	} 
-	.app-bar-menu{
 
-	}
 	.app-bar-element{
-		line-height: 3.125rem;
-		padding: 2px .625rem;
-		font-size: 1rem;
-		cursor: pointer;
-		color: inherit;
-		display: block;
-		float: left;
-		position: relative;
-		vertical-align: middle;
-		height: 3.125rem;
-		a{
-			padding-right: 0;
-			&:before{
-				content:none;
-			}
-		}
 		&:active, &:hover{
 			color: @color;
-			background-color: #fff;
+		}
+	}
 
-		}
-	}
-	.herramientas{
-		li a span{
-			top: 15;
-    		position: relative;
-		}
-	}
-	.icon{
-		&-load{
-			display:none;
-			margin:0 5px;
-			width: 26px;
-			float: left;
-			color: inherit;
-		}
-		&-edit, &-doc-text{
-			color: inherit;
-		}	
-	}
-	.menulbl{
-		@media (max-width: 800px) {display:none;}
-	}
-	#conTxtBuscar{
-		display:none;
-		position:absolute;
-		background-color: @color;
-		width: 100%;
-		height: 50px;
-		z-index: 1001;
-		float:right;
-		right: 110px;
-		@media  (min-width: 800px) {
-			right:140px;
-		}
-
-		input{
-			border: none;
-			width: 350px;
-			margin: 10px 20px auto;
-			float: right;
-			@media (max-width: 425px){
-				width:210px;
-				margin: 10px auto;
-			}
-		}
-	}
-	.menuNull{
-		display:none !important;
-		width:40px;
-		padding: 0 18px;
-		@media screen and (max-width: 590px) {display:block !important;}
-		@media screen and (max-width: 320px) {display:none !important;}
-	}
-	.branding{
-		@media screen and (max-width: 800px) {
-			width:50px;
-		}
-	}
 	.color-menu();
 	.selected {
-		.caption {
-			
+		.caption {			
 			text-shadow: -2px -2px @color, -2px 2px @color, 2px -2px @color, 2px 2px @color;
-			background-size: 1px 1em;
 			box-shadow: inset 0 -0.175em @color, inset 0 -0.2em @base;
-			display: inline;
-
 		}
 		&:hover, &:active, &:focus{
 			.caption{
@@ -643,205 +550,39 @@ th{
 	}
 	.d-menu, .active-toggle{
 		li:hover, li:active{
-			color: #fff;
 			background-color: @color;
 		}
 		.color-sel;
 	}
 	&-drop-container{
-		margin: 5px;
 		border-color: @color !important;
-		@media screen and (max-width: 325px) {
-			width:300px !important;
-			right:-48px !important;
-			&:before{
-				margin: -9px 41px !important;
-			}
-		}
 
 		&:before{
 			border-color: @color !important;
-			border-bottom: none;
-			border-right: none;
-		}
-		.text-light{
-			padding-left:5px;
 		}
 	}
 	&-divider{
 		background-color: @base !important;
-		display: block;
-		float: left;
-		line-height: 3.125rem;
-		height: 3.125rem;
-		width: 1px;
-		background-color: #4c9cd7;
-		padding: 0;
-		@media screen and (max-width: 560px) {
-			height: 55px;
-		}
 	}
-	&-pullbutton{
-		float: right;
-		padding: 0 !important;
-		&.automatic{
-			display: none;
+	&-pullbutton.automatic{
 			color: @base;
-			background-color: @color;
-			cursor: pointer;
-			font: 2rem sans-serif;
-			height: 3.125rem;
-			line-height: 1.25rem;
-			vertical-align: middle;
-			text-align: center;
-			margin: 0;
-			position:relative;
-			float:right ;
-			width: 80px;
-			&:before {
-			  content: "\2261";
-			  position: absolute;
-			  top: .875rem;
-			  left: .875rem;
-			}
-			@media screen and (max-width: 800px) {
-				width: 3.125rem;
-			}
-		}
-	}
-	&-pullmenu{
-		display: none;
-	    text-align: left !important;
-		&bar{
-			.color-menu();
-		}
-		@media screen and (max-width: 490px) {
-		    //float: left;
-		}
-
-	}
-	.input-control{
-		width: 230px ;
-	}
-	&-menu{
-		li{
-			display:block;
-		}
-	}
-	#btnOptions{
-		ul{
-			width: 320px !important;
-		}
-	}
-	@media screen and (max-width: 560px) {
-		text-align: center ;
-		display: none;
+			background-color: @color;	
 	}
 }
-.contenedorDatepicker{
-	margin: 0 auto;
-	text-align: center;
-	@media (max-width: 425px){
-		width: 100%;
-	}
-	i{
+.contenedorDatepicker i{
 		color: @grey;
-		position: absolute;
-		z-index:10;
-		top: 26%;
-	}
-	.icon-left-open{
-		left: 0.5em;
-	}
-	.icon-right-open{
-		right: 0.5em;
-	}
-	.datepicker{
-		text-align:center;
-		width:100%;
-		padding: 0;
-		font-size: 1.1em;
-	}
-}
-#ui-datepicker-div{
-		right: 33% !important;
 }
 .dialog{
 	font-family: @main-font;
 	.border-radius (@radio_popover,@radio_popover,@radio_popover,@radio_popover);
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-	display:none;
-	width: 320px;
-    margin: 55px auto;
-	padding: 20px;
-	line-height: 1.5em;
-    background-color: @base;
+   background-color: @base;
 	color: @text-color;
-    z-index: 1050;
-	text-align:center;
-	.icon-cancel{
-	    color: #777777;
-		float: right;
-		top: -15px;
-		position: relative;
-		right: -10px;
-		&:hover{
-			color: @red;
-		}
+  
+	.icon-cancel:hover{
+		color: @red;
 	}
 	.icon-plus-circled{
 		color : @green ;
-	}
-	#tblGuardarCita{
-		margin:auto;
-		border-collapse: separate;
-		border-spacing: 5px;
-		td:first-child {font-size:@fontSize - 0.1}
-	}
-	button{
-	    margin-top: 20px;
-	}
-	label{
-		display: block;
-		text-align: left;
-		margin-left: 15px;
-	}
-	.lst{
-		text-align: left;
-    	margin-left: 26px;
-	}
-	#codigos{
-		div{
-			display : block ;
-		}
-	}
-	@media (max-width: 320px){
-		width:auto;
-		.iconClass-container{
-			width:auto;
-			&.icon-left{
-				.iconClass-inside{
-					left: 10px;
-				}			
-			}
-		}
-	}
-}
-.display-inline-flex{
-	margin: 0 auto;
-	width: 60%;
-	display: flex;
-	display: -webkit-flex;
-	flex-direction: column;
-	-webkit-flex-direction: column;
-	flex-wrap: wrap;
-	-webkit-flex-wrap: wrap;
-	align-items: center;
-	justify-content: center;
-	flex-direction: row-reverse;
-
-	select{
-
 	}
 }
 .error{
@@ -849,34 +590,18 @@ th{
 		border-color: @red !important;
 		border-radius: 1px;
 	}
-}
+ }
 .festivo{
 	a, .ui-state-disabled{
 		border-color: @red !important;
 		color:@red !important;
 	}
-}
+ }
 .info{
   font-size: 0.8em;
   color: @grey;
-}
+ }
 .input{
-	&-control{
-		display: inline-block;
-		min-height: 2.125rem;
-		height: 2.125rem;
-		position: relative;
-		vertical-align: middle;
-		margin: .325rem;
-		line-height: 1;
-		height: inherit;
-		.prepend-icon{
-			top: 50% !important;
-		}
-		input{
-			width:95%;
-		}
-	}
 	&-error{
 		&[type=text], &[type=password], &[type=email], &[type=number], &[type=search], &[type=tel],&[type=list],&[type=time] , &[type=date], &select, &textarea{
 			border-color: @red !important;
@@ -887,63 +612,13 @@ th{
 			border-color: @green !important;
 		}
 	}
-	&-control{
-		height: inherit;
-	}
 	&-button{
-		//left: 10%;
-		position:relative;
-		//display:flex;
-		width:380px;
-		padding:5px;
-		margin:10px auto;
-		position: relative;
-		@media (max-width: 325px){
-			right: 4.5rem;
-
-		}
-		input, select{
-			z-index:0;
-			margin: 0;
-			padding: 0 0 0 5px ;
-			width: 100%;
-			&:focus{
-				outline: 0;
+		input, select{	
+			&:focus{	
 				border-color: @blue;
 			}
 		}
-		.buttons{
-			display: flex;
-			z-index:2;
-			float: right;
-			 &-square{
-				overflow: visible;
-				float: right;
-				margin: 0;
-				padding: 0;
-				cursor: pointer;
-				height: 32px;
-				width: 32px;
-				text-transform: uppercase;
-				.border-radius(0,0,0,0);
-
-				&::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
-					border: 0;
-					padding: 0;
-				}
-			}
-		}
 	}
-}
-.invalid{
-	border-color: #ff0000 ;
-}
-.link{
-	color: #0000ff;
-	text-decoration: underline;
-}
-.load{
-	margin: 50px auto;
 }
 .login{
 	background-color: #fff; 

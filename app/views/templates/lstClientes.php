@@ -10,7 +10,7 @@
 		?>
 		<option 
             data-id="<?=$id?>" 
-			data-name="<?=normaliza($name)?>" 
+			data-name="<?=\core\Tools::normalize($name)?>" 
 			value="<?=$name?>">
 		</option>
 		<?php

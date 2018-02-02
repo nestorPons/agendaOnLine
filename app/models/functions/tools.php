@@ -1,10 +1,10 @@
-<?php 
+<?php
 function diasTranscurridos($f1,$f2){
 	$d = (strtotime($f1)-strtotime($f2))/86400;
 	$d = abs($d);
 	$d = floor($d);
 	return $d;
-}
+ }
 function getMonthDays($Month, $Year){
    //Si la extensión que mencioné está instalada, usamos esa.
    if( is_callable("cal_days_in_month")){
@@ -13,7 +13,7 @@ function getMonthDays($Month, $Year){
       //Lo hacemos a mi manera.
       return date("d",mktime(0,0,0,$Month+1,0,$Year));
    }
-}
+ }
 function normaliza($cadena){
     $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ
 	ßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
@@ -24,12 +24,12 @@ function normaliza($cadena){
     $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
     $cadena = strtolower($cadena);
     return utf8_encode($cadena);
-}
+ }
 function sumarfecha($fecha,$num){
 	$f = strtotime('+'.$num.' day',strtotime($fecha));
 	$f = date('Y-m-d',$f);
 	return $f;
-}
+ }
 //FESTIVOS
 function festivos(){
 	global $conn;
@@ -48,14 +48,14 @@ function festivos(){
 	}
 
 	return $data['festivos']??false;
-}
+ }
 function delArray ($valor, &$arr){
     if (($key = array_search($valor, $arr)) !== false){
   		unset($arr[$key]);
     }
 
     return $arr;
-}
+ }
 function compareArray ($arr1 ,$arr2) {
     $r['val'] = 0 ;
     $r['val'] += ($r['comp2'] = array_diff($arr2,$arr1))?1:0;
@@ -69,7 +69,7 @@ function compareArray ($arr1 ,$arr2) {
             3 =  cambios en  array 1 y 2
     */
     return $r;
-}
+ }
 function generateId( $f = null , $h = null , $a = null) { 
 
 	$a = (!empty($a)) ? str_pad($a, 2, "0", STR_PAD_LEFT) : '';
@@ -77,4 +77,4 @@ function generateId( $f = null , $h = null , $a = null) {
 	$h = str_replace(':','',$h);
 	return $a . $f . $h ; 
 
-}
+ }

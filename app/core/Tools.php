@@ -2,11 +2,10 @@
 
 class Tools{
     function __construct(){}
-
     public static function getUserLanguage() {  
         $idioma =substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,2); 
         return $idioma;  
-    }
+     }
     public static function full_copy( $source, $target ) {
         try
         {
@@ -79,5 +78,15 @@ class Tools{
 		$a = explode('-',$fecha);
 		$fecha = $a[2].'/'.$a[1].'/'.$a[0];
 		return $fecha;
+     }
+    public static function encodeJSON($content){
+        header('Content-Type: application/json');
+         include_once $content;
+        echo json_encode($r??false);
+     }
+    public static function printArray($arr){
+        echo('<pre>');
+            print_r($arr); 
+        echo('</pre>');
      }
 }

@@ -1,0 +1,17 @@
+
+<section id="recover" class="hidden">
+    <h1 class="heading">Recuperar contraseña</h1>
+    <hr>
+    <form id="frmRecover">
+        <input type="hidden" id="empresa"  value="<?php  ?>">
+        <p>Introduzca email el email de la cuenta registrada</p>
+        <div class="iconClass-container icon-left">
+            <input type="email" class="email" name="email" id="email" placeholder="Introduzca email." required>
+            <span class="iconClass-inside icon-mail-1"></span>
+        </div>
+        <p class= "submit">
+            <button type="submit" class="btn-success btnLoad " data-value="Guardar">Guardar</button>
+            <input type="button" class="btn-danger inicio cancel " value="Cancelar" >
+        </p>
+    </form>
+</section>

@@ -39,6 +39,9 @@ class Error {
     const E030 = "Error guardando datos";
     const E031 = "Tamaño de datos incorrecto";
 
+    //Base datos
+    const E051 = "No se encontro la base de datos";
+
     //Mail 
     const E071 = "No se ha podido mandar el email";
 

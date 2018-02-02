@@ -28,19 +28,13 @@ define('URL_VIEWS' , APP_FOLDER . 'views/' );
     define('URL_MENUS' , URL_TEMPLATES . 'menus/' );
 define('URL_LOGO' , getLogo());
 define('URL_BACKGROUND' , '/empresas/'.NAME_EMPRESA."/background.jpg");
-define('CLASS_BACKGROUND' , backgroundImage());
+
 define('NUM_MAX_ATTEMPT', 5); //attempts for crack brute force pass
 define('URL_PROTOCOL', stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
 //constantes de empresa
-define('AOL_WEB','http://www.aol.com');
-define('AOL_EMAIL', 'nestorpons@gmail.com');
 
 function getLogo () {
    return file_exists(URL_EMPRESA."logo.png")?'/empresas/'.NAME_EMPRESA."/logo.png":"img/logo.png" ;
-}
-
-function backgroundImage() {
-	return file_exists( URL_EMPRESA ."background.jpg")?"background-personalized": "background" ;
 }

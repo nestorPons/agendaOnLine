@@ -139,12 +139,12 @@ class Login extends \core\BaseClass {
             $this->admin
 	    );
         $this->attempts(0);
-echo "AKI";
         if ($remember) $this->authByCookie();
 
         return ($this->admin>0)?'admin':'users' ;
      }
     public static function logout() {
+        $Logs = new Logs;
 
         // Borra la cookie que almacena la sesión 
         foreach($_COOKIE as $key => $val){
@@ -166,7 +166,7 @@ echo "AKI";
 
         // Finalmente, destruye la sesión 
         session_destroy(); 
-        
+        return true;
      }
 
 }

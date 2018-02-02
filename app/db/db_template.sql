@@ -3,6 +3,8 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+CREATE DATABASE demo IF NOT EXIST; 
+
 CREATE TABLE `agendas` (
   `id` tinyint(2) NOT NULL,
   `nombre` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,

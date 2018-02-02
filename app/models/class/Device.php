@@ -65,7 +65,7 @@ class Device{
 
     }
     private function getDevice($width){
-    
+
         $this->type = 'laptop';
         if ($width<800) {
             $this->type = 'tablet';

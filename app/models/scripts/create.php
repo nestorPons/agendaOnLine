@@ -14,7 +14,6 @@ try {
     header('location: /'.$Create->$nameEmpresa);
 
 } catch (\Exception $e){
-
     header('location: /create.html?err='.$e->getMessage().'&cod='.$e->getCode());
 
 }

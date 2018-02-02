@@ -11,8 +11,12 @@ class BaseClass{
         $logs = ['data','usuarios'];
 
     public function __construct($table , $bd = null, $user = 0 ) {
-        $this->table = (string)$table ;
-        $this->conn = new Conexion($bd, $user);
+        try {
+            $this->table = (string)$table ;        
+            $this->conn = new Conexion($bd, $user);
+        } catch (\Exception $e){
+            echo "Error bd " . $e->getMessage(); 
+        }
      }
     public function getConnect () {
         return $this->conn ;
@@ -91,7 +95,7 @@ class BaseClass{
 
        if ($return != '*'){
             $result = $query->fetch_row();
-            if(count($result)<=1)$result = $result[0];
+            if(!empty($result) && count($result)<=1)$result = $result[0];
         }else{
             $result = $typeNum? $query->fetch_row(): $query->fetch_assoc() ; 
         }          
@@ -106,9 +110,9 @@ class BaseClass{
         $sql = "SELECT * FROM {$this->table} WHERE $column = '$value' " ;
         return $this->conn->row($sql) ;
      }
-    public function getBetween ( $column, $val1, $val2 ){
-        $sql = "SELECT * FROM {$this->table} WHERE $column BETWEEN '$val1' AND '$val2';" ;
-        return $this->conn->row($sql) ;
+    public function getBetween ( $column, $val1, $val2, $args ){
+        $sql = "SELECT * FROM {$this->table} WHERE $column BETWEEN '$val1' AND '$val2' $args;" ;
+        return $this->conn->all($sql) ;
      }
     public function multi_query(){
 
@@ -253,7 +257,7 @@ class BaseClass{
      }
 
     public function __destruct() {
-echo $this->table ;
+//echo $this->table ;
         
     }
     //AKI :: BUSCO DOS VECES USUARIOS AL ABRIR CREAR CITA

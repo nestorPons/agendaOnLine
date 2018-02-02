@@ -95,7 +95,7 @@
 				</a>
 			</li>
 			<li>
-				<a id="menu9" name='menu[]'   data-capa="historia">Historia</a>
+				<a id="menu9" name='menu[]' data-capa="history">Historia</a>
 			</li>
 
 			
@@ -105,57 +105,67 @@
 	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
 			<a href="/<?=NAME_EMPRESA?>/logout">
-				<span id="mnuUserSalirSession" class="icon-logout"></span>
+				<span id="mnuUserSalirSession" class="icon icon-logout"></span>
 			</a>
 		</li>
 		 <div id="btnSearch" class="app-bar-element no-flexible place-right disabled ">
-			<span  class="icon-search"></span>
+			<span  class="icon icon-search"></span>
 			<span  class="menulbl">Buscar</span>
 		</div>
 		<div id="btnOptions" class="app-bar-element no-flexible place-right disabled">
 			<a class="dropdown-toggle no-flexible place-right  ">
-				<span class="icon-cog"></span>
+				<span class="icon icon-cog"></span>
 				<span  class="menulbl">Opciones</span>
 			</a>
 			<ul class="d-menu" data-role="dropdown">
-				<li>
+				<li id=rowsHiddens class=disabled>
 					<input type="checkbox" id="chckOpUsersDel">
 					<label for = "chckOpUsersDel" >	Mostrar eliminados.</label>
+				</li>
+				<li id=showByTime class=disabled>
+					<label for = "selShowByTime" >Filtro tiempo.</label>
+					<select id=selShowByTime>
+						<option value=1>Ayer</option>
+						<option value=7>Última semana</option>
+						<option value=30>Último mes</option>
+					</select>
 				</li>
 
 			</ul>
 		</div>
 
 		 <div id="btnReset" class="app-bar-element no-flexible place-right">
-			<span  class="icon-undo"></span>
+			<span  class="icon icon-undo"></span>
 			<span  class="menulbl">Refrescar</span>
 		</div>
 		 <div id="btnDel" class="app-bar-element no-flexible place-right disabled ">
-			<span  class="icon-trash"></span>
+			<span  class="icon icon-trash"></span>
 			<span  class="menulbl">Eliminar</span>
 		</div>
 		 <div id="btnAdd" class="app-bar-element no-flexible place-right disabled" data-value=0>
-			<span  class="icon-plus-circled" ></span>
+			<span  class="icon icon-plus-circled" ></span>
 			<span  class="menulbl">Nuevo</span>
 		</div>
 		 <div id="btnSave" class="app-bar-element no-flexible place-right disabled ">
-			<span  class="icon-floppy" ></span>
-			<span class="icon-load animate-spin"></span>
+			<span  class="icon icon-floppy" ></span>
+			<span class="icon icon-load animate-spin"></span>
 			<span class="menulbl">Guardar</span>
 		</div>
 		 <div id="btnEdit" class="app-bar-element no-flexible place-right disabled ">
-			<span  class="icon-edit" ></span>
-			<span class="icon-load animate-spin"></span>
+			<span  class="icon icon-edit" ></span>
+			<span class="icon icon-load animate-spin"></span>
 			<span class="menulbl">Editar</span>
 		</div>
 		<div id="btnShow" class="app-bar-element no-flexible place-right" >
-				<span class="off icon-list <?=CONFIG['ShowRow']==1?"hidden":""?>"></span>
-				<span class="on icon-list-nested <?=CONFIG['ShowRow']==1?"":"hidden"?>"></span>
+				<span class="off icon icon-list <?=CONFIG['ShowRow']==1?"hidden":""?>"></span>
+				<span class="on icon icon-list-nested <?=CONFIG['ShowRow']==1?"":"hidden"?>"></span>
 				<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>
+	<div id="conTxtBuscar" class=" mnu_extensible place-right"> 
+		<input type="search" name="txtName" id="txtBuscar">
+	</div>
 	<div id="conTxtBuscar" class=" place-right"> 
 		<input type="search" name="txtName" id="txtBuscar">
 	</div>
-
 </nav>

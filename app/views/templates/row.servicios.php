@@ -1,5 +1,4 @@
 <?php
-
 // 0 Id 1 codigo 2 descripcion 3 Precio 4 tiempo 5 IdFamilia 6 Baja
 $id = $serv[0];
 $codigo = $serv[1];
@@ -8,11 +7,11 @@ $precio = $serv[3];
 $tiempo = $serv[4];
 $familia = $serv[5];
 $baja = $serv[6]==1?'ocultar_baja':'';
-
 ?>
+
 <tr id="rowServicios<?=$id?>" 
     class="fam<?=$familia?> <?=$baja?>"  
-    name="<?=normaliza($codigo)?>" 
+    name="<?=\core\Tools::normalize($codigo)?>" 
     familia = "<?=$familia?>"
     value=<?= $id?> >
     <td class="ico"><a name="editar[]" class= "icon-edit x6" value="<?= $id?>"></a></td>

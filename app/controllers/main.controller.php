@@ -2,7 +2,11 @@
 require_once $url_base . 'app/conf/autoload.php' ;
 $Security = new \core\Security;
 $Forms = new models\Forms;
-$exceptions = ['fileLogo'];
+
+$Logs = new models\Logs;
+
+
+$exceptions = ['fileLogo','tel']; 
 if (!$Forms->validateForm($_POST, $exceptions)) core\Error::die();
 
 //compruebo que sea dir app

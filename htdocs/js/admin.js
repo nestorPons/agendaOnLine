@@ -59,7 +59,6 @@ function mostrarCapa(capa, callback){
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
 	if($('#crearCita').is(':visible')) crearCita.reset();
 
-
 	$('.capasPrincipales').hide()
 	$('#'+capa).fadeIn()
 
@@ -76,8 +75,8 @@ function mostrarCapa(capa, callback){
 	typeof callback == "function" && callback()
 	}
 function sliderConfigBorder ( value, slider ) {
-	estilos.test( value ) ;
-	}	
+	estilos.test( value ) 
+ }	
 var servicios = {
 	controller : 'servicios',
 	init : function () {
@@ -86,7 +85,7 @@ var servicios = {
 		if (!$.isEmpty( clase )){
 			clase_id = clase.replace(/\D/g,'')
 			servicios.mostrar(clase_id) ;
-		}
+		 }
 		
 		},
 	buscar: function(){
@@ -322,10 +321,10 @@ var servicios = {
 			}else {
 				return true ;
 			}
-		}
-		}
-	}
-var main ={	
+		 }
+	 }
+ },
+main ={	
 	xhr : new Object(), 
 	section : $("#main") , 
 	body : $('#main .cuerpo') ,
@@ -755,7 +754,7 @@ var main ={
 			action : 'del' , 
 			controller : 'cita', 
 			fecha : Fecha.sql(Fecha.general)
-		}	
+		 }	
 
 		if (main.lbl.delete(idCita)){
 			$.post(INDEX,data,function(r){
@@ -768,7 +767,7 @@ var main ={
 
 			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown ) { echo (jqXHR.responseText) });
-		}
+		 }
 
 	 },
 	guardarNota: function($this){
@@ -1035,19 +1034,22 @@ var main ={
 					}
 			}
 		}
-	 }
-var menu = {
+	 },
+menu = {
 	status: function (capa){
-		var add = $('#btnAdd');
-		var reset = $('#btnReset');
-		var search = $('#btnSearch');
-		var save = $('#btnSave');
-		var show  =  $('#btnShow')
-		var edit  =  $('#btnEdit')
-		var options  =  $('#btnOptions')
-		var del  =  $('#btnDel')
-
-		menu.disabled(add,reset,search,save,show,edit,options);
+		var add 	= $('#btnAdd'),
+			reset 	= $('#btnReset'),
+			search 	= $('#btnSearch'),
+			save 	= $('#btnSave'),
+			show  	= $('#btnShow'),
+			edit  	= $('#btnEdit'),
+			options = $('#btnOptions'),
+			del  	= $('#btnDel'),
+			df 		= {
+				options : true
+			}
+		options.find('li').addClass('disabled')
+		menu.disabled(add,reset,search,save,show,edit,options)
 
 		switch(capa) {
 			case 'main':
@@ -1056,8 +1058,8 @@ var menu = {
 			case 'crearCita':
 				break;
 			case 'usuarios':
-				 menu.enabled(add,search,options)
-				 break;
+				menu.enabled(add,search,options)
+				break;
 			case 'servicios':
 				 menu.enabled(add,search,options)
 				 break;
@@ -1084,8 +1086,14 @@ var menu = {
 				break;
 			case 'notas':
 				menu.enabled(save)
-				break;
-		}	
+				break
+			case 'history':
+				menu.enabled(options)
+				df.options = false
+				options.find('#showByTime').removeClass('disabled')
+				break
+		}
+		if (df.options) options.find('#rowsHiddens').removeClass('disabled')
 		$('#navbar').resize()
 	 },
 	save:function (){
@@ -1134,10 +1142,9 @@ var menu = {
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case '':
 			break;
-		}
+		 }
  	 },
 	add: function (){
-
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'usuarios':
 				usuarios.dialog(0);
@@ -1154,7 +1161,7 @@ var menu = {
 			case 'festivos' :
 				festivo.dialog() 
 				break
-		}
+		 }
 	 },
 	del: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
@@ -1196,7 +1203,7 @@ var menu = {
 					break;
 			}
 		}
-		menu.exit();
+		menu.exit()
 	 },
 	exit: function (){
 			$('#txtBuscar')
@@ -1212,8 +1219,8 @@ var menu = {
 
 		servicios.init();	
 	 },
- }
-var agendas = {
+ },
+agendas = {
 	change: false ,
 	guardar: function (callback){
 		var data = $('#agendas #frmAg').serializeArray() ;
@@ -1749,7 +1756,7 @@ crearCita ={
 			return $('#crearCita [name="servicios[]"]:checked').length!==0
 				&&$('#crearCita #cliente').val()!==""
 				&&$('#crearCita [name="hora[]"]:checked').length!==0;
-		},
+		 },
 		name : function () {
 			var $this =  $('#crearCita #cliente');	
 			var cliente = $this.val().trim();
@@ -1779,7 +1786,7 @@ crearCita ={
 				$this.popover('show');
 				return false;
 			}
-		}, 
+		 }, 
 		service: function(){
 			crearCita.horas.sincronizar();
 			$('#crearCita #lblSer').empty();
@@ -1794,7 +1801,7 @@ crearCita ={
 				})
 				return true;
 			}
-		}
+		 }
 	 },
 
  },
@@ -2466,8 +2473,22 @@ notas = {
 			$('#txtNotas').show('slide',{direction:notas.dir},750)	
 		})
 	 }
- }
-
+ },
+logs = {
+	get : function(days){
+		data = {
+			controller :'history', 
+			action : GET , 
+			days : days
+		}
+		$.post(INDEX, data,
+			function (html, textStatus, jqXHR) {
+				$('#history').html(html)
+			},
+			'html'
+		)
+	} 
+}
 $(function(){
 	cargarDatepicker()
 	colorearMenuDiasSemana()
@@ -2477,7 +2498,7 @@ $(function(){
 		if(!$(this).data('disabled')) {
 			sincronizar($(this).data('action'));
 		}
-	})
+	 })
 	$('.tabcontrol').tabcontrol();
 
 	main.lbl.widht = $('#main th.aling-center').width()
@@ -2616,10 +2637,10 @@ $(function(){
 			}else{
 				menu.load();
 			}
-		})
+		 })
 		.on('click','#btnReset',function(){
 			if($('#usuarios').is(':visible')) usuarios.select('A');
-		})
+		 })
 		.on('click','#btnSave',menu.save)
 		.on('keyup','#txtBuscar',function(event){
 			if(event.which==13)menu.load()
@@ -2627,11 +2648,12 @@ $(function(){
 				event.stopPropagation
 				menu.exit();
 			}
-		})
+		 })
 		.on('click','#btnAdd',menu.add)
 		.on('click','#btnDel',menu.del)
 		.on('click','#btnReset',menu.reset)
 		.on('click','#btnOptions #chckOpUsersDel',menu.options)
+		.on('change','#selShowByTime', function(){logs.get($(this).val())})
 		.find('[name="menu[]"]').click(function(){
 			var capa = $(this).data('capa') ;
 			if (capa == 'main'){
@@ -2640,7 +2662,7 @@ $(function(){
 				mostrarCapa($(this).data('capa'));
 			}
 			$('.app-bar-pullmenu ').hide('blind');
-		})
+		 })
 
 
 

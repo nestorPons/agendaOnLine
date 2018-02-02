@@ -2,7 +2,6 @@
 <div class="cabecera" >
 	<?php include URL_TEMPLATES . 'menus/abc.php'  ?>
 </div>	
-
 <div class="cuerpo">
 	<table class="tablas">					
 		<thead>
@@ -10,10 +9,13 @@
 				<th>Opcion</th>
 				<th>Num</th>
 				<th>nombre</th>
-				<th>Telefono</th>
-				<th>Email</th>
-				<th>obs</th>
-				<th>admin</th>
+				<?php if(!$Device->isMovile){?>
+					<th>Telefono</th>
+					<th>Email</th>
+					<th>obs</th>
+					<th>admin</th>
+					<?php
+				}?>	
 			</tr>
 		</thead>
 		<tbody>

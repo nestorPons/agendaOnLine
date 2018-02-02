@@ -6,37 +6,38 @@ class Create{
     private $exceptionsPost = ['web'];
 
     public function __construct($post){
+echo "Class create";
         $this->empresas = new \core\BaseClass('empresas','aa_db');
         $this->Users = new \core\BaseClass('usuarios','aa_db');
         $this->connect();
-
         $this->post = $post;
-        $this->defineNameCompany();
-    }
+echo "nombnr!!".$this->post['nombre_empresa'];
+        $this->nameCompany = $this->defineNameCompany();
+        $this->db = 'bd_' . $this->nameCompany ;
+     }
     private function connect ($db = false){
         $this->cConn = new \core\Conexion( $db , 1);
         return $this->cConn;
-    }
+     }
     public function validateForm(){
         foreach($this->post as $key => $value){
             if (empty($value) && !in_array($key,$this->exceptionsPost))
                 throw new \Exception(\core\Error::E012, 12);
-        }
+         }
         return true;
-    }
+     }
     public function ifCompanyExist(){
 
         $empresa = $this->empresas->getBy('nombre_empresa', $this->nameCompany );
         if (!empty($empresa)) throw new \Exception(\core\Error::E011, 11);
         return true;
         
-    }
+     }
     public function defineNameCompany(){
-        $this->nameCompany = \core\Tools::normalize($this->post['nombre_empresa']);
-        $this->db = 'bd_' . $this->nameCompany ;
+        $nameCompany = \core\Tools::normalize($this->post['nombre_empresa']);
         return $this->nameCompany;
 
-    }
+     }
     public function saveCompany(){
         $this->pass = $this->post['pass'];
         unset($this->post['pass']);
@@ -56,9 +57,10 @@ class Create{
             if (!$this->Users->saveById(0,$this->user))
                 throw new \Exception(\core\Error::E003, 3);
             $this->post['idAdmin'] = $this->Users->getId();
-        } else {
+         } 
+        else {
             $this->post['idAdmin'] = $this->user['id'];
-        }
+         }
         unset(
             $this->post['dni'],
             $this->post['nombre_usuario'],
@@ -67,14 +69,14 @@ class Create{
             $this->post['provincia'],
             $this->post['pais'],
             $this->post['cp']
-        );
+         );
         
         if (!$this->empresas->saveById(0,$this->post))
             throw new \Exception(\core\Error::E003, 3);
         $this->id = $this->empresas->getId();
 
         return true;
-    }
+     }
     public function saveDb(){
        
          $sql = "CREATE DATABASE " . $this->db . " COLLATE utf8_spanish_ci";
@@ -82,14 +84,14 @@ class Create{
          if(!$this->cConn->query($sql))
             throw new \Exception(\core\Error::E013, 13);
          return true;
-    }
+     }
     public function createTables(){
         $this->cConn->selectDb( $this->db);
         $fileSQL = file_get_contents(URL_SQL . 'db_template.sql');
         if(!$this->cConn->multi_query($fileSQL))
             throw new \Exception(\core\Error::E015, 15);
         return true;
-    }
+     }
     public function initializeCompany(){
         $this->connect($this->db);
         $sql = "INSERT INTO usuarios (nombre, email, pass, admin, tel) 
@@ -121,4 +123,4 @@ class Create{
         }
      }
 
-}
+ }

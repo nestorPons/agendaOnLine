@@ -1,6 +1,6 @@
 "use strict"
 
-var SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index', AJAX = 'ajax' , 
+var SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index' , 
 LEFT = 'left' , RIGHT = 'right', JSON = 'json', GET = 'get'
 
 var HORARIOS = document.horarios

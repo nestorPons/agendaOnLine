@@ -1,7 +1,4 @@
 <?php 
-require_once URL_ROOT . 'app/conf/config.php'  ;
-require_once URL_FUNCTIONS . 'tools.php'  ;
-
 $Agendas = new core\BaseClass('agendas');
 $agendas  = isset($zoneUsers)?$Agendas->getBy('mostrar', 1, '*' , MYSQLI_NUM ):$Agendas->getAll();
 
