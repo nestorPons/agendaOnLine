@@ -2,7 +2,7 @@
 class Logs extends \core\BaseClass{
     private $table = 'logs' ; 
     public function __construct(){
-		parent::__construct($this->table);		
+        parent::__construct($this->table);		 
 	 }
     public function set(int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null ){
        return self::saveById(0,[

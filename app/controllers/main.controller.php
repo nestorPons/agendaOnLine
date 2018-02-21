@@ -1,43 +1,56 @@
 <?php
-require_once $url_base . 'app/conf/autoload.php' ;
-$Security = new \core\Security;
-$Forms = new models\Forms;
+try {
+    require_once $url_base . 'app/conf/autoload.php' ;
+    $Security = new \core\Security;
+    $Forms = new models\Forms;
 
-$Logs = new models\Logs;
+    // Condicion para cuando la empresa no esta creada no cargue la confuiguracion  de la empresa 
+    if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
 
+    $exceptions = ['fileLogo','tel']; 
+    if (!$Forms->validateForm($_POST, $exceptions)) core\Error::die();
 
-$exceptions = ['fileLogo','tel']; 
-if (!$Forms->validateForm($_POST, $exceptions)) core\Error::die();
+    //compruebo que sea dir app
+    $controller = isset($_REQUEST['controller'])&&$_REQUEST['controller']!='err'
+        ?$_REQUEST['controller']
+        :'login' ;
 
-//compruebo que sea dir app
+    if (isset($_GET['empresa'])){
+        $Logs = new models\Logs;
+        if (file_exists(URL_EMPRESA)){   
+            
+            require_once URL_FUNCTIONS . 'compilaLess.php' ;
+            if(!$Security->checkSession($controller)) {
 
-$controller = isset($_REQUEST['controller'])&&$_REQUEST['controller']!='err'
-    ?$_REQUEST['controller']
-    :'login' ;
+                $controller = 'logout';
+                $mensErr = \core\Error::E010;
+            }
 
-if (isset($_GET['empresa'])){
+            //Inicializo la base datos demo para ejemplos
+            if($_REQUEST['empresa']==='demo'&&$controller=='login'){
 
-    if (file_exists(URL_EMPRESA)){
-    
-        require_once $url_base . 'app/conf/config.php' ;
-        require_once URL_FUNCTIONS . 'compilaLess.php' ;
-        if(!$Security->checkSession($controller)) {
-            $controller = 'logout';
-            $mensErr = \core\Error::E010;
+                $file  = file_get_contents(APP_FOLDER . 'db/demo.sql');
+                $connDemo = new \core\Conexion(null,3);
+                $connDemo->multiquery($file);
+                unset($connDemo);
+
+            }
+            require  URL_CONTROLLERS . $controller . '.php';
+
+        }else{
+
+            models\Login::logout();
+            include(PUBLIC_FOLDER . "error404.php");
+
         }
-    
-        require  URL_CONTROLLERS . $controller . '.php';
 
-    }else{
+    } else {
 
-        models\Login::logout();
-        include(PUBLIC_FOLDER . "error404.php");
-
+        require_once URL_SCRIPTS . $controller. '.php';
     }
-
-} else {
-
-    require_once URL_SCRIPTS . $controller. '.php';
-}
-//AKI :: implementar seguridad por eventos
-//echo $_SESSION['count']++ ;
+    //AKI :: implementar seguridad por eventos
+    //echo $_SESSION['count']++ ;
+ } 
+catch (\Exception $e) {
+    die($e->getMessage() . "::" . $e->getFile() . "::" . $e->getLine());
+ }

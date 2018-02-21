@@ -16,22 +16,25 @@ class Conexion extends \conf\UserConn {
 			case 2:
 				$this->select();
 				break;
+			case 3:
+				$this->createDemo();
+				break;
 		}
 
-		$this->db = $db ?? NAME_DB;
+		$this->db = $db ?? NAME_DB; 
 
-		if (!$this->connect()) {
+		if (!$this->connect()) 
 			 throw new \Exception(\core\Error::E051,51 );
-		}
-
+		
 	 }
 	private function connect(){
-			$this->conexion = (empty($this->db))
-				? mysqli_connect($this->server, $this->user, $this->pass) 
-				: mysqli_connect($this->server, $this->user, $this->pass , $this->db) ;
-			@mysqli_query("SET NAMES 'utf8'") ;
-			
-			return $this->conexion??header("HTTP/1.0 404 Not Found");
+		if ( $this->db == "bd_") throw new \Exception(\core\Error::E051,51 );
+		$this->conexion = (empty($this->db))
+			? mysqli_connect($this->server, $this->user, $this->pass) 
+			: mysqli_connect($this->server, $this->user, $this->pass , $this->db) ;
+		@mysqli_query("SET NAMES 'utf8'") ;
+		
+		return $this->conexion??header("HTTP/1.0 404 Not Found");
 	
 	 }
 	public function selectDb(string $db){
@@ -45,12 +48,13 @@ class Conexion extends \conf\UserConn {
 	
 	 }
 	public function multi_query ($sql) {
-		$return = mysqli_multi_query($this->conexion, $sql) or die ( mysqli_error($this->conexion) ) ;
+	
+		$return = mysqli_multi_query($this->conexion, $sql) or die ( 'error multiquery =>' . mysqli_error($this->conexion) ) ;
 		while(mysqli_more_results($this->conexion) && mysqli_next_result($this->conexion)){
 			$result = mysqli_store_result($this->conexion);
 			if(is_object($result)){ $result->free(); }
 			unset($result);
-		}
+		 }
 		return $return ;
 	 }
 	public function multiQuery(string $sql){

@@ -50,8 +50,7 @@ loadSync('/js/jquery.min.js' , function(){
 			loadSync('/js/jquery.mask.min.js',function(){
 				loadAsync('/js/funciones.js',function(){
 					loadAsync(url(),function(){
-						if (window.innerWidth < 800) loadAsync('/js/jquery.mobile.custom.min.js' )
-							
+						if (window.innerWidth < 800) loadAsync('/js/jquery.mobile.min.js' )	
 					})
 				})
 			})

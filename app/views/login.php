@@ -32,7 +32,9 @@
 						<span class="info">No cerrar sesión.</span>
 						<a class="politicLink" href = "" >Politica de cookies</a>
 					</div>
+
 					<button class="btn-success btnLoad"  id="btnLogin" value="Entrar" default>Entrar</button>
+
 				</form>
 					<div id="frameSocialMedia">
 						<div id="tileSocialMedia">

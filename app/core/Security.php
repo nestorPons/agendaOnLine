@@ -21,7 +21,7 @@ class Security {
             :true;  
             
      }
-    public function getDevice(){
+    public static function getDevice(){
         return sha1($_SERVER['HTTP_USER_AGENT'] . $_SERVER["HTTP_USER_AGENT"]);
      }    
     public static function session_start(){ 
@@ -54,10 +54,10 @@ class Security {
         session_name (self::getDevice()); 
         session_start(['cookie_lifetime' => 3600 * 8/*h*/,]); // Iniciar la sesión PHP 8 horas expira la session
         session_regenerate_id(true);      // regenerado la sesión, elimine el antiguo. 
-  
+
      }
     public function loadSession($idUser,$company, $admin=0 ){
-
+echo "LOADSESSION";
         $_SESSION['id_usuario'] = $idUser;
         $_SESSION['bd'] =$company ; 
         $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'];

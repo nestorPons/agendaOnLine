@@ -130,7 +130,8 @@ a,i , .a{
 	 }
  }
 .inputs(){
-[type=url],[type=text], [type=password], [type=email], [type=number], [type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail], select, textarea{
+	[type=url],[type=text], [type=password], [type=email], [type=number], 
+	[type=search], [type=tel],[type=list],[type=time],[type=date],[type=mail], select, textarea{
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -158,14 +159,11 @@ a,i , .a{
 input, button, select, textarea {
 	width: 100%;
 	height: 35px;
-	max-width: 280px;
+	max-width: 310px;
 	margin: 5px auto;
 	padding: 0px  2px 0px 10px;
 	&.short{
 		width: 45%;
-	}
-	@media (max-width: 425px){
-		height:30px;
 	}
  }
 textarea{
@@ -238,7 +236,6 @@ input[type="color"] {
 	}
 
  }
-
 .aling{
 	&-left{text-align: left !important;}
 	&-right{
@@ -258,7 +255,7 @@ input[type="color"] {
 	}
  }
 .app-bar {
-    display: block;
+   display: block;
     width: 100%;
 	height: 50px;
 	position: fixed;
@@ -280,12 +277,16 @@ input[type="color"] {
 	&:after {
 		clear: both;
 	 }
-	li {
-		padding-top:  15;
+	ul{
+		border:solid;
+		border-width: 0 0 0 1px;
+		li {
+			padding-top:  15;
+		}
 	}
 	.app-bar-element {
 		line-height: 3.125rem;
-		//	padding: 0 .625rem;
+		padding: 0 .625rem;
 		font-size: 1rem;
 		cursor: pointer;
 		color: inherit;
@@ -307,7 +308,7 @@ input[type="color"] {
 			&-edit, &-doc-text{
 				color: inherit;
 			}	
-		}
+		 }
 		&:after {
 			clear: both;
 		 }
@@ -325,10 +326,7 @@ input[type="color"] {
 		.button{
 			margin-top: -0.15rem;
 		 }
-		&.branding {
-			padding-left: 1rem;
-			padding-right: 1rem;
-		 }
+
 		.d-menu {
 			top: 100%;
 			border: 1px solid @default_color; 	
@@ -522,261 +520,259 @@ input[type="color"] {
 		 }
 	 }
  }
-
 .lbl{  
-	@whidth_table: 88%; 
-	
+	@whidth_table: 92%; 	
 	position: absolute;
 	z-index : 2 ;
 	width: 90%;	
 	padding :5px;
 	overflow : hidden;
+	border : 1px solid;
 	div {
 		font-size: 1em;
 		margin : -2;
-		margin-bottom :4px;
-		
-	}
+		margin-bottom :4px;		
+	 }
 	.servicios {
 		div{
 			display : block ;
 		}
-	}
+	 }
 	.nombre { 
 		padding-right: 50px;
 		height: 0.9rem;
 		display: inline-block;
 		overflow: 	hidden;
-	}
+	 }
 	.iconos{
 		position : absolute ;
 		top : 5px ;
 		right : 5px ;
 		display: flex;
 
-	}
+	 }
 	.icons_crud{
 		top: 2px;
 		position: relative;
-	}
+	 }
 	.note { 
 		overflow : hidden;
 		display: none;
 		width: 100%;
-	}
+	 }
 	@em : 34 ;
 	@rem : 24px ; 
-	@increment : 10px ;
+	@increment : 1px ;
 
 	&.row_1 {
-		height :  @increment ;
+		height :  11px ;
 		.nombre{
 			display:none;
 		}
 		&.width_6 .icons_crud{
 			display: none;
 		}
-	}
+	 }
 	&.row_2 {
-		height : @rem + 13  ;
-	}
+		height : @rem + 12;
+	 }
 	&.row_3 {
-		height : @rem + @em ;
-	}
+		height : @rem + @em + @increment;
+	 }
 	&.row_4 {
-		height : (@rem * 2)+ @em ;
-	}
+		height : (@rem * 2)+ @em + @increment;
+	 }
 	&.row_5 {
-		height : (@rem * 3) + @em ;
-	}
+		height : (@rem * 3) + @em + @increment;
+	 }
 	&.row_6 {
-		height :  (@rem * 4) + @em ;
-	}
+		height :  (@rem * 4) + @em + @increment;
+	 }
 	&.row_7 {
-		height :  (@rem * 5) + @em;
-	}
+		height :  (@rem * 5) + @em + @increment;
+	 }
 	&.row_8 {
-		height :  (@rem * 6) + @em ;
-	}
+		height :  (@rem * 6) + @em + @increment;
+	 }
 	&.row_9 {
-		height :  (@rem * 7) + @em ;
-	}
+		height :  (@rem * 7) + @em + @increment;
+	 }
 	&.row_10 {
-		height :  (@rem * 8) + @em ;
-	}
+		height :  (@rem * 8) + @em + @increment;
+	 }
 	&.row_11 {
-		height :  (@rem * 9) + @em ;
-	}
+		height :  (@rem * 9) + @em + @increment;
+	 }
 	&.row_12 {
-		height :  (@rem * 10) + @em ;
-	}
+		height :  (@rem * 10) + @em + @increment;
+	 }
 	&.row_13 {
-		height :  (@rem * 11) + @em ;
-	}
+		height :  (@rem * 11) + @em + @increment;
+	 }
 	&.row_14 {
-		height :  (@rem * 12) + @em ;
-	}
+		height :  (@rem * 12) + @em + @increment;
+	 }
 	&.row_15 {
-		height :  (@rem * 13) + @em ;
-	}
+		height :  (@rem * 13) + @em + @increment;
+	 }
 	&.row_16 {
-		height :  (@rem * 14) + @em ;
-	}
+		height :  (@rem * 14) + @em + @increment;
+	 }
 	&.row_17 {
-		height :  (@rem * 15) + @em ;
-	}
+		height :  (@rem * 15) + @em + @increment;
+	 }
 	&.row_18 {
-		height :  (@rem * 16) + @em ;
-	}
+		height :  (@rem * 16) + @em + @increment;
+	 }
 	&.row_19 {
-		height :  (@rem * 17) + @em ;
-	}
+		height :  (@rem * 17) + @em + @increment;
+	 }
 	&.row_20 {
-		height :  (@rem * 18) + @em ;
-	}
+		height :  (@rem * 18) + @em + @increment;
+	 }
 	&.row_21 {
-		height :  (@rem * 19) + @em ;
-	}
+		height :  (@rem * 19) + @em + @increment;
+	 }
 	&.row_22 {
-		height :  (@rem * 20) + @em ;
-	}
+		height :  (@rem * 20) + @em + @increment;
+	 }
 	&.row_23 {
-		height :  (@rem * 21) + @em ;
-	}
+		height :  (@rem * 21) + @em + @increment;
+	 }
 	&.row_24 {
-		height :  (@rem * 22) + @em ;
-	}
+		height :  (@rem * 22) + @em + @increment;
+	 }
 	&.row_25 {
-		height :  (@rem * 23) + @em ;
-	}
+		height :  (@rem * 23) + @em + @increment;
+	 }
 	&.row_26 {
-		height :  (@rem * 24) + @em ;
-	}
+		height :  (@rem * 24) + @em + @increment;
+	 }
 	&.row_27 {
-		height :  (@rem * 25) + @em ;
-	}
+		height :  (@rem * 25) + @em + @increment;
+	 }
 	&.row_28 {
-		height :  (@rem * 26) + @em ;
-	}
+		height :  (@rem * 26) + @em + @increment;
+	 }
 	&.row_29 {
-		height :  (@rem * 27) + @em ;
-	}
+		height :  (@rem * 27) + @em + @increment;
+	 }
 	&.row_30 {
-		height :  (@rem * 28) + @em ;
-	}
+		height :  (@rem * 28) + @em + @increment;
+	 }
 	&.row_31 {
-		height :  (@rem * 29) + @em ;
-	}
+		height :  (@rem * 29) + @em + @increment;
+	 }
 	&.row_32 {
-		height :  (@rem * 30) + @em ;
-	}
+		height :  (@rem * 30) + @em + @increment;
+	 }
 	&.row_33 {
-		height :  (@rem * 31) + @em ;
-	}
+		height :  (@rem * 31) + @em + @increment;
+	 }
 	&.row_34 {
-		height :  (@rem * 32) + @em ;
+		height :  (@rem * 32) + @em + @increment;
 	}
 	&.row_35 {
-		height :  (@rem * 33) + @em ;
+		height :  (@rem * 33) + @em + @increment;
 	}
 	&.row_36 {
-		height :  (@rem * 34) + @em ;
+		height :  (@rem * 34) + @em + @increment;
 	}
 	&.row_37 {
-		height :  (@rem * 35) + @em ;
+		height :  (@rem * 35) + @em + @increment;
 	}
 	&.row_38 {
-		height :  (@rem * 36) + @em ;
+		height :  (@rem * 36) + @em + @increment;
 	}
 	&.row_39 {
-		height :  (@rem * 37) + @em ;
+		height :  (@rem * 37) + @em + @increment;
 	}
 	&.row_40 {
-		height :  (@rem * 38) + @em ;
+		height :  (@rem * 38) + @em + @increment;
 	}
 	&.row_41 {
-		height :  (@rem * 39) + @em ;
+		height :  (@rem * 39) + @em + @increment;
 	}
 	&.row_42 {
-		height :  (@rem * 40) + @em ;
+		height :  (@rem * 40) + @em + @increment;
 	}
 	&.row_43 {
-		height :  (@rem * 41) + @em ;
+		height :  (@rem * 41) + @em + @increment;
 	}
 	&.row_44 {
-		height :  (@rem * 42) + @em ;
+		height :  (@rem * 42) + @em + @increment;
 	}
 	&.row_45 {
-		height :  (@rem * 43) + @em ;
+		height :  (@rem * 43) + @em + @increment;
 	}
 	&.row_46 {
-		height :  (@rem * 44) + @em ;
+		height :  (@rem * 44) + @em + @increment;
 	}
 	&.row_47 {
-		height :  (@rem * 45) + @em ;
+		height :  (@rem * 45) + @em + @increment;
 	}
 	&.row_48 {
-		height :  (@rem * 46) + @em ;
+		height :  (@rem * 46) + @em + @increment;
 	}
 	&.row_49 {
-		height :  (@rem * 47) + @em ;
+		height :  (@rem * 47) + @em + @increment;
 	}
 	&.row_50 {
-		height :  (@rem * 48) + @em ;
+		height :  (@rem * 48) + @em + @increment;
 	}
 	&.row_51 {
-		height :  (@rem * 49) + @em ;
+		height :  (@rem * 49) + @em + @increment;
 	}
 	&.row_52 {
-		height :  (@rem * 50) + @em ;
+		height :  (@rem * 50) + @em + @increment;
 	}
 	&.row_53 {
-		height :  (@rem * 51) + @em ;
+		height :  (@rem * 51) + @em + @increment;
 	}
 	&.row_54 {
-		height :  (@rem * 52) + @em ;
+		height :  (@rem * 52) + @em + @increment;
 	}
 	&.row_55 {
-		height :  (@rem * 53) + @em ;
+		height :  (@rem * 53) + @em + @increment;
 	}
 	&.row_56 {
-		height :  (@rem * 54) + @em ;
+		height :  (@rem * 54) + @em + @increment;
 	}
 	&.row_57 {
-		height :  (@rem * 55) + @em ;
+		height :  (@rem * 55) + @em + @increment;
 	}
 	&.row_58 {
-		height :  (@rem * 56) + @em ;
+		height :  (@rem * 56) + @em + @increment;
 	}
 	&.row_59 {
-		height :  (@rem * 57) + @em ;
+		height :  (@rem * 57) + @em + @increment;
 	}
 	&.row_60 {
-		height :  (@rem * 58) + @em ;
+		height :  (@rem * 58) + @em + @increment;
 	}
 	
 	&.width_{
 		&1{
 			width: @whidth_table;
-		}
+		 }
 		&2{
-			width: @whidth_table/2;
-		}
+			width: (@whidth_table/2);
+		 }
 		&3{
 			width: @whidth_table/3;
-		}
+		 }
 		&4{
 			width: @whidth_table/4;
-		}
+		 }
 		&5{
 			width: @whidth_table/5;
-		}
+		 }
 		&6{
 			width: @whidth_table/6;	
-		}
+		 }
 		&7{
 			width: @whidth_table/7;
-		}
+		 }
 
 	}
  }
@@ -975,6 +971,7 @@ input[type="color"] {
 	}
 	@media screen and (max-width: 800px) {
 		width:95%;
+		top: 16px;
 	}
 	@media screen and (max-width: 560px) {
 		.cod {
@@ -1007,16 +1004,15 @@ input[type="color"] {
 	&-form {
 		border:	1px solid #bbbbbb;
 		text-align:center;
-		width: 350px;
-		height: 530px;
+		width: 320px;
 		margin: auto;
 		margin-top:20px;
 		background-color: #ffffff;
 		section {
 			height: 100%;
 		}
-		.info{
-			font-size: 1em ;
+		input { 
+			max-width: 320px;
 		}
 		.submit{
 			position: absolute;
@@ -1053,6 +1049,9 @@ input[type="color"] {
 
 	input[type=image]{
 		cursor: pointer ;
+	 }
+	 &-help{
+		font-size: 0.9em;
 	 }
  }
 .cabecera{
@@ -1200,10 +1199,6 @@ input[type="color"] {
 	display:none;
  }
 .icon{
-	&-load{
-		margin: 35%;
-		color: initial;
-	 }
 	&-attention{
 		color:#ff0000;
 		display:none;
@@ -1219,11 +1214,14 @@ input[type="color"] {
 			&.icon{
 				&-left{
 					.iconClass-inside{
-						left: 23px;
+						left: 7px;
 						top: 13px;
 					 }
 					input, select,textarea{
 						padding-left: 2rem;
+						//max-width: 310px;
+						//left: -21px;
+						position: relative;
 					 }
 				 }
 				&-right{
@@ -1255,6 +1253,9 @@ input[type="color"] {
 	&-eye{
 		cursor: pointer;
 	 }
+	&-left-open.idDateAction{
+		left: 12px;
+	}
  }
 .input{
 	&-control{
@@ -1415,6 +1416,51 @@ input[type="color"] {
 		float: left !important;
 	}
  }
+.popover {
+  display: block;
+  min-width: 12.5rem;
+  height: auto;
+  position: relative;
+  background-color: #eeeeee;
+  padding: 1.25rem;
+
+	.popover * {
+		color: inherit;
+	}
+	.popover-shadow {
+	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+	}
+	&:before {
+	content: "";
+	width: .625rem;
+	height: .625rem;
+	display: block;
+	position: absolute;
+	background-color: inherit;
+	left: -0.3125rem;
+	top: 50%;
+	margin-top: -0.3125rem;
+	-webkit-transform: rotate(45deg);
+			transform: rotate(45deg);
+	}
+	&.marker-on-top:before {
+	top: 0;
+	left: 50%;
+	margin-left: -0.3125rem;
+	}
+	&.marker-on-right:before {
+	top: 50%;
+	margin-top: -0.3125rem;
+	left: 100%;
+	margin-left: -0.3125rem;
+	}
+	&.marker-on-bottom:before {
+	top: 100%;
+	margin-left: -0.3125rem;
+	left: 50%;
+	margin-top: -0.3125rem;
+	}
+ }
 .popup-overlay{
     left: 0;
     position: fixed;
@@ -1436,6 +1482,7 @@ input[type="color"] {
 		margin: 10px;
 	}
  }
+
 .resaltado{
 	font-weight: bold;
  }
@@ -1545,17 +1592,29 @@ input[type="color"] {
 #main{
 	.cuerpo{
 		top: 100px;
+		
 		@media (max-width: 800px){
 			top:35px;
 		}
-	}
+		@media (max-width: 430px){
+			&.esMovil{
+				.tablas{
+					.celda{
+						display: none;
+						&[agenda='1']{
+							display: table-cell;
+						}
+					}
+				}
+			}
+		}
+	 }
 	.atenuado{
 		background-color: #dddddd;
 		color:#fff;
-	}
+	 }
  }
-#navbar{
-	
+#navbar{	
 	.menulbl{
 		@media (max-width: 800px) {display:none;}
 	 }
@@ -1592,6 +1651,9 @@ input[type="color"] {
 	.branding{
 		@media screen and (max-width: 800px) {
 			width:50px;
+		}
+		@media screen and (max-width: 450px) {
+			display: none;
 		}
 	 }
 	.selected {
@@ -1658,21 +1720,33 @@ input[type="color"] {
 		display: block;	
 		margin: auto;
 		max-width: inherit;
-		width: 50%;
-		height: 50%;
+		width: 320px;
+		height: auto;
 	}
 	button, input{
 		display: inline-block;
 	}
  }
-#ui-datepicker-div{
-	right: 33% !important;
+
+.ui-datepicker{
+	width: 302px;
+
+	&-inline{
+		border-width :0px ;
+		display: inline ;
+	}
  }
-.login-form{
-	.iconClass-container{
-		.iconClass-inside{
-			left: 10px;
-			top: 15px;
+.ui{
+	&-widget-content &-corner-all {
+		font-family: 'iconos';
+		.ui-datepicker-next {
+			left: 92%;
+			.ui-icon{
+				&:before { content: '\e80e'; }
+			}
+		}
+		.ui-datepicker-prev .ui-icon{
+			&:before { content: '\e80d'; }
 		}
 	}
  }

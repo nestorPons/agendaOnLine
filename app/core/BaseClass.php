@@ -5,18 +5,16 @@ class BaseClass{
         $type = MYSQLI_ASSOC,
          $multi_query = false;
     protected $conn, $sql = ''; 
-    private $table, $db , 
+    private 
+        $table, 
+        $db , 
         $log = false, 
         $return = false,  
         $logs = ['data','usuarios'];
 
     public function __construct($table , $bd = null, $user = 0 ) {
-        try {
-            $this->table = (string)$table ;        
-            $this->conn = new Conexion($bd, $user);
-        } catch (\Exception $e){
-            echo "Error bd " . $e->getMessage(); 
-        }
+        $this->table = (string)$table ;        
+        $this->conn = new Conexion($bd, $user);
      }
     public function getConnect () {
         return $this->conn ;

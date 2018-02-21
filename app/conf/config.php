@@ -1,31 +1,25 @@
 <?php 
-$conn = new \core\Conexion(NAME_DB , 2); 
-define('SAVE', 'save') ;
-define('DEL', 'del') ;
-define('EDIT', 'edit') ;
-define('GET', 'get') ;
-define('MARGIN_DAYS',6);
-define('DEFAULT_HISTORY_DAYS',1);
+//Se declara NAME_DB en confing para que no se declare antes de crear una empresa
+define('NAME_EMPRESA' , strtolower(trim($_REQUEST['empresa']??FALSE)) );
+define('NAME_DB' , 'bd_' . NAME_EMPRESA??FALSE );
+define('URL_EMPRESA' , URL_EMPRESAS . NAME_EMPRESA . '/' );
+define('URL_LOGIN','/'.NAME_EMPRESA);
+define('URL_LOGO' , file_exists(URL_EMPRESA."logo.png")?'/empresas/'.NAME_EMPRESA."/logo.png":"img/logo.png");
+define('URL_BACKGROUND' , '/empresas/'.NAME_EMPRESA."/background.jpg");
+
+$conn = new \core\Conexion('bd_' . NAME_EMPRESA , 2); 
+//Define los festivos y usa la variable $conn para hacer la conexion 
 define('FESTIVOS' , include_once (URL_SCRIPTS . 'festivos.php') );
 
 define('AOL_WEB','http://www.aol.com');
 define('AOL_EMAIL', 'nestorpons@gmail.com');
-
-const EMAIL_FROM = 'nestorpons@gmail.com';
-const EMAIL_NAME = 'AOL TEAM';
-const EMAIL_HOST = 'smtp.gmail.com';
-const EMAIL_USER = 'nestorpons@gmail.com';
-const EMAIL_PASS = 'PP09ol.__';
-const EMAIL_PORT = 25;
-
-const BR = '<br>'; //variable para desarrollo
 
 include (URL_CONFIG . 'admin.php');
 
 if ($conn->error == false ) {
 
     $confP = $conn->assoc('SELECT * FROM config ') ;
-
+ 
     if(!empty($confP['idEmpresa'])){
         
         $configCSS = $conn->assoc('SELECT * FROM config_css ') ;
@@ -35,10 +29,10 @@ if ($conn->error == false ) {
         $browsers =  $conf->all( 'SELECT code , name FROM browsers' );
 
         foreach($browsers as $browser){
-            $browsers_arr['BROWSERS'][$browser [0]] = $browser [1];
+            $browsers_arr['BROWSERS'][$browser[0]] = $browser[1];
         }
-        $adminConf =  $conf->assoc( 'SELECT * FROM admin WHERE id = '.$confG['idAdmin'] .' LIMIT 1' );
-        $arrConf =  array_merge($confG,$confP,$configCSS,$browsers_arr, $adminConf);
+    
+        $arrConf =  array_merge($confG,$confP,$configCSS,$browsers_arr);
 
     } else {
         

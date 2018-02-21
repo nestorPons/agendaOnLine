@@ -3,6 +3,11 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+DROP DATABASE IF EXISTS `bd_demo`;
+
+CREATE DATABASE `bd_demo`;
+USE `bd_demo`;
+
 CREATE TABLE `agendas` (
   `id` tinyint(2) PRIMARY KEY AUTO_INCREMENT ,
   `nombre` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
@@ -203,5 +208,37 @@ ALTER TABLE `tblreseteopass`
 
 ALTER TABLE `logs`
   ADD CONSTRAINT `LOG_IDU_FK` FOREIGN KEY (`idUser`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
+
+INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, `idioma`, `dateReg`, `dateBaja`, `status`, `attempts`, `pin`) VALUES
+(1, 'Demo', 'demo@demo.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 2, 'Usuario administrador', 1, '2018-02-04 15:01:40', NULL, 0, 0, NULL),
+(2, 'Admin', 'admin@admin.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 1, 'Usuario administrador', 1, '2018-02-10 16:21:13', NULL, 0, 0, NULL),
+(3, 'Usuario', 'usuario@usuario.es', '', '123456789', 0, 'Usuario general', 1, '2018-02-10 16:21:13', NULL, 0, 0, NULL);
+
+INSERT INTO `agendas` (`nombre`, `mostrar`) VALUES ('Mi Agenda', 1);
+
+INSERT INTO `familias` (`id`, `nombre`, `mostrar`, `baja`) VALUES
+(1, 'Familia 1', 1, 0);
+
+INSERT INTO `horarios` (`id`, `agenda`, `dia`, `inicio`, `fin`) VALUES
+(1, 1, 0, '09:00:00', '20:00:00'),
+(2, 1, 1, '09:00:00', '20:00:00'),
+(3, 1, 2, '09:00:00', '20:00:00'),
+(4, 1, 3, '09:00:00', '20:00:00'),
+(5, 1, 4, '09:00:00', '20:00:00'),
+(6, 1, 5, '09:00:00', '20:00:00'),
+(7, 1, 6, '09:00:00', '20:00:00');
+
+INSERT INTO `config`(`idEmpresa`) VALUES (1); 
+INSERT INTO `config_css` VALUES (); 
+
+INSERT INTO `servicios` (`id`, `codigo`, `descripcion`, `precio`, `tiempo`, `idFamilia`, `baja`) VALUES
+(1, 'COD001', 'Servicio de prueba', 0, 10, 1, 0),(2, 'COD002', 'Servicio de prueba dos', 0, 30, 1, 0);
+
+INSERT INTO `data` (`id`, `agenda`, `idUsuario`, `fecha`, `hora`, `obs`, `usuarioCogeCita`) VALUES
+(1, 1, 1, CURRENT_TIMESTAMP, '14:45:00', '', 1),
+(2, 1, 2, CURRENT_TIMESTAMP, '11:00:00', '', 2);
+
+INSERT INTO `cita` (`idCita`,`servicio`) 
+VALUES (1,1), (2,2);
+
 COMMIT;

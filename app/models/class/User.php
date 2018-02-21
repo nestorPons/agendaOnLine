@@ -5,8 +5,10 @@ class User extends \core\BaseClass {
 	private $user, $pass, $table = 'usuarios' ;
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $token = 'undefined';
 	
-	public function __construct( $id , $email = false ){
+	public function __construct( $id , $email = false){
+		
 		parent::__construct($this->table);
+		
 		$this->user = ($id)
 			? parent::getById($id)
 		 	: $this->user = parent::getOneBy('email', $email);
@@ -73,6 +75,7 @@ class User extends \core\BaseClass {
 			: $this->set(array('status'=>$arg));
 	 }
 	public function getToken(){
+
 		$this->removeToken();
         if ($this->token == 'undefined'){
 			$cadena = $this->id.$this->nombre.rand(1,9999999).date('Y-m-d');
@@ -85,6 +88,7 @@ class User extends \core\BaseClass {
 			]))
 			return false;
 		}
+
 		return $this->token;
      }
 	public function checkToken($token){

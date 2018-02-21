@@ -21,4 +21,11 @@ class UserConn{
         $this->pass = 'gon3rJGgpCBwksi0';
 
     }
+
+    protected function createDemo(){
+
+        $this->user = 'demo';
+        $this->pass = 'YLot6pyQCwgTjolF';
+
+    }
 }

@@ -6,7 +6,7 @@
 		?>
 	</div>
 </div>
-<div class="cuerpo" >
+<div class="cuerpo <?php if($Device->isMovile) echo'esMovil'?>" >
 	<?php
 	include_once URL_TEMPLATES . 'agenda.head.php';
 	functions\view();

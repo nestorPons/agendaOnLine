@@ -1,6 +1,15 @@
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 var _hora = 0; 
+//Funcion para menu responsive 
+//Por el motivo que sea no se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
+function menuEsMovil(tab){
+	$('.esMovil .dia [agenda]').each(function(){
+		$(this).hide()
+	})
+	$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').fadeIn()
 
+	return true
+}
 function sincronizar( dias, date , callback ){
 	var fecha = date||Fecha.general ,
 		datepicker = $('.datepicker')
@@ -369,14 +378,10 @@ main ={
 
 		//no lo meto en fin de carga para avanzar mas rapido
 		if (Fecha.id != section.find('.dia.activa').attr('id')) {
-			var dir= dir||0;
-			if (dir>0||dir=='right'){
-				var ent = 'right';
-				var sal = 'left';
-			}else{
-				var ent = 'left';
-				var sal = 'right';
-			}
+			var dir= dir||0,
+				ent = (dir>0||dir=='right')?'right':'left',
+				sal = (ent=='right')?'left':'right'
+	
 			body.hide("slide", { direction: sal }, 750,function(){
 				$('.dia.activa').removeClass('activa')
 				section.find('#'+ Fecha.id).addClass('activa')
@@ -431,8 +436,7 @@ main ={
 			url: INDEX ,
 			dataType: 'json',
 			data: data,
-			cache: false, 
-			async: false
+			cache: false
 		})
 		.done(function(r){
 			
@@ -475,8 +479,7 @@ main ={
 				controller : 'main' ,
 				action : VIEW
 			},
-			cache: false, 
-			async: false
+			cache: false
 		})
 		.done(function(html){
 			body.append(html)
@@ -892,9 +895,9 @@ main ={
 				
 				$('.lbl')
 					.css('z-index', 0)
-					.width(lbl.widht-15)
-					.parent('.celda')
-				lbl.color()
+					.width(main.lbl.widht)
+				lbl.color()	
+
 			}, 
 		delete: function(idCita, noMens){
 
@@ -1594,8 +1597,7 @@ crearCita ={
 				url: INDEX ,
 				dataType: 'html',
 				data: data,
-				cache: true, 
-				async: false
+				cache: true
 			})
 			.done(function(html){
 				var m = document.getElementById('tablas')
@@ -2194,13 +2196,13 @@ usuarios = {
 								.addClass('ocultar_baja')
 								.removeClass('mostrar_baja')
 								.hide();
-						$('#lstClientes [data-id="'+normalize(frm.nombre)+'"]').remove();
+						$('#lstClientes [data-name="'+normalize(frm.nombre)+'"]').remove();
 					}else{
 						$("#rowUsuarios"+frm.id)
 							.removeClass('mostrar_baja ocultar_baja')
-							.fadeTo("slow", 1);
+							.fadeTo("slow", 1)
 						$('#lstClientes')
-							.append('<option data-id="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
+							.append('<option data-name="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
 					}	
 
 					notify.success('Usuario guardado con éxito!.','Usuario editado')						
@@ -2248,7 +2250,7 @@ usuarios = {
 					.insertAfter($template)
 						
 			$('#lstClientes').append(
-				'<option data-id="'+normalize(data.nombre)+'" value = "' + data.nombre + '">'+data.id+'</option>')	
+				'<option data-id='+data.id+' data-name="'+normalize(data.nombre)+'" value = "' + data.nombre + '">'+data.id+'</option>')	
 		},
 		del : function(){
 			$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1)
@@ -2488,42 +2490,41 @@ logs = {
 			'html'
 		)
 	} 
-}
+ }
 $(function(){
 	cargarDatepicker()
 	colorearMenuDiasSemana()
 	main.inactivas.change(localStorage.getItem("showRows"))
+	main.lbl.widht = $('#main .dia.activa tr.active').find('.celda').first().width() - 11 
+	main.lbl.style()
+	main.lbl.droppable()
+
 	$('body').on('click',".idDateAction",function(){
 		
 		if(!$(this).data('disabled')) {
 			sincronizar($(this).data('action'));
 		}
 	 })
-	$('.tabcontrol').tabcontrol();
-
-	main.lbl.widht = $('#main th.aling-center').width()
-	main.lbl.style()
-	main.lbl.droppable()
-
+	$('.tabcontrol').tabcontrol()
 	$('html')
 		.on('click','.close',function(e){dialog.close()})
 		.on('change','input',function(){$(this).removeClass('input-error')})
 		.on('change','#lstSerSelect',function(){
-				var id = $(this).val();
-				// servicios.mostrar(id);
-				$('#lstSerSelect').each(function(){
-					$(this).find('option[value='+id+']').attr('selected','selected');
-				})
+			var id = $(this).val();
+			// servicios.mostrar(id);
+			$('#lstSerSelect').each(function(){
+				$(this).find('option[value='+id+']').attr('selected','selected');
 			})
-
+		 })
+	
 	$('#btnContacto').click(function(){
 		var menu = $('#mnuContacto')
 		if(menu.is(':visible'))
 			menu.hide('slide',{ direction: 'right' })
 		else
 			menu.show('slide',{ direction: 'right' })
-
 	 })
+
 	$('#frmContact button')
 		.click(function(event){
 			
@@ -2715,6 +2716,5 @@ $(function(){
 			notas.save()
 		 })
 		.on('click','.fnDel', notas.delete)
-
 
  })

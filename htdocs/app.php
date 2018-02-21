@@ -1,4 +1,7 @@
 <?php 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 //Establecemos zona horaria por defecto
 date_default_timezone_set('Europe/Madrid');
 //Se inicia session que esta en clase segurity

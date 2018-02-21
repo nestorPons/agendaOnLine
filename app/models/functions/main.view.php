@@ -38,9 +38,9 @@ function view($fecha_inicio = null, $existen_array = false ){
 							$class="";
 							if  (array_search($str_hora,$array_horas)===false) {
 								$class .= "fuera_horario " ;  
-								$disabled = (empty(CONFIG['ShowRow']))?' disabled ' : '' ;
+								$disabled = (empty(CONFIG['ShowRow']))?'disabled' : '' ;
 							} else {
-								$disabled = '' ;
+								$disabled = 'active' ;
 							}
 
 							$array = explode(":",$str_hora);

@@ -50,10 +50,12 @@ $link = $_SERVER['SERVER_NAME']."/".$_GET["e"]."/index.php";
 		<h1 class="text-light">Empresa creada</h1>
 		<hr class="thin"/>
 		<br>
-		<span>Ya tiene creada la empresa.</span><br>
+		<span>Se creó la empresa correctamente.</span><br>
+		<p>Debe seguir las instrucciones del correo electronico que le hemos enviado</p>
+		<p>Si no lo encuentra en su bandeja de entrada revise la carpeta de spam</p>
 		<span> A partir de ahora siempre que quiera dirigirse a su agenda OnLine acceda a la siguiente direccion:</span>
 		<div class="margin10">
-			<a  href="<?php  echo  $_GET["e"]."/"?>"><?php  echo$link?></a>
+			<a  href="<?= $_GET["e"]."/"?>"><?php  echo$link?></a>
 		</div>
 	</div>
 </body></html>

@@ -1,6 +1,6 @@
 <div id="tablasEncabezado">
 	<?php
-	
+
 	$nombreagenda = $conn->all("SELECT nombre FROM agendas");
 
 	if (!$Device->isMovile){ ?>
@@ -23,14 +23,15 @@
 		</table>
 		<?php 
 	}else{
-			?>
-		<div class="tabcontrol" datar-role="tabcontrol" data-save-state=true>	
+		// PArte si es un mobil 
+		?>
+		<div id="tabcontrol" class="tabcontrol" datar-role="tabcontrol" data-save-state=true data-on-tab-click="menuEsMovil" >	
 			<ul class="tabs">
 				<?php
 				for ($a=1;$a<=CONFIG['num_ag'];$a++){
 					?>
-					<li>
-						<a href="">
+					<li agenda=<?=$a?> value=<?=$a?>>
+						<a href="" agenda=<?=$a?>>
 						<?php
 						echo empty($nombreagenda[$a-1][0])?"agenda $a":$nombreagenda[$a-1][0]; 
 						?>

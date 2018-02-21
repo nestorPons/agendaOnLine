@@ -1,9 +1,7 @@
 <?php
-
 $url_font_main = "https://fonts.googleapis.com/css?family=" .
 	str_replace(' ' ,'+' ,CONFIG['font_main']) ."|" . 
 	str_replace(' ' ,'+' ,CONFIG['font_tile']) ; 
-    
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -15,6 +13,7 @@ $url_font_main = "https://fonts.googleapis.com/css?family=" .
 
         <link rel='shortcut icon' href='<?=URL_LOGO?>' >
         <link rel='shortcut icon' href='/img/favicon.ico' >
+       
         <link rel="stylesheet"  type="text/css" href="/css/jquery-ui.min.css">
         <link rel="stylesheet"  type="text/css" href="/css/metro.css">
         <link rel="stylesheet"  type="text/css" href="/css/iconos.css">
