@@ -11,7 +11,7 @@
 				<a href= "<?=CONFIG['web']??''?>" >
 					<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
 				</a>
-				<h1 class="heading">Agenda <?= ucwords(NAME_EMPRESA) ?></span></h1>
+				<h1 class="heading">Agenda <?= \core\Tools::normalizeShow(NAME_EMPRESA) ?></span></h1>
 				<hr>
 				<form id="loginUsuario" method="post" action='<?= $url_validate ?>' defaultbutton="Entrar"
 					data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña."

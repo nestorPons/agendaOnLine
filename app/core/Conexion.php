@@ -47,6 +47,9 @@ class Conexion extends \conf\UserConn {
 		return $this->result ;
 	
 	 }
+
+	//Funcion original multi query 
+	//La que hay que usar por defecto
 	public function multi_query ($sql) {
 	
 		$return = mysqli_multi_query($this->conexion, $sql) or die ( 'error multiquery =>' . mysqli_error($this->conexion) ) ;
@@ -57,6 +60,10 @@ class Conexion extends \conf\UserConn {
 		 }
 		return $return ;
 	 }
+
+	//Fake multi query 
+	//Se usa para obtener el resultado de todas las querys 
+	//Si hay allgun error lo muestra
 	public function multiQuery(string $sql){
 		$arr = explode(';',$sql);
 		array_pop($arr);
@@ -68,6 +75,7 @@ class Conexion extends \conf\UserConn {
 		}
 		return $this->mQResult[$this->mQCount-1];
 	 }
+	 
 	public function scape ($str) {
 	
 		if(!$this->error){

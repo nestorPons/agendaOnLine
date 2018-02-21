@@ -12,6 +12,9 @@ class Create{
         $this->nameCompany = $this->defineNameCompany();
         $this->db = 'bd_' . $this->nameCompany ;
      }
+    public function getNameCompany(){
+        return $this->nameCompany;
+    }
     private function connect ($db = false){
         $this->cConn = new \core\Conexion( $db , 1);
         return $this->cConn;
@@ -33,7 +36,6 @@ class Create{
      }
     public function defineNameCompany(){
         $nameCompany = \core\Tools::normalize($this->post['nombre_empresa']);
-
         return $nameCompany;
 
      }

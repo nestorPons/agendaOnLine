@@ -46,6 +46,11 @@ class Tools{
         $cadena = strtolower($cadena);
         return utf8_encode($cadena);
      }
+    public static function normalizeShow($name){
+        $name = str_replace('_', ' ', trim($name));
+        $name = ucwords($name);
+        return $name; 
+    }
     public static function getIp() {
  
         if (isset($_SERVER["HTTP_CLIENT_IP"]))
@@ -89,4 +94,5 @@ class Tools{
             print_r($arr); 
         echo('</pre>');
      }
+    
 }

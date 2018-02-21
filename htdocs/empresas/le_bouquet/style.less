@@ -152,7 +152,6 @@ a,i , .a{
 		border: 1px solid @border_color;
 		font-family: @main-font ;
 		color: @text-color;
-		background-color: @base;
 		.border-radius(@border-radius,@border-radius,@border-radius,@border-radius);
 		 @media screen and (max-width: 800px){
 			.border-radius(@border-radius+10,@border-radius+10,@border-radius+10,@border-radius+10);
@@ -574,7 +573,7 @@ a,i , .a{
 }
 .lbl{
 
-	border-color : @text1 ;
+	border : 2px solid @text1 ;
 	background : fade(@b1, 90%);
 	.border-radius(10px,10px,10px,10px);
 	.iconos{
@@ -774,7 +773,27 @@ a,i , .a{
 		}
 	}
  }
+#config{
+	.chck-container{
+		display:inline-block;
+		width: 77%;
+		text-align: justify;
+		@media (max-width: 800px){
+			width: 90%;
+		}
 
+		@media (max-width: 320px){
+			width: 100%;
+			label{
+				margin: 0.3rem;
+			}
+		}
+
+		#minTime{
+			width: 2em;
+		}
+	}
+ } 
 #crearCita{
 	.tablas{
 		table{

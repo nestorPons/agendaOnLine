@@ -9,7 +9,6 @@ try {
 
     $exceptions = ['fileLogo','tel']; 
     if (!$Forms->validateForm($_POST, $exceptions)) core\Error::die();
-
     //compruebo que sea dir app
     $controller = isset($_REQUEST['controller'])&&$_REQUEST['controller']!='err'
         ?$_REQUEST['controller']
@@ -26,15 +25,17 @@ try {
                 $mensErr = \core\Error::E010;
             }
 
-            //Inicializo la base datos demo para ejemplos
+            //Inicializo la base datos DEMO para ejemplos
             if($_REQUEST['empresa']==='demo'&&$controller=='login'){
 
                 $file  = file_get_contents(APP_FOLDER . 'db/demo.sql');
                 $connDemo = new \core\Conexion(null,3);
-                $connDemo->multiquery($file);
+                $connDemo->multi_query($file);
                 unset($connDemo);
 
             }
+            /*********************************************/
+
             require  URL_CONTROLLERS . $controller . '.php';
 
         }else{

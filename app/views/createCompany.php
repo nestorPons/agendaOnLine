@@ -1,6 +1,6 @@
 <?php 
-$link = $_SERVER['SERVER_NAME']."/".$_GET["e"]."/index.php";
-
+// variable $nameCompany declarada en script create. 
+$link = $_SERVER['SERVER_NAME']."/".$nameCompany."/index.php";
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -14,10 +14,9 @@ $link = $_SERVER['SERVER_NAME']."/".$_GET["e"]."/index.php";
     <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
 
     <title>Login form :: Metro UI CSS - The front-end framework for developing projects on the web in Windows Metro Style</title>
-	 <link href="css/estilos.css" rel="stylesheet">
-    <link href="css/metro.min.css" rel="stylesheet">
-	<script  type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-	<script  type="text/javascript" src="js/jquery-ui.min.js" async></script>
+	 <link href="/css/main.css" rel="stylesheet">
+
+	<script  type="text/javascript" src="/js/jquery.min.js" async></script>
  
     <script>
         $(function(){
@@ -44,10 +43,15 @@ $link = $_SERVER['SERVER_NAME']."/".$_GET["e"]."/index.php";
 				$(this).html('<span class="icon-load animate-spin"></span>')			
 			})
 		});
-    </script>
+	</script>
+	<style>
+		.login-form{
+			text-align: justify
+		}
+	</style>
 </head><body>
     <div class="login-form padding20 block-shadow">
-		<h1 class="text-light">Empresa creada</h1>
+		<h1>Empresa creada</h1>
 		<hr class="thin"/>
 		<br>
 		<span>Se creó la empresa correctamente.</span><br>
@@ -55,7 +59,7 @@ $link = $_SERVER['SERVER_NAME']."/".$_GET["e"]."/index.php";
 		<p>Si no lo encuentra en su bandeja de entrada revise la carpeta de spam</p>
 		<span> A partir de ahora siempre que quiera dirigirse a su agenda OnLine acceda a la siguiente direccion:</span>
 		<div class="margin10">
-			<a  href="<?= $_GET["e"]."/"?>"><?php  echo$link?></a>
+			<a  href="<?= $nameCompany."/"?>"><?php  echo$link?></a>
 		</div>
 	</div>
 </body></html>

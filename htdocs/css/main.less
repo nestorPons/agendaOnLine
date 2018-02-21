@@ -61,6 +61,7 @@ body{
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+
 	&.background {
 		@media (min-width: 800px){
 			background-image: url("/img/background.jpg")
@@ -107,7 +108,7 @@ h4{
 	margin: 15px;
  }
 hr{	
-	margin : 5px 30px 25px 30px;
+	margin : 5px auto;
     background-color: @default_color;
  }
 th{
@@ -162,6 +163,7 @@ input, button, select, textarea {
 	max-width: 310px;
 	margin: 5px auto;
 	padding: 0px  2px 0px 10px;
+	display: block;
 	&.short{
 		width: 45%;
 	}
@@ -1211,6 +1213,9 @@ input[type="color"] {
 			position:relative;
 			text-align:center;
 			width: 310px;
+			*{
+				box-sizing: border-box;
+			}
 			&.icon{
 				&-left{
 					.iconClass-inside{
@@ -1533,29 +1538,38 @@ input[type="color"] {
 .underline {	
 	background-size: 1px 1em;
  }
+#config{
+	.chck-container{
+		display:inline-block;
+		width: 77%;
+		text-align: justify;
+		@media (max-width: 800px){
+			width: 90%;
+		}
+
+		@media (max-width: 320px){
+			width: 100%;
+			label{
+				margin: 0.3rem;
+			}
+		}
+
+		#minTime{
+			width: 4em;
+			display: inline;
+		}
+	}
+ } 
 #contenedorMenuPrincipal{
 	top:50px;
 	position:relative;
  }
 #frameSocialMedia{
-	padding:10px;
 	
 	button{
-		display: inline-block;
+		display: block;
 		cursor: pointer;
 		color:#fff;
-		margin: auto;
-		width: 45px;
-		height: 45px;
-		@media (max-width: 800px){
-			width: 77%;
-			height: 25px;
-		}
-		@media (max-width: 320px){
-			width: 35px;
-			height: 35px;
-			border-radius:50px;
-		}
 	}
 	hr{
 	    border: 0;
