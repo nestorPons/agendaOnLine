@@ -3,7 +3,7 @@ try {
     if (!$_POST) exit;
     $Create = new Create($_POST);
     $nameCompany =  $Create->getNameCompany();
-/*
+
     $Create->validateForm(); 
     $Create->ifCompanyExist();
     $Create->saveCompany();
@@ -23,7 +23,6 @@ try {
     $Mail->url_menssage = URL_SOURCES . 'mailactivate.php';
     $Mail->AltBody = 'Activar usuario: ' .  $User->token;
     $r['success'] = $Mail->send($User); 
-*/
     
     include URL_VIEWS . 'createCompany.php' ;
 

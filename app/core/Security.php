@@ -7,10 +7,12 @@ class Security {
     //private check exceptions
    
     function __construct(){
+        
         $this->session_start();
+
      }
     public function checkSession($pageIn){
-
+  
         return !in_array($pageIn, $this->pageExcep)      
             ?isset($_SESSION)
                 &&isset($_SESSION['SKey'])
@@ -18,7 +20,7 @@ class Security {
                 &&$_SESSION['agent']==$_SERVER['HTTP_USER_AGENT']
                 &&$_SESSION['ip'] == $_SERVER['REMOTE_ADDR']   
                 &&$_SESSION['device'] == self::getDevice()
-            :true;  
+            :true;
             
      }
     public static function getDevice(){
@@ -42,6 +44,7 @@ class Security {
         } 
         // Obtiene las cookies actuales params. 
         $cookieParams  =  session_get_cookie_params() ; 
+
         session_set_cookie_params ( 
             $cookieParams [ "lifetime" ] ,  
             $cookieParams [ "path" ] ,  
@@ -52,12 +55,12 @@ class Security {
         // Establece el nombre de la sesión a la establecida anteriormente. 
        
         session_name (self::getDevice()); 
-        session_start(['cookie_lifetime' => 3600 * 8/*h*/,]); // Iniciar la sesión PHP 8 horas expira la session
-        session_regenerate_id(true);      // regenerado la sesión, elimine el antiguo. 
+        session_start(); // Iniciar la sesión PHP 8 horas expira la session
+       //session_regenerate_id(true);      // regenerado la sesión, elimine el antiguo. (Da problemas al actualizar los dias de crearcita.horas)
 
      }
     public function loadSession($idUser,$company, $admin=0 ){
-echo "LOADSESSION";
+
         $_SESSION['id_usuario'] = $idUser;
         $_SESSION['bd'] =$company ; 
         $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'];
@@ -98,7 +101,7 @@ echo "LOADSESSION";
                 }
 
             }else{
-            $request[$key] = $conn->scape($value) ;
+                $request[$key] = $conn->scape($value) ;
     
             }
 

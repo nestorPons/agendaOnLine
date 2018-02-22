@@ -11,8 +11,11 @@ $Lbl =   new \models\Lbl();
 $action = $_POST['action'];
 include URL_AJAX . $_POST['controller'] . '/' . $action . '.php' ;
 
-$id = empty($idData=$Data->getId())?$_POST['idCita']:$idData;
-//int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null 
-$Logs->set($_SESSION['id_usuario'], $action, $id, $r['success'], 'data');  
+// crear historia
+if ($action!='check'){ 
+    $id = $Data->getId()??$_POST['idCita'];
+    //int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null 
+    $Logs->set($_SESSION['id_usuario'], $action, $id, $r['success'], 'data');  
+}
 
-echo json_encode($r??false);
+echo json_encode(isset($r)??false);

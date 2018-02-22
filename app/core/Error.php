@@ -49,7 +49,7 @@ class Error {
         
     }
     public static function E010(){
-       echo "<SCRIPT>window.location='/".NAME_EMPRESA."?logout=true&err=".self::E010."';</SCRIPT>"; 
+       echo "error<SCRIPT>window.location='/".NAME_EMPRESA."?logout=true&err=".self::E010."';</SCRIPT>"; 
        return false;
     }
     public static function array($err){

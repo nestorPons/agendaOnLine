@@ -1590,16 +1590,8 @@ crearCita ={
 				controller : 'crearCita.horas'}
 
 			if ($('#crearCita #'+id_table).length) $('#crearCita #'+id_table).remove()
-			
-			
-			$.ajax({
-				type:"POST",
-				url: INDEX ,
-				dataType: 'html',
-				data: data,
-				cache: true
-			})
-			.done(function(html){
+					
+			$.post(INDEX , data , function(html){
 				var m = document.getElementById('tablas')
 				m.innerHTML = html
 				crearCita.horas.pintar(id_table)				

@@ -16,13 +16,13 @@ try {
 
     if (isset($_GET['empresa'])){
         $Logs = new models\Logs;
-        if (file_exists(URL_EMPRESA)){   
-            
+        if (file_exists(URL_EMPRESA)){     
             require_once URL_FUNCTIONS . 'compilaLess.php' ;
             if(!$Security->checkSession($controller)) {
 
                 $controller = 'logout';
                 $mensErr = \core\Error::E010;
+                exit();
             }
 
             //Inicializo la base datos DEMO para ejemplos
