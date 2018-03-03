@@ -17,10 +17,8 @@
                          min=0001 max=9999 title="Pin de 4 dígitos" required>
                         <span class="iconClass-inside icon-key"></span>
                     </div>
-                    <p class= "submit">
-                        <button type="submit" class="btn-success btnLoad" data-value="Aceptar">Aceptar</button>
-                        <input type="button" class="btn-danger logout"  value="Cancelar" >
-                    </p>
+                    <button type="submit" class="btn-success btnLoad" data-value="Aceptar">Aceptar</button>
+                    <input type="button" class="btn-danger logout"  value="Cancelar" >
                 </form>
             </section>
 		</div>

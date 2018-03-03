@@ -370,6 +370,11 @@ main ={
 			 })
 		
 	 },
+	set: {
+		nameAgenda : function(id, name){
+			$('#nombreagenda' + id).text(name);
+		}
+	}, 
 	sincronizar: function (dir,callback){
 		
 		var self = main , section = main.section , body = main.body
@@ -1240,7 +1245,13 @@ agendas = {
 			if (r) {
 				notify.success('Los cambios han sido guardados');
 				agendas.change = false;
+				$('#agendas #frmAg label').each(function(element) {
+					var id = $(this).find('input:checkbox').val(), 
+						value = $(this).find('input:text').val()
 
+					main.set.nameAgenda(id,value)
+					crearCita.set.nameAgenda(id,value)
+				}, this);
 				$('#agendas #frmAg input:text').each(function(index){
 					var i = index+1;
 					var lblMain =$('#main .encabezado #nombreAgenda'+i)
@@ -1475,6 +1486,11 @@ crearCita ={
 		}
 		cargarDatepicker();
 	 },
+	set : {
+		nameAgenda :function(id,name){
+			$('#crearCita #lblagenda'+id).text(name)
+		}
+	 }, 
 	idUser : function () {
 		var cli = $('#crearCita #cliente').val();
 		var  nombre = normalize(cli);

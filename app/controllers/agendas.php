@@ -2,7 +2,7 @@
 
 require_once URL_FUNCTIONS .'tools.php';
 
-$Agendas = new core\BaseClass('agendas');
+$Agendas = new models\Agendas();
 
 $url = (isset($_POST['action'])) ? 
     URL_AJAX . $_POST['controller'] . '.php' :

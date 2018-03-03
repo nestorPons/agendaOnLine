@@ -3,8 +3,8 @@ class BaseClass{
 
     public $names,
         $type = MYSQLI_ASSOC,
-         $multi_query = false;
-    protected $conn, $sql = ''; 
+        $multi_query = false;
+    public $conn, $sql = ''; 
     private 
         $table, 
         $db , 
@@ -255,8 +255,7 @@ class BaseClass{
      }
 
     public function __destruct() {
-//echo $this->table ;
-        
+   
     }
-    //AKI :: BUSCO DOS VECES USUARIOS AL ABRIR CREAR CITA
+//AKI :: BUSCO DOS VECES USUARIOS AL ABRIR CREAR CITA
 }

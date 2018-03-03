@@ -9,9 +9,7 @@
             <input type="email" class="email" name="email" id="email" placeholder="Introduzca email." required>
             <span class="iconClass-inside icon-mail-1"></span>
         </div>
-        <p class= "submit">
             <button type="submit" class="btn-success btnLoad " data-value="Guardar">Guardar</button>
             <input type="button" class="btn-danger inicio cancel " value="Cancelar" >
-        </p>
     </form>
 </section>

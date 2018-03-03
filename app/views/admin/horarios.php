@@ -22,7 +22,7 @@
 						<select  class="num numero_agenda" name="numero_agenda[]">
 							<option value = 0 > <span > Todas </span> </option>
 							<?php 
-							foreach($agendas as $value){
+							foreach($Agendas->get as $value){
 								?>
 								<option 
 									value = <?= $value[0]?> 

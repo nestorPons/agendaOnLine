@@ -1,6 +1,6 @@
 <div id='selagendas'>
 	<?php 	
-	foreach ($agendas as $key => $agenda){
+	foreach ($Agendas->get as $key => $agenda){
 		if ($key>=CONFIG['num_ag']) break;
 		$id = $agenda[0]??-1;
 		$nombre = $agenda[1]??'';

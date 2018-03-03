@@ -9,8 +9,7 @@ if (isset($_POST['action'])) {
 
 } else {
 
-    $Agendas = new core\BaseClass('agendas');
-    $agendas = $Agendas->getAll();
+    $Agendas = new models\Agendas();
     $horarios = $Horarios->all() ;
     
     $url = URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 

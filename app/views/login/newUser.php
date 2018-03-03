@@ -12,7 +12,7 @@
             <span class="iconClass-inside icon-mail-1"></span>
         </div>
         <div class="iconClass-container icon-left">
-            <input type="tel" class="tel" name="tel" id="tel" title="Un numero telefono válido!!"	placeholder="Telefono de contacto" >
+            <input type="tel" class="tel" name="tel" id="tel" title="Un numero telefono válido!!"	placeholder="Telefono de contacto" required>
             <span class="iconClass-inside icon-phone"></span>
         </div>
         <div class="iconClass-container icon-left">
@@ -24,10 +24,10 @@
             <input type="password" id="fakePassR"  placeholder="repita contraseña" required>
             <span class="iconClass-inside icon-eye"></span>
         </div>
-        <p class= "submit">
-            <button type="submit" class="btn-success btnLoad " id="btnSuccessNew" data-value="Guardar">Guardar</button>
-            <input type="button" class="btn-danger inicio cancel" id="btnCancelNew" value="Cancelar" >
-        </p>
+
+        <button type="submit" class="btn-success btnLoad " id="btnSuccessNew" data-value="Guardar">Guardar</button>
+        <input type="button" class="btn-danger inicio cancel" id="btnCancelNew" value="Cancelar" >
+
     </form>
 </section>
 <section id="secNewNotification" class="hidden">

@@ -3,13 +3,12 @@
 <h4>Seleccione las agendas que quiere que vean los clientes:</h4>
 <form id="frmAg">
 	<?php 
-	$agendas = $Agendas->getAll('*',MYSQLI_ASSOC);
 
-	foreach($agendas as $agenda){
-		$i = $agenda['id'];
+	foreach($Agendas->get as $agenda){
+		$i = $agenda[0];
 		if ($i>CONFIG['num_ag']) break;
-		$checked = $agenda['mostrar']==0?"":"checked";
-		$nom = $agenda['nombre'];
+		$checked = $agenda[2]==0?"":"checked";
+		$nom = $agenda[1];
 
 		?>
 		<label id="agenda<?=$i?>">

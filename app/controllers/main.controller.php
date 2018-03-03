@@ -1,19 +1,17 @@
 <?php
+
 try {
     require_once $url_base . 'app/conf/autoload.php' ;
     $Security = new \core\Security;
-    $Forms = new models\Forms;
+    $Forms = new models\Forms($_POST, ['fileLogo','tel','chck']);
 
     // Condicion para cuando la empresa no esta creada no cargue la confuiguracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
 
-    $exceptions = ['fileLogo','tel']; 
-    if (!$Forms->validateForm($_POST, $exceptions)) core\Error::die();
     //compruebo que sea dir app
     $controller = isset($_REQUEST['controller'])&&$_REQUEST['controller']!='err'
         ?$_REQUEST['controller']
         :'login' ;
-
     if (isset($_GET['empresa'])){
         $Logs = new models\Logs;
         if (file_exists(URL_EMPRESA)){     

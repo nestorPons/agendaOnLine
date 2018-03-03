@@ -1,5 +1,4 @@
 <?php
-$Forms = new models\Forms;
 $Forms::sanitize($_POST);
 
 $r['success']=true;

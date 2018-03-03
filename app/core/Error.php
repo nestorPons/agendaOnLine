@@ -8,7 +8,7 @@ class Error {
     const E001 = "No se pudo crear la conexion a la base de datos" ;
     const E003 = "No se pudo guardar el registro";
     const E004 = "Registro duplicado";
-    const E005 = "Error no se encuentran datos";
+    const E005 = "Error faltan datos";
 
     // Creando empresa
     const E011 = "Nombre ocupado" ;
@@ -53,7 +53,6 @@ class Error {
        return false;
     }
     public static function array($err){
-        if(!$err) return false;
         if (defined ('self::'.$err))
             return ['success'=>false , 'code' => $err , 'err' => constant('self::'.$err)] ;
         else
@@ -70,7 +69,6 @@ class Error {
     }
     public static function die($err = null){
         $err = $err??self::getLast();
-        
         die(var_dump(self::array($err)));
     }
 }

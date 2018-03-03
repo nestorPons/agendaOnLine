@@ -1,6 +1,5 @@
 <?php
 header('Content-Type: application/json');
-	$Forms = new models\Forms;
 	$data = $Forms->sanitize($_POST);
 		$id = $_SESSION["id_usuario"] ;
 

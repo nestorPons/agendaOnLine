@@ -1,5 +1,4 @@
 <?php
-$Forms = new models\Forms; 
 $_POST = $Forms->sanitize($_POST);
 
 $Admin = new core\BaseClass('admin', 'aa_db');

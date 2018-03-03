@@ -5,7 +5,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `agendas` (
   `id` tinyint(2) PRIMARY KEY AUTO_INCREMENT ,
-  `nombre` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `mostrar` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

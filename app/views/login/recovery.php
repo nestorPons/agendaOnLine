@@ -23,9 +23,7 @@
                         <input type="password" id="fakePassR"  placeholder="repita nueva contraseña" required>
                         <span class="iconClass-inside icon-eye"></span>
                     </div>
-                    <p class= "submit">
-                        <button type="submit" class="btn-success btnLoad" data-value="Aceptar">Aceptar</button>
-                    </p>
+                   <button type="submit" class="btn-success btnLoad" data-value="Aceptar">Aceptar</button>
                 </form>
             </section>
         </div>

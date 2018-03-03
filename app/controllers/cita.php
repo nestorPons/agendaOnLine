@@ -18,4 +18,4 @@ if ($action!='check'){
     $Logs->set($_SESSION['id_usuario'], $action, $id, $r['success'], 'data');  
 }
 
-echo json_encode(isset($r)??false);
+echo json_encode($r??false);

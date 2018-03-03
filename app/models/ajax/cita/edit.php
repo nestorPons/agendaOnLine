@@ -1,5 +1,4 @@
 <?php
-$Forms = new models\Forms;
 $_POST = $Forms->sanitize($_POST);
 
 $idCita = $_POST['idCita']; 

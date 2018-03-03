@@ -2,6 +2,7 @@
 
 class Forms{ 
     const ISINT = 1 , ISBOOL = 2, ISSTR = 3, ISDATE = 4, ISEMAIL = 5, ISHOUR = 6, ISFLOAT= 7, ISCOL = 8;
+    private $exceptions, $post;
     private  $rules =  [
         'admin'         => [self::ISBOOL,1,1],
         'agenda'        => [self::ISINT,2,1],
@@ -9,7 +10,8 @@ class Forms{
         'ancho'         => [self::ISINT,5, 1],
         'auth'          => [self::ISSTR,70,60],
         'baja'          => [self::ISBOOL,1,1],
-        'border'        => [self::ISINT,2,1],  
+        'border'        => [self::ISINT,2,1],
+        'chk'         => [self::ISINT,2,1],
         'cliente'       => [self::ISINT,5,1],  
         'codigo'        => [self::ISSTR,6,1],
         'controller'    => [self::ISSTR,16,3],
@@ -56,7 +58,12 @@ class Forms{
         'view'          => [self::ISSTR,15,4],
         'web'           => [self::ISSTR,50,1]
      ];
-    function __construct(){}
+
+    function __construct($post, $e= false){
+        $this->post = $post; 
+        $this->exceptions = $e; 
+        $this->validateForm();
+    }
     public static function isDate($strDate){
         $arr = explode('-',$strDate);
         if (!isset($arr[1])){
@@ -80,8 +87,7 @@ class Forms{
         if(isset($post['action'])) unset($post['action']);
         return $post;
      }
-    private function  switchRules($key, $value, $exceptions =[]){
-
+    private function  switchRules($key, $value){
         foreach ($this->rules as $kRule => $vRule){
             if (stristr($key,$kRule)){
                 $len = strlen($value);
@@ -111,16 +117,18 @@ class Forms{
         }
         
      }
-    public function validateForm ($post,$exceptions = []){
+    public function validateForm (){
 
-        foreach($post as $key => $value){
-            if (is_array($value)) { 
-                foreach($value as $k => $val){
-                    if(!$this->switchRules($key, $val, $exceptions)) return \core\Error::set($k);
-                }
-            } else {
-                if(!$this->switchRules($key, $value, $exceptions)) return \core\Error::set($key);
-            }        
+        foreach($this->post as $key => $value){
+            if (!in_array($key, $this->exceptions)){
+                if (is_array($value)) { 
+                    foreach($value as $k => $val){
+                        if(!$this->switchRules($key, $val)) return \core\Error::set($k);
+                    }
+                } else {
+                    if(!$this->switchRules($key, $value)) return \core\Error::set($key);
+                }        
+            }
         }
         return true;
      }  

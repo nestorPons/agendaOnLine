@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 	$Agendas->multi_query = true ;
 
 	for ($i=0 ; $i < CONFIG['num_ag'] ; $i++){
+		
 		$a = $i+1;
 		
 		$data = array(
@@ -13,6 +14,6 @@ header('Content-Type: application/json');
 			'nombre' => ($_POST['nombre'][$i])??"agenda$a"
 		);
 		$Agendas->saveById($a , $data );
-	}
 
+	}
 echo json_encode( $Agendas->multi_query() );

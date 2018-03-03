@@ -2,6 +2,7 @@ const EMPRESA = $('body').data('empresa'),
 	URL = 'app.php?empresa='+$('body').data('empresa')
 
 var general = {  
+	loaded : ['secLogin'],
 	dir1 : RIGHT, 
 	dir2 : LEFT, 
 	toggle : function($in){
@@ -20,18 +21,24 @@ var general = {
 							general.dir2 = LEFT
 						}
 				})
-			}
+			},
+			nameId = $in.selector.replace('#',''); 
 
-		if (!$in.length){
+		if(general.loaded.indexOf(nameId)==-1){
+			//Cargo el id en la variable para saber cuales estan cargados
+			
+			general.loaded[general.loaded.length] = nameId
+			if (nameId == 'newUser') general.loaded[general.loaded.length] = 'secNewNotification'
 			var data = {
 				controller: 'login',
-				view: $in.selector.replace('#','')
+				view: nameId
 			}
 
 			$.post(URL,data,function(html){
 				$('#login').prepend(html)
 				$(html)	.attr('class','')
 				_toggle($(html))
+				
 			},'html')
 		} else {
 			_toggle($in)
@@ -102,10 +109,10 @@ user = {
 				btn.load.hide()
 			},JSON);	
 			
-	},
+	 },
 	notification: function(){
 		general.toggle($('#secNewNotification'))
-	}
+	 }
  },
 validate = {
 	login :function() {
@@ -117,7 +124,7 @@ validate = {
 			return false
 		}
 		return true;
-	}, 
+	 }, 
 	pass : function (pass1, pass2) {
 		if (!$.isEmpty(pass1) && pass1 === pass2){
 			if (pass1.length < 6 ) {
@@ -130,7 +137,7 @@ validate = {
 			return false
 		}
 		return true
-	}
+	 }
  }
 $(function(){
 	$('body')
@@ -172,13 +179,13 @@ $(function(){
 	$('#frmLogin')
 		.keyup(function(e){
 			if(e.keyCode == 13)$('#btnLogin').click();
-		})
+		 })
 		.submit(function(e){
 			if (!validate.login()) {
 				e.preventDefault()  
 				btn.load.hide()
 			}
-		})
+		 })
 
 
 	

@@ -5,7 +5,7 @@ USE `bd_demo`;
 
 CREATE TABLE `agendas` (
   `id` tinyint(2) PRIMARY KEY AUTO_INCREMENT ,
-  `nombre` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `mostrar` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -209,7 +209,7 @@ INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, 
 (2, 'Admin', 'admin@admin.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 1, 'Usuario administrador', 1, '2018-02-10 16:21:13', NULL, 0, 0, NULL),
 (3, 'Usuario', 'usuario@usuario.es', '', '123456789', 0, 'Usuario general', 1, '2018-02-10 16:21:13', NULL, 0, 0, NULL);
 
-INSERT INTO `agendas` (`nombre`, `mostrar`) VALUES ('Mi Agenda', 1);
+INSERT INTO `agendas` (`nombre`, `mostrar`) VALUES ('Principal', 1), ('Secundaria', 1);
 
 INSERT INTO `familias` (`id`, `nombre`, `mostrar`, `baja`) VALUES
 (1, 'Familia 1', 1, 0);
