@@ -30,7 +30,6 @@
 					<div id="chkNoCerrarSesion">
 						<input type="checkbox" id="recordar"  name="recordar" value="1" >
 						<span class="info">No cerrar sesión.</span>
-						<a class="politicLink" href = "" >Politica de cookies</a>
 					</div>
 
 					<button class="btn-success btnLoad"  id="btnLogin" value="Entrar" default>Entrar</button>
@@ -62,5 +61,16 @@
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>			
 		</footer>
+		
+<!--//BLOQUE COOKIES-->
+<div id="barraaceptacion">
+    <div class="inner">
+        Solicitamos su permiso para obtener datos estadísticos de su navegación en esta web, en cumplimiento del Real 
+        Decreto-ley 13/2012. Si continúa navegando consideramos que acepta el uso de cookies.
+        <a href="javascript:void(0);" class="ok" onclick="PonerCookie();"><b>OK</b></a> | 
+		<a href="politicCookies.php?empresa=<?=NAME_EMPRESA?>" target="_blank" class="info">Más información</a>
+    </div>
+</div>
+<!--//FIN BLOQUE COOKIES-->
 	</body>
 </html>

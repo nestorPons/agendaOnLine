@@ -1,5 +1,6 @@
 const EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
+localStorage.setItem("AOLAvisoCookie", 0);
 
 var general = {  
 	loaded : ['secLogin'],
@@ -141,6 +142,13 @@ validate = {
  }
 $(function(){
 	$('body')
+		.on('click','#btnLogin , #fb-facebookLogin',function(e){
+			if (localStorage.getItem('AOLAvisoCookie')!=1) {
+				e.preventDefault()
+				e.stopPropagation()
+				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
+			}
+		})
 		.on('click','.cancel',function(e){
 			general.toggle($('#secLogin'))
 		 })
@@ -187,9 +195,17 @@ $(function(){
 			}
 		 })
 
-
-	
 	//para poder recoger los get en el login se muestran en la 5 barra de la url amigable
 	//if(error.get()) notify.error(error.mns)
-	$('input#pinpass').focus()
+	$('#login.email').focus()
+
+	//BLOQUE DE COOKIES
+	if(localStorage.getItem('AOLAvisoCookie')!=1){
+		document.getElementById("barraaceptacion").style.display="block";
+	}
+
  })
+function PonerCookie(){
+	localStorage.setItem("AOLAvisoCookie", 1);
+	document.getElementById("barraaceptacion").style.display="none";
+ }
