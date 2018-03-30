@@ -1,7 +1,7 @@
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 var _hora = 0; 
 //Funcion para menu responsive 
-//Por el motivo que sea no se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
+//No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
 function menuEsMovil(tab){
 	$('.esMovil .dia [agenda]').each(function(){
 		$(this).hide()
@@ -9,7 +9,7 @@ function menuEsMovil(tab){
 	$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').fadeIn()
 
 	return true
-}
+ }
 function sincronizar( dias, date , callback ){
 	var fecha = date||Fecha.general ,
 		datepicker = $('.datepicker')
@@ -86,7 +86,8 @@ function mostrarCapa(capa, callback){
 function sliderConfigBorder ( value, slider ) {
 	estilos.test( value ) 
  }	
-var servicios = {
+var 
+servicios = {
 	controller : 'servicios',
 	init : function () {
 
@@ -138,7 +139,7 @@ var servicios = {
 			}
 			dlg.find("#id").val(id);
 			
-			if (id!=0){ 
+			if (id!=-1){ 
 				//EDITANDO...
 				var row = $("#servicios #rowServicios"+id),	
 					cod = row.find("[name='cod']").text(),
@@ -160,7 +161,7 @@ var servicios = {
 				//NUEVO....
 				var idCapa = $('#servicios .c3').attr('id');
 				dlg
-					.find('#id').val(0).end()
+					.find('#id').val(-1).end()
 					.find('#codigo').val($('#servicios #buscarTxt').val()).end()
 					.find('#familia').val(idCapa).end()
 					.find('#btnEliminar').val('Cancelar').end()
@@ -195,10 +196,10 @@ var servicios = {
 
 			servicios.sendAjax(SAVE , _fnOk)
 
-		}else{
+		  }else{
 			btn.load.hide()
-		}		
-		},
+		  }		
+		 },
 	eliminar: function() {
 
 		var id= $('#dlgServicios #id').val().trim(), 
@@ -221,7 +222,7 @@ var servicios = {
 				dialog.close('dlgServicios')
 			}
 
-		if (id!=0){
+		if (id!=-1){
 			if (confirm ("Deseas eliminar el servicio "+id+", " + $('#dlgServicios #codigo').val() + "?")) 
 				servicios.sendAjax(DEL , _fnOk)
 
@@ -301,9 +302,9 @@ var servicios = {
 		if (action == DEL)
 			data.push({name : 'baja' , value : 1})
 
-		var isNew = id==0
+		var isNew = id==-1
 
-		id!=0 && row.fadeTo("slow", 0.30)
+		id!=-1 && row.fadeTo("slow", 0.30)
 
 		$.ajax({
 			url: INDEX,
@@ -315,10 +316,8 @@ var servicios = {
 			typeof callback == "function" && callback(rsp ,isNew)
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) { 
-			echo (jqXHR)
-			echo (textStatus)
-			echo (errorThrown) 
-		})
+			echo (jqXHR, textStatus,  errorThrown) 
+		 })
 		},
 	validate : {
 		form : function () {  
@@ -342,8 +341,12 @@ main ={
 	arrSer : new Array(), 
 	last : new Object(),
 	idsControl : new Object(),
-	setData : function (idCita){
-		var lbl = $('#idCita_'+idCita+'.lbl')
+	set: {
+		nameAgenda : function(id, name){
+			$('#nombreagenda' + id).text(name);
+		 }, 
+		data : function (idCita){
+			var lbl = $('#idCita_'+idCita+'.lbl')
 
 			main.data[idCita] = {
 				idCita : idCita ,
@@ -368,13 +371,8 @@ main ={
 				main.arrSer.push({id ,  codigo ,  descripcion , tiempo}) 
 				main.data[idCita].tiempoTotal += parseInt(tiempo)	
 			 })
-		
-	 },
-	set: {
-		nameAgenda : function(id, name){
-			$('#nombreagenda' + id).text(name);
-		}
-	}, 
+	 	 }
+	 }, 
 	sincronizar: function (dir,callback){
 		
 		var self = main , section = main.section , body = main.body
@@ -549,7 +547,7 @@ main ={
 
 		if ($.isEmpty(idCita)) return false
 		var lbl = $('#idCita_'+idCita+'.lbl')  
-		main.setData(idCita)
+		main.set.data(idCita)
 
 		main.last = {
 			idCita : main.data[idCita].idCita,
@@ -710,7 +708,7 @@ main ={
 			delete edata['cliente']
 			for (let i = 0; i < len; i++) {
 				edata.servicios.push(ser[i].id)
-			}
+			 }
 			edata.action = EDIT
 
 			main.save(edata)
@@ -1081,7 +1079,7 @@ menu = {
 				menu.enabled(add,save,del)
 				break;
 			case 'agendas':
-				menu.enabled(save)
+				menu.enabled(save,add)
 				break;
 			case 'festivos':
 				menu.enabled( add ) ;
@@ -1154,20 +1152,23 @@ menu = {
  	 },
 	add: function (){
 		switch($('.capasPrincipales:visible').attr('id')) {
+			case 'agendas':
+				agendas.add();
+				break;
 			case 'usuarios':
-				usuarios.dialog(0);
+				usuarios.dialog(-1);
 				break;
 			case 'servicios':
-				 servicios.dialog(0);
+				 servicios.dialog(-1);
 				break;
 			case 'familias':
-				familias.dialog(0);
+				familias.dialog(-1);
 				 break;
 			case 'horarios':
 				horario.add()
 				break
 			case 'festivos' :
-				festivo.dialog() 
+				festivo.dialog(-1) 
 				break
 		 }
 	 },
@@ -1230,6 +1231,35 @@ menu = {
  },
 agendas = {
 	change: false ,
+	add: function(){
+		var data = {
+			controller: 'agendas', 
+			action: ADD
+		 }
+		$.post(INDEX,data,function(r){
+			if(r)
+				location.reload()
+			else
+				notify.error("No se ha podido crear la agenda.\n\r Consulte con el administrador")
+		},JSON)
+	 }, 
+	del: function (id) {
+		var data = {
+			controller: 'agendas', 
+			action: DEL, 
+			id : id
+		 }
+		if(
+		 confirm("Realmente desea borrar la agenda? \n No se podran recuperar los datos.")
+		){
+			$.post(INDEX,data,function(r){
+				if(r)
+					location.reload()
+				else
+					notify.error("No se ha podido eliminar la agenda.")
+			},JSON)
+		}
+	 }, 
 	guardar: function (callback){
 		var data = $('#agendas #frmAg').serializeArray() ;
 		data.push({name : 'controller' , value : 'agendas'})
@@ -1248,9 +1278,7 @@ agendas = {
 				$('#agendas #frmAg label').each(function(element) {
 					var id = $(this).find('input:checkbox').val(), 
 						value = $(this).find('input:text').val()
-
-					main.set.nameAgenda(id,value)
-					crearCita.set.nameAgenda(id,value)
+					agendas.set.name(id,value)
 				}, this);
 				$('#agendas #frmAg input:text').each(function(index){
 					var i = index+1;
@@ -1269,7 +1297,25 @@ agendas = {
 		.always(function(r){
 			typeof callback == "function" && callback();
 		})
-	}
+	 },
+	guardarNombre: function(data){
+		
+		data.controller = 'agendas'
+		data.action = 'saveName'
+
+		$.post(INDEX,data,function(r){
+			agendas.set.name(data.id, data.nombre)
+		},JSON)
+
+	 }, 
+	set: {
+		name: function(id, value){
+			main.set.nameAgenda(id,value)
+			crearCita.set.nameAgenda(id,value)
+			config.set.nameAgenda(id,value)
+		}
+	 }
+	
  }, 
 familias = {
 	change : false , 
@@ -1315,7 +1361,7 @@ familias = {
 		var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
 		var _fnOk = function (r) {
 			if (r.success){
-				if (id > 0){
+				if (id > -1){
 					//EDICION
 					$('#familias #familia_' + r.id).html(r.nombre);
 					$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
@@ -1353,7 +1399,7 @@ familias = {
 				$("#rowFamilias"+id).fadeTo("fast", 1);
 		}
 
-		if (id == 0 ){
+		if (id == -1 ){
 			(familias.validate.form()) ? familias.sendAjax(SAVE , _fnOk) : btn.load.hide();
 
 		}else{
@@ -1501,7 +1547,7 @@ crearCita ={
 		var $cliente = $('#crearCita #cliente'),
 			nombre = $cliente.val()
 
-		usuarios.guardar(0,nombre)	
+		usuarios.guardar(-1,nombre)	
 		dialog.close()
 	 },
 	dialog: function (){
@@ -1818,6 +1864,11 @@ crearCita ={
 config ={
 	change : false,
 	controller : 'config' ,
+	set: {
+		nameAgenda : function(id, name){
+			$('#nameAgendaConfig' + id).val(name);
+		}
+	 }, 
 	pass: 	function (){ 
 		var $frm = $('#dlgCambiarPass'),
 			newPass = $frm.find('#pass').val(),
@@ -1921,10 +1972,9 @@ general = {
 	 }
  },
 festivo = {
-	
 	dialog : function () {
 		dialog.open('dlgFestivos',festivo.guardar, festivo.eliminar)
-	},
+	 },
 	eliminar:	function ($this){
 		var self = this 
 		var id = $this.parent().parent().attr('id');
@@ -1942,7 +1992,7 @@ festivo = {
 			var index = $.inArray(Fecha.md(f),FESTIVOS)
 			if (index>-1) FESTIVOS.splice(index,1)
 		},'json');
-	},
+	 },
 	guardar:	function (callback){
 		var nombre = $('#dlgFestivos #nombre').val() ,
 			fecha = $('#dlgFestivos #fecha').val() ,
@@ -1956,15 +2006,15 @@ festivo = {
 		if ( $.isEmpty( nombre , fecha ) ){
 			notify.error('faltan rellenar los campos' , ' Error festivos') 
 			return false 
-		}
+		 }
 
 
 		if($.isEmpty(nombre)){
 			$('#nuevo [name="nombre[]"]').popover('show');
-		}else{
+		 }else{
 			if($.isEmpty(fecha)){
 				$('#nuevo #dpFestivos').popover('show');
-			}else{
+			 }else{
 				hideShow('#nuevo .icon-plus')
 				$('#nuevo .icon-load').css('display','inline-activa')
 				$.post(INDEX ,data,function(r){
@@ -1984,9 +2034,9 @@ festivo = {
 					dialog.close() 
 
 				},'json').fail(function(rsp){"ERROR=>"+echo(rsp);})
-			}
-		}
-	},
+			 }
+		 }
+	 },
  },
 horario = {
 	controller : 'horarios' , 
@@ -2025,21 +2075,17 @@ horario = {
 				.removeClass('editando');
 			typeof callback == "function" && callback();
 		})()
-	},
+	 },
 	guardar: function (callback){
 		var horarios = $('#frmHorario tr').not(':eq(0)')
 		var data = new Array();
 
-		 if(horario._validate()){
+		if(horario._validate()){
 			$.each(horarios,function( index , me ){
-				// SI SELECCIONA TODAS QUE DE MOMENTO SE LO PONGA A LA 1 
-				var numAge = $(this).find('.numero_agenda').val() 
-				var agenda = numAge === 0 ? 1 : numAge 
-				//*************************************************** */
-
+ 
 				data.push({
 					id:	me.id,
-					agenda: agenda,
+					agenda: $(this).find('.numero_agenda').val(),
 					dia: $(this).find('.dia_semana').val(),
 					inicio: $(this).find('.hora_inicio').val(),
 					fin: $(this).find('.hora_fin').val()
@@ -2061,12 +2107,11 @@ horario = {
 					typeof callback == "function" && callback();
 				})
 				.fail(function(rsp){echo("fail =>"+rsp.sql);})
-				.always(btn.load.hide);
 		 }else{
 			 notify.error('Debe de completar todos los campos.','Validar formulario');
 			 btn.load.hide();
 		 }
-	},
+	 },
 	add: function(){
 		var dia_semana = $('#horarios .template .dia_semana');
 		var numero_agenda  = $('#horarios .template .numero_agenda');
@@ -2081,7 +2126,7 @@ horario = {
 			.find('.numero_agenda').val($('option:first', numero_agenda).val()).end()
 
 			.appendTo('#horarios table')
-	},
+	 },
 	del: function(){
 		var selects = $('#horarios #frmHorario input:checked');
 
@@ -2097,7 +2142,7 @@ horario = {
 				location.reload();
 			}
 		}, 'json')
-	},
+	 },
 	_validate: function(){
 		var $time = $('#horarios #frmHorario .time');
 		var return_function = true;
@@ -2106,7 +2151,7 @@ horario = {
 		})
 		
 		return return_function;
-	},
+	 },
  },
 usuarios = {
 	controller : 'usuarios' , 
@@ -2114,7 +2159,7 @@ usuarios = {
 		usuarios.select('A')
 	 },
 	eliminar: function (id, nombre,callback) {
-		if ($('#usuarios #id').val()!=0){
+		if ($('#usuarios #id').val()!=-1){
 			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
 				var data = {
 					id: id ,
@@ -2147,7 +2192,7 @@ usuarios = {
 
 		var frm = $.serializeForm('frmUsuarios'),
 			data = {
-				id:idUsuario||0, 
+				id:idUsuario||-1, 
 				nombre: nombreUsuario||frm.nombre,
 				email: frm.email||'',
 				tel: frm.tel||'',
@@ -2170,7 +2215,7 @@ usuarios = {
 				admin = $.isEmpty(frm.admin)?0:1,
 				activa = $.isEmpty(frm.activa)?1:0
 
-				if (data.id == 0 ){ 
+				if (data.id == -1 ){ 
 					//NUEVO ...
 					data.id = rsp.id 
 					usuarios.rows.add(data)
@@ -2269,7 +2314,7 @@ usuarios = {
 		var _fnLoad = function (r) {
 			$('#dlgUsuarios').find('#id').val(id)
 					
-				if (id!=0){
+				if (id!=-1){
 					var $this = $("#usuarios #rowUsuarios"+id);
 					
 					var nom = $this.find("[name='nom']").text();
@@ -2575,7 +2620,7 @@ $(function(){
 		.on('blur','#cliente',crearCita.validate.name)
 		.on("swipeleft",'.tablas')
 		.on('click','.idServicios',function(){crearCita.horas.load($(this))})
-		
+		.on('click','.cancelar',function(){mostrarCapa('main')})
 	$('#familias')
 		.on('click','table .icon-edit',function(){
 			familias.dialog($(this).attr('value'));
@@ -2598,20 +2643,20 @@ $(function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 			var diaB = parseInt($(this).data('value'));
 			sincronizar(diaB-diaA);
-		})
+		 })
 		.on('change','#lstDiasSemana',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 			var diaB = parseInt($(this).val());
 			sincronizar(diaB-diaA);
-		})
+		 })
 		.on('click','.icon-attention',function(e){
 			main.citasSup($(this));
 			e.stopPropagation()
-		})
+	    	})
 		.on('click','.fnEdit', function(e){
 			e.stopPropagation() 
 			main.edit($(this).parents('.lbl').attr('idcita'))
-		})
+		 })
 		.on('click','.cita',function(e){
 			$(this).parent()
 				.find('.note')
@@ -2619,15 +2664,23 @@ $(function(){
 					.find('input')
 						.focus();
 
-		})
+		 })
 		.on('click','.lbl .fnDel',function(e){
 			$( ".selector" ).draggable( "option", "disabled", true );
 			e.stopPropagation();
 			main.del($(this).parents('.lbl').attr('idcita'))
-		})
+		 })
 		.on('change','#selectTablasEncabezado',function(){
 			main.responsive($(this))
-		})
+		 })
+		 .on('change','.nombreagenda',function(){
+
+			var data = {
+				id : $(this).data('agenda'), 
+				nombre : $(this).val()
+			 }
+			 agendas.guardarNombre(data)
+		 })
 		.find('.cuerpo')
 			.on("swipeleft",function(){sincronizar(1)})
 			.on("swiperight",function(){sincronizar(-1)})
@@ -2683,10 +2736,13 @@ $(function(){
 		.on('submit','#frmAg',function(e){
 			e.preventDefault();
 			guardarAgenda()
-		})
+		 })
 		.on('change','input',function(){
 			agendas.change =  true;
-		})
+		 })
+		 .on('click','.fnDel',function(){
+			 agendas.del($(this).attr('id'))
+		 })
 
 	$('#servicios')
 		.on('click','a',function(){servicios.mostrar($(this).attr('id'),$('#servicios'))})

@@ -2,12 +2,12 @@
 
 class User extends \core\BaseClass {
 	
-	private $user, $pass, $table = 'usuarios' ;
+	private $user, $pass ;
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $token = 'undefined';
 	
 	public function __construct( $id , $email = false){
 		
-		parent::__construct($this->table);
+		parent::__construct('usuarios');
 		
 		$this->user = ($id)
 			? parent::getById($id)
@@ -82,7 +82,7 @@ class User extends \core\BaseClass {
 			$this->token = sha1($cadena) . str_pad($this->id, 4, "0", STR_PAD_LEFT); 
 			
 			$Token = new \core\BaseClass('tblreseteopass');
-			if( !$Token->saveById(0,[
+			if( !$Token->saveById(-1,[
 				'id'=> $this->id , 
 				'token' => $this->token 	
 			]))

@@ -1,17 +1,16 @@
 <?php 
 	include URL_TEMPLATES . '/header.php' ;
-	$url_validate= URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. NAME_EMPRESA .'/'. 'validar';
-
+	$url_validate= URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. CODE_EMPRESA .'/'. 'validar';
 	?>
 	<title>Agenda Online zona login</title>
 	</head>
-	<body data-empresa="<?=NAME_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
+	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
 		<div id="login" class="login login-form ">
 			<section id="secLogin">
-				<a href= "<?=CONFIG['web']??''?>" >
+				<a href= "http:\\<?=CONFIG['web']??''?>"  target="_blank">
 					<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
 				</a>
-				<h1 class="heading">Agenda <?= \core\Tools::normalizeShow(NAME_EMPRESA) ?></span></h1>
+				<h1 class="heading">Agenda <?=CODE_EMPRESA?></span></h1>
 				<hr>
 				<form id="loginUsuario" method="post" action='<?= $url_validate ?>' defaultbutton="Entrar"
 					data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña."
@@ -37,11 +36,9 @@
 				</form>
 					<div id="frameSocialMedia">
 						<div id="tileSocialMedia">
-							<span id="tile">O connecta con ... </span>
-							<hr>
 						</div>
-						<button class = "facebook  image-button icon-facebook"  id='fb-facebookLogin'></button>
-						<button class = "google  image-button icon-gplus "  id='idGoogle'></button>
+						<button class = "facebook  image-button icon-facebook"  id='fb-facebookLogin'> conectar...</button>
+						<button class = "google  image-button icon-gplus "  id='idGoogle'> conectar...</button>
 					</div>
 					<div class="login-help">
 						<p>
@@ -56,7 +53,7 @@
 		</div>
 		<footer class="login about">
 			<p class="about-author">
-				&copy; 2016 <a href="https://www.agendaonline.es" target="_blank">agendaOnLine v2.1</a>
+				&copy; 2016 <a href="/.." target="_blank">reservaTuCita v5.1</a>
 				Creado por Néstor Pons
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>			
@@ -68,7 +65,7 @@
         Solicitamos su permiso para obtener datos estadísticos de su navegación en esta web, en cumplimiento del Real 
         Decreto-ley 13/2012. Si continúa navegando consideramos que acepta el uso de cookies.
         <a href="javascript:void(0);" class="ok" onclick="PonerCookie();"><b>OK</b></a> | 
-		<a href="politicCookies.php?empresa=<?=NAME_EMPRESA?>" target="_blank" class="info">Más información</a>
+		<a href="politicCookies.php?empresa=<?=CODE_EMPRESA?>" target="_blank" class="info">Más información</a>
     </div>
 </div>
 <!--//FIN BLOQUE COOKIES-->

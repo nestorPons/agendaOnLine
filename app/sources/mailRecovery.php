@@ -1,5 +1,5 @@
 <?php 
-    $link = URL_ABSOLUT . NAME_EMPRESA . '/recovery/' . $token;
+    $link = URL_ABSOLUT . CODE_EMPRESA . '/recovery/' . $token;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -14,7 +14,7 @@
             
             <p><img src="cid:logoimg" width=128px /></p>
             <h1 style="color:#48c188">Reestablecer contraseña</h1>
-            <p>Ha solicitado reestablecer la contraseña de su cuenta en <?=ucwords(NAME_EMPRESA)?> .</p>
+            <p>Ha solicitado reestablecer la contraseña de su cuenta en <?=NAME_EMPRESA?> .</p>
             <p>Le administramos un numero de identificación para validara la operación</p>
             <a href="<?=$link?>">Reestablecer contraseña</a>
             <p>o copiando esta dirección en su navegador</p>

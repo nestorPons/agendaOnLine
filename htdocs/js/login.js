@@ -1,6 +1,5 @@
 const EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
-localStorage.setItem("AOLAvisoCookie", 0);
 
 var general = {  
 	loaded : ['secLogin'],
@@ -170,12 +169,14 @@ $(function(){
 			)		
 		 })
 		.on('click','.logout',function(){
-			location.href = '/'+EMPRESA + '/logout';
+			deleteAllCookies();
+			location.href = '/'+EMPRESA + '';
 		 })
 		.on('keyup','#pinpass',function(){
 			pin = $(this).val()
 			if(pin.length == 4) $('#frmPinpass').submit()
 		})
+			
 	$('#ancho').val(screen.width)
 	if(!$.isEmpty($_GET['args'])){
 		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''

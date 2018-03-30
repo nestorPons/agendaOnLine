@@ -3,18 +3,25 @@ class BaseClass{
 
     public $names,
         $type = MYSQLI_ASSOC,
-        $multi_query = false;
-    public $conn, $sql = ''; 
+        $multi_query = false,
+        $conn, 
+        $sql = ''; 
+
+    protected
+        $table;  
+
     private 
-        $table, 
         $db , 
         $log = false, 
         $return = false,  
         $logs = ['data','usuarios'];
+    
 
     public function __construct($table , $bd = null, $user = 0 ) {
+        $db = $bd??NAME_DB;
+
         $this->table = (string)$table ;        
-        $this->conn = new Conexion($bd, $user);
+        $this->conn = new Conexion($db, $user);
      }
     public function getConnect () {
         return $this->conn ;
@@ -25,13 +32,13 @@ class BaseClass{
     protected function query(){
         $sql = $this->sql;
         $this->sql = '';
-        return $this->conn->query($sql) ;
+        
+        return $this->conn->query($sql);
      }
     public function getAll ( string $return = '*' , $type = MYSQLI_NUM ) {
 
         $query = $this->conn->query("SELECT $return FROM {$this->table}") ;
-
-       return $query->fetch_all( $type );
+        return $query->fetch_all( $type );
         
      }
     public function getById ( int $id , string $return = '*') {
@@ -79,7 +86,7 @@ class BaseClass{
         $query = $this->conn->query($sql);
         $result = $query->fetch_all($type); 
              
-        return $result ; 
+        return $result; 
      }
     public function getId () {
         return $this->conn->id();
@@ -112,6 +119,11 @@ class BaseClass{
         $sql = "SELECT * FROM {$this->table} WHERE $column BETWEEN '$val1' AND '$val2' $args;" ;
         return $this->conn->all($sql) ;
      }
+    public function count() {
+        $sql = "SELECT * FROM {$this->table};";
+        $result = $this->conn->num($sql);      
+        return (int)$result;
+     }
     public function multi_query(){
 
         $r = $this->conn->multi_query($this->sql);
@@ -120,15 +132,17 @@ class BaseClass{
         return $r;
      }
     public function saveById ( int $id , array $args = null  ) {
+        
+        $columns = null ; 
+        $values = null ;
 
-        $columns = '' ; 
-        $values = '' ;
-
-        if ( $id == 0 ) {
-            foreach ($args as $column => $value ) {
-                $columns .=  $column . ',' ;
-                $values .= '"' . $value . '",' ; 
-             }
+        if ( $id == -1) {
+            if (!is_null($args)){
+                foreach ($args as $column => $value ) {
+                    $columns .=  $column . ',' ;
+                    $values .= '"' . $value . '",' ; 
+                 }    
+            }
             $columns = trim( $columns , ',' ) ;
             $values = trim( "'" . $values , "'," ) ;
             $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
@@ -137,7 +151,6 @@ class BaseClass{
 
             $this->sql .= $this->updateSql($args , $id);
         }
-        
       if(!$this->multi_query){
             $this->return = $this->query();
             return $this->return;
@@ -246,16 +259,12 @@ class BaseClass{
      }
     private function format($result){
 
-        if (count($result) == 1) {
+        if (is_array($result) && count($result) == 1) {
             foreach ($result as $key => $value){
                 $result = $value ;
             }
         }
         return $result;
      }
-
-    public function __destruct() {
-   
-    }
 //AKI :: BUSCO DOS VECES USUARIOS AL ABRIR CREAR CITA
 }

@@ -9,6 +9,9 @@ class Error {
     const E003 = "No se pudo guardar el registro";
     const E004 = "Registro duplicado";
     const E005 = "Error faltan datos";
+    const E006 = "Error en el envio de los datos";
+    const E007 = "Error de seguridad";
+    const E008 = 'No se pudo cargar la configuracion'; 
 
     // Creando empresa
     const E011 = "Nombre ocupado" ;
@@ -22,10 +25,10 @@ class Error {
     const E021 = "";
     const E022 = "Email ocupado."; 
     const E023 = "Estado usuario desactivado.";
-    const E024 = 'Cuenta bloqueada. Consulte su administrador.';
-    
-    //nuevo usuario 
+    const E024 = "Cuenta bloqueada. Consulte su administrador.";
     const E025 = "";
+    const E026 = "Usuario o contraseña incorrectos.";
+    const E027 = "Pin incorrecto";
 
     //Sessiones y times
     const E050 = "Se ha excedido el tiempo de sessión";
@@ -49,7 +52,7 @@ class Error {
         
     }
     public static function E010(){
-       echo "error<SCRIPT>window.location='/".NAME_EMPRESA."?logout=true&err=".self::E010."';</SCRIPT>"; 
+       echo "error<SCRIPT>window.location='/".CODE_EMPRESA."?logout=true&err=".self::E010."';</SCRIPT>"; 
        return false;
     }
     public static function array($err){
@@ -69,6 +72,6 @@ class Error {
     }
     public static function die($err = null){
         $err = $err??self::getLast();
-        die(var_dump(self::array($err)));
+        die(print_r(self::array($err)));
     }
 }

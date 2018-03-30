@@ -1,5 +1,5 @@
  <div id='idCita_<?=$val['idCita']?>' idcita=<?=$val['idCita']?> 
- lastMod="<?=$val['lastMod']?>"  class='lbl row_<?=$rows?> width_<?=CONFIG['num_ag']?>' >
+ lastMod="<?=$val['lastMod']?>"  class='lbl row_<?=$rows?> width_<?=CONFIG['totalAgendas']?>' >
     <div id ='<?=$val['idUsuario']?>' class='nombre'>
         <span class ='icon-user-1'></span> 
         <span class = 'text-value'><?=$val['nombre']?></span>

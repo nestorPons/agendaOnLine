@@ -28,10 +28,10 @@
 
 	<hr>
 	<h3>o puede contactarnos en ...</h3> 
-	<a href="<?=AOL_WEB?>" >www.agendaOnLine.es</a>
-	<a href="mailto:<?=AOL_EMAIL?>?Subject=Contacto agendaOnLine" 	
+	<a href="<?=ADMIN_WEB?>" >www.agendaOnLine.es</a>
+	<a href="mailto:<?=ADMIN_EMAIL?>?Subject=Contacto agendaOnLine" 	
 		target="_top">
-		<?=AOL_EMAIL?>
+		<?=ADMIN_EMAIL?>
 	</a>
 </div>
 
@@ -104,7 +104,7 @@
 		<span class="app-bar-divider"></span>
 	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
-			<a href="/<?=NAME_EMPRESA?>/logout">
+			<a href="/<?=CODE_EMPRESA?>/logout">
 				<span id="mnuUserSalirSession" class="icon icon-logout"></span>
 			</a>
 		</li>

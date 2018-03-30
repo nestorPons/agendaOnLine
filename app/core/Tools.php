@@ -40,7 +40,7 @@ class Tools{
         ßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
         $modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuy
         bsaaaaaaaceeeeiiiidnoooooouuuyybyRr';
-        $cadena = str_replace(' ', '_', trim($cadena));
+        $cadena = str_replace(' ', '', trim($cadena));
         $cadena = utf8_decode($cadena);
         $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
         $cadena = strtolower($cadena);
@@ -50,7 +50,7 @@ class Tools{
         $name = str_replace('_', ' ', trim($name));
         $name = ucwords($name);
         return $name; 
-    }
+     }
     public static function getIp() {
  
         if (isset($_SERVER["HTTP_CLIENT_IP"]))

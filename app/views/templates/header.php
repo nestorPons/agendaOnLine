@@ -25,7 +25,7 @@ $url_font_main = "https://fonts.googleapis.com/css?family=" .
                 <?php
             }
         ?>
-        <link rel="stylesheet"  type="text/css" href="/empresas/<?=NAME_EMPRESA?>/style.css">
+        <link rel="stylesheet"  type="text/css" href="/empresas/<?=CODE_EMPRESA?>/style.css">
 
         <link href="<?=$url_font_main?>" rel="stylesheet">
         <script  type="text/javascript" src="/js/start.js" async defer></script>

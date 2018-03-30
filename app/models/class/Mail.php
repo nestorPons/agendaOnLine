@@ -1,45 +1,52 @@
 <?php namespace models;
-class Mail {
+class Mail extends PHPMailer {
+    private $user; 
     public $url_menssage ;
-    function __construct(){}
-    public function send(User $User){   
 
-        $mail = new PHPMailer(true);
+    function __construct(User $User){
+        parent::__construct(true);
+        $this->user = $User; 
+    }
+
+    public function send_mail(){   
 
         if (!isset($this->url_menssage)) die('Hay que iniciar url_menssage');
         try {
-
             include URL_CONFIG . 'mail.php';
             //Server settings
-            $mail->SMTPDebug = 0;                 // Enable verbose debug output
-            $mail->isSMTP();                      // Set mailer to use SMTP
-            $mail->Host = EMAIL_HOST;             // Specify main and backup SMTP servers
-            $mail->SMTPAuth = true;               // Enable SMTP authentication
-            $mail->Username = EMAIL_USER;         // SMTP username
-            $mail->Password = EMAIL_PASS;         // SMTP password
-            $mail->SMTPSecure = 'tls';            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = EMAIL_PORT;             // TCP port to connect to
-            //Recipients
-            $mail->setFrom(EMAIL_FROM, EMAIL_NAME);
+            $this->SMTPDebug = 0;                 // Enable verbose debug output
 
-            $mail->addAddress($User->email, 'Finalizar Registro');     // Add a recipient              
+            $this->isMail();                            // Set mailer to use SMTP
+            $this->Host = gethostbyname(EMAIL_HOST);    // Specify main and backup SMTP servers
+            $this->SMTPAuth = false;                    // Enable SMTP authentication
+            $this->Username = EMAIL_USER;         // SMTP username
+            $this->Password = EMAIL_PASS;         // SMTP password
+            $this->SMTPSecure = 'TLS';            // Enable TLS encryption, `ssl` also accepted
+            $this->Port = EMAIL_PORT;             // TCP port to connect to
+            
+            //Recipients
+            $this->setFrom(EMAIL_FROM, EMAIL_NAME);
+
+            $this->addAddress($this->user->email, 'Finalizar Registro');     // Add a recipient              
 
             //config 
-            $mail->CharSet = 'UTF-8';
-            $mail->isHTML(true);  
+            $this->CharSet = 'UTF-8';
+            $this->isHTML(true);  
 
             //Attachments
-            $mail->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
-            $mail->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');
+            $this->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
+            $this->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');
             //Content
-            $mail->Subject = 'Here is the subject';
+            $this->Subject = 'Here is the subject';
 
-            $mail->Body    = self::getContent($User->getToken());
+            $this->Body    = self::getContent($this->user->getToken());
 
-            $mail->send();
+            $this->send();
             return true;
+        } catch (phpmailerException $e) {
+            echo $e->errorMessage(); //Pretty error messages from PHPMailer
         } catch (Exception $e) {
-            return \core\Error::set($mail->ErrorInfo);
+            return \core\Error::set($this->ErrorInfo);
         }
      }
  

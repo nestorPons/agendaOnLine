@@ -20,9 +20,9 @@
 					</td>
 					<td>
 						<select  class="num numero_agenda" name="numero_agenda[]">
-							<option value = 0 > <span > Todas </span> </option>
+							<!--<option value = 0 > <span > Todas </span> </option>-->
 							<?php 
-							foreach($Agendas->get as $value){
+							foreach($Agendas->get() as $value){
 								?>
 								<option 
 									value = <?= $value[0]?> 
@@ -49,6 +49,7 @@
 							type="time" 
 							class="num hora_inicio time" 
 							placeholder='00:00' 
+							step="900"
 							value="<?= date('H:i',strtotime($horario['inicio']))?>"> 
 					</td>
 					<td>
@@ -56,6 +57,7 @@
 							type="time" 
 							class="num hora_fin time" 
 							placeholder='00:00'  
+							step="900"
 							value="<?= date('H:i',strtotime($horario['fin'])) ?>">
 					</td>
 				</tr>

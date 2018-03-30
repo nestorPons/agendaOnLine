@@ -28,7 +28,7 @@ class Create{
      }
     public function ifCompanyExist(){
 
-        $empresa = $this->empresas->getBy('nombre_empresa', $this->nameCompany );
+        $empresa = $this->empresas->getBy('nombre_empresa', $this->post['nombre_empresa'] );
         if (!empty($empresa)) throw new \Exception(\core\Error::E011, 11);
         
         return true;
@@ -43,7 +43,7 @@ class Create{
         $this->pass = $this->post['pass'];
         unset($this->post['pass']);
 
-        if (!$this->empresas->saveById(0,$this->post))
+        if (!$this->empresas->saveById(-1,$this->post))
             throw new \Exception(\core\Error::E003, 3);
         $this->id = $this->empresas->getId();
 
@@ -66,17 +66,19 @@ class Create{
      }
     public function initializeCompany(){
         $this->connect($this->db);
-        $sql = "INSERT INTO usuarios (nombre, email, pass, admin, tel) 
-        VALUES ( '{$this->post['nombre_usuario']}' , '{$this->post['email']}','".password_hash($this->pass,PASSWORD_DEFAULT)."',2, '{$this->post['tel']}');";
-        $sql .= "INSERT INTO config (idEmpresa) VALUES ({$this->id});";
+        $sql = "INSERT INTO usuarios (id, nombre, email, pass, admin, tel) 
+        VALUES (1, '{$this->post['nombre_usuario']}' , '{$this->post['email']}','".password_hash($this->pass,PASSWORD_DEFAULT)."',2, '{$this->post['tel']}');";
+        $sql .= "INSERT INTO config (`idEmpresa`) VALUES ({$this->id});";
         $sql .= "INSERT INTO config_css () VALUES ();";
-        $sql .= "INSERT INTO agendas (nombre) VALUES ('Principal');";
-        $sql .= "INSERT INTO familias (nombre) VALUES ('Familia 1');";
-        $sql .= "INSERT INTO servicios (codigo, descripcion, tiempo, idFamilia) VALUES ('COD001', 'Servicio de prueba', 10, 1);";
+        $sql .= "INSERT INTO agendas (`nombre`) VALUES ('Principal');";
+        $sql .= "INSERT INTO familias (id, `nombre`) VALUES (0, 'Familia');";
+        $sql .= "INSERT INTO servicios (`codigo`, `descripcion`, `tiempo`, `idFamilia`) 
+                    VALUES ('COD001', 'Servicio de prueba', 10, 1);";
+        $sql .= "INSERT INTO festivos (`nombre`, `fecha`) VALUES ('Año nuevo', '2018-01-01'),('Reyes', '2018-01-06'),('Navidad', '2018-12-25'),('Noche vieja', '2018-12-31');";
         for ($i = 0; $i<=6; $i++){
-            $sql .= "INSERT INTO horarios (agenda, dia, inicio, fin) VALUES (1,$i,'9:00','20:00');";
+            $sql .= "INSERT INTO horarios (`agenda`, `dia`, `inicio`, `fin`) VALUES (1, $i ,'9:00:00','20:00:00');";
         }
-        
+echo $sql;      
         if(!$this->cConn->multiQuery($sql))
             throw new \Exception(\core\Error::E016, 16);
         

@@ -1,7 +1,7 @@
 <div id='selagendas'>
 	<?php 	
-	foreach ($Agendas->get as $key => $agenda){
-		if ($key>=CONFIG['num_ag']) break;
+	foreach ($Agendas->get() as $key => $agenda){
+		if ($key>=CONFIG['totalAgendas']) break;
 		$id = $agenda[0]??-1;
 		$nombre = $agenda[1]??'';
 		$mostrar = $agenda[2]??'';

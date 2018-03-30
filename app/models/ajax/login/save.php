@@ -11,7 +11,7 @@ if ($Users->getOneBy('email',$_POST['email'],'id','num') != false) {
         } 
     }
     $_POST['pass'] = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-    $Users->saveById(0, $_POST);
+    $Users->saveById(-1, $_POST);
     $User = new models\User($Users->getId());
     $Mail = new models\Mail;
     $Mail->url_menssage = URL_SOURCES . 'mailactivate.php';

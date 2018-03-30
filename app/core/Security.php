@@ -12,7 +12,14 @@ class Security {
 
      }
     public function checkSession($pageIn){
-  
+        /*
+        var_dump(isset($_SESSION));
+        var_dump(isset($_SESSION['SKey']));
+        var_dump($_SESSION['SKey']==$_COOKIE['token']);
+        var_dump($_SESSION['agent']==$_SERVER['HTTP_USER_AGENT']);
+        var_dump($_SESSION['ip'] == $_SERVER['REMOTE_ADDR']);
+        var_dump($_SESSION['device'] == self::getDevice());
+        */
         return !in_array($pageIn, $this->pageExcep)      
             ?isset($_SESSION)
                 &&isset($_SESSION['SKey'])

@@ -21,14 +21,16 @@ class Conexion extends \conf\UserConn {
 				break;
 		}
 
-		$this->db = $db ?? NAME_DB; 
+		$this->db = $db; 
 
 		if (!$this->connect()) 
 			 throw new \Exception(\core\Error::E051,51 );
 		
 	 }
 	private function connect(){
+ 
 		if ( $this->db == "bd_") throw new \Exception(\core\Error::E051,51 );
+
 		$this->conexion = (empty($this->db))
 			? mysqli_connect($this->server, $this->user, $this->pass) 
 			: mysqli_connect($this->server, $this->user, $this->pass , $this->db) ;
@@ -38,7 +40,6 @@ class Conexion extends \conf\UserConn {
 	
 	 }
 	public function selectDb(string $db){
-		
 		return mysqli_select_db ( $this->conexion, $db );
 	 }
 	public function query($sql){
@@ -71,7 +72,7 @@ class Conexion extends \conf\UserConn {
 		
 		for($i = 0; $i < $this->mQCount ; $i++ ){
 			if (!empty($arr[$i]))
-				$this->mQResult[$i] = $this->query($arr[$i]);
+				$this->mQResult[$i] = $this->query($arr[$i]);				
 		}
 		return $this->mQResult[$this->mQCount-1];
 	 }

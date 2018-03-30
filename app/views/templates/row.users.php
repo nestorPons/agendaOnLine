@@ -7,9 +7,9 @@
     <td name="nom" class="name" id="<?=strtolower(str_replace(' ', '_', $nombre))?>"><?=$nombre;?></td>
     <?php if(!$Device->isMovile){?>
         <td name="tel" class=""><?=$tel;?></td>
-        <td name="email" class="w1" data-value ="<?=$email?>"><?=$email_status?></td>
+        <td name="email"  data-value ="<?=$email?>"><?=$email_status?></td>
         <td name="obs" class="obs" data-value ="<?=$obs?>"><?=$obs_status?></td>
-        <td name="admin" class="w1" data-value =<?=$admin?>><?=$admin==0?'No':'Si'?></td>
+        <td name="admin"  data-value =<?=$admin?>><?=$admin==0?'No':'Si'?></td>
         <?php
     }?>
 </tr>

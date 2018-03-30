@@ -1677,7 +1677,7 @@ class lessc {
 			return $in;
 		}
 	}
-	//include variables php in file less whit symbol ^ before work;
+	//include in file less php variables whit symbol ^ before work;
 	public function varPhp($str){ 
 	
 		$posEnd = 0;

@@ -2,11 +2,11 @@
 	include URL_TEMPLATES . '/header.php' ;
     $idUser = substr($_GET['args'],-4);
     $token = $_GET['args'];
-    $url = URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. NAME_EMPRESA .'/'. 'validar';
+    $url = URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. CODE_EMPRESA .'/'. 'validar';
 	?>
 	<title>Agenda Online zona login</title>
 	</head>
-	<body data-empresa="<?=NAME_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
+	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
         <div id="login" class="login login-form ">
             <section id="newPass"  >
                 <h1 class="heading">Restablecer contraseña</h1>

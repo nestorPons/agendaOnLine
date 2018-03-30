@@ -6,5 +6,5 @@ if($idUser){
 
 }
 $get = (isset($_GET['err']))?"?err=".$_GET['err']:'';
-echo("<SCRIPT>window.location='/".NAME_EMPRESA.$get."';</SCRIPT>"); 
-//header('location: /'.NAME_EMPRESA . '/err/'.$mensErr);
+echo("<SCRIPT>window.location='/".CODE_EMPRESA.$get."';</SCRIPT>"); 
+//header('location: /'.CODE_EMPRESA . '/err/'.$mensErr);

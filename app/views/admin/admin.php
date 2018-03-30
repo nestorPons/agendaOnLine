@@ -10,7 +10,7 @@
 	</script>
 	<title>AgendaOnline zona admin</title>
 </head>
-	<body data-empresa="<?=NAME_EMPRESA?>" class="<?=$Device->type?>">
+	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=$Device->type?>">
 
 		<?php include URL_TEMPLATES . "menus/admin.php"?>
 

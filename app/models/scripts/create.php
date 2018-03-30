@@ -11,19 +11,16 @@ try {
     $Create->createTables();
     $Create->createFolder();
     $Create->initializeCompany();
-    // Esta constante se usa en la clase Conexion para conectar por defecto, si no se pasa ninguna base datos en los argumentos
-    // Como paso por baseClass y no puedo pasarle la base datos hay que modificar la variable por defecto
 
     $_REQUEST['empresa'] = strtolower(trim($nameCompany));
     require_once $url_base . 'app/conf/config.php' ;
 
     //Confirmacion por email hay que pasarle un objeto User
     $User = new User(1);
-    $Mail = new Mail;
+    $Mail = new Mail($User);
     $Mail->url_menssage = URL_SOURCES . 'mailactivate.php';
     $Mail->AltBody = 'Activar usuario: ' .  $User->token;
-    $r['success'] = $Mail->send($User); 
-    
+    $r['success'] = $Mail->send(); 
     include URL_VIEWS . 'createCompany.php' ;
 
 } catch (\Exception $e){

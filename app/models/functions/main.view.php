@@ -2,7 +2,7 @@
 
 function view($fecha_inicio = null, $existen_array = false ){	
 	global $Device;
-		
+
     date_default_timezone_set('UTC');			
 	$fecha = $fecha_inicio??Date('Y-m-d') ;
 	$dias = round(MARGIN_DAYS/2);
@@ -50,7 +50,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 							<tr id='<?=$h?>' class="hora h<?= $h . ' '.$disabled?> " data-hour='<?= $str_hora?>'>
 								<td  class="<?= $clasehora ?> "><?= $str_hora?> </td>
 								<?php
-								for ($a=1;$a<=CONFIG['num_ag'];$a++){
+								for ($a=1;$a<=CONFIG['totalAgendas'];$a++){ 
 									$label = $lbl->html[$h][$a] ?? false ;
 									
 									?>

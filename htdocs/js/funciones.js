@@ -1,7 +1,7 @@
 "use strict"
 
-var SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index' , 
-LEFT = 'left' , RIGHT = 'right', JSON = 'json', GET = 'get'
+var ADD = 'add', SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index' , 
+LEFT = 'left' , RIGHT = 'right', JSON = 'json', GET = 'get' 
 
 var HORARIOS = document.horarios
 var FESTIVOS = document.festivos
@@ -391,7 +391,7 @@ var dialog = {
 		$('#dialogs').fadeOut()
 		dialog.isOpen = null
 		typeof callback == "function" && callback();
-	},
+	 },
 	create: function (objName,fnOk,fnCancel,callback){
 
 		var section = $('#dialogs')
@@ -443,7 +443,7 @@ var dialog = {
 			 },'html')
 
 
-	},
+	 },
 	reset : function(objName){
 		var $this = $('#'+objName)
 		var $load = $this.find('.btnLoad');
@@ -466,7 +466,7 @@ var dialog = {
 			})
 		}
 
-	}
+	 }
  }
 var notify = {
 	success: function(mns,cptn, keep, $input){
@@ -663,8 +663,10 @@ function normalize(string){
 	return res;
 
  } 
-function echo(d){
-	console.log(d);
+function echo(){
+	for(let i = 0 ; i < arguments.length; i++){
+		console.log(arguments[i]);
+	}
  }
 function SHA(str) {
  /*
@@ -972,6 +974,16 @@ function pad (n, length) {
          n = "0" + n;
     return n;
  }
+function deleteAllCookies() {
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+ }
 $(function(){
 	$('.time').mask('00:00');
 	$('.tel').mask('##000000000');
@@ -1002,18 +1014,18 @@ $(function(){
 				else
 					$pass.attr('type','text')
 			e.stopPropagation()
-		})
+		 })
 		.on('change','input:password',function(){
 			validar.pass.estado=false
 			validar.pass.funcion($(this))
-		})
+		 })
 		.on('blur','.email',function(){validar.email.funcion($(this))})
 		.on('change','.email',function(){validar.email.estado=false})
 		.on('blur','.tel',function(){validar.tel.funcion($(this))})
 		.on('change','.tel',function(){validar.tel.estado=false})
 		.on('click','.iconClass-inside.icon-cancel',function(){
 			$(this).parent().find('input').val("");
-		})
+		 })
 		.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
 		.on('change','.nombre',function(){validar.nombre.estado=false}).end()
 		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
@@ -1021,7 +1033,11 @@ $(function(){
 		.on('click','.inicio',function(){window.location.href="index.php"})
 		.on('click','#btnMenuResponsive',function(){
 			toggleMetroCharm('#mnuResponsive')
-	})
+		 })
+	$('body')
+		.on('click','.clear-input',function(){
+		$(this).siblings('input').val('');
+		})
 	if(!$.isEmpty($_GET['err'])){
 		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''
 		notify.error($_GET['err'], 'ERROR:' + code)

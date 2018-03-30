@@ -13,8 +13,7 @@ if (isset($_POST['action'])){
     require_once URL_VIEWS . 'login/' . $_POST['view'] . '.php';
 
 } else {
-
-    if(!isset($_COOKIE["auth"])||isset($_GET['logout'])){
+    if(!isset($_COOKIE["auth"])){
     
         require_once URL_VIEWS . 'login.php';
         
@@ -24,7 +23,7 @@ if (isset($_POST['action'])){
         if ($action = $Login->authToken($_COOKIE["auth"])){
             require_once URL_VIEWS . '/login/pinpass.php';
         }else{ 
-            header('Location: ' . NAME_EMPRESA . '/logout');
+            $Login->logout();
         }      
         
     }

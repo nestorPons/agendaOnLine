@@ -34,12 +34,14 @@ CREATE TABLE `config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE `config_css` (
-  `color_main` varchar(10) NOT NULL DEFAULT '#48c188',
-  `color_secon` varchar(10) NOT NULL DEFAULT '#eda537',
-  `color_text` varchar(12) NOT NULL DEFAULT '#000',
+  `color_main` varchar(7) NOT NULL DEFAULT '#48c188',
+  `color_secon` varchar(7) NOT NULL DEFAULT '#eda537',
+  `color_text` varchar(7) NOT NULL DEFAULT '#000',
+  `color_back` varchar(7) NOT NULL DEFAULT '#fff',
   `border_radio` tinyint(2) NOT NULL DEFAULT '2',
   `font_main` varchar(20) NOT NULL DEFAULT 'Roboto',
   `font_tile` varchar(20) NOT NULL DEFAULT 'Raleway',
+  `font_size` varchar(5) NOT NULL DEFAULT '1em',
   `url_img` varchar(100) NOT NULL DEFAULT 'http://pingendo.github.io/pingendo-bootstrap/assets/blurry/800x600/12.jpg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -82,7 +84,7 @@ CREATE TABLE `familias` (
 
 CREATE TABLE `festivos` (
   `id` tinyint(2) PRIMARY KEY AUTO_INCREMENT ,
-  `nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
+  `nombre` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
   `fecha` date NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -133,12 +135,13 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB;
 
 CREATE TABLE `logs` (
-	`id` int(11) PRIMARY KEY AUTO_INCREMENT,
+	`id` bigint(255) PRIMARY KEY AUTO_INCREMENT ,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`idUser` int(11) NOT NULL, 
 	`action` int(2) NOT NULL, 
 	`idFK` bigint(255), 
 	`status` tinyint(1) NOT NULL, 
-	`tables` varchar(30)  
+	`tables` varchar(30) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE `auth_tokens`

@@ -8,5 +8,5 @@ if($_POST){
     require URL_VIEWS . 'login/recovery.php';
 } else {
     $mensErr = \core\Error::E010;
-    header('location: /'.NAME_EMPRESA . '/err/'.$mensErr);
+    header('location: /'.CODE_EMPRESA . '/err/'.$mensErr);
 }

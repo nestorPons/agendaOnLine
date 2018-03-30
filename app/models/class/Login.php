@@ -1,10 +1,10 @@
 <?php namespace models;
 
 class Login extends \core\BaseClass {
-	private $num, $selector, $validator,  $pass, $table = 'usuarios';
+	private $num, $selector, $validator,  $pass;
 	public $email, $id, $dateBaja, $admin, $user;	
 	public function __construct(){
-		parent::__construct($this->table);		
+		parent::__construct('usuarios');		
 	 }
     public function findUserById(int $id){
         if ($this->user = parent::getById($id))
@@ -114,7 +114,7 @@ class Login extends \core\BaseClass {
 
         $auth = new \core\BaseClass('auth_tokens');
 
-        if ($auth->saveById(0,[
+        if ($auth->saveById(-1,[
                 'selector'=> $this->selector,
                 'validator'=>$this->validator, 
                 'idUser' => $this->id
@@ -143,14 +143,15 @@ class Login extends \core\BaseClass {
 
         return ($this->admin>0)?'admin':'users' ;
      }
-    public static function logout() {
+    public static function logout($deleteCookies = false) {
         $Logs = new Logs;
 
         // Borra la cookie que almacena la sesión 
-        foreach($_COOKIE as $key => $val){
+       if($deleteCookies){
+        foreach($_COOKIE as $key => $val)
             setcookie($key, '', time() - 3600, '/');    
-        }
-        
+         }
+
         // Borra todas las variables de sesión 
 
         $_COOKIE = array();
@@ -162,11 +163,25 @@ class Login extends \core\BaseClass {
                 $params["path"], $params["domain"],
                 $params["secure"], $params["httponly"]
             );
-        }
+         }
 
         // Finalmente, destruye la sesión 
         session_destroy(); 
         return true;
      }
+    public static function example(){
+        $connDemo = new \core\Conexion(null,3);
+        $connDemo->multi_query("
+            DROP DATABASE IF EXISTS `bd_demo`;
+            CREATE DATABASE `bd_demo`;
+            USE `bd_demo`;
+         ");
+        $file  = file_get_contents(APP_FOLDER . 'db/db_template.sql');
+        $connDemo->multi_query($file);      
+        
+        $file  = file_get_contents(APP_FOLDER . 'db/demo.sql');
+        $connDemo->multi_query($file);
+        unset($connDemo);
+    }
 
 }

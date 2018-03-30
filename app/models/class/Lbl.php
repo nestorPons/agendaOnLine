@@ -36,7 +36,7 @@ class Lbl {
     
     function __CONSTRUCT(){
 
-        $this->conn = new \core\Conexion;
+        $this->conn = new \core\Conexion(NAME_DB);
 
     }
     public function getById ($value) {

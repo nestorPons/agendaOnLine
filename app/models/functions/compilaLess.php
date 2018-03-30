@@ -2,31 +2,17 @@
 
 //Compilando la hoja de estilos
 // los css fijos 
-$url_css = URL_EMPRESA . "style.css";
-$url_less = URL_EMPRESA . "style.less";
+compilaLess(URL_EMPRESA."style.css",URL_EMPRESA."style.less");
+compilaLess(URL_CSS."main.css",URL_CSS."main.less");
 
-require_once( URL_FUNCTIONS . 'compilaLess.php') ; 
-compilaLess($url_css,$url_less);
+// css variables login
 
-
-$url_css = URL_CSS . "main.css";
-$url_less = URL_CSS . "main.less";
-
-compilaLess($url_css,$url_less);
-
-// css variables segun zona 
-
-if ($controller == 'login') {
-	$url_css = URL_CSS . "login.css";
-	$url_less = URL_CSS . "login.less";
-
-	compilaLess($url_css,$url_less);
-}
+if ($controller == 'login') compilaLess(URL_CSS."login.css",URL_CSS."login.less");
 
 function compilaLess($style_css,$style_less){
-	global $conn ; 
-	global $configCSS; // se crea en config.php
-	
+	global $Empresa ; 
+
+
 	include_once URL_CLASS . "lessc.inc.php";
 	$less = new lessc;
 	
@@ -37,9 +23,8 @@ function compilaLess($style_css,$style_less){
 	try {
 
 		//if ($config = $conn->assoc("SELECT * FROM config_css"))
-			$less->arrPHP = $configCSS;
+			$less->arrPHP = $Empresa->conf_css();
 			
-
 		$less->checkedCompile($style_less,$style_css);
 
 	}catch (Exception $e){

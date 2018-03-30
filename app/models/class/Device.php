@@ -3,15 +3,16 @@
 class Device{
 
   public $os , $browser , $agente, $browserShort, $device;
-  public $isMovile = false, $isTablet = false, $isWatch= false, $isLaptop= false;
+  public $isMovile = false, $isTablet = false, $isWatch= false, $isLaptop= false, $width;
     public function __construct($width){
         $this->agente = $_SERVER['HTTP_USER_AGENT'];
+        $this->width = $width;
         $this->getOs();
         $this->getBrowser();
-        $this->getDevice($width);
+        $this->getDevice();
+
 
     }
-
     private function getOs(){
         if (preg_match('/linux/i', $this->agente)) {
             $this->os = 'linux';
@@ -24,7 +25,7 @@ class Device{
         }else {
             $this->os = 'undefined';
         }
-    }
+     }
     private function getBrowser(){
         $agente = $this->agente;
         $version= "";
@@ -63,27 +64,27 @@ class Device{
 
         return  $this->browserShort;
 
-    }
-    private function getDevice($width){
+     }
+    public function getDevice(){      
 
-        $this->type = 'laptop';
-        if ($width<800) {
+        if ($this->width<=800) {
             $this->type = 'tablet';
             $this->isTablet = true;
-        }
-        if ($width<590) {
+        } else
+        if ($this->width<=590) {
             $this->type = 'movile';
             $this->isMovile = true;
-        } 
-        if ($width<300) {
+        } else
+        if ($this->width<=300) {
             $this->type = 'watch';
             $this->isWatch = true;
-        } 
-        
+        } else {
+            $this->type = 'laptop';
+            $this->isLaptop = true;
+        }
+ 
         return $this->type;
-    }
-    public function __destruct(){
-        
-    }
+     }
+
 
 }

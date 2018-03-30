@@ -6,11 +6,9 @@ class Horarios extends \core\BaseClass {
 	public $close_hours ;
 	public $uniTime = 0 ;
 	
-	private $table = 'horarios' ;
-	
 	public function __construct( ){
 		
-		parent::__construct($this->table);
+		parent::__construct('horarios');
 
 	 }
 	public function consult($sql){
@@ -75,21 +73,13 @@ class Horarios extends \core\BaseClass {
 		
 		return $this->query($sql) ;
 	 }
-	public function save_horarios ( $data_arr ) {
-		$sql = "" ;
+	public function save ( $data ) {
+		$this->multi_query = false;
 
-		for($i = 0 ; $i < count($data_arr); $i++){
-			$data = $data_arr[$i];	
-			$data_ini = date('H:i:s' ,strtotime( $data['ini']));
-			$data_fin = date('H:i:s' ,strtotime( $data['fin']));
-
-			if($data['id']== -1){
-				$sql .= 'INSERT INTO horarios (agenda, dia, inicio, fin) VALUES ('.$data['agenda'] . ', '.$data['dia'] . ', "'.$data_ini . '","'.$data_fin. '");';
-			} else {
-				$sql .= 'UPDATE horarios SET agenda='.$data['agenda'] . ', dia='.$data['dia'] . ',inicio= "'.$data_ini . '",fin="'.$data_fin . '" WHERE id=' . $data['id'] . ';';
-			}
-		}
-		return $this->conn->multi_query($sql);
+		foreach($data as $d )
+			if(!$this->saveById($d['id'], $d)) return false; 
+		
+		return true;
 	 }
 	public function del_horarios($arr_id){
 		$sql = '';

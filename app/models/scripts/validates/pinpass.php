@@ -2,11 +2,11 @@
 if(isset($_COOKIE["auth"]) && $Login->authToken($_COOKIE["auth"])){
     if ((int)$Login->attempts() <= (int)NUM_MAX_ATTEMPT){
         if($Login->user['pin']==$_POST['pinpass']){
-             $Login->attempts(0);
+            $return['action'] =  $Login->createSession();
             return ($Login->admin>0)?['action'=>'admin']:['action'=>'users'] ;
         } else {
             $Login->attempts(1);
-            return  err('Pin erroneo',5) ; 
+            return  err(\core\Error::E026,5);
         }
     }else{
         //bloqueado por demasiados intentos

@@ -16,7 +16,7 @@ $result_data = $conn->row($sql) ;
 
 if ($result_data <= 1 || 1 ){
 	$r['ocupado']=false;
-	if($Data->saveById(0,[
+	if($Data->saveById(-1,[
 			'agenda' => $agenda,
 			'idUsuario' => $userId,
 			'fecha' => $fecha,
@@ -29,7 +29,7 @@ if ($result_data <= 1 || 1 ){
 		$sql = '';
 
 		foreach ($servicios as $id ) {
-				$Cita->saveById(0,[
+				$Cita->saveById(-1,[
 						'idCita' =>$id_servicio, 
 						'servicio'=> $id
 					]);

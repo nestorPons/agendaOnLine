@@ -32,8 +32,4 @@ const SAVE = 'save';
 const DEL = 'del';
 const EDIT = 'edit';
 const GET = 'get';
-const MARGIN_DAYS = 6;
-const DEFAULT_HISTORY_DAYS = 1;
-const NUM_MAX_ATTEMPT = 15; //attempts for crack brute force pass
-
 const BR = '<br>';

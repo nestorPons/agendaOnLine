@@ -1,11 +1,11 @@
 <?php namespace models;
 class Logs extends \core\BaseClass{
-    private $table = 'logs' ; 
+    
     public function __construct(){
-        parent::__construct($this->table);		 
+        parent::__construct('logs');		 
 	 }
     public function set(int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null ){
-       return self::saveById(0,[
+       return self::saveById(-1,[
                 'idFK'=>$idFK, 
                 'idUser'=> $idUser, 
                 'tables'=> $tables, 

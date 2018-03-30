@@ -7,8 +7,8 @@
 		<thead>
 			<tr>
 				<th>Opcion</th>
-				<th>Num</th>
-				<th>nombre</th>
+				<th class="num">Num</th>
+				<th class="name">nombre</th>
 				<?php if(!$Device->isMovile){?>
 					<th>Telefono</th>
 					<th>Email</th>

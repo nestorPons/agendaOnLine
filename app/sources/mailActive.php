@@ -1,5 +1,5 @@
 <?php 
-    $link = URL_ABSOLUT . NAME_EMPRESA . '/activate/' . $token;
+    $link = URL_ABSOLUT . CODE_EMPRESA . '/activate/' . $token;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -14,7 +14,7 @@
             
             <p><img src="cid:logoimg" width=128px /></p>
             <h1 style="color:#48c188">Activar cuenta</h1>
-            <p>Actualmente ha se ha bloqueado la cuenta de <?=ucwords(NAME_EMPRESA)?> .</p>
+            <p>Actualmente ha se ha bloqueado la cuenta de <?=NAME_EMPRESA?> .</p>
             <p>Puede volver a activar la cuenta siguiendo en el siguiente link:</p>
             <a href="<?=$link?>">Activar cuenta</a>
             <p>o copiando esta dirección en su navegador</p>

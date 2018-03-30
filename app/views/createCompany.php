@@ -9,9 +9,13 @@ $link = $_SERVER['SERVER_NAME']."/".$nameCompany."/index.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Metro, a sleek, intuitive, and powerful framework for faster and easier web development for Windows Metro Style.">
     <meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, metro, front-end, frontend, web development">
-    <meta name="author" content="Sergey Pimenov and Metro UI CSS contributors">
-
-    <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+	<meta name="author" content="Sergey Pimenov and Metro UI CSS contributors">
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+	<link rel="stylesheet" href="css/pigendo.css" type="text/css">
+	<link rel="stylesheet" href="css/metro.css" type="text/css">
+	
+    <link rel='shortcut icon' type='image/x-icon' href='../img/favicon.ico' />
 
     <title>Login form :: Metro UI CSS - The front-end framework for developing projects on the web in Windows Metro Style</title>
 	 <link href="/css/main.css" rel="stylesheet">

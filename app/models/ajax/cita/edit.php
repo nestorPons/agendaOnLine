@@ -24,7 +24,7 @@ if ($arrSerPost && $arrSerPost!=$arrSerDb && $r['success']) {
                 'idCita' => $idCita , 
                 'servicio' => $ser
             ]; 
-        $Cita->saveById( 0, $args) ; 
+        $Cita->saveById( -1, $args) ; 
         }
     
     if(!$r['success'] = $Cita->multi_query()) $r['err'] = 'Save cita'; 
