@@ -42,7 +42,7 @@ class Login extends \core\BaseClass {
 		return self::saveById($this->id, $args);
 	 }
     public function validatePass( $pass ){
-        return password_verify ($pass, $this->pass);
+        return password_verify($pass, $this->pass);
      }
     public function validateEmail( string $email ){
 		$email = trim( $email ) ;

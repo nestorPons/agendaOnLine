@@ -94,5 +94,13 @@ class Tools{
             print_r($arr); 
         echo('</pre>');
      }
-    
+    public static function get_content(...$args){
+        
+        ob_start(); # apertura de bufer
+        include( $args[0] );
+        $begin = ob_get_contents();
+        ob_end_clean(); # cierre de bufer
+
+        return $begin;
+     }
 }

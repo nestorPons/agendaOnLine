@@ -10,7 +10,7 @@ class Empresa extends \core\BaseClass {
 //y no tener que hacer tantas peticiones 
 //ademas debera actualizar cadavez que se cambien los datos INSERT o UPDATE
 
-        $this->data = $this->getBySQL("replace(`nombre_empresa`,' ','') = '$codeEmpresa' LIMIT 1",  MYSQLI_ASSOC)[0];         
+        $this->data = $this->getBySQL("replace(`nombre_empresa`,' ','') = '$codeEmpresa' LIMIT 1",  MYSQLI_ASSOC)[0]??false;   
         $this->code = \core\Tools::normalize($this->data['nombre_empresa']); 
         parent::__construct('config', 'bd_'. $this->code, 2);
         
@@ -39,7 +39,7 @@ class Empresa extends \core\BaseClass {
         $festivos = $this->getAll('fecha'); 
         foreach($festivos as $date){
 
-            $date =new DateTime($r);
+            $date =new \DateTime($date[0]);
             $date = date_format($date,"md");
             $data['festivos'][]=$date;	
 

@@ -2,8 +2,7 @@
 
 class Create{
     public $nameCompany ,$db;
-    private $empresas, $pass, $cConn, $post, $id;
-    private $exceptionsPost = ['web'];
+    private $empresas, $pass, $cConn, $post, $id, $exceptionsPost = ['web'];
 
     public function __construct($post){
         $this->empresas = new \core\BaseClass('empresas','aa_db');
@@ -11,10 +10,13 @@ class Create{
         $this->post = $post;
         $this->nameCompany = $this->defineNameCompany();
         $this->db = 'bd_' . $this->nameCompany ;
+        $this->pass = $this->post['pass'];
+        $this->name = $this->post['nombre_usuario'];
+        $this->email = $this->post['email'];
      }
     public function getNameCompany(){
         return $this->nameCompany;
-    }
+     }
     private function connect ($db = false){
         $this->cConn = new \core\Conexion( $db , 1);
         return $this->cConn;
@@ -40,7 +42,7 @@ class Create{
 
      }
     public function saveCompany(){
-        $this->pass = $this->post['pass'];
+       
         unset($this->post['pass']);
 
         if (!$this->empresas->saveById(-1,$this->post))
@@ -64,10 +66,13 @@ class Create{
             throw new \Exception(\core\Error::E015, 15);
         return true;
      }
+    
     public function initializeCompany(){
+        $pass = password_hash($this->pass,PASSWORD_DEFAULT); 
+
         $this->connect($this->db);
         $sql = "INSERT INTO usuarios (id, nombre, email, pass, admin, tel) 
-        VALUES (1, '{$this->post['nombre_usuario']}' , '{$this->post['email']}','".password_hash($this->pass,PASSWORD_DEFAULT)."',2, '{$this->post['tel']}');";
+        VALUES (1, '{$this->post['nombre_usuario']}' , '{$this->post['email']}','$pass',2, '{$this->post['tel']}');";
         $sql .= "INSERT INTO config (`idEmpresa`) VALUES ({$this->id});";
         $sql .= "INSERT INTO config_css () VALUES ();";
         $sql .= "INSERT INTO agendas (`nombre`) VALUES ('Principal');";
@@ -78,7 +83,7 @@ class Create{
         for ($i = 0; $i<=6; $i++){
             $sql .= "INSERT INTO horarios (`agenda`, `dia`, `inicio`, `fin`) VALUES (1, $i ,'9:00:00','20:00:00');";
         }
-echo $sql;      
+     
         if(!$this->cConn->multiQuery($sql))
             throw new \Exception(\core\Error::E016, 16);
         
@@ -94,4 +99,18 @@ echo $sql;
             throw new \Exception(\core\Error::E017, 17);     
         }
      }
+    public function sendMail(){
+        $User = new User(1);
+        $Mail = new PHPMailer(true);
+        include_once URL_CONFIG . 'mail.php';
+        $Mail->Subject = "Activar nueva cuenta";
+        $Mail->addAddress($User->email, $User->nombre);   
+        $Mail->url_menssage = URL_SOURCES . 'mailactivate.php';
+        $Mail->Body    = \core\Tools::get_content($Mail->url_menssage, $User->getToken());
+        $Mail->AltBody = 'Activar usuario: ' .  $User->token;
+        $Mail->Subject =  "Activar cuenta";
+
+        return $Mail->send(); 
+    }
+
  }

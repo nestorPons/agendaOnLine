@@ -2,8 +2,6 @@
 $action = 'login' ;
 
 $Login = new \models\Login;
-//var_dump($_POST);
-
 $_POST = $Forms->sanitize($_POST);
 
 $script  =  

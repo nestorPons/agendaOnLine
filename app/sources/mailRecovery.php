@@ -1,5 +1,5 @@
 <?php 
-    $link = URL_ABSOLUT . CODE_EMPRESA . '/recovery/' . $token;
+    $link = URL_ABSOLUT . CODE_EMPRESA . '/recovery/' . $args[1];
 ?>
 <!DOCTYPE html>
 <html lang="es">

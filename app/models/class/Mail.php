@@ -1,50 +1,46 @@
 <?php namespace models;
 class Mail extends PHPMailer {
-    private $user; 
+    private $userm, $count = 0; 
     public $url_menssage ;
 
     function __construct(User $User){
         parent::__construct(true);
         $this->user = $User; 
+
+        include_once URL_CONFIG . 'mail.php';
+
+        //Server settings
+        $this->SMTPDebug = 0;           // Enable verbose debug output
+        $this->isMail();                // Set mailer to use SMTP
+        $this->Host = EMAIL_HOST;       // Specify main and backup SMTP servers
+        $this->SMTPAuth = false;        // Enable SMTP authentication
+        $this->Username = EMAIL_USER;   // SMTP username
+        $this->Password = EMAIL_PASS;   // SMTP password
+        $this->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
+        $this->Port = EMAIL_PORT;
+        
+        //Recipients        
+        $this->setFrom(EMAIL_FROM, EMAIL_NAME);
+        $this->addAddress($User->email, $User->nombre);     // Add a recipient              
+        $this->AddReplyTo(EMAIL_FROM,EMAIL_NAME);
+        //config 
+        $this->CharSet = 'UTF-8';
+        $this->isHTML(true);  
+        //Attachments
+        $this->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
+        $this->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');
     }
 
-    public function send_mail(){   
+    public function send(){   
 
         if (!isset($this->url_menssage)) die('Hay que iniciar url_menssage');
         try {
-            include URL_CONFIG . 'mail.php';
-            //Server settings
-            $this->SMTPDebug = 0;                 // Enable verbose debug output
-
-            $this->isMail();                            // Set mailer to use SMTP
-            $this->Host = gethostbyname(EMAIL_HOST);    // Specify main and backup SMTP servers
-            $this->SMTPAuth = false;                    // Enable SMTP authentication
-            $this->Username = EMAIL_USER;         // SMTP username
-            $this->Password = EMAIL_PASS;         // SMTP password
-            $this->SMTPSecure = 'TLS';            // Enable TLS encryption, `ssl` also accepted
-            $this->Port = EMAIL_PORT;             // TCP port to connect to
-            
-            //Recipients
-            $this->setFrom(EMAIL_FROM, EMAIL_NAME);
-
-            $this->addAddress($this->user->email, 'Finalizar Registro');     // Add a recipient              
-
-            //config 
-            $this->CharSet = 'UTF-8';
-            $this->isHTML(true);  
-
-            //Attachments
-            $this->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
-            $this->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');
             //Content
-            $this->Subject = 'Here is the subject';
-
+            $this->Subject =  $this->Subject??EMAIL_NAME;
             $this->Body    = self::getContent($this->user->getToken());
 
-            $this->send();
-            return true;
-        } catch (phpmailerException $e) {
-            echo $e->errorMessage(); //Pretty error messages from PHPMailer
+            return parent::send();
+    
         } catch (Exception $e) {
             return \core\Error::set($this->ErrorInfo);
         }

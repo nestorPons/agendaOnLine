@@ -42,7 +42,7 @@ class User extends \core\BaseClass {
 		} else {
 			return $this->get('pass');
 		}
-	}
+	 }
     public function validatePass( $pass ){
        return $this->pass === $pass ;
      }

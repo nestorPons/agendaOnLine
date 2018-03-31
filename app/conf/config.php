@@ -9,6 +9,7 @@ define ('ADMIN_EMAIL' , 'nestorpons@gmail.com') ;
 
 //Se declara NAME_DB en confing para que no se declare antes de crear una empresa
 define('CODE_EMPRESA' , strtolower(trim($_REQUEST['empresa']??FALSE)) );
+
 $Empresa = new models\Empresa(CODE_EMPRESA);
 
 define('NAME_EMPRESA' ,  $Empresa->name());
@@ -19,12 +20,11 @@ define('URL_LOGO' , file_exists(URL_EMPRESA."logo.png")?'/empresas/'.CODE_EMPRES
 define('URL_BACKGROUND' , '/empresas/'.CODE_EMPRESA."/background.jpg");
 
 //Define los festivos y usa la variable $conn para hacer la conexion 
-define('FESTIVOS' , include_once (URL_SCRIPTS . 'festivos.php') );
+define('FESTIVOS' , $Empresa->festivos() );
 
 $Agendas = new models\Agendas();
 $myAgenda['totalAgendas'] = $Agendas->count();
 define('CONFIG', array_merge($Empresa->getConf(),$myAgenda));
-
 
 //Guardo los anchos de pantalla para posteriores configuraciones
 //crear cookie configAOl para ancho de pantalla y otras configuraciones

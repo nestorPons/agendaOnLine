@@ -10,9 +10,9 @@ try {
         :'login' ;
 
     //Inicializo la base datos DEMO para ejemplos
-    if(isset($_REQUEST['empresa']) && $_REQUEST['empresa']==='demo' && $controller=='login')
-//AKI :: solo comento para desarroyo   // models\Login::example();
-    
+    if(isset($_REQUEST['empresa']) && $_REQUEST['empresa']==='demo' && $controller=='login'){
+        models\Login::example();
+    }
     // Condicion para cuando la empresa no esta creada no cargue la confuiguracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
     if (isset($_GET['empresa'])){
