@@ -170,11 +170,12 @@ class Login extends \core\BaseClass {
         return true;
      }
     public static function example(){
+        $demo = PREFIX_DB . 'demo'; 
         $connDemo = new \core\Conexion(null,3);
         $connDemo->multi_query("
-            DROP DATABASE IF EXISTS `bd_demo`;
-            CREATE DATABASE `bd_demo`;
-            USE `bd_demo`;
+            DROP DATABASE IF EXISTS `$demo`;
+            CREATE DATABASE `$demo`;
+            USE `$demo`;
          ");
         $file  = file_get_contents(APP_FOLDER . 'db/db_template.sql');
         $connDemo->multi_query($file);      

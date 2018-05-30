@@ -10,7 +10,8 @@ class Cita extends \core\BaseClass {
     }
     public function add () {
         //AKI :: en construccion
-        $sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,usuarioCogeCita) VALUE ('$agenda','$userId','$fecha', '$hora' ,'$nota','".$_SESSION['id_usuario']."')";
+        $sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,usuarioCogeCita) 
+        VALUE ('$agenda','$userId','$fecha', '$hora' ,'$nota','".$_SESSION['id_usuario']."')";
         return $this->conn->query($sql);
     }
     public function deleteById ( $id ) {
@@ -20,18 +21,17 @@ class Cita extends \core\BaseClass {
     public function copyDelTable (int $id_data , int $id_cita = null) {
 
         $r = $this->Data->copyTableById('del_data', $id_data ) ;
-
-        if ($r)
+        if ($r){
             $r = $Data->deleteById($idCita);
+            $this->Data_del->saveById($id_data, ['fechaDel',date('Y-m-d H:m:s')]); 
+        }
         if ($r) 
             $r = $Cita->deleteBy('idCita' , $idCita);
         
         if (isset($id_cita)){
             //true
              $r = $Cita->copyTableBy('del_cita', $idCita , 'idCita' ) ;
-        } else {
-            
-        }
+        } 
         
     }
     public function seachDelete($arr1 , $arr2){

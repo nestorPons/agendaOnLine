@@ -12,7 +12,7 @@ class Empresa extends \core\BaseClass {
 
         $this->data = $this->getBySQL("replace(`nombre_empresa`,' ','') = '$codeEmpresa' LIMIT 1",  MYSQLI_ASSOC)[0]??false;   
         $this->code = \core\Tools::normalize($this->data['nombre_empresa']); 
-        parent::__construct('config', 'bd_'. $this->code, 2);
+        parent::__construct('config', PREFIX_DB. $this->code, 2);
         
     }
     public function name(){
@@ -27,7 +27,8 @@ class Empresa extends \core\BaseClass {
         return  $this->conf_css;
     }
     private function conf(){
-        return $this->getAll('*',MYSQLI_ASSOC )[0];
+        $this->table = "config";
+        return $this->getAll('*',MYSQLI_ASSOC )[0]??false;
     }
     public function getConf(){
         $this->conf = array_merge($this->data(), $this->conf(), $this->conf_css()); 

@@ -110,7 +110,7 @@ servicios = {
 		
 		if (no_validate && $('#servicios .fam'+ id).is(':visible') || $('#crearCita .fam'+ id).is(':visible')  ) return false ;
 
-		var id = $.isEmpty(id)?1:id;
+		var id = $.isEmpty(id)?0:id;
 
 		$('.contenedorServicios').each(function(){
 			var $this = $(this)
@@ -545,7 +545,7 @@ main ={
 	 },
 	edit : function (idCita, idCelda ) {
 
-		if ($.isEmpty(idCita)) return false
+		if (!idCita)  return false
 		var lbl = $('#idCita_'+idCita+'.lbl')  
 		main.set.data(idCita)
 
@@ -561,7 +561,7 @@ main ={
 			},
 			obs : main.data[idCita].obs 
 		}
-		
+	
 		var _addServiceToLbl = function (callback){
 			var arrSer = main.data[idCita].servicios
 			var lblSer = lbl.find('.servicios') , html = ''
@@ -581,6 +581,7 @@ main ={
 			}
 
 			lblSer.html(html)
+
 			if (main.last.tiempoTotal != main.data[idCita].tiempoTotal){
 
 				var t = Math.ceil(main.data[idCita].tiempoTotal / 15) 
@@ -692,6 +693,7 @@ main ={
 		 }
 
 		if (!$.isEmpty(idCelda)) { 
+
 			// se ha editado arrastrando label
 			let decode = generateId.decode(idCelda)
 			main.data[idCita].agenda = decode.agenda
@@ -980,7 +982,6 @@ main ={
 					accept : ".lbl",
 					classes: {"ui-droppable-hover": "ui-state-hover"},
 					drop: function( event, ui ) {
-
 
 							var posi = $(this).position()
 							var drag  = ui.draggable
@@ -1351,7 +1352,7 @@ familias = {
 
 		if (confirm ('Desea eliminar la familia?')) 
 			familias.sendAjax(DEL , _fnOk)
-		else
+		 else
 			btn.load.hide() 
 		
 		
@@ -1361,7 +1362,19 @@ familias = {
 		var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
 		var _fnOk = function (r) {
 			if (r.success){
-				if (id > -1){
+				if (id == -1){
+					//NUEVO
+					var mostrar = (r.mostrar==1)?'checked':'';
+					$("#familias table").append("\
+						<tr id='rowFamilias"+r.id+"'>\
+						<td><a name='editar[]' class= 'icon-edit x6' value="+r.id+"></a></td>\
+						<td id='familia_"+ r.id + "' class='nombre'>"+r.nombre+"</td>\
+						<td class='ico'>\
+						<input type='checkbox' name = 'mostrar[]' id='chck"+r.id+" class='mostrar'\
+						value="+r.id+" "+ mostrar + "></td></tr>")
+					$('#servicios #frmEditar #familia').append("<option value="+r.id+">"+r.nombre+"</option>");
+					familias.menu.crear( r.id , r.nombre ) ;
+				}else{
 					//EDICION
 					$('#familias #familia_' + r.id).html(r.nombre);
 					$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
@@ -1374,20 +1387,6 @@ familias = {
 					$('#servicios #frmEditar #familia option[value='+id+']').html(r.nombre);
 
 					familias.menu.editar( r.id , r.nombre ) ;
-
-				}else{
-					//NUEVO
-					var mostrar = (r.mostrar==1)?'checked':'';
-					$("#familias table").append("\
-						<tr id='rowFamilias"+r.id+"'>\
-						<td><a name='editar[]' class= 'icon-edit x6' value="+r.id+"></a></td>\
-						<td id='familia_"+ r.id + "' class='nombre'>"+r.nombre+"</td>\
-						<td class='ico'>\
-						<input type='checkbox' name = 'mostrar[]' id='chck"+r.id+" class='mostrar'\
-						value="+r.id+" "+ mostrar + "></td></tr>")
-					$('#servicios #frmEditar #familia').append("<option value="+r.id+">"+r.nombre+"</option>");
-					
-					familias.menu.crear( r.id , r.nombre ) ;
 
 				}
 				
@@ -1402,12 +1401,12 @@ familias = {
 		if (id == -1 ){
 			(familias.validate.form()) ? familias.sendAjax(SAVE , _fnOk) : btn.load.hide();
 
-		}else{
+		 }else{
 			if ($.isEmpty(dlg.find('#nombre').val()))
 				notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
 			else	
 				familias.sendAjax(SAVE , _fnOk)
-		}
+		 }
 		
 	 },
 	sendAjax : function(action , callback){
@@ -1439,7 +1438,9 @@ familias = {
 			})
 		},
 	menu : {
-
+		a : function(id , name) {
+			return  $('<a>').attr('id', id).html( name ) ;
+		},
 		editar : function ( id ,  nombre ){
 			$('.menuServicios').each(function(){
 				$(this).find('#lstSerMain').find('#'+id).remove();
@@ -1464,7 +1465,7 @@ familias = {
 			$('.menuServicios').each(function(){
 				$(this).find('#lstSerMain').find('#'+id).addClass('ocultar_baja');
 				$(this).find('#lstSerSelect').find('#'+id).addClass('ocultar_baja');
-			})
+			 })
 			$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
 			$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
 			typeof callback == "function" && callback();
@@ -1479,16 +1480,10 @@ familias = {
 			})
 
 		},
-		a : function(id , name) {
 
-			return  $('<a>').attr('id', id).html( name ) ;
-	
-		},
 		option : function (id , name  ) {
-
 			return $('<option>').attr('id', id ).val(id).html( name ) ;
-
-		},
+		 },
 
 	 }, 
 	dialog: function (id){
@@ -1715,18 +1710,7 @@ crearCita ={
 			var activa = context.find('.activa')
 			var activar = context.find('#'+ Fecha.id)
 
-			crearCita.horas.crear(Fecha.id)			
-			/*context.fadeOut(function () {
-
-				//if(!activar.length) {
-				 /*} else {
-					activa.removeClass('activa')
-					activar.addClass('activa')
-					context.fadeIn() 
-				 }
-			})
-				*/
-
+			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },
 	reset: function(){

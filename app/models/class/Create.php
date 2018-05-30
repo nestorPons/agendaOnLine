@@ -9,7 +9,7 @@ class Create{
         $this->connect();
         $this->post = $post;
         $this->nameCompany = $this->defineNameCompany();
-        $this->db = 'bd_' . $this->nameCompany ;
+        $this->db = PREFIX_DB . $this->nameCompany ;
         $this->pass = $this->post['pass'];
         $this->name = $this->post['nombre_usuario'];
         $this->email = $this->post['email'];
@@ -101,6 +101,7 @@ class Create{
      }
     public function sendMail(){
         $User = new User(1);
+
         $Mail = new PHPMailer(true);
         include_once URL_CONFIG . 'mail.php';
         $Mail->Subject = "Activar nueva cuenta";

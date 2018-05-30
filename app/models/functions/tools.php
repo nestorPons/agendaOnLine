@@ -57,6 +57,8 @@ function generateId( $f = null , $h = null , $a = null) {
 	$a = (!empty($a)) ? str_pad($a, 2, "0", STR_PAD_LEFT) : '';
 	$f = substr(str_replace('-','',$f),0);
 	$h = str_replace(':','',$h);
-	return $a . $f . $h ; 
+    
+	$input =  $a . $f . $h ; 
+    return str_pad($input,14,'0',STR_PAD_LEFT); 
 
  }

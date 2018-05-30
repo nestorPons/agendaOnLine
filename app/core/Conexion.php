@@ -25,16 +25,16 @@ class Conexion extends \conf\UserConn {
 
 		if (!$this->connect()) 
 			 throw new \Exception(\core\Error::E051,51 );
-		
 	 }
 	private function connect(){
  
-		if ( $this->db == "bd_") throw new \Exception(\core\Error::E051,51 );
+		if ( $this->db == PREFIX_DB) throw new \Exception(\core\Error::E051,51 );
 
 		$this->conexion = (empty($this->db))
 			? mysqli_connect($this->server, $this->user, $this->pass) 
 			: mysqli_connect($this->server, $this->user, $this->pass , $this->db) ;
 		@mysqli_query("SET NAMES 'utf8'") ;
+		@mysqli_query("SET time_zone= Europe/Madrid") ;
 		
 		return $this->conexion??header("HTTP/1.0 404 Not Found");
 	

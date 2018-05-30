@@ -4,7 +4,7 @@ var servicios = {
 		
 		if (no_validate && $('#servicios .fam'+ id).is(':visible') || $('#crearCita .fam'+ id).is(':visible')  ) return false ;
 
-		var id = $.isEmpty(id)?1:id;
+		var id = $.isEmpty(id)?0:id; 
 
 		$('.contenedorServicios').each(function(){
 			var $this = $(this)
@@ -24,6 +24,7 @@ var crearCita ={
 	tiempoServicios : 0 ,
 	data : new Object() , 
 	init : function(){
+
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
 		if (!$.isEmpty(clase)){
 			clase_id = clase.replace(/\D/g,'');

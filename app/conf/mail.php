@@ -8,22 +8,22 @@ const EMAIL_PASS = 'QQasw2!!';
 const EMAIL_PORT = 25;
 
 //Server settings
-$Mail->SMTPDebug = 0;           // Enable verbose debug output
-$Mail->isMail();                // Set mailer to use SMTP
-$Mail->Host = 'mail.gandi.net';       // Specify main and backup SMTP servers
-$Mail->SMTPAuth = false;        // Enable SMTP authentication
-$Mail->Username = '';   // SMTP username
-$Mail->Password = '';   // SMTP password
-$Mail->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
-$Mail->Port = 25;
-//$Mail->setFrom(EMAIL_FROM, EMAIL_NAME);  
-$Mail->From =  'nestorpons@gmail.com';
-$Mail->FromName =  'ReservaTuCita.com';
+$this->SMTPDebug = 0;           // Enable verbose debug output
+$this->isMail();                // Set mailer to use SMTP
+$this->Host = 'mail.gandi.net';       // Specify main and backup SMTP servers
+$this->SMTPAuth = false;        // Enable SMTP authentication
+$this->Username = '';   // SMTP username
+$this->Password = '';   // SMTP password
+$this->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
+$this->Port = 25;
+//$this->setFrom(EMAIL_FROM, EMAIL_NAME);  
+$this->From =  'nestorpons@gmail.com';
+$this->FromName =  'ReservaTuCita.com';
 //Recipients        
-$Mail->AddReplyTo(EMAIL_FROM,EMAIL_NAME);
+$this->AddReplyTo(EMAIL_FROM,EMAIL_NAME);
 //config 
-$Mail->CharSet = 'UTF-8';
-$Mail->isHTML(true);  
+$this->CharSet = 'UTF-8';
+$this->isHTML(true);  
 //Attachments
-$Mail->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
-$Mail->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');
+$this->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
+$this->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');

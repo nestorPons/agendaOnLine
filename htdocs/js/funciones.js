@@ -117,7 +117,7 @@ var generateId = {
 		h = h.split(':')
 
 		return a + f + h[0] + h[1]
-	},
+	 },
 	decode : function (value) {
 
 		var result = new Object()
@@ -130,7 +130,7 @@ var generateId = {
 		result.hour = hora.substr(0,2) + ':' + hora.substr(2,2)
 
 		return result
-	}
+	 }
  }
 var btn = {
 	active : null , 
@@ -274,6 +274,7 @@ var validar = {
 		estado: false,
 		funcion:function($this){
 			var pass = SHA($this.val())
+
 		   	$this.siblings('#pass').val(pass)
 	
 			if (!$.isEmpty($this.val())){				
@@ -1036,7 +1037,7 @@ $(function(){
 		 })
 	$('body')
 		.on('click','.clear-input',function(){
-		$(this).siblings('input').val('');
+			$(this).siblings('input').val('')
 		})
 	if(!$.isEmpty($_GET['err'])){
 		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''

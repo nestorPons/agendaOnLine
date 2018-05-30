@@ -18,7 +18,8 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 	for ($d = 0; $d <= ($dias * 2) ; $d++){
 		$fecha =date ( 'Y-m-d', strtotime ( '+'.$d.' day' , strtotime ( $fecha_inicio ) ) );
-		$id_fecha = generateId($fecha);
+		$id_fecha = str_replace('-','',$fecha);
+
 		$dia_semana = date('w',strtotime($fecha)) ;
 		$array_horas = $_SESSION['HORAS'][$dia_semana]??false;
 
@@ -50,7 +51,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 							<tr id='<?=$h?>' class="hora h<?= $h . ' '.$disabled?> " data-hour='<?= $str_hora?>'>
 								<td  class="<?= $clasehora ?> "><?= $str_hora?> </td>
 								<?php
-								for ($a=1;$a<=CONFIG['totalAgendas'];$a++){ 
+								for ($a=0;$a<CONFIG['totalAgendas'];$a++){ 
 									$label = $lbl->html[$h][$a] ?? false ;
 									
 									?>

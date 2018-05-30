@@ -2,6 +2,9 @@
 
 class Tools{
     function __construct(){}
+    public static function current_date($format = 'Y-m-d H:m:s'){
+        return date($format);
+    }
     public static function getUserLanguage() {  
         $idioma =substr($_SERVER["HTTP_ACCEPT_LANGUAGE"],0,2); 
         return $idioma;  

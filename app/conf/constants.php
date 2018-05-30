@@ -26,6 +26,10 @@ define('URL_VIEWS' , APP_FOLDER . 'views/' );
 define('URL_PROTOCOL', stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
+const PREFIX_DB = 'rtc_'; 
+const MARGIN_DAYS = 6;
+const DEFAULT_HISTORY_DAYS = 1;
+const NUM_MAX_ATTEMPT = 7; //attempts for crack brute force pass
 
 // Constantes de desarrollo
 const SAVE = 'save';
@@ -33,3 +37,10 @@ const DEL = 'del';
 const EDIT = 'edit';
 const GET = 'get';
 const BR = '<br>';
+
+const _NEW = -1; 
+
+//datos de administrador
+define ('ADMIN_WEB','http://57230b1799704ccc80ad7f3bbfad7c95.yatu.ws');
+define ('ADMIN_NAME' , 'Nestor Pons') ; 
+define ('ADMIN_EMAIL' , 'nestorpons@gmail.com') ; 

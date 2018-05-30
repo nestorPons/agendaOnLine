@@ -1,5 +1,5 @@
 <?php 
-    $link = URL_ABSOLUT . CODE_EMPRESA . '/activate/' . $args[1];
+    $link = URL_ABSOLUT . CODE_EMPRESA . '/activate/' . $token; 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,6 +24,3 @@
     </center>
     </body>
 </html>
-
-
-

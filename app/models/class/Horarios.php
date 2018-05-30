@@ -24,11 +24,11 @@ class Horarios extends \core\BaseClass {
 	public function all(){
 		return $this->consult("SELECT * FROM horarios ORDER BY dia") ;  
 	 }
-	public function hours($day = 'all'){
+	public function hours($day = 'all', $agenda = 0){
 
 		$sql =  ($day=='all') ?
-			"SELECT * FROM horarios ORDER BY dia " :
-			"SELECT * FROM horarios WHERE dia = $day ORDER BY inicio " ;
+			"SELECT * FROM horarios ORDER BY dia AND agenda = " . $agenda :
+			"SELECT * FROM horarios WHERE dia = $day AND agenda = " . $agenda . " ORDER BY inicio " ;
 
 		if ($row = $this->consult($sql)){
 			foreach ($row as $value){
@@ -50,8 +50,6 @@ class Horarios extends \core\BaseClass {
 					$horas_array[$d][] = null;
 				}
 			} 
-		
-
 		}	
 
 		return $horas_array??false;

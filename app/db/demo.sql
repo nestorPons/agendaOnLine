@@ -1,7 +1,6 @@
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 1;
-
 SET time_zone = "+00:00";
 
 INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, `idioma`, `dateReg`, `dateBaja`, `status`, `attempts`, `pin`) VALUES
@@ -43,7 +42,7 @@ INSERT INTO `data` (`id`, `agenda`, `idUsuario`, `fecha`, `hora`, `obs`, `usuari
 (1, 1, 2, CURRENT_TIMESTAMP, '11:00:00', '', 2);
 
 INSERT INTO `cita` (`idCita`,`servicio`) 
-VALUES (0,1), (1,2);
+VALUES (0,0), (1,1);
 
 INSERT INTO `festivos` (`nombre`, `fecha`) 
 VALUES (`Año nuevo`, `1970-01-01`), (`Reyes`, `1970-01-06`), (`Noche vieja`, `1970-12-31`); 

@@ -7,6 +7,7 @@ class Logs extends \core\BaseClass{
     public function set(int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null ){
        return self::saveById(-1,[
                 'idFK'=>$idFK, 
+                'date'=>\core\Tools::current_date(), 
                 'idUser'=> $idUser, 
                 'tables'=> $tables, 
                 'action'=> self::formatAction($action), 

@@ -75,36 +75,35 @@ class User extends \core\BaseClass {
 			: $this->set(array('status'=>$arg));
 	 }
 	public function getToken(){
-
 		$this->removeToken();
-        if ($this->token == 'undefined'){
+		if ($this->token == 'undefined'){
 			$cadena = $this->id.$this->nombre.rand(1,9999999).date('Y-m-d');
 			$this->token = sha1($cadena) . str_pad($this->id, 4, "0", STR_PAD_LEFT); 
 			
 			$Token = new \core\BaseClass('tblreseteopass');
-			if( !$Token->saveById(-1,[
-				'id'=> $this->id , 
-				'token' => $this->token 	
-			]))
-			return false;
+			if( !$Token->saveById(_NEW, [
+				'id_user'=> $this->id , 
+				'token' => $this->token , 
+				'date'	=> \core\Tools::current_date()
+			]));
 		}
 
 		return $this->token;
      }
 	public function checkToken($token){
 		$Token = new \core\BaseClass('tblreseteopass'); 
-		$tbl = $Token->getOneBy('id', $this->id);
+		$tbl = $Token->getOneBy('id_user', $this->id);
 
 		$actualDate = (strtotime(date("Y-m-d H:i:00",time())));
 		$saveDate = (strtotime('+30 minute' , strtotime($tbl['date'])));
-
-		if($actualDate > $saveDate) return \core\Error::set('E061');
+echo $actualDate .BR. $saveDate;
+		if($actualDate >= $saveDate) return \core\Error::set('E061');
 		if($tbl['token'] != $token) return \core\Error::set('E062');
 		return true;
 	 }
 	private function removeToken(){
 		$Token = new \core\BaseClass('tblreseteopass'); 
-		return $Token->deleteById($this->id);
+		return $Token->deleteBy('id_user', $this->id);
 	 }
 	public function activate($get){
 		if (!$this->checkToken($get['args'])) return false;

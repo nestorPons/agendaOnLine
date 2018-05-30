@@ -29,7 +29,7 @@
 		<div id="tabcontrol" class="tabcontrol" datar-role="tabcontrol" data-save-state=true data-on-tab-click="menuEsMovil" >	
 			<ul class="tabs">
 				<?php
-				for ($a=1;$a<=$Agendas->count();$a++){
+				for ($a=0;$a<$Agendas->count();$a++){
 					$id = $agendas[$a][0];
 					$name = $agendas[$a][1];
 					?>

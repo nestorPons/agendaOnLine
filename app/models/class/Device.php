@@ -10,8 +10,6 @@ class Device{
         $this->getOs();
         $this->getBrowser();
         $this->getDevice();
-
-
     }
     private function getOs(){
         if (preg_match('/linux/i', $this->agente)) {

@@ -11,8 +11,8 @@ $servicios = $_POST['servicios']??mnsExit('No se han pasado servicios');
 $agenda =  $_POST['agenda'][0]??mnsExit('Sin agenda');
 
 $r['success']=true;
-$sql = "SELECT * FROM data WHERE fecha = '$fecha' AND hora = '$hora' AND agenda= '$agenda'";
-$result_data = $conn->row($sql) ;
+
+$result_data = $Data->getBy(array('fecha','hora','agenda'),array($fecha, $hora, $agenda)); 
 
 if ($result_data <= 1 || 1 ){
 	$r['ocupado']=false;
@@ -35,7 +35,7 @@ if ($result_data <= 1 || 1 ){
 					]);
 
 				$arrSer[] = $Serv->getById($id) ;
-				$arridCitaSer[] = $conn->id();
+				$arridCitaSer[] = $Data->getId();
 			}
 
 		$r['idUser'] = $userId ;

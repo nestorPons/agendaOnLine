@@ -60,7 +60,6 @@ class Lbl {
                 WHERE $filter D.fecha BETWEEN '$ini' AND '$end'  
                 ORDER BY D.id, D.hora;";
 
-
         $this->data($sql) ;
     }
     private function data ($sql) {

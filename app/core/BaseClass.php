@@ -49,15 +49,15 @@ class BaseClass{
 
         return  $this->format($result);
     
-     }
+     }  
     public function getBy ( $column , $value , string $return = '*', $type = MYSQLI_ASSOC ) {
         //varios valores ponerlos en un array
         $filters = '';
 
         if ( gettype($column) == 'array' )  {
             $count = count($column);
-            for ($i = 0 ; $i < $count ; $i++){
-                $value[$i] = $this->conn->scape($value[$i]);   
+            for ($i = 0 ; $i < $count ; $i++){ 
+                //$value[$i] = $this->conn->scape($value[$i]);   
                 $filters .= ($i!=0) ? ' AND ' : '' ;
                 $filters .= (string)$column[$i] ." = '".(string)$value[$i] ."'";
             }  
@@ -132,12 +132,14 @@ class BaseClass{
         return $r;
      }
     public function saveById ( int $id , array $args = null  ) {
-        
+         
         $columns = null ; 
         $values = null ;
+        
 
         if ( $id == -1) {
             if (!is_null($args)){
+                unset($args['id']);
                 foreach ($args as $column => $value ) {
                     $columns .=  $column . ',' ;
                     $values .= '"' . $value . '",' ; 
@@ -148,9 +150,9 @@ class BaseClass{
             $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
 
         } else {
-
             $this->sql .= $this->updateSql($args , $id);
         }
+
       if(!$this->multi_query){
             $this->return = $this->query();
             return $this->return;
@@ -168,7 +170,6 @@ class BaseClass{
          } 
         $columns = trim( $columns , ',' ) ;
         $values = trim( "'" . $values , "'," ) ;
-
         if ($id = $this->getOneBy($fName , $fValue, 'id')) 
             $this->sql .= $this->updateSql($args , $id);
         else 
@@ -188,14 +189,13 @@ class BaseClass{
        }
      } 
     private function updateSql(array $args = null, int $id = null){
-       
+
         $str = ''; 
         foreach ($args as $column => $value ) {
             $str .=  $column . ' ="' . $value . '",' ; 
         }
-
         $str = trim( $str , ',') ; 
-        $str .= (!empty($id))?" WHERE id = $id":'';
+        $str .= (!is_null($id))?" WHERE id = $id":'';
         $sql = "UPDATE {$this->table} SET $str ;" ;
 
         return $sql;
@@ -219,9 +219,9 @@ class BaseClass{
      }
     public function copyTableById($target , $id  ){
         $cols = '';
-        $sql = "SELECT * FROM {$this->table}";
-        
+        $sql = "SELECT * FROM {$this->table}";    
         $query = $this->conn->query($sql) ;
+
         $info = $query->fetch_fields();
         foreach ($info as $val) {
             $cols .= $val->name . ',' ;

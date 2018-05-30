@@ -117,12 +117,12 @@ user = {
 validate = {
 	login :function() {
 			var $pass = $('#fakePass'), 
-			$email = $('#login')
+				$email = $('#login')
 				
 		if ($.isEmpty($pass.val())|| $pass.val() < 6){
 			$pass.addClass('input-error')
 			return false
-		}
+		 }
 		return true;
 	 }, 
 	pass : function (pass1, pass2) {
@@ -187,7 +187,7 @@ $(function(){
 			notify.success($_GET['success'])
 	$('#frmLogin')
 		.keyup(function(e){
-			if(e.keyCode == 13)$('#btnLogin').click();
+			if(e.keyCode == 13)$('#btnLogin').click()
 		 })
 		.submit(function(e){
 			if (!validate.login()) {

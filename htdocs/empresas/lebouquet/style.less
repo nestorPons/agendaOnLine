@@ -604,17 +604,13 @@ a,i , .a{
 	}
  }
 .stepper{
-	margin:0;
-    width: 97%;
+	border: 1px solid @base;
 	&>ul{
 		li{
-			border-radius: 50%;
 			background-color:@base !important;
 			border: 1px solid @color ;
 			&:before{
 				color: @color !important;
-				position:relative;
-				top:2px;
 			}
 
 			&:hover{
@@ -640,9 +636,6 @@ a,i , .a{
 				color: @base !important;
 			}
 		}
-	}
-	@media (max-width: 425px){
-		margin: auto;
 	}
  }
 .ocupado , .reservado , .disabled{
