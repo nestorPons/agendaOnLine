@@ -123,7 +123,7 @@ var crearCita ={
 		 },	
 		load : function ($this) {
 			var lblTS = $('#tSer')[0]
-
+		
 			if( $this.is(':checked') )
 				crearCita.tiempoServicios += $this.data('time')
 			else 
@@ -133,6 +133,7 @@ var crearCita ={
 		
 			lblTS.innerHTML = crearCita.tiempoServicios;
 		 } ,
+AKI:: 
 		crear: function (id_table, callback){
 			var data = {
 				agenda: crearCita.data.agenda,

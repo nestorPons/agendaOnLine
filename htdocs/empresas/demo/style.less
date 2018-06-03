@@ -30,7 +30,7 @@
 @yellow :desaturate(#FFFF00,lightness(@color));
 
 @grey:#8a8a7b;
-@grey-bg:#eee;
+@grey-bg:mix(@grey,#fff,50%);
 
 @fontSize: 1rem;
 @tabla_celda_borde: mix(@grey,#fff,10%);
@@ -833,8 +833,9 @@ a,i , .a{
 	}
 	
 	.fuera_horario{
-		border-color: @grey-bg;
-		color: @grey;
+		border-color: @grey;
+		color: @text1;
+		background-color: @grey-bg; 
 	}
  }
 

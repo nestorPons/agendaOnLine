@@ -1605,7 +1605,7 @@ class Lessc {
 		$this->importDir = $oldImport;
 		if ($outFname !== null) {
 			$file =  file_put_contents($outFname, $out);
-			chmod($outFname , 0664);
+			chmod($outFname , 0666);
 			return $file ; 
 		}
 		return $out;

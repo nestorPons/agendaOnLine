@@ -428,6 +428,7 @@ main ={
 					$.each(data.servicios, function( index, $this ){
 						tt += parseInt($this.tiempo)
 					})
+
 					data.uTiempo = Math.ceil(tt / 15)  
 					if (isDel) main.lbl.delete(data.idCita ,true)
 					if (isAdd) main.lbl.create(data)
@@ -878,7 +879,8 @@ main ={
 						<div class='note '>"+data.nota+"</div> \
 					</div> \
 				"
-				return html ;					
+
+				return html 					
 			}, 
 		service : function (data) {
 
@@ -958,22 +960,22 @@ main ={
 						opacity : 0.70 , 
 						zIndex: 100 ,
 						revert: function(ob){
-								if (ob == false){
-									$('.ui-draggable-dragging').remove()
-									$('#'+main.lbl.idLastCelda)
-										.html(main.lbl.clone)
-									main.lbl.draggable()
-									return true
-								}
-							}, 
+							if (ob == false){
+								$('.ui-draggable-dragging').remove()
+								$('#'+main.lbl.idLastCelda)
+									.html(main.lbl.clone)
+								main.lbl.draggable()
+								return true
+							}
+						 }, 
 						revertDuration: 500,
 						handle :$(this).find('.fnMove'), 
 						stop : function(e, ui){
-						},
+						 },
 						start : function ( e, ui) {
 							main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',1)
 							main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
-						},
+						 },
 					}) 
 				})
 			},
@@ -1561,8 +1563,8 @@ crearCita ={
 			data = {
 				fecha : Fecha.general , 
 				hora : sec.find('.horas:checked').val(), 
-				agenda : sec.data.agenda,
-				nameCli :sec.data.nombre, 
+				agenda : crearCita.data.agenda,
+				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
 				nota : sec.find('#crearCitaNota').val(),
 				uTiempo : Math.ceil(parseInt(sec.find('#tSer').text()) / 15) 
@@ -1591,14 +1593,12 @@ crearCita ={
 						notify.error( rsp.mns.body , rsp.mns.tile )
 
 					}else{	
-
 						self.data.idCita = rsp.idCita
 						self.data.idUsuario = rsp.idUser
 						self.data.servicios = rsp.services
 						main.lbl.create(self.data)
 
-						mostrarCapa('main' , true )
-							
+						mostrarCapa('main' , true )			
 					}
 				} else {
 					echo(rsp)
@@ -1629,16 +1629,17 @@ crearCita ={
 			
 		 },	
 		load : function ($this) {
+			tiempoServicios = 0
 			var lblTS = $('#tSer')[0]
 
 			if( $this.is(':checked') )
-				crearCita.tiempoServicios += $this.data('time')
+				tiempoServicios += $this.data('time')
 			else 
-				crearCita.tiempoServicios -= $this.data('time')
+				tiempoServicios -= $this.data('time')
 
 			crearCita.horas.pintar(Fecha.id)
 		
-			lblTS.innerHTML = crearCita.tiempoServicios;
+			lblTS.innerHTML = tiempoServicios;
 		 } ,
 		crear: function (id_table, callback){
 			var data = {
@@ -1655,7 +1656,7 @@ crearCita ={
 			})
 
 		 },		
-		pintar: function(id_table){
+		pintar: function(id_table, tiempoServicios){
 
 			var self = crearCita, 	
 				section = $('#crearCita') 
@@ -1684,7 +1685,7 @@ crearCita ={
 				}
 				return  _return
 			},
-				ts = parseInt(Math.ceil(self.tiempoServicios/15))||0 ,
+				ts = parseInt(Math.ceil(tiempoServicios/15))||0 ,
 				_reservar= ( me ) =>  me.attr('disabled',true).parent('label').addClass('reservado') ,
 				_fueraHorario  = ( me ) =>  me.hasClass('disabled') ,
 				diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS) ,
