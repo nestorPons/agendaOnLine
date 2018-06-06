@@ -438,6 +438,7 @@ var dialog = {
 				$this.on('click','.btn-success',function(e){
 					typeof fnOk == "function" && fnOk()
 				})
+		
 
 				typeof callback == "function" && callback(true)
 

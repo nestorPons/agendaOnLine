@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 var _hora = 0; 
 //Funcion para menu responsive 
@@ -1528,7 +1528,7 @@ crearCita ={
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
 		if (!$.isEmpty(clase)){
-			clase_id = clase.replace(/\D/g,'');
+			var clase_id = clase.replace(/\D/g,'');
 			servicios.mostrar(clase_id) ;
 		}
 		cargarDatepicker();
@@ -2450,22 +2450,23 @@ estilos = {
 	}
  }, 
 notas = {
-	nombreDlg : 'dlgNotas', 
-	$dlg : $('#'+this.dlgNotas), 
+	nombreDlg : 'dlgNotas',
+	dir : 'right',
+	init : function(){
+		cargarDatepicker();
+	 },
 	dialog:function(id=-1){
-		var  $dlg = $('#dlgNotas')
-		var fnLoad = function (isNew) {
-alert($('#dlgNotas').lenght)
+		var fnLoad = function () {
+		var  $dlg = $('#'+notas.nombreDlg)
 			$dlg.find("#id").val(id)
-alert($dlg.find("#id").lenght)	
+
 			if (id==-1){ 
 				//NUEVO....
 				
-				var idCapa = $('#servicios .c3').attr('id');
-				 $dlg
-					.find('#fecha').val(Fecha.print()).end()
-					.find('#hora').val('').end()
-					.find('#descripcion').val('').end()
+				$dlg
+					.find('#fecha').val(Fecha.sql).end()
+					.find('#hora').val('00:00').end()
+					.find('#descripcion').val('Escribe una nota').end()
 					.find('h1').html('Nuevo...')
 		
 			}else{ 
@@ -2491,12 +2492,9 @@ alert($dlg.find("#id").lenght)
 			}
 			
 		}
-
+		
 		dialog.open(this.nombreDlg,this.save,this.delete(id),fnLoad)
-		},
-	dir : 'right',
-	init : function(){
-		cargarDatepicker();
+
 	 },
 	save : function(callback){
 		var  $dlg = $('#dlgNotas'), 
@@ -2808,10 +2806,6 @@ $(function(){
 			sincronizar(null, $(this).parent().parent().data('fecha'))
 		 })
 	$('#notas')
-		.on('submit', function(e){
-			e.preventDefault()
-			notas.save()
-		 })
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 		.on('click','.fnDel', notas.delete)
 
