@@ -1,3 +1,4 @@
+"use strict";
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 var _hora = 0; 
 //Funcion para menu responsive 
@@ -41,7 +42,7 @@ function sincronizar( dias, date , callback ){
 
  }
 function mostrarCapa(capa, callback){
-	data = { 
+	var data = { 
 		controller : capa ,  
 		fecha :  Fecha.sql ,
 	 }
@@ -1094,7 +1095,7 @@ menu = {
 				menu.enabled(save) ;
 				break;
 			case 'notas':
-				menu.enabled(save)
+				menu.enabled(add)
 				break
 			case 'history':
 				menu.enabled(options)
@@ -1172,6 +1173,9 @@ menu = {
 				break
 			case 'festivos' :
 				festivo.dialog(-1) 
+				break
+			case 'notas' :
+				notas.dialog(-1) 
 				break
 		 }
 	 },
@@ -2410,11 +2414,11 @@ estilos = {
 	border : false , 
 	init : function () {
 		this.border = $('#sldBorderRadius').data('position') ;
-	},
+	 },
 	test : function ( value ) {
 		this.border = value ;
 		$('#btnTest').css('border-radius' , value)
-	},
+	 },
 	save : function () {
 		
 		
@@ -2446,36 +2450,80 @@ estilos = {
 	}
  }, 
 notas = {
+	nombreDlg : 'dlgNotas', 
+	$dlg : $('#'+this.dlgNotas), 
+	dialog:function(id=-1){
+		var  $dlg = $('#dlgNotas')
+		var fnLoad = function (isNew) {
+alert($('#dlgNotas').lenght)
+			$dlg.find("#id").val(id)
+alert($dlg.find("#id").lenght)	
+			if (id==-1){ 
+				//NUEVO....
+				
+				var idCapa = $('#servicios .c3').attr('id');
+				 $dlg
+					.find('#fecha').val(Fecha.print()).end()
+					.find('#hora').val('').end()
+					.find('#descripcion').val('').end()
+					.find('h1').html('Nuevo...')
+		
+			}else{ 
+				//EDITANDO..
+				
+				/*
+				var row = $("#notas #rowServicios"+id),	
+					cod = row.find("[name='cod']").text(),
+					des = row.find("[name='des']").text(),
+					time = row.find("[name='time']").text(),
+					price = row.find("[name='price']").data("value"),
+					fam = row.attr('familia')
+
+				dlg
+					.find('#codigo').val(cod).end()
+					.find('#descripcion').val(des).end()
+					.find('#tiempo').val(parseInt(time)).end()
+					.find('#precio').val(price).end()
+					.find('#familia').val(fam).end()
+					.find('#eliminar').val('Eliminar').end()
+					.find('h1').html('Editando...')
+				*/
+			}
+			
+		}
+
+		dialog.open(this.nombreDlg,this.save,this.delete(id),fnLoad)
+		},
 	dir : 'right',
 	init : function(){
 		cargarDatepicker();
 	 },
 	save : function(callback){
-
-		data =  {
-			nota : $('#txtNotas').val(),
-			fecha : Fecha.sql, 
+		var  $dlg = $('#dlgNotas'), 
+		 data =  {
+			id : $dlg.find('#id').val(), 
+			nota : $dlg.find('#descripcion').val(),
+			fecha : $dlg.find('#fecha').val() ,
+			hora : $dlg.find('#hora').val(), 
 			controller : 'notas', 
 			action : SAVE
 		}
-		$.post(INDEX, data,
-			function (r, textStatus, jqXHR) {
-				if (r.success) {
-					notify.success('Su nota ha sido guardada')
-				} else{
-					notify.error('No se ha podido guardar la nota')
-					echo (r)
-				} 
-				typeof callback == "function" && callback();
-			},
-			JSON
-		)
+echo (data)
+		$.post(INDEX, data,function (r, textStatus, jqXHR) {
+			if (r.success) {
+				notify.success('Su nota ha sido guardada')
+			} else{
+				notify.error('No se ha podido guardar la nota')
+				echo (r)
+			} 
+			typeof callback == "function" && callback();
+		 },JSON)
 	 }, 
-	delete : function(callback){
-		data = {
+	delete : function(id,callback){
+		var data = {
 			controller : 'notas' , 
 			action : DEL , 
-			fecha : Fecha.sql
+			id : id
 		}
 		$.post(INDEX, data,
 			function (r, textStatus, jqXHR) {
@@ -2764,6 +2812,7 @@ $(function(){
 			e.preventDefault()
 			notas.save()
 		 })
+		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 		.on('click','.fnDel', notas.delete)
 
  })

@@ -100,7 +100,8 @@ CREATE TABLE `horarios` (
 CREATE TABLE `notas` (
   `id` int(50) PRIMARY KEY AUTO_INCREMENT ,
   `nota` longtext CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
-  `fecha` date NOT NULL
+  `fecha` date NOT NULL,
+  `hora` time
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE `servicios` (

@@ -136,7 +136,7 @@ class BaseClass{
         $columns = null ; 
         $values = null ;
         
-
+echo $id; 
         if ( $id == -1) {
             if (!is_null($args)){
                 unset($args['id']);
@@ -187,7 +187,7 @@ class BaseClass{
             $this->return = $this->query();
             return $this->return;
        }
-     } 
+     }
     private function updateSql(array $args = null, int $id = null){
 
         $str = ''; 

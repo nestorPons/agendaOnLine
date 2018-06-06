@@ -16,7 +16,7 @@ try {
     }
     
     
-    // Condicion para cuando la empresa no esta creada no cargue la confuiguracion  de la empresa 
+    // Condicion para cuando la empresa no esta creada no cargue la configuracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
     if (isset($_GET['empresa'])){
         $Logs = new models\Logs;

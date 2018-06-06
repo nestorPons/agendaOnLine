@@ -2,6 +2,9 @@ Options +FollowSymLinks -MultiViews -Indexes
 RewriteEngine On
 AddDefaultCharset UTF-8
 
+#activa errores php
+php_flag display_errors On
+
 ErrorDocument 404 error404.php
 
 RewriteRule ^css/(.*)$ - [L]

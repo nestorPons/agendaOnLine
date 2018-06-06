@@ -172,6 +172,7 @@ class Login extends \core\BaseClass {
     public static function example(){
         $demo = PREFIX_DB . 'demo'; 
         $connDemo = new \core\Conexion(null,3);
+        
         $connDemo->multi_query("
             DROP DATABASE IF EXISTS `$demo`;
             CREATE DATABASE `$demo`;

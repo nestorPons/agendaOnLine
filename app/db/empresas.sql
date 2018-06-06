@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `aa_db`
 --
+CREATE DATABASE IF NOT EXISTS aa_db; 
+USE aa_db; 
 
 -- --------------------------------------------------------
 
@@ -28,7 +30,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `empresas`
 --
 
-CREATE TABLE `empresas` (
+CREATE TABLE IF NOT EXISTS `empresas`(
   `id` int(11) NOT NULL,
   `nombre_empresa` varchar(30) NOT NULL,
   `email` varchar(30) NOT NULL,

@@ -3,10 +3,10 @@ $post = $Forms->sanitize($_POST);
 header('Content-Type: application/json');
 switch ($_POST['action']){
     case SAVE:
-        $r['success'] = $Notas->SaveBy(['fecha'=>$_POST['fecha']], $post) ;
+        $r['success'] = $Notas->SaveById((int)$_POST['id'], $post) ;
         break;
     case DEL :
-        $r['success'] = $Notas->DeleteBy('fecha',$_POST['fecha']);
+        $r['success'] = $Notas->DeleteById((int)$_POST['id']);
         break;
     case GET :
         $r['data'] = trim($Notas->getOneBy('fecha',$_POST['fecha'], 'nota'));
