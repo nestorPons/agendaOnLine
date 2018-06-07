@@ -114,6 +114,7 @@ thead{
 		&:focus, &:hover, &:active{
 			text-decoration: none;
 		}
+		height: 1.1em;
 	}
 
  }
@@ -1344,7 +1345,11 @@ input[type="color"] {
 			text-align: center;
 			margin: 0 5px auto;
 		}
-	 }
+	}
+	th{
+		height: 25px;
+	}
+	 
 	.celda{
 		vertical-align: top;
 		text-align:left !important;
@@ -1423,10 +1428,10 @@ input[type="color"] {
 		}
 	 }
 
-	&.encabezado, .enca	bezado {
+	&.encabezado, .encabezado {
 		color: @grey;
 		margin:5px;
-		td{
+		th{
 			border: none;
 			text-decoration: underline;
 			font-size:@fontSize;

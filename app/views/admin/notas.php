@@ -1,16 +1,18 @@
 
     <div class="cabecera-content">
+    <h1>Nota del dia</h1>
     <?php 
         include URL_TEMPLATES . "datepicker.php" ;
     ?>
 	</div>
-    <h1>Nota del dia</h1>
     <table class=tablas>
      <thead>
       <tr>
-       <th><span class="idituloOpciones">Opciones</span></th>
-       <th><span class="idTituloFecha">Fecha</span></th>
-       <th><span class="idTituloDescripcion">Descripcion</span></th>
+       <th><span class="tituloOpciones">Opciones</span></th>
+       <th><span class="tituloNumero">Numero</span></th>
+       <th><span class="tituloFecha">Fecha</span></th>
+       <th><span class="tituloHora">Hora</span></th>
+       <th><span class="tituloDescripcion">Descripcion</span></th>
       </tr>
      </thead>
      <tbody>

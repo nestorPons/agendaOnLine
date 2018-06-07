@@ -1,4 +1,4 @@
-'use strict'
+
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 var _hora = 0; 
 //Funcion para menu responsive 
@@ -2472,28 +2472,21 @@ notas = {
 			}else{ 
 				//EDITANDO..
 				
-				/*
-				var row = $("#notas #rowServicios"+id),	
-					cod = row.find("[name='cod']").text(),
-					des = row.find("[name='des']").text(),
-					time = row.find("[name='time']").text(),
-					price = row.find("[name='price']").data("value"),
-					fam = row.attr('familia')
+				var $row = $("#notas #trNotas"+id),	
+					fecha = $row.find(".idFecha").text(),
+					hora = $row.find(".idHora").text(),
+					des = $row.find(".idDescripcion").text()
 
-				dlg
-					.find('#codigo').val(cod).end()
-					.find('#descripcion').val(des).end()
-					.find('#tiempo').val(parseInt(time)).end()
-					.find('#precio').val(price).end()
-					.find('#familia').val(fam).end()
-					.find('#eliminar').val('Eliminar').end()
-					.find('h1').html('Editando...')
-				*/
+				$dlg
+					.find('#fecha').val(Fecha.sql(fecha.trim())).end()
+					.find('#hora').val(hora.trim()).end()
+					.find('#descripcion').val(des)
+							
 			}
 			
 		}
 		
-		dialog.open(this.nombreDlg,this.save,this.delete(id),fnLoad)
+		dialog.open(this.nombreDlg,this.save,()=>this.delete(id),fnLoad)
 
 	 },
 	save : function(callback){
@@ -2506,9 +2499,18 @@ notas = {
 			controller : 'notas', 
 			action : SAVE
 		}
-echo (data)
+
 		$.post(INDEX, data,function (r, textStatus, jqXHR) {
 			if (r.success) {
+				dialog.close(this.nombreDlg)
+
+				let $linea = ($("#notas #trNotas"+data.id).length)
+				?$("#notas #trNotas"+data.id)
+				:$('#notas tbody tr').first().clone().attr('id','trNotas'+r.id).appendTo('#notas table tbody')
+
+				$linea.find('.idFecha').text(data.fecha)
+				$linea.find('.idHora').text(data.hora)
+				$linea.find('.idDescripcion').text(data.nota)
 				notify.success('Su nota ha sido guardada')
 			} else{
 				notify.error('No se ha podido guardar la nota')
@@ -2516,8 +2518,10 @@ echo (data)
 			} 
 			typeof callback == "function" && callback();
 		 },JSON)
+
 	 }, 
 	delete : function(id,callback){
+
 		var data = {
 			controller : 'notas' , 
 			action : DEL , 

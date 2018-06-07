@@ -136,7 +136,7 @@ class BaseClass{
         $columns = null ; 
         $values = null ;
         
-echo $id; 
+
         if ( $id == -1) {
             if (!is_null($args)){
                 unset($args['id']);

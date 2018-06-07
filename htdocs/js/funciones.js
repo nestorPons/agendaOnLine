@@ -429,11 +429,11 @@ var dialog = {
 				})
 				
 
-				$this.on('click','.icon-cancel',function(){
+				$this.on('click','.fnClose',function(){
 					dialog.close(objName)
 				})
 				$this.on('click','.btn-danger',function(e){
-					typeof fnCancel == "function"?fnCancel():dialog.close(objName);
+					typeof fnCancel == "function"?fnCancel():dialog.close(objName)
 				})
 				$this.on('click','.btn-success',function(e){
 					typeof fnOk == "function" && fnOk()
