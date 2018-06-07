@@ -2421,8 +2421,9 @@ estilos = {
 	 },
 	save : function () {
 		
-		
-		data = {
+AkI: guardar el valor del slider 
+
+		var data = {
 			color1 : $('#btnColor1').val() ,
 			color2 : $('#btnColor2').val() ,
 			border : this.border , 
@@ -2432,9 +2433,9 @@ estilos = {
 			action : SAVE
 		}
 		$.post(INDEX,data,function(r){ 
-			if (r) location.reload(); 
+			//if (r) location.reload(); 
 		},'json')
-	}, 
+	 }, 
 	_getTheColor : function  (colorVal) {
 		var theColor = "";
 		if ( colorVal < 50 ) {
