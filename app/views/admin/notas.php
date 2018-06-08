@@ -15,7 +15,7 @@
        <th><span class="tituloDescripcion">Descripcion</span></th>
       </tr>
      </thead>
-     <tbody>
+     <tbody class="deslizanteFechas">
       <?php 
        $notas = $Notas->getBy("DATE_FORMAT (fecha, '%Y-%m-%d')",$fecha); 
        foreach($notas as $nota){

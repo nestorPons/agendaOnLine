@@ -20,12 +20,15 @@ function sincronizar( dias, date , callback ){
 	else
 		dias = 0;
 	
-	Fecha.general = Fecha.sql(fecha);
-	Fecha.id = Fecha.number(Fecha.general);
+	Fecha.anterior = Fecha.general
+	Fecha.general = Fecha.sql(fecha)
+	Fecha.id = Fecha.number(Fecha.general)
+
+	slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
 
 
 	main.sincronizar(dias)
-	notas.sync()
+	notas.sync(Fecha.general)
 	if ($('#crearCita').find('div').length )
 		crearCita.horas.sincronizar()
 
@@ -2508,14 +2511,17 @@ notas = {
 				?$("#notas #trNotas"+data.id)
 				:$('#notas tbody tr').first().clone().attr('id','trNotas'+r.id).appendTo('#notas table tbody')
 
-				$linea.find('.idFecha').text(data.fecha)
-				$linea.find('.idHora').text(data.hora)
-				$linea.find('.idDescripcion').text(data.nota)
+				$linea
+				.removeClass().addClass(Fecha.id)
+					.find('.idFecha').text(Fecha.print(data.fecha))
+				.end().find('.idHora').text(data.hora)
+				.end().find('.idDescripcion').text(data.nota)
 				notify.success('Su nota ha sido guardada')
 			} else{
 				notify.error('No se ha podido guardar la nota')
 				echo (r)
 			} 
+			this.sync(Fecha.general)
 			typeof callback == "function" && callback();
 		 },JSON)
 
@@ -2529,7 +2535,10 @@ notas = {
 		}
 		$.post(INDEX, data,
 			function (r, textStatus, jqXHR) {
-				if (!r.success) {
+				if (r.success) {
+					$("#notas #trNotas"+data.id).remove()
+					dialog.close('dlgNotas')
+				} else {
 					notify.error('No se ha podido eliminar la nota')
 					echo (r)
 				} 
@@ -2538,22 +2547,28 @@ notas = {
 			JSON
 		)
 	 },
-	sync : function(){
-		notas.slide()
-		if (!$('#txtNotas').length) return false
-		data = {
-			controller : 'notas' , 
-			action : GET , 
-			fecha : Fecha.sql
-		}
-		$.post(INDEX, data,
-			function (r, textStatus, jqXHR) {
-				var html = (r.success) ? r.data : '' 				
-				$('#txtNotas').html(html)
-			},
-			JSON
-		)
-		return true
+	sync : function(fecha){
+	    var $obj = $('#notas table tbody')
+		if (!$obj.length) return false
+			var _sinc = function(){
+				$obj.find('.mostrar').removeClass('mostrar').addClass('ocultar')
+				$obj.find('.'+Fecha.id).addClass('mostrar')
+			}
+			if (!$obj.find('tr.'+Fecha.id).length){
+				var data = {
+					controller : 'notas' , 
+					action : GET , 
+					fecha : fecha
+				}
+				$.post(INDEX, data,	function (html, textStatus, jqXHR) {
+					$obj.append(html)
+					_sinc() 
+				},'html')
+			} else {
+				_sinc()
+			}
+			
+			return true
 	 },
 	slide : function(){
 		var lastDate = $('.datepicker').val()

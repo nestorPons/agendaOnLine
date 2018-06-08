@@ -52,6 +52,7 @@ $_GET[decode(arguments[1])] = decode(arguments[2]);
 var Fecha = {
 	actual: fechaActual(),
 	general: formatofecha(fechaActual(),'sql'),
+	anterior: '1990-01-01', 
 	id:  formatofecha(fechaActual(),'number'), //inicializo con fecha actual pero es un id.
 	day : formatofecha(fechaActual(),'day'),
 	month : formatofecha(fechaActual(),'month'),
@@ -609,7 +610,9 @@ function cargarDatepicker(callback){
 			return day == 0 ||$.inArray(current,  FESTIVOS) > -1?[fesOn, "festivo"]:[true, ""];
 		},
 		onSelect: function (fecha) {
+			
 			sincronizar(null, fecha)
+
 		},
 		onClose: function(){
 			this.blur();
@@ -948,9 +951,8 @@ function existeUrl(url) {
    http.send();
    return http.status!=404;
  }
-function slideDias(contenedor,dir,callback){
-	var idfecha = Fecha.number(Fecha.general);
-	var 	dir= dir||0;
+function slideDias($obj,dir=0,callback){
+	
 	if (dir>0||dir=='right'){
 		var ent = 'right';
 		var sal = 'left';
@@ -959,12 +961,17 @@ function slideDias(contenedor,dir,callback){
 		var sal = 'right';
 	}
 
-	contenedor
-		.hide("slide", { direction: sal }, 750,function(){
+	$obj
+		.hide("slide", { direction: sal }, 1000,function(){
+			// nueva forma de mostrar slider
+			$obj.find('.mostrar').removeClass('mostrar').addClass('ocultar')
+			$obj.find('.'+Fecha.id).addClass('mostrar').removeClass('ocultar')
+			
+			// en desuso
 			$('table.activa').removeClass('activa')
 			$('#'+Fecha.id).addClass('activa')
-			contenedor
-				.show("slide", { direction: ent }, 750,function(){
+			$obj
+			.show("slide", { direction: ent },1000,function(){
 					typeof callback == "function" && callback();
 				});
 		})
