@@ -1,6 +1,6 @@
-<tr id="trNotas<?=$nota['id']?>" >
+<tr id="trNotas<?=$nota['id']?>" class="<?=str_replace('-','',$nota['fecha'])?> mostrar">
     <td class="ico" >
-        <a class= "icon-edit fnEdit x6" value="<?= $nota['id']?>"></a>
+        <a class= "icon-edit fnEdit x6" value="<?= str_replace('-','',$nota['id'])?>"></a>
     </td>
     <td class="idid">
         <?=$nota['id']?>

@@ -4,6 +4,7 @@
 @grey-bg:#eee;
 @text-icon: #aaa;
 @fontSize: 1em;
+@base: #fff;
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -489,9 +490,7 @@ input[type="color"] {
 		display : inline-blocK ;
 	}
  }
-.dateTime{
-	width: 10em;
- }
+
 .dialog{
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
 	display:none;
@@ -717,6 +716,7 @@ input[type="color"] {
 	padding :5px;
 	overflow : hidden;
 	border : 1px solid;
+	
 	div {
 		font-size: 1em;
 		margin : -2;
@@ -763,7 +763,7 @@ input[type="color"] {
 		}
 	 }
 	&.row_2 {
-		height : @rem + 12;
+		height :@rem + 12;
 	 }
 	&.row_3 {
 		height : @rem + @em + @increment;
@@ -1095,6 +1095,12 @@ input[type="color"] {
 .mostrar_baja{
 	display:initial;
  }
+ .mostrar{
+	 display: table-row;
+ }
+ .ocultar{
+	 display: none; 
+ } 
 .navigation{
   width: 15em;
   right: -15em;
@@ -1351,7 +1357,6 @@ input[type="color"] {
 		vertical-align: top;
 		text-align:left !important;
 		height :24px;
-
 		form{
 			width:100%;
 			margin: 5px auto;
@@ -1742,6 +1747,33 @@ input[type="color"] {
 	input[type="radio"], [type="checkbox"] {
 		top: -10px;
 	}
+	table tr td {
+		padding: 2px;
+		*{ 
+			display: inline;
+		}
+		select {
+			background-color: @base;
+		}
+		.horas, .minutos{
+			width: 3.5rem;
+		}
+	}
+
+ }
+#history{
+	a[class*='icon-']{
+		
+		&:hover{
+			color: inherit;
+			cursor: inherit;
+		}
+	}
+	table{
+		.fecha{
+			width: 20ch;
+		}
+	}
  }
 #main{
 	.celda{
@@ -1974,6 +2006,11 @@ input[type="color"] {
 	}
 	button, input{
 		display: inline-block;
+	}
+	table{
+		th:last-child{	
+			width: 50%; 
+		} 
 	}
  }
 

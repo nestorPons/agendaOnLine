@@ -11,7 +11,7 @@ if (isset($_POST['action'])) {
 
     $Agendas = new models\Agendas();
     $horarios = $Horarios->all() ;
-    
+    $agendas = $Agendas->get();
     $url = URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 
 
 }

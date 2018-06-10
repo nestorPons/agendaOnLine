@@ -20,6 +20,6 @@ if(!empty($_POST["login"]) && !empty($_POST['pass'])){ //step 2
 
 	}else $return = err(\core\Error::E026,6);
 	
-} else $return = err(\core\Error::E06,2);
+} else $return = err(\core\Error::E006,2);
 
 return $return ;

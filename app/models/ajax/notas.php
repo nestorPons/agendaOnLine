@@ -10,7 +10,7 @@ switch ($_POST['action']){
         $r['success'] = $Notas->DeleteById((int)$_POST['id']);
         break;
     case GET :
-        $r['data'] = trim($Notas->getOneBy('fecha',$_POST['fecha'], 'nota'));
+        $r['data'] = $Notas->getBy('fecha',$_POST['fecha']);
         $r['success'] = !empty($r['data']);
         break;
 }

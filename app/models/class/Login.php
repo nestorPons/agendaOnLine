@@ -133,14 +133,18 @@ class Login extends \core\BaseClass {
      }
     public function createSession(bool $remember = false){
         global $Security;
+        $Logs = new \models\Logs; 
+        $Logs->set($this->id, 'login'); 
+
         $Security->loadSession(
             $this->id,
             $_REQUEST['empresa'],
             $this->admin
 	    );
         $this->attempts(0);
-        if ($remember) $this->authByCookie();
 
+        if ($remember) $this->authByCookie();
+        
         return ($this->admin>0)?'admin':'users' ;
      }
     public static function logout($deleteCookies = false) {
@@ -153,7 +157,7 @@ class Login extends \core\BaseClass {
          }
 
         // Borra todas las variables de sesión 
-
+        $Logs->set($this->id, 'unlogin'); 
         $_COOKIE = array();
         $_SESSION = array();
 

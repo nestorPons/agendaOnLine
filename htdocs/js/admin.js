@@ -20,17 +20,24 @@ function sincronizar( dias, date , callback ){
 	else
 		dias = 0;
 	
-	Fecha.general = Fecha.sql(fecha);
-	Fecha.id = Fecha.number(Fecha.general);
+	Fecha.anterior = Fecha.general
+	Fecha.general = Fecha.sql(fecha)
+	Fecha.id = Fecha.number(Fecha.general)
+
+	slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
 
 
 	main.sincronizar(dias)
-	notas.sync()
+	notas.sync(Fecha.general)
 	if ($('#crearCita').find('div').length )
 		crearCita.horas.sincronizar()
 
 	colorearMenuDiasSemana();
 	
+
+	//Sincronizamos historial
+	logs.sinc()
+
 	var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 	$.each(datepicker, function( index , me ){
 		(diaFestivo)?$(this).addClass('c-red'):$(this).removeClass('c-red')
@@ -243,7 +250,7 @@ servicios = {
 			.find(' td:nth-child(1)').attr('value',datos.id).end()
 			.find(' td:nth-child(2)')
 				.html(datos.codigo)
-				.attr('id', data.id)
+				.attr('id', datos.id)
 			.end()
 			.find(' td:nth-child(3)').html(datos.descripcion).end()
 			.find(' td:nth-child(4)').html(datos.tiempo).end()
@@ -1021,7 +1028,7 @@ main ={
 
 			},	
 		resize : function($this){
-				if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
+				//if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
 				if ($this.hasClass('initial')){
 					$this
 						.removeClass('initial') 
@@ -1047,7 +1054,7 @@ main ={
 	 },
 menu = {
 	status: function (capa){
-		var add 	= $('#btnAdd'),
+		var add = $('#btnAdd'),
 			reset 	= $('#btnReset'),
 			search 	= $('#btnSearch'),
 			save 	= $('#btnSave'),
@@ -2421,7 +2428,7 @@ estilos = {
 	 },
 	save : function () {
 		
-AkI: guardar el valor del slider 
+
 
 		var data = {
 			color1 : $('#btnColor1').val() ,
@@ -2481,16 +2488,20 @@ notas = {
 				$dlg
 					.find('#fecha').val(Fecha.sql(fecha.trim())).end()
 					.find('#hora').val(hora.trim()).end()
-					.find('#descripcion').val(des)
-							
-			}
-			
+					.find('#descripcion').val(des)				
+			}		
 		}
 		
-		dialog.open(this.nombreDlg,this.save,()=>this.delete(id),fnLoad)
+		dialog.open(
+			notas.nombreDlg,
+			notas.save,
+			()=>notas.delete($('#dlgNotas #id').attr('value')),
+			fnLoad
+		)
 
 	 },
 	save : function(callback){
+
 		var  $dlg = $('#dlgNotas'), 
 		 data =  {
 			id : $dlg.find('#id').val(), 
@@ -2505,32 +2516,32 @@ notas = {
 			if (r.success) {
 				dialog.close(this.nombreDlg)
 
-				let $linea = ($("#notas #trNotas"+data.id).length)
-				?$("#notas #trNotas"+data.id)
-				:$('#notas tbody tr').first().clone().attr('id','trNotas'+r.id).appendTo('#notas table tbody')
+				data.id = (data.id>-1) ?data.id:r.id; 
+				notas.crear.linea(data)
 
-				$linea.find('.idFecha').text(data.fecha)
-				$linea.find('.idHora').text(data.hora)
-				$linea.find('.idDescripcion').text(data.nota)
 				notify.success('Su nota ha sido guardada')
 			} else{
 				notify.error('No se ha podido guardar la nota')
 				echo (r)
 			} 
+
 			typeof callback == "function" && callback();
 		 },JSON)
-
+		
 	 }, 
 	delete : function(id,callback){
 
-		var data = {
+		let data = {
 			controller : 'notas' , 
 			action : DEL , 
 			id : id
 		}
 		$.post(INDEX, data,
 			function (r, textStatus, jqXHR) {
-				if (!r.success) {
+				if (r.success) {
+					$("#notas #trNotas"+data.id).remove()
+					dialog.close('dlgNotas')
+				} else {
 					notify.error('No se ha podido eliminar la nota')
 					echo (r)
 				} 
@@ -2539,23 +2550,44 @@ notas = {
 			JSON
 		)
 	 },
-	sync : function(){
-		notas.slide()
-		if (!$('#txtNotas').length) return false
-		data = {
-			controller : 'notas' , 
-			action : GET , 
-			fecha : Fecha.sql
-		}
-		$.post(INDEX, data,
-			function (r, textStatus, jqXHR) {
-				var html = (r.success) ? r.data : '' 				
-				$('#txtNotas').html(html)
-			},
-			JSON
-		)
-		return true
+	sync : function(fecha){
+	    var $obj = $('#notas table tbody')
+		if (!$obj.length) return false
+
+				let data = {
+					controller : 'notas' , 
+					action : GET , 
+					fecha : fecha
+				}
+				$.post(INDEX, data, function (r, textStatus, jqXHR) {
+					if(r.success){
+
+						for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
+			
+							notas.crear.linea(datos[i])							
+						}
+						
+					}
+					return r.success
+				},JSON)
+			
 	 },
+	crear : {
+		linea : function (d){
+			let mostrar =  (d.fecha == Fecha.general)?'mostrar':'ocultar';
+			$('#notas table tbody')
+				.find('#trNotas'+d.id).remove().end()
+				.find('tr.template').clone()
+				.removeClass().addClass(Fecha.number(d.fecha) + " " + mostrar)
+				.attr('id','trNotas'+d.id)
+				.find('a').attr('value',d.id)
+				.end().find('.idid').text(d.id)
+				.end().find('.idFecha').text(Fecha.print(d.fecha))
+				.end().find('.idHora').text(d.hora)
+				.end().find('.idDescripcion').text(d.nota)
+				.end().appendTo('#notas tbody')
+		},
+	 }, 
 	slide : function(){
 		var lastDate = $('.datepicker').val()
 		notas.dir = (Date.parse(Fecha.general) > Date.parse(Fecha.sql(lastDate)))?'left':'right'
@@ -2567,18 +2599,69 @@ notas = {
  },
 logs = {
 	get : function(days){
-		data = {
+		let data = {
 			controller :'history', 
 			action : GET , 
 			days : days
 		}
-		$.post(INDEX, data,
-			function (html, textStatus, jqXHR) {
-				$('#history').html(html)
-			},
-			'html'
-		)
-	} 
+		$.post(INDEX, data,	function (r, textStatus, jqXHR) {
+			for(let i=0, len=r.datos.length-1; i<=len; i++){
+				let d = r.datos[i]
+
+				logs.crear.linea({
+					id: d[0], 
+					fecha: d[1],
+					idUsuario: d[2], 
+					accion: d[3], 
+					estado: d[5]?'Ok':'Error', 
+					tabla: d[6]
+				})
+
+			}		
+		},JSON)
+	},
+	crear: {
+		linea: function(d){
+echo(d)
+			//Si existe que no haga nada en historia no se editan los datos solo se crean 
+			$obj = $('#history table tbody')
+			if($obj.find('#historia_'+d.id).length) return false
+			
+			switch(parseInt(d.accion)){
+				case 1: 
+					ico = 'plus'; 
+					accion = "Nueva cita";
+				break
+				case 2: 
+					ico = 'trash-empty';
+					accion = "Cita eliminada";
+				break
+				case 3: 
+					ico = 'edit';
+					accion = "Cita modificada";
+				break
+				case 4: 
+					ico = 'logout';
+					accion = "Salida usuario";
+				break
+				case 5: 
+					ico = 'login';    
+					accion = "Entrada usuario";
+				break
+			}
+
+			 
+			
+			$obj.find('.template').clone()
+				.find('.id').text(d.id).end()
+				.find('.icono').html('<a class= "icon-'+ico+'" ></a>').end()
+				.find('.fecha').text(d.fecha).end()
+				.find('.idUsuario').text(d.idUsuario).end()
+				.find('.accion').text(d.accion).end()
+				.find('.estado').text(d.estado).end()
+			
+		}
+	}
  }
 $(function(){
 	cargarDatepicker()
@@ -2673,7 +2756,7 @@ $(function(){
 		.on('click','.lbl',function(e){
 			main.z_index +=  1 
 			$(this).css({'z-index': main.z_index })	
-			})
+		 })
 		.on('click','.row_1, .row_2',function(){main.lbl.resize($(this))})
 		.on('click','#mainLstDiasSemana a',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
@@ -2812,6 +2895,5 @@ $(function(){
 		 })
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
-		.on('click','.fnDel', notas.delete)
 
  })
