@@ -2073,10 +2073,24 @@ horario = {
 		})()
 	 },
 	guardar: function (callback){
-		var horarios = $('#frmHorario tr').not(':eq(0)')
-		var data = new Array();
-
-		if(horario._validate()){
+echo("guardando horarios....")
+		var horarios = $('#horarios .lineaHorarios')
+		var data = new Array()
+echo(horarios)
+		//if(horario._validate()){
+			horarios.each(()=>{
+				
+				data.push({
+					//id:	$this.id,
+					agenda: $(this).find('.agenda_horario').val(),
+					diaInicio: $(this).find('.idDiaInicio').val(),
+					diaFin: $(this).find('.idDiaFin').val(),
+					horaInicio: $(this).find('.idHoraInicio').val(),
+					horaFin: $(this).find('.idHoraFin').val()
+				})
+			})
+echo(data)
+			/*
 			$.each(horarios,function( index , me ){
  
 				data.push({
@@ -2087,26 +2101,26 @@ horario = {
 					fin: $(this).find('.hora_fin').val()
 				})
 			})
-
 			$.ajax({
 				type:"POST",
 				data: { action : SAVE , data : data , controller : horario.controller },
 				url: INDEX,
 				dataType: 'json'
 			})
-				.done(function(r,s){
-					if(r)
-						location.reload();
-					else	
-						notify.error('No se pudo guardar el horario!!')
-					
-					typeof callback == "function" && callback();
-				})
-				.fail(function(rsp){echo("fail =>"+rsp.sql);})
-		 }else{
-			 notify.error('Debe de completar todos los campos.','Validar formulario');
-			 btn.load.hide();
-		 }
+			.done(function(r,s){
+				if(r)
+				location.reload();
+				else	
+				notify.error('No se pudo guardar el horario!!')
+				
+				typeof callback == "function" && callback();
+			})
+			.fail(function(rsp){echo("fail =>"+rsp.sql);})
+		}else{
+			notify.error('Debe de completar todos los campos.','Validar formulario');
+			btn.load.hide();
+		}
+		*/
 	 },
 	add: function(){
 		var dia_semana = $('#horarios .template .dia_semana');

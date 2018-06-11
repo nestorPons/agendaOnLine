@@ -175,6 +175,13 @@ a,i , .a{
 		}
 	}
  }
+ .iconClass{ 
+	 &-container{
+		.caption{
+			color: mix(@text-color, #fff, 70%)
+		}
+	 }
+ }
 .animate-spin {
   -moz-animation: spin 2s infinite linear;
   -o-animation: spin 2s infinite linear;
@@ -326,7 +333,6 @@ a,i , .a{
 	}
 
  }
-
 .dialog{
 	font-family: @main-font;
 	.border-radius (@radio_popover,@radio_popover,@radio_popover,@radio_popover);

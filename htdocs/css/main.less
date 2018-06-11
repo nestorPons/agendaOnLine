@@ -4,7 +4,7 @@
 @grey-bg:#eee;
 @text-icon: #aaa;
 @fontSize: 1em;
-@base: #fff;
+@base: #fff; 
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -104,7 +104,8 @@ h4{
 	margin: 15px;
  }
 hr{	
-	margin : 5px auto;
+	margin: 5px auto 10px auto;
+
  }
 thead{
 	th{
@@ -603,10 +604,15 @@ input[type="color"] {
 			*{
 				box-sizing: border-box;
 			}
+			.caption{
+				float: left;
+				margin-bottom: 4px;
+				font-size: 0.8rem; 
+			}
 			input, select,textarea{
 				padding-left: 2rem;
 				position: relative;
-				
+				background-color: @base;
 			}
 			.iconClass-inside{
 				color: @text-icon;
@@ -1738,14 +1744,16 @@ input[type="color"] {
 	}
  }
 #horarios{
-	.input-control{
-		margin:15px;
-		.ui-datepicker-year{
-			display: none;
-		}
+	input, select { 
+		padding-left: 2px; 
 	}
-	input[type="radio"], [type="checkbox"] {
-		top: -10px;
+	.lineaHorarios{
+		.iconClass-container{
+			width: 115px ;
+		}
+		input[type=checkbox]{
+			top: 6px;
+		}
 	}
 	table tr td {
 		padding: 2px;
@@ -2013,7 +2021,6 @@ input[type="color"] {
 		} 
 	}
  }
-
 #preloader{
 	display: block;
  }
@@ -2119,3 +2126,7 @@ input[type="color"] {
 		}
 	}
  }
+// Auxiliares
+.inline{
+	display: inline-block; 
+}
