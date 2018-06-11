@@ -1,4 +1,3 @@
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 1;
 SET time_zone = "+00:00";
@@ -14,22 +13,12 @@ INSERT INTO `agendas` (`id`, `nombre`, `mostrar`)
 INSERT INTO `familias` (`id`, `nombre`, `mostrar`, `baja`) 
     VALUES (0, 'Familia demo', 1, 0);
 
-INSERT INTO `horarios` (`agenda`, `dia`, `inicio`, `fin`) 
+INSERT INTO `horarios` (`agenda`, `dia_inicio`, `dia_fin`, `hora_inicio`, `hora_fin`) 
     VALUES
-    (1, 0, '09:00:00', '20:00:00'),
-    (1, 1, '09:00:00', '20:00:00'),
-    (1, 2, '09:00:00', '20:00:00'),
-    (1, 3, '09:00:00', '20:00:00'),
-    (1, 4, '09:00:00', '20:00:00'),
-    (1, 5, '09:00:00', '20:00:00'),
-    (1, 6, '09:00:00', '20:00:00'),
-    (0, 0, '09:00:00', '20:00:00'),
-    (0, 1, '09:00:00', '20:00:00'),
-    (0, 2, '09:00:00', '20:00:00'),
-    (0, 3, '09:00:00', '20:00:00'),
-    (0, 4, '09:00:00', '20:00:00'),
-    (0, 5, '09:00:00', '20:00:00'),
-    (0, 6, '09:00:00', '20:00:00');
+    (0, 1, 5, '09:00:00', '20:00:00'),
+    (0, 6, 6, '09:00:00', '14:00:00'),
+    (1, 1, 5, '10:00:00', '20:00:00'),  
+    (1, 6, 6, '10:00:00', '14:00:00'); 
 
 INSERT INTO `config`(`idEmpresa`) VALUES (1); 
 INSERT INTO `config_css` VALUES (); 
@@ -45,5 +34,4 @@ INSERT INTO `cita` (`idCita`,`servicio`)
 VALUES (0,0), (1,1);
 
 INSERT INTO `festivos` (`nombre`, `fecha`) 
-VALUES (`Año nuevo`, `1970-01-01`), (`Reyes`, `1970-01-06`), (`Noche vieja`, `1970-12-31`); 
-
+VALUES (`Año nuevo`, `1970-01-01`), (`Reyes`, `1970-01-06`), (`Noche vieja`, `1970-12-31`);

@@ -2074,19 +2074,22 @@ horario = {
 	 },
 	guardar: function (callback){
 echo("guardando horarios....")
-		var horarios = $('#horarios .lineaHorarios')
-		var data = new Array()
-echo(horarios)
+
+		var	$horarios =$('#horarios '),
+			$lineaHorario = $horarios.find('.lineaHorarios'), 
+			agenda = $horarios.find('#agenda_horario').val(), 
+			data = new Array()
+
 		//if(horario._validate()){
-			horarios.each(()=>{
+			$lineaHorario.each(function(){
 				
 				data.push({
 					//id:	$this.id,
-					agenda: $(this).find('.agenda_horario').val(),
-					diaInicio: $(this).find('.idDiaInicio').val(),
-					diaFin: $(this).find('.idDiaFin').val(),
-					horaInicio: $(this).find('.idHoraInicio').val(),
-					horaFin: $(this).find('.idHoraFin').val()
+					agenda: agenda,
+					dia_inicio: $(this).find('.idDiaInicio').val(),
+					dia_fin: $(this).find('.idDiaFin').val(),
+					hora_inicio: $(this).find('.idHoraInicio').val(),
+					hora_fin: $(this).find('.idHoraFin').val()
 				})
 			})
 echo(data)

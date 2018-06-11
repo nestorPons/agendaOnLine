@@ -80,9 +80,9 @@ class Create{
         $sql .= "INSERT INTO servicios (`codigo`, `descripcion`, `tiempo`, `idFamilia`) 
                     VALUES ('COD001', 'Servicio de prueba', 10, 1);";
         $sql .= "INSERT INTO festivos (`nombre`, `fecha`) VALUES ('Año nuevo', '2018-01-01'),('Reyes', '2018-01-06'),('Navidad', '2018-12-25'),('Noche vieja', '2018-12-31');";
-        for ($i = 0; $i<=6; $i++){
-            $sql .= "INSERT INTO horarios (`agenda`, `dia`, `inicio`, `fin`) VALUES (1, $i ,'9:00:00','20:00:00');";
-        }
+        $sql .= "INSERT INTO horarios (`agenda`, `dia_inicio`, `dia_fin`, `hora_inicio`, `hora_fin`)
+            VALUES (1, 0 , 4, '9:00:00','20:00:00'), (1, 5, 5, '9:00:00','14:00:00');";
+        
      
         if(!$this->cConn->multiQuery($sql))
             throw new \Exception(\core\Error::E016, 16);

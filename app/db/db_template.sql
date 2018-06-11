@@ -92,9 +92,10 @@ CREATE TABLE `festivos` (
 CREATE TABLE `horarios` (
   `id` tinyint(2) PRIMARY KEY AUTO_INCREMENT ,
   `agenda` tinyint(2) NOT NULL,
-  `dia` tinyint(1) NOT NULL,
-  `inicio` time NOT NULL,
-  `fin` time NOT NULL
+  `dia_inicio` tinyint(1) NOT NULL,
+  `dia_fin` tinyint(1) NOT NULL,
+  `hora_inicio` time NOT NULL,
+  `hora_fin` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notas` (

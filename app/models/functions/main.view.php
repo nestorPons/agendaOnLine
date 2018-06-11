@@ -22,7 +22,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 		$dia_semana = date('w',strtotime($fecha)) ;
 		$array_horas = $_SESSION['HORAS'][$dia_semana]??false;
-
+//var_dump($_SESSION['HORAS'][$dia_semana]);
 		if (empty($existen_array)||array_search($id_fecha,$existen_array)<0){
 			?>
 			<div id="<?=$id_fecha?>" name="dia[]" class="dia <?= $fecha== Date('Y-m-d') ?'activa':'';?>" diaSemana = "<?= $dia_semana?>" >
@@ -34,8 +34,8 @@ function view($fecha_inicio = null, $existen_array = false ){
 						$str_hora = date('H:i', $h);
 
 						if ($array_horas) {	
-							//AKI :: si es movil hay que poner pestañas
-							//$class = $Device->isMovile&&$a!=1?' hidden_responsive ':'';
+//AKI :: si es movil hay que poner pestañas
+//$class = $Device->isMovile&&$a!=1?' hidden_responsive ':'';
 							$class="";
 							if  (array_search($str_hora,$array_horas)===false) {
 								$class .= "fuera_horario " ;  

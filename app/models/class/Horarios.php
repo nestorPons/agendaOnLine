@@ -16,46 +16,45 @@ class Horarios extends \core\BaseClass {
 		$arrhorarios = $this->conn->all($sql,MYSQLI_ASSOC);
 
 		foreach ($arrhorarios as $key => $value){
-			$horarios[] = ['id' => $value['id'] , 'agenda' => $value['agenda'] ,'dia' => $value['dia'], 'inicio' => $value['inicio'] , 'fin' => $value['fin'] ];
+			$horarios[] = [
+				'id' => $value['id'] , 
+				'agenda' => $value['agenda'] ,
+				'dia_inicio' => $value['dia_inicio'], 
+				'dia_fin' => $value['dia_fin'], 
+				'hora_inicio' => $value['hora_inicio'] , 
+				'hora_fin' => $value['hora_fin'] 
+			];
 		}
 
 		return $horarios??false;
 	 }
 	public function all(){
-		return $this->consult("SELECT * FROM horarios ORDER BY dia") ;  
+		return $this->consult("SELECT * FROM horarios ORDER BY dia_inicio") ;  
 	 }
 	public function hours($day = 'all', $agenda = 0){
 
-		$sql =  ($day=='all') ?
-			"SELECT * FROM horarios ORDER BY dia AND agenda = " . $agenda :
-			"SELECT * FROM horarios WHERE dia = $day AND agenda = " . $agenda . " ORDER BY inicio " ;
+  		$sql =  ($day=='all') ?
+			"SELECT * FROM horarios ORDER BY dia_inicio AND agenda = $agenda" :
+			"SELECT * FROM horarios WHERE agenda = $agenda 
+			AND $day BETWEEN dia_inicio AND dia_fin ORDER BY hora_inicio" ;
 
-		if ($row = $this->consult($sql)){
-			foreach ($row as $value){
-				$inicio_horarios[$value['dia']][] = $value['inicio'];
-				$fin_horarios[$value['dia']][] = $value['fin'];
-			}
-	
-			for ($d = 0 ; $d <= 6 ;$d++ ){
-				if (!empty($inicio_horarios[$d])){
-					for ($i = 0 ; $i < count($inicio_horarios[$d]); $i++){
-						for($h =  strtotime($inicio_horarios[$d][$i]); $h <=  strtotime($fin_horarios[$d][$i]) ; $h = strtotime("+15 minutes", ($h))){	
-							$horas_array[$d][] = date('H:i', $h);	
-							if ( $h ==  strtotime($fin_horarios[$d][$i] )) {
-								$this->close_hours [$d][] = date('H:i', $h) ;
-							}
-						} 
+		if ($rows = $this->consult($sql)){
+
+			foreach ($rows as $row){
+				for($d = 0; $d <= 6; $d++){
+					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
+						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
+							$horas_array[$d][] = date('H:i', $h);
+						}
 					}
-				}else{
-					$horas_array[$d][] = null;
 				}
-			} 
-		}	
+			}
+		}
 
 		return $horas_array??false;
 	
 	 }
-	public function days($day){
+	/*public function days($day){
 		$row =  $this->consult("SELECT * FROM horarios WHERE dia = $day")  ;
 
 		foreach ($row as $key => $value){
@@ -64,6 +63,7 @@ class Horarios extends \core\BaseClass {
 		}
 
 	 }
+	 */
 	public function add ( $datos ){
 		
 		$sql = "INSERT INTO horarios (agenda,dia,inicio,fin) 
