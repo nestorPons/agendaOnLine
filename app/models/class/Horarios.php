@@ -29,13 +29,14 @@ class Horarios extends \core\BaseClass {
 
 		return $horarios??false;
 	 }
+AKI:: 
 	public function all(){
 	  $result=$this->consult("SELECT * FROM horarios ORDER BY dia_inicio");
 		if ($result){
 			foreach ($result as $row){
 				for($d = 0; $d <= 6; $d++){
-					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin'] -1 ){
-						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
+					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin'] ){
+						for($h=strtotime($row['hora_inicio']); $h<strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
 							$this->horary[$d][$row['agenda']][] = date('H:i', $h);
 						}
 					}
@@ -55,8 +56,8 @@ class Horarios extends \core\BaseClass {
 		if ($rows = $this->consult($sql)){
 			foreach ($rows as $row){
 				for($d = 0; $d <= 6; $d++){
-					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin'] - 1){
-						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
+					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
+						for($h=strtotime($row['hora_inicio']); $h<strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
 							$this->horary[$d][$agenda][] = date('H:i', $h);
 						}
 					}
@@ -77,6 +78,7 @@ class Horarios extends \core\BaseClass {
 
 	 }
 	 */
+
 	public function add ( $datos ){
 		
 		$sql = "INSERT INTO horarios (agenda,dia,inicio,fin) 
