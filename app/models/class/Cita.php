@@ -9,7 +9,7 @@ class Cita extends \core\BaseClass {
         $this->Cita_del = parent::__construct('cita_del');
     }
     public function add () {
-        //AKI :: en construccion
+       
         $sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,usuarioCogeCita) 
         VALUE ('$agenda','$userId','$fecha', '$hora' ,'$nota','".$_SESSION['id_usuario']."')";
         return $this->conn->query($sql);

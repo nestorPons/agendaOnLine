@@ -34,7 +34,7 @@ class Horarios extends \core\BaseClass {
 		if ($result){
 			foreach ($result as $row){
 				for($d = 0; $d <= 6; $d++){
-					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
+					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin'] -1 ){
 						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
 							$this->horary[$d][$row['agenda']][] = date('H:i', $h);
 						}
@@ -44,17 +44,18 @@ class Horarios extends \core\BaseClass {
 		}
 		return $this->horary; 
 	 }
+
 	public function hours($day = 'all', $agenda = 0){
 
   		$sql =  ($day=='all') ?
 			"SELECT * FROM horarios ORDER BY dia_inicio AND agenda" :
 			"SELECT * FROM horarios WHERE agenda = $agenda 
 			AND $day BETWEEN dia_inicio AND dia_fin ORDER BY hora_inicio" ;
-
+ 
 		if ($rows = $this->consult($sql)){
 			foreach ($rows as $row){
 				for($d = 0; $d <= 6; $d++){
-					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
+					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin'] - 1){
 						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
 							$this->horary[$d][$agenda][] = date('H:i', $h);
 						}
