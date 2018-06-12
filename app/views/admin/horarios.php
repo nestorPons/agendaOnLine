@@ -6,11 +6,9 @@
 	<span class="caption">Agendas</span>
 		<select id="agenda_horario">
 		<?php 
-		foreach($Agendas->get() as $value){
+		foreach($Agendas->get() as $agenda){
 			?>
-			<option value = <?= $value[0]?>>
-				<?= $value[1]?>
-			</option>
+			<option value = "<?= $agenda[0]?>"><?= $agenda[1]?></option>
 			<?php 
 		}?>
 		</select>
@@ -18,9 +16,9 @@
 	</br>
 	<?php 
 	foreach($horarios as $horario){
-		var_dump($horario);
 		?>
-		<div id="horario_<?=$horario['id']?>" agenda="<?=$horario['agenda']?>" class="lineaHorarios">
+		<div id="horario_<?=$horario['id']?>" agenda="<?=$horario['agenda']?>" 
+		class="lineaHorarios <?php if(!$horario['agenda']==0)echo'ocultar';?>">
 
 			<input type="checkbox" class="" value=""> 
 

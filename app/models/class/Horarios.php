@@ -29,27 +29,15 @@ class Horarios extends \core\BaseClass {
 
 		return $horarios??false;
 	 }
-AKI:: 
-	public function all(){
-	  $result=$this->consult("SELECT * FROM horarios ORDER BY dia_inicio");
-		if ($result){
-			foreach ($result as $row){
-				for($d = 0; $d <= 6; $d++){
-					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin'] ){
-						for($h=strtotime($row['hora_inicio']); $h<strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
-							$this->horary[$d][$row['agenda']][] = date('H:i', $h);
-						}
-					}
-				}
-			}
-		}
-		return $this->horary; 
+
+	public function horarios(){
+	  return $this->consult("SELECT * FROM horarios ORDER BY dia_inicio");
 	 }
 
 	public function hours($day = 'all', $agenda = 0){
 
   		$sql =  ($day=='all') ?
-			"SELECT * FROM horarios ORDER BY dia_inicio AND agenda" :
+			"SELECT * FROM horarios ORDER BY dia_inicio" :
 			"SELECT * FROM horarios WHERE agenda = $agenda 
 			AND $day BETWEEN dia_inicio AND dia_fin ORDER BY hora_inicio" ;
  
@@ -58,7 +46,7 @@ AKI::
 				for($d = 0; $d <= 6; $d++){
 					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
 						for($h=strtotime($row['hora_inicio']); $h<strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
-							$this->horary[$d][$agenda][] = date('H:i', $h);
+							$this->horary[$d][$row['agenda']][] = date('H:i', $h);
 						}
 					}
 				}
@@ -86,14 +74,7 @@ AKI::
 		
 		return $this->query($sql) ;
 	 }
-	public function save ( $data ) {
-		$this->multi_query = false;
 
-		foreach($data as $d )
-			if(!$this->saveById($d['id'], $d)) return false; 
-		
-		return true;
-	 }
 	public function del_horarios($arr_id){
 		$sql = '';
 		foreach ($arr_id as $id){

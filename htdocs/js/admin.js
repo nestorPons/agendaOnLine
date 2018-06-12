@@ -36,7 +36,7 @@ function sincronizar( dias, date , callback ){
 	
 
 	//Sincronizamos historial
-	logs.sinc()
+	historial.sinc()
 
 	var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 	$.each(datepicker, function( index , me ){
@@ -2036,7 +2036,7 @@ festivo = {
  },
 horario = {
 	controller : 'horarios' , 
-	section : $('#horarios') , 
+	section : $('#horarios') ,  
 	activo:null,
 	editar: function (){
 		var numeroHorario = $('#hor	arios  #nombre option:selected').val();
@@ -2077,22 +2077,32 @@ echo("guardando horarios....")
 
 		var	$horarios =$('#horarios '),
 			$lineaHorario = $horarios.find('.lineaHorarios'), 
-			agenda = $horarios.find('#agenda_horario').val(), 
-			data = new Array()
+			data = new Object()
+
+			data.action =SAVE
+			data.controller = 'horarios'
+			data.datos = new Array()
 
 		//if(horario._validate()){
 			$lineaHorario.each(function(){
 				
-				data.push({
-					//id:	$this.id,
-					agenda: agenda,
+				data.datos.push({
+					id:	$(this).attr('id').replace('horario_',''),
+					agenda: $(this).attr('agenda'),
 					dia_inicio: $(this).find('.idDiaInicio').val(),
 					dia_fin: $(this).find('.idDiaFin').val(),
 					hora_inicio: $(this).find('.idHoraInicio').val(),
 					hora_fin: $(this).find('.idHoraFin').val()
 				})
 			})
-echo(data)
+			$.post(INDEX,data,function(r){
+				if(r.success){
+					notify.success('Horario guardado')
+					location.reload(true);
+				} else {
+					notify.error('No se pudo guardare el horario')
+				}
+			})
 			/*
 			$.each(horarios,function( index , me ){
  
@@ -2155,6 +2165,15 @@ echo(data)
 				location.reload();
 			}
 		}, 'json')
+	 },
+	 mostrar: function(){
+		let $sec = $('#horarios'), 
+			val = $sec.find('#agenda_horario').val()
+
+		$sec
+			.find('.lineaHorarios').fadeOut().addClass('ocultar')
+			.end()
+			.find('div[agenda='+val+']').fadeIn().removeClass('ocultar')
 	 },
 	_validate: function(){
 		var $time = $('#horarios #frmHorario .time');
@@ -2614,8 +2633,12 @@ notas = {
 		})
 	 }
  },
-logs = {
-	get : function(days){
+historial = {
+	sinc: function(){
+		if(!$('#historial table').length) return false
+		historial.get()
+	}, 
+	get : function(days=1){
 		let data = {
 			controller :'history', 
 			action : GET , 
@@ -2624,22 +2647,23 @@ logs = {
 		$.post(INDEX, data,	function (r, textStatus, jqXHR) {
 			for(let i=0, len=r.datos.length-1; i<=len; i++){
 				let d = r.datos[i]
-
-				logs.crear.linea({
-					id: d[0], 
-					fecha: d[1],
-					idUsuario: d[2], 
-					accion: d[3], 
-					estado: d[5]?'Ok':'Error', 
-					tabla: d[6]
-				})
+				if(!$('#historial table #historia_'+d[0]).length){
+					historial.crear.linea({
+						id: d[0], 
+						fecha: d[1],
+						idUsuario: d[2], 
+						accion: d[3], 
+						estado: d[5]?'Ok':'Error', 
+						tabla: d[6]
+					})
+				}
 
 			}		
 		},JSON)
 	},
 	crear: {
 		linea: function(d){
-echo(d)
+
 			//Si existe que no haga nada en historia no se editan los datos solo se crean 
 			$obj = $('#history table tbody')
 			if($obj.find('#historia_'+d.id).length) return false
@@ -2851,7 +2875,7 @@ $(function(){
 		.on('click','#btnDel',menu.del)
 		.on('click','#btnReset',menu.reset)
 		.on('click','#btnOptions #chckOpUsersDel',menu.options)
-		.on('change','#selShowByTime', function(){logs.get($(this).val())})
+		.on('change','#selShowByTime', function(){historial.get($(this).val())})
 		.find('[name="menu[]"]').click(function(){
 			var capa = $(this).data('capa') ;
 			if (capa == 'main'){
@@ -2912,5 +2936,6 @@ $(function(){
 		 })
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
-
+	$('#horarios')
+		 .on('click', '#agenda_horario',function(){horario.mostrar($(this).attr('value'))})
  })
