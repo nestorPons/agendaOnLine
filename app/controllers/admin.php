@@ -5,8 +5,7 @@ require_once URL_SCRIPTS . 'admin.php' ;
 require_once URL_TEMPLATES . 'lstClientes.php';
 
 $Horarios = new models\Horarios();
-$_SESSION['HORAS'] =  $Horarios->hours();
-//var_dump($_SESSION['HORAS']);
+$_SESSION['HORAS'] =  $Horarios->all();
 
 $Servicios = new core\BaseClass('servicios') ;
 $_SESSION['SERVICIOS'] = $Servicios->getAll() ;

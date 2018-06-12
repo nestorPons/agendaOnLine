@@ -3,6 +3,14 @@
 function view($fecha_inicio = null, $existen_array = false ){	
 	global $Device;
 
+
+	function _inArray($hour, $multi_array){
+		foreach($multi_array as $arr){
+			if(in_array($hour,$arr)) return true; 
+		}
+
+		return false; 
+	}
     date_default_timezone_set('UTC');			
 	$fecha = $fecha_inicio??Date('Y-m-d') ;
 	$dias = round(MARGIN_DAYS/2);
@@ -22,14 +30,18 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 		$dia_semana = date('w',strtotime($fecha)) ;
 		$array_horas = $_SESSION['HORAS'][$dia_semana]??false;
-//var_dump($_SESSION['HORAS'][$dia_semana]);
+/*echo "######";
+print_r($_SESSION['HORAS'][$dia_semana][1]);
+echo "######";
+*/
 		if (empty($existen_array)||array_search($id_fecha,$existen_array)<0){
+
 			?>
 			<div id="<?=$id_fecha?>" name="dia[]" class="dia <?= $fecha== Date('Y-m-d') ?'activa':'';?>" diaSemana = "<?= $dia_semana?>" >
 				<table class = "tablas tablas-general" >	
 					<?php 
 					$h = strtotime($fecha . ' 06:45') ;
-					for( $i = 0 ; $i <= 96 ; $i++  ){							
+					for( $i = 0 ; $i < 96 ; $i++  ){							
 						$h =  strtotime ( '+15 minute' ,  $h  )  ;
 						$str_hora = date('H:i', $h);
 
@@ -37,12 +49,11 @@ function view($fecha_inicio = null, $existen_array = false ){
 //AKI :: si es movil hay que poner pestañas
 //$class = $Device->isMovile&&$a!=1?' hidden_responsive ':'';
 							$class="";
-							if  (array_search($str_hora,$array_horas)===false) {
+							$disabled = 'active' ;
+							if  (!_inArray($str_hora,$array_horas)) {
 								$class .= "fuera_horario " ;  
 								$disabled = (empty(CONFIG['ShowRow']))?'disabled' : '' ;
-							} else {
-								$disabled = 'active' ;
-							}
+							} 
 
 							$array = explode(":",$str_hora);
 							$clasehora=$array[1]=='00'?"num resaltado":"num";
@@ -53,9 +64,12 @@ function view($fecha_inicio = null, $existen_array = false ){
 								<?php
 								for ($a=0;$a<CONFIG['totalAgendas'];$a++){ 
 									$label = $lbl->html[$h][$a] ?? false ;
-									
+
+									$estadoCelda = (isset($array_horas[$a]) && in_array($str_hora,$array_horas[$a]))? 'dentro_horario':'fueras_horario';
 									?>
-									<td id = "<?= generateId($fecha , $str_hora, $a) ?>" class="celda <?php  if( $label ); echo $class?> " agenda="<?= $a?>" >
+									<td id = "<?= generateId($fecha , $str_hora, $a) ?>" 
+										class="celda <?php  if( $label ); echo $class . " " . $estadoCelda ?> 
+										" agenda="<?= $a?>" >
 										<?php
 																							
 										echo $label;

@@ -697,77 +697,6 @@ a,i , .a{
 	}
  }
 
-#crearCita{
-	.tablas{
-		table{
-			margin: 0 auto;
-		}
-		td{
-			padding: 0 25px;
-		}
-		.fuera_horario{
-			color: @grey;
-		}
-	}
-	#stepper1, #stepper2{
-		display:none;
-	}
-	.contenedorServicios{
-		margin: 20px auto;
-		text-align: left;
-		tr {
-			display : none;
-		}
-	}
-	.contUsers{
-		margin: 20px auto;
-		input, textarea{
-			width:250px;
-			display:block;
-		}
-	}
-	.editando {
-		display:none;
-	}
-	.ui-datepicker-inline{
-		margin: auto;
-	}
-	#principal{
-		display:none;
-	}
-	#secundaria{
-		margin: auto;
-	}
-	#tSer{
-		padding: 0 5px;
-	}
-
- }
-#festivos{
-	form{
-		.none;
-	}
-	.tablas{
-		tr{
-			text-align: center;
-		}
-		input{
-			margin: 0;
-			width: auto;
-		}
-		td{
-			margin: auto;
-			&:first-child{
-				width: 10%;
-				text-align: center;
-			}
-			&:last-child {
-				margin: 0;
-				padding: 0;
-			}
-		}
-	}
- }
 #frameSocialMedia{
 	button{
 		border-radius: @radius;
@@ -844,9 +773,9 @@ a,i , .a{
 		}
 	}
 	
-	.fuera_horario{
-		border-color: @grey;
-		color: @text1;
+	.fuera_horario, .fueras_horario{
+		border-color: @base;
+		color: @base;
 		background-color: @grey-bg; 
 	}
  }

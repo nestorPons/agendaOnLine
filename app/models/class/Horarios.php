@@ -5,6 +5,7 @@ class Horarios extends \core\BaseClass {
 	public $horas_array  ;
 	public $close_hours ;
 	public $uniTime = 0 ;
+	private $horary; 
 	
 	public function __construct( ){
 		
@@ -29,29 +30,40 @@ class Horarios extends \core\BaseClass {
 		return $horarios??false;
 	 }
 	public function all(){
-		return $this->consult("SELECT * FROM horarios ORDER BY dia_inicio") ;  
+	  $result=$this->consult("SELECT * FROM horarios ORDER BY dia_inicio");
+		if ($result){
+			foreach ($result as $row){
+				for($d = 0; $d <= 6; $d++){
+					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
+						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
+							$this->horary[$d][$row['agenda']][] = date('H:i', $h);
+						}
+					}
+				}
+			}
+		}
+		return $this->horary; 
 	 }
 	public function hours($day = 'all', $agenda = 0){
 
   		$sql =  ($day=='all') ?
-			"SELECT * FROM horarios ORDER BY dia_inicio AND agenda = $agenda" :
+			"SELECT * FROM horarios ORDER BY dia_inicio AND agenda" :
 			"SELECT * FROM horarios WHERE agenda = $agenda 
 			AND $day BETWEEN dia_inicio AND dia_fin ORDER BY hora_inicio" ;
 
 		if ($rows = $this->consult($sql)){
-
 			foreach ($rows as $row){
 				for($d = 0; $d <= 6; $d++){
 					if ($d >= $row['dia_inicio'] && $d <= $row['dia_fin']){
 						for($h=strtotime($row['hora_inicio']); $h<=strtotime($row['hora_fin']) ; $h=strtotime("+15 minutes", ($h))){	
-							$horas_array[$d][] = date('H:i', $h);
+							$this->horary[$d][$agenda][] = date('H:i', $h);
 						}
 					}
 				}
 			}
 		}
 
-		return $horas_array??false;
+		return $this->horary??false;
 	
 	 }
 	/*public function days($day){

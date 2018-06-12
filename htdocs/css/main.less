@@ -3,6 +3,7 @@
 @grey:#8a8a7b;
 @grey-bg:#eee;
 @text-icon: #aaa;
+@font-color: #222; 
 @fontSize: 1em;
 @base: #fff; 
 
@@ -1783,102 +1784,7 @@ input[type="color"] {
 		}
 	}
  }
-#main{
-	.celda{
-		.note{
-			.icon{
-				&-load{
-					display : none ;
-				}
-				&-ok {
-					display : none ;
-				}
-			}
-			&:first-child{
-				top: 50%;
-				position: fixed;
-			}
-			[type=text]{
-				height: inherit;
-				margin: 0 auto;
-				padding: 0;
-				border: none;
-				width: 80%;
-				max-width: none;
-				background-color: inherit;
-			}
-			.iconClass-container{
-				text-align:left;
-				.iconClass-inside{
-					top:0;
-					display:none;
-				}
-				.icon{
-					&-ok{
-						position: absolute;
-						right: 0;
-					}
-					&-load{
-						position: absolute;
-						right: 0;
 
-					}
-				}
-			}
-		}
-		&.fuera_horario{
-			&.num{
-				background:none;
-			}
-		}
-	 }
-	.dia {
-		display:none;
-		&.activa{
-			display: block;
-		}
-	 }
-	.icon{
-		&-resize-full{
-			visibility:hidden;
-			text-align: right !important;
-			float:right;
-		}
-		&-cancel{
-			color: #ff0000;
-		}
-	 }
-	.cuerpo{
-		top: 70px;
-		
-		@media (max-width: 800px){
-			top:40px;
-		 }
-		@media (max-width: 430px){
-			&.esMovil{
-				.tablas{
-					.celda{
-						display: none;
-						&[agenda='1']{
-							display: table-cell;
-						}
-					}
-				}
-			}
-		 }
-	 }
-	.atenuado{
-		background-color: #dddddd;
-		color:#fff;
-	 }
-	 input.nombreagenda{
-		border: none;
-		text-align: center;
-		&:active{
-			text-decoration: none !important;
-		}
-	 }
- }
 #mnuContacto{
 	display:none;
 	#frmContact{
@@ -2123,6 +2029,174 @@ input[type="color"] {
 		}
 		.ui-datepicker-prev .ui-icon{
 			&:before { content: '\e80d'; }
+		}
+	}
+ }
+  //secciones 
+ #main{
+	.celda{
+		.note{
+			.icon{
+				&-load{
+					display : none ;
+				}
+				&-ok {
+					display : none ;
+				}
+			}
+			&:first-child{
+				top: 50%;
+				position: fixed;
+			}
+			[type=text]{
+				height: inherit;
+				margin: 0 auto;
+				padding: 0;
+				border: none;
+				width: 80%;
+				max-width: none;
+				background-color: inherit;
+			}
+			.iconClass-container{
+				text-align:left;
+				.iconClass-inside{
+					top:0;
+					display:none;
+				}
+				.icon{
+					&-ok{
+						position: absolute;
+						right: 0;
+					}
+					&-load{
+						position: absolute;
+						right: 0;
+
+					}
+				}
+			}
+		}
+		&.fuera_horario{
+			&.num{
+				background:none;
+			}
+		}
+	 }
+	.dia {
+		display:none;
+		&.activa{
+			display: block;
+		}
+	 }
+	.icon{
+		&-resize-full{
+			visibility:hidden;
+			text-align: right !important;
+			float:right;
+		}
+		&-cancel{
+			color: #ff0000;
+		}
+	 }
+	.cuerpo{
+		top: 70px;
+		
+		@media (max-width: 800px){
+			top:40px;
+		 }
+		@media (max-width: 430px){
+			&.esMovil{
+				.tablas{
+					.celda{
+						display: none;
+						&[agenda='1']{
+							display: table-cell;
+						}
+					}
+				}
+			}
+		 }
+	 }
+	.atenuado{
+		background-color: #dddddd;
+		color:#fff;
+	 }
+	 input.nombreagenda{
+		border: none;
+		text-align: center;
+		&:active{
+			text-decoration: none !important;
+		}
+	 }
+ }
+
+ #crearCita{
+	.tablas{
+		table{
+			margin: 0 auto;
+		}
+		td{
+			padding: 0 25px;
+		}
+		.fuera_horario, .fueras_horario{
+			color: mix(@font-color,#fff,50%);
+			background-color: @grey; 
+			border-color: @base;  
+		}
+	}
+	#stepper1, #stepper2{
+		display:none;
+	}
+	.contenedorServicios{
+		margin: 20px auto;
+		text-align: left;
+		tr {
+			display : none;
+		}
+	}
+	.contUsers{
+		margin: 20px auto;
+		input, textarea{
+			width:250px;
+			display:block;
+		}
+	}
+	.editando {
+		display:none;
+	}
+	.ui-datepicker-inline{
+		margin: auto;
+	}
+	#principal{
+		display:none;
+	}
+	#secundaria{
+		margin: auto;
+	}
+	#tSer{
+		padding: 0 5px;
+	}
+
+ }
+ #festivos{
+	.tablas{
+		tr{
+			text-align: center;
+		}
+		input{
+			margin: 0;
+			width: auto;
+		}
+		td{
+			margin: auto;
+			&:first-child{
+				width: 10%;
+				text-align: center;
+			}
+			&:last-child {
+				margin: 0;
+				padding: 0;
+			}
 		}
 	}
  }
