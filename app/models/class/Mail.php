@@ -6,19 +6,6 @@ class Mail extends PHPMailer {
     function __construct(User $User){
         parent::__construct(true);
         $this->user = $User; 
-
-        include_once URL_CONFIG . 'mail.php';
-        
-        //Recipients        
-        $this->setFrom(EMAIL_FROM, EMAIL_NAME);
-        $this->addAddress($User->email, $User->nombre);     // Add a recipient              
-        $this->AddReplyTo(EMAIL_FROM,EMAIL_NAME);
-        //config 
-        $this->CharSet = 'UTF-8';
-        $this->isHTML(true);  
-        //Attachments
-        $this->AddEmbeddedImage(URL_LOGO, 'logoimg', 'logo.jpg');
-        $this->AddEmbeddedImage(URL_BACKGROUND, 'backgroundimg', 'background.jpg');
     }
 
     public function send(){   

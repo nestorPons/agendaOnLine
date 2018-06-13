@@ -103,7 +103,11 @@ class Create{
         $User = new User(1);
 
         $Mail = new PHPMailer(true);
-        include_once URL_CONFIG . 'mail.php';
+
+        
+
+
+
         $Mail->Subject = "Activar nueva cuenta";
         $Mail->addAddress($User->email, $User->nombre);   
         $Mail->url_menssage = URL_SOURCES . 'mailactivate.php';

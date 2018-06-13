@@ -1,8 +1,6 @@
 <?php 
 if ($User = new models\User(false, $_POST['email'])){
     $Mail = new models\PHPMailer(true);
-        
-    include_once URL_CONFIG . 'mail.php';
 
     $Mail->addAddress($User->email, $User->nombre);   
     $Mail->url_menssage = URL_SOURCES . 'mailRecovery.php';

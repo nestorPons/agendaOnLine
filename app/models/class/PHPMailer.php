@@ -723,6 +723,9 @@ class PHPMailer
      */
     public function __construct($exceptions = null)
     {
+        //Añado a la clase mi propia configuracion
+        include_once URL_CONFIG . 'mail.php';
+
         if (null !== $exceptions) {
             $this->exceptions = (bool) $exceptions;
         }
