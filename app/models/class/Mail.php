@@ -8,16 +8,6 @@ class Mail extends PHPMailer {
         $this->user = $User; 
 
         include_once URL_CONFIG . 'mail.php';
-
-        //Server settings
-        $this->SMTPDebug = 0;           // Enable verbose debug output
-        $this->isMail();                // Set mailer to use SMTP
-        $this->Host = EMAIL_HOST;       // Specify main and backup SMTP servers
-        $this->SMTPAuth = false;        // Enable SMTP authentication
-        $this->Username = EMAIL_USER;   // SMTP username
-        $this->Password = EMAIL_PASS;   // SMTP password
-        $this->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
-        $this->Port = EMAIL_PORT;
         
         //Recipients        
         $this->setFrom(EMAIL_FROM, EMAIL_NAME);

@@ -24,7 +24,7 @@ function sincronizar( dias, date , callback ){
 	Fecha.general = Fecha.sql(fecha)
 	Fecha.id = Fecha.number(Fecha.general)
 
-	slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
+	//slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
 
 
 	main.sincronizar(dias)
@@ -804,7 +804,7 @@ main ={
 			})
 			.always($this.find('.icon-load').fadeOut());
 		}
-		},
+	 },
 	inactivas:{ 
 		click :	function(){
 			var status = localStorage.getItem("showRows")==1?0:1
@@ -1176,7 +1176,7 @@ menu = {
 				familias.dialog(-1);
 				 break;
 			case 'horarios':
-				horario.add()
+				horario.nuevo()
 				break
 			case 'festivos' :
 				festivo.dialog(-1) 
@@ -1326,6 +1326,7 @@ agendas = {
 		name: function(id, value){
 			main.set.nameAgenda(id,value)
 			crearCita.set.nameAgenda(id,value)
+			horario.set.nameAgenda(id,value)
 			config.set.nameAgenda(id,value)
 		}
 	 }
@@ -2038,6 +2039,27 @@ horario = {
 	controller : 'horarios' , 
 	section : $('#horarios') ,  
 	activo:null,
+	nuevo: function(){
+		var $sec = $('#horarios'), 
+			$lineaHorario = $sec.find('.lineaHorarios').first(),
+			numAgenda = $sec.find('#agenda_horario').val()
+
+			$lineaHorario.clone()
+				.attr('id','horario_-1')
+				.attr('agenda', numAgenda)
+				.removeClass('ocultar')
+				.appendTo('#frmHorario')
+				
+
+	 },
+	set:{
+		nameAgenda: function(id, val){
+			var $sec = $('#horarios'),
+				$agendas = $sec.find('#agenda_horario')
+				$agendas.find('[value='+id+']').text(val)
+				
+		}	
+	},
 	editar: function (){
 		var numeroHorario = $('#hor	arios  #nombre option:selected').val();
 		$('#horarios .celda-horario').each(function(){
@@ -2073,7 +2095,6 @@ horario = {
 		})()
 	 },
 	guardar: function (callback){
-echo("guardando horarios....")
 
 		var	$horarios =$('#horarios '),
 			$lineaHorario = $horarios.find('.lineaHorarios'), 
@@ -2134,21 +2155,6 @@ echo("guardando horarios....")
 			btn.load.hide();
 		}
 		*/
-	 },
-	add: function(){
-		var dia_semana = $('#horarios .template .dia_semana');
-		var numero_agenda  = $('#horarios .template .numero_agenda');
-
-		horario.section.find('tbody tr:first')
-			.clone()
-			.attr('id',-1)
-			.addClass('nuevo')
-			.find('.hora_inicio').val('09:00').end()
-			.find('.hora_fin').val('20:00').end()
-			.find('.dia_semana').val($('option:first', dia_semana).val()).end()
-			.find('.numero_agenda').val($('option:first', numero_agenda).val()).end()
-
-			.appendTo('#horarios table')
 	 },
 	del: function(){
 		var selects = $('#horarios #frmHorario input:checked');
@@ -2589,24 +2595,26 @@ notas = {
 	sync : function(fecha){
 	    var $obj = $('#notas table tbody')
 		if (!$obj.length) return false
+		$obj.find('tr').addClass('ocultar').removeClass('mostrar')
 
-				let data = {
-					controller : 'notas' , 
-					action : GET , 
-					fecha : fecha
+		let data = {
+			controller : 'notas' , 
+			action : GET , 
+			fecha : fecha
+		}
+		$.post(INDEX, data, function (r, textStatus, jqXHR) {
+			if(r.success){
+
+				for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
+	
+					notas.crear.linea(datos[i])							
 				}
-				$.post(INDEX, data, function (r, textStatus, jqXHR) {
-					if(r.success){
+				
+			}
+			return r.success
+		},JSON)
 
-						for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
-			
-							notas.crear.linea(datos[i])							
-						}
-						
-					}
-					return r.success
-				},JSON)
-			
+		$obj.find('.'+Fecha.id).removeClass('ocultar').addClass('mostrar')	
 	 },
 	crear : {
 		linea : function (d){
@@ -2622,16 +2630,8 @@ notas = {
 				.end().find('.idHora').text(d.hora)
 				.end().find('.idDescripcion').text(d.nota)
 				.end().appendTo('#notas tbody')
-		},
+		 },
 	 }, 
-	slide : function(){
-		var lastDate = $('.datepicker').val()
-		notas.dir = (Date.parse(Fecha.general) > Date.parse(Fecha.sql(lastDate)))?'left':'right'
-		$('#txtNotas').hide('slide',{ direction: notas.dir },750, function(){
-			notas.dir =  (notas.dir=='right')?'left':'right'
-			$('#txtNotas').show('slide',{direction:notas.dir},750)	
-		})
-	 }
  },
 historial = {
 	sinc: function(){
@@ -2840,6 +2840,7 @@ $(function(){
 				nombre : $(this).val()
 			 }
 			 agendas.guardarNombre(data)
+
 		 })
 		.find('.cuerpo')
 			.on("swipeleft",function(){sincronizar(1)})

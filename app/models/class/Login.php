@@ -156,8 +156,7 @@ class Login extends \core\BaseClass {
             setcookie($key, '', time() - 3600, '/');    
          }
 
-        // Borra todas las variables de sesión 
-        $Logs->set($this->id, 'unlogin'); 
+        // Borra todas las variables de sesión  
         $_COOKIE = array();
         $_SESSION = array();
 

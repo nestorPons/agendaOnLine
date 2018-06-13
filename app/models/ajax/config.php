@@ -10,9 +10,6 @@ if (!empty($_FILES["fileLogo"]["tmp_name"])){
 
 	$check = getimagesize($_FILES["fileLogo"]["tmp_name"]);
 
-//AKI :: Modificar os filtros pq al filtrar no se va al siguiente pudiendo valdar erroenamente .
-
-
 	$js['err'] = ($check == false) ?
 		'El archivo seleccionado no es una imagen' : //no es una imagen
 			file_exists($target_file) ?

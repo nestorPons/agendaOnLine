@@ -133,7 +133,7 @@ var crearCita ={
 		
 			lblTS.innerHTML = crearCita.tiempoServicios;
 		 } ,
-AKI:: 
+
 		crear: function (id_table, callback){
 			var data = {
 				agenda: crearCita.data.agenda,

@@ -266,5 +266,4 @@ class BaseClass{
         }
         return $result;
      }
-//AKI :: BUSCO DOS VECES USUARIOS AL ABRIR CREAR CITA
 }

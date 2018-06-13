@@ -49,8 +49,7 @@ if ($result_data <= 1 || 1 ){
 	$r['mns']['body'] = " No se pueden reservar dos citas en la misma hora " ;
 	}
 
-//AKI :: hay que implementar los email de aviso
-//if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
+if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
 
 function mnsExit($mns){
 	echo($mns);

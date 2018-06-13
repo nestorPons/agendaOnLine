@@ -1,7 +1,6 @@
 <?php  namespace models;
 
 class Lbl {	
-    //AKI :: unificar Lbl y Cita
     //datos
     private $id ;
     private $idCita ; 

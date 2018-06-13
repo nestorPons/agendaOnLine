@@ -28,7 +28,7 @@ jQuery.isEmpty = function(){
 	}
 	return isEmpty;
 
-}
+ }
 jQuery.serializeForm = function(form){
 	var $form = $('#'+form);
 	var inputs = $form.find('input:not(:button)');

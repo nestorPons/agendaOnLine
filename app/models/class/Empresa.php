@@ -24,6 +24,7 @@ class Empresa extends \core\BaseClass {
     public function conf_css(){
         $this->table = "config_css"; 
         $this->conf_css = $this->getAll('*',MYSQLI_ASSOC)[0];
+
         return  $this->conf_css;
     }
     private function conf(){
