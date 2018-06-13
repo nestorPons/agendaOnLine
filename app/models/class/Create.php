@@ -5,6 +5,8 @@ class Create{
     private $empresas, $pass, $cConn, $post, $id, $exceptionsPost = ['web'];
 
     public function __construct($post){
+        /*
+AKI:: DESCOMENTAR ESTO
         $this->empresas = new \core\BaseClass('empresas','aa_db');
         $this->connect();
         $this->post = $post;
@@ -13,6 +15,7 @@ class Create{
         $this->pass = $this->post['pass'];
         $this->name = $this->post['nombre_usuario'];
         $this->email = $this->post['email'];
+        */
      }
     public function getNameCompany(){
         return $this->nameCompany;
@@ -103,10 +106,6 @@ class Create{
         $User = new User(1);
 
         $Mail = new PHPMailer(true);
-
-        
-
-
 
         $Mail->Subject = "Activar nueva cuenta";
         $Mail->addAddress($User->email, $User->nombre);   

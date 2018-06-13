@@ -16,7 +16,7 @@ $this->Username = '';   // SMTP username
 $this->Password = '';   // SMTP password
 $this->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
 $this->Port = 25;
-//$this->setFrom(EMAIL_FROM, EMAIL_NAME);  
+ 
 $this->From =  'nestorpons@gmail.com';
 $this->FromName =  'ReservaTuCita.com';
 //Recipients        
