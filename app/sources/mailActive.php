@@ -1,4 +1,5 @@
 <?php 
+    $token = $args[1];
     $link = URL_ABSOLUT . CODE_EMPRESA . '/activate/' . $token;
 ?>
 <!DOCTYPE html>

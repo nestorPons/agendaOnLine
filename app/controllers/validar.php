@@ -1,4 +1,4 @@
-<?php 
+<?php  
 $action = 'login' ;
 
 $Login = new \models\Login;
@@ -17,12 +17,6 @@ if (isset($return['action'])){
 	$args = isset($return['args']) ? '?' . $return['args'] :  '' ; 
 	$action = $return['action']. $args ;
 } else $action = 'login';
-
-// Se guarda en el historial de movimientos 
-if (!empty($_SESSION['id_usuario'])) {
-	//$idUser, $action,$idFK,$status,$tables
-	$Logs->set($_SESSION['id_usuario'], 'login' , 0 , $return['action']); 
-}
 
 //var_dump ($return);
 header('Location: ' . $action);

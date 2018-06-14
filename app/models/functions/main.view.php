@@ -2,7 +2,7 @@
 
 function view($fecha_inicio = null, $existen_array = false ){	
 	global $Device;
-
+	$Agenda = new \models\Agendas;
 
 	function _inArray($hour, $multi_array){
 		foreach($multi_array as $arr){
@@ -30,10 +30,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 		$dia_semana = date('w',strtotime($fecha)) ;
 		$array_horas = $_SESSION['HORAS'][$dia_semana]??false;
-/*echo "######";
-print_r($_SESSION['HORAS'][$dia_semana][1]);
-echo "######";
-*/
+
 		if (empty($existen_array)||array_search($id_fecha,$existen_array)<0){
 
 			?>
@@ -62,7 +59,13 @@ echo "######";
 							<tr id='<?=$h?>' class="hora h<?= $h . ' '.$disabled?> " data-hour='<?= $str_hora?>'>
 								<td  class="<?= $clasehora ?> "><?= $str_hora?> </td>
 								<?php
-								for ($a=0;$a<CONFIG['totalAgendas'];$a++){ 
+								$agendas = $Agenda->get(); 
+
+								//for ($a=0;$a<CONFIG['totalAgendas'];$a++){ 
+								foreach($agendas as $k => $agenda){
+									if ($k>=CONFIG['totalAgendas']) break; 
+									$a = $agenda[0];
+
 									$label = $lbl->html[$h][$a] ?? false ;
 
 									$estadoCelda = (isset($array_horas[$a]) && in_array($str_hora,$array_horas[$a]))? 'dentro_horario':'fueras_horario';

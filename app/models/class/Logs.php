@@ -1,5 +1,5 @@
 <?php namespace models;
-class Logs extends \core\BaseClass{
+ class Logs extends \core\BaseClass{
     
     public function __construct(){
         parent::__construct('logs');		 
@@ -18,9 +18,10 @@ class Logs extends \core\BaseClass{
         $end = date('Y-m-d H:m:s',strtotime ( '+1 hour' , strtotime(date('Y-m-d H:m:s'))));
         $ini = date('Y-m-d H:m:s',strtotime ( '-'. $days .' day' , strtotime($end)));
 
-        return $this->getBetween('date', $ini, $end, 'ORDER BY date DESC'); 
+        return $this->getBetween('date', $ini, $end, 'ORDER BY id DESC'); 
     }
     private static function formatAction($arg){
+
         switch ($arg) {
             case SAVE:
                 return 1; 

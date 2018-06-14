@@ -1,10 +1,11 @@
 <?php namespace models;
 
 class Login extends \core\BaseClass {
-	private $num, $selector, $validator,  $pass;
+	private $num, $selector, $validator,  $pass, $Logs;
 	public $email, $id, $dateBaja, $admin, $user;	
 	public function __construct(){
-		parent::__construct('usuarios');		
+		parent::__construct('usuarios');	
+          $this->Logs = new \models\Logs; 	
 	 }
     public function findUserById(int $id){
         if ($this->user = parent::getById($id))
@@ -34,7 +35,6 @@ class Login extends \core\BaseClass {
             $this->attempts = $this->user['attempts'];
      }
     public function get($args){
-
 		return self::getById($this->id, $args);
 	 }
 	public function set($args){
@@ -133,8 +133,7 @@ class Login extends \core\BaseClass {
      }
     public function createSession(bool $remember = false){
         global $Security;
-        $Logs = new \models\Logs; 
-        $Logs->set($this->id, 'login'); 
+      
 
         $Security->loadSession(
             $this->id,
@@ -145,12 +144,14 @@ class Login extends \core\BaseClass {
 
         if ($remember) $this->authByCookie();
         
+        $this->Logs->set($this->id, 'login'); 
+
         return ($this->admin>0)?'admin':'users' ;
      }
-    public static function logout($deleteCookies = false) {
-        $Logs = new Logs;
+    public function logout($deleteCookies = false) {
 
-        // Borra la cookie que almacena la sesión 
+        $this->Logs->set($_SESSION['id_usuario'], 'logout');
+
        if($deleteCookies){
         foreach($_COOKIE as $key => $val)
             setcookie($key, '', time() - 3600, '/');    
@@ -167,7 +168,6 @@ class Login extends \core\BaseClass {
                 $params["secure"], $params["httponly"]
             );
          }
-
         // Finalmente, destruye la sesión 
         session_destroy(); 
         return true;

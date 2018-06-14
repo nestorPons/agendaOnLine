@@ -46,12 +46,12 @@
                             $accion = "Cita modificada";
                             break;
                         case 4:
-                            $ico = 'logout';
-                            $accion = "Salida usuario";
-                            break;
-                        case 5:
                             $ico = 'login';    
                             $accion = "Entrada usuario";
+                            break;
+                        case 5:
+                            $ico = 'logout';
+                            $accion = "Salida usuario";
                             break;
                     }
                     include URL_TEMPLATES . 'row.history.php';

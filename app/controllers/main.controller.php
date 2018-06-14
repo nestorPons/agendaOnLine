@@ -15,7 +15,6 @@ try {
         models\Login::example();
     }
     
-    
     // Condicion para cuando la empresa no esta creada no cargue la configuracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
     if (isset($_GET['empresa'])){
@@ -28,7 +27,7 @@ try {
                 $mensErr = \core\Error::E010;
                 exit();
             }
-            
+
             require  URL_CONTROLLERS . $controller . '.php';
             
         }else{
