@@ -5,8 +5,7 @@ class Create{
     private $empresas, $pass, $cConn, $post, $id, $exceptionsPost = ['web'];
 
     public function __construct($post){
-        /*
-AKI:: DESCOMENTAR ESTO
+
         $this->empresas = new \core\BaseClass('empresas','aa_db');
         $this->connect();
         $this->post = $post;
@@ -15,7 +14,7 @@ AKI:: DESCOMENTAR ESTO
         $this->pass = $this->post['pass'];
         $this->name = $this->post['nombre_usuario'];
         $this->email = $this->post['email'];
-        */
+    
      }
     public function getNameCompany(){
         return $this->nameCompany;

@@ -37,25 +37,6 @@ try {
             include(PUBLIC_FOLDER . "error404.php");
             
         }
-// AKII hay que eliminar este codigo
-        $phpMailer = new \models\PHPMailer(); 
-echo $phpMailer->From; 
-        if($phpMailer->Send()){
-
-            echo 'Sent.<br/>';
-        
-        }else{
-        
-            echo 'Not sent: <pre>'.print_r(error_get_last(), true).'</pre>';
-        
-        }
-        $c = new \models\Create(['pass'=>'123','nombre_usuario'=>'uno','email'=>'a@a']); 
-        $c->sendMail(); 
-    echo"sada";
-
-    exit(1);
-    
-//-------------------------------------
 
 
     } else {

@@ -96,7 +96,6 @@ class User extends \core\BaseClass {
 
 		$actualDate = (strtotime(date("Y-m-d H:i:00",time())));
 		$saveDate = (strtotime('+30 minute' , strtotime($tbl['date'])));
-echo $actualDate .BR. $saveDate;
 		if($actualDate >= $saveDate) return \core\Error::set('E061');
 		if($tbl['token'] != $token) return \core\Error::set('E062');
 		return true;
@@ -105,7 +104,7 @@ echo $actualDate .BR. $saveDate;
 		$Token = new \core\BaseClass('tblreseteopass'); 
 		return $Token->deleteBy('id_user', $this->id);
 	 }
-	public function activate($get){
+	public function statusActive($get){
 		if (!$this->checkToken($get['args'])) return false;
 		return $this->set(['status'=> 0]);
 	 }
