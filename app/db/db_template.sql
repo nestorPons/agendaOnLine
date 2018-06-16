@@ -172,7 +172,6 @@ ALTER TABLE `horarios`
   ADD KEY `agenda` (`agenda`);
 
 ALTER TABLE `servicios`
-  ADD INDEX(`id`),
   ADD UNIQUE KEY `codigo` (`codigo`),
   ADD KEY `idFamilia` (`idFamilia`);
 
@@ -202,7 +201,7 @@ ALTER TABLE `horarios`
   ADD CONSTRAINT `HOR_AGE_FK` FOREIGN KEY (`agenda`) REFERENCES `agendas` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `servicios`
-  ADD CONSTRAINT `SER_FAM_FK` FOREIGN KEY (`idFamilia`) REFERENCES `familias` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `SER_FAM_FK` FOREIGN KEY (`idFamilia`) REFERENCES `familias` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE `tblreseteopass`
   ADD CONSTRAINT `RPS_ID_FK` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

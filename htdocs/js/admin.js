@@ -2412,10 +2412,11 @@ usuarios = {
 	 },
 	select: function (letra) {
 
-		$('#usuarios')
-			.find('.c3').removeClass('c3').end()
+		var $sec = $('#usuarios')
+		$sec 
+			.find('a.c3').removeClass('c3').end()
 			.find('#menu'+letra).addClass('c3').end()
-			.find('tbody tr').hide().end()
+			.find('tbody tr:visible').hide().end()
 			.find('.name[id^='+letra.toLowerCase()+']').parent().show()
 	 },
 	buscar: function (txt){

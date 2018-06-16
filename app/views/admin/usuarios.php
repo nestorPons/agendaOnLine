@@ -35,16 +35,16 @@
 			//****//
 
 			foreach($users as $user){
-				$id = $user[0] ;
-				$nombre = $user[1] ; 
-				$email = $user[2] ; 
-				$tel = $user[4] ; 
-				$admin = $user[5] ; 
-				$obs = $user[6] ; 
-				$activa = $user[10] ; 
+				$id = $user['id'] ;
+				$nombre = $user['nombre'] ; 
+				$email = $user['email'] ; 
+				$tel = $user['tel'] ; 
+				$admin = $user['admin'] ; 
+				$obs = $user['obs'] ; 
+				$activa = $user['status'] ; 
 				$email_status= empty($email)?"No":"Si";
 				$obs_status =empty($obs)?"No":"Si";
-				$clase = $activa!=0||!empty($user[9])?'ocultar_baja':'';
+				$clase = empty($user['dateBaja'])?'':'ocultar_baja';
 
 				include (URL_TEMPLATES .'row.users.php');			
 				

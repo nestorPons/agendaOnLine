@@ -3,5 +3,5 @@
     <hr>
     <p>Se le ha enviado un email a su cuenta asociada</p>
     <p>Si no le llega ningún email pongase en contacto con el administrador<p>
-    <p>Grácias</p>
+    <p>Gracias</p>
 </section>
