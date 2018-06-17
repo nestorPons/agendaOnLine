@@ -61,7 +61,7 @@ class Create{
             throw new \Exception(\core\Error::E013, 13);
          return true;
      }
-    public function createTables(){
+    public function createTables(){ 
         $this->cConn->selectDb( $this->db);
         $fileSQL = file_get_contents(URL_SQL . 'db_template.sql');
         if(!$this->cConn->multi_query($fileSQL))

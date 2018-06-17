@@ -56,16 +56,11 @@ class Horarios extends \core\BaseClass {
 		return $this->horary??false;
 	
 	 }
-	/*public function days($day){
-		$row =  $this->consult("SELECT * FROM horarios WHERE dia = $day")  ;
-
-		foreach ($row as $key => $value){
-			$inicio_horarios[$value['dia']][] = $value['inicio'];
-			$fin_horarios[$value['dia']][] = $value['fin'];
-		}
-
-	 }
-	 */
+	public function initialize($agenda){
+		$this->sql = "INSERT INTO horarios (`agenda`, `dia_inicio`, `dia_fin`, `hora_inicio`, `hora_fin`)
+            VALUES ($agenda, 1 , 5, '9:00:00','20:00:00'), ($agenda, 6, 6, '9:00:00','14:00:00');";
+		return $this->query($this->sql);
+	}
 
 	public function add ( $datos ){
 		

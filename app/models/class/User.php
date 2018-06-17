@@ -8,7 +8,7 @@ class User extends \core\BaseClass {
 	public function __construct( $id , $email = false){
 		
 		parent::__construct('usuarios');
-		
+
 		$this->user = ($id)
 			? parent::getById($id)
 		 	: $this->user = parent::getOneBy('email', $email);
@@ -24,10 +24,7 @@ class User extends \core\BaseClass {
 			$this->idioma = $this->user['idioma'];
 			$this->admin = $this->user['admin'];
 			$this->status = $this->user['status'];
-		} else {
-			die('no encontrado');
-		}
-		
+		} 
 	 }
 	public function get($args){
 		return self::getById($this->id, $args);
@@ -94,9 +91,13 @@ class User extends \core\BaseClass {
 		$Token = new \core\BaseClass('tblreseteopass'); 
 		$tbl = $Token->getOneBy('id_user', $this->id);
 
-		$actualDate = (strtotime(date("Y-m-d H:i:00",time())));
-		$saveDate = (strtotime('+30 minute' , strtotime($tbl['date'])));
-		if($actualDate >= $saveDate) return \core\Error::set('E061');
+		$actualDate = new \DateTime();
+		$saveDate = new \DateTime($tbl['date']);
+		$saveDate->modify('+30 minute');
+		$interval = $actualDate->diff($saveDate);
+
+		// Tiempo limite para activar cuenta
+		if(15 < (int)$interval->format("hi")) return \core\Error::set('E061');
 		if($tbl['token'] != $token) return \core\Error::set('E062');
 		return true;
 	 }

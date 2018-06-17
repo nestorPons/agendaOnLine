@@ -16,7 +16,7 @@ class Agendas extends \core\BaseClass {
     }
     function add($max_permitted){
 
-        return ($this->count < $max_permitted)
+        return ($this->count <= $max_permitted)
              ? $this->saveById(-1, ["nombre"=>"Agenda". ($this->count()+1)])
              : false; 
     }

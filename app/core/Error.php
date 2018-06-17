@@ -26,7 +26,7 @@ class Error {
     const E022 = "Email ocupado."; 
     const E023 = "Estado usuario desactivado.";
     const E024 = "Cuenta bloqueada. Consulte su administrador.";
-    const E025 = "";
+    const E025 = "No se ha encontrado el usuario";
     const E026 = "Usuario o contraseña incorrectos.";
     const E027 = "Pin incorrecto";
 

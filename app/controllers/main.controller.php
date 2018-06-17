@@ -4,7 +4,7 @@ try {
     require_once $url_base . 'app/conf/autoload.php' ;
     $Security = new \core\Security;
     $Forms = new models\Forms($_POST, ['fileLogo','tel','chck']);
-
+    
     //compruebo que sea dir app
     $controller = isset($_REQUEST['controller'])&&$_REQUEST['controller']!='err'
     ?$_REQUEST['controller']
@@ -18,7 +18,9 @@ try {
     // Condicion para cuando la empresa no esta creada no cargue la configuracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
     if (isset($_GET['empresa'])){
+        
         $Logs = new models\Logs;
+
         if (file_exists(URL_EMPRESA)){     
             require_once URL_FUNCTIONS . 'compilaLess.php' ;
             
@@ -31,8 +33,7 @@ try {
             require  URL_CONTROLLERS . $controller . '.php';
             
         }else{
-            
-            models\Login::logout();
+
             include(PUBLIC_FOLDER . "error404.php");
             
         }

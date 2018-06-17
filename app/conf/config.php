@@ -10,7 +10,7 @@ define('NAME_EMPRESA' ,  $Empresa->name());
 define('NAME_DB' , PREFIX_DB . CODE_EMPRESA??FALSE );
 define('URL_EMPRESA' , URL_EMPRESAS . CODE_EMPRESA . '/' );
 define('URL_LOGIN','/'.CODE_EMPRESA);
-define('URL_LOGO' , file_exists(URL_EMPRESA."logo.png")?'/empresas/'.CODE_EMPRESA."/logo.png":"img/logo.png");
+define('URL_LOGO' , file_exists(URL_EMPRESA."logo.png")?'empresas/'.CODE_EMPRESA."/logo.png":"img/logo.png");
 define('URL_BACKGROUND' , '/empresas/'.CODE_EMPRESA."/background.jpg");
 
 //Define los festivos y usa la variable $conn para hacer la conexion 

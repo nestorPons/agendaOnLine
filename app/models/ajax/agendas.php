@@ -23,7 +23,10 @@ switch($action){
 		$return = $Agendas->multi_query();
 		break;
 	case "add":
-		$return = $Agendas->add(CONFIG['num_ag']);
+		$H = new \models\Horarios; 
+		$return = ($Agendas->add(CONFIG['num_ag']))
+			?$H->initialize($Agendas->getId())
+			: false ; 
 		break;
 	case "del": 
 		$return = $Agendas->deleteById($_POST['id']);

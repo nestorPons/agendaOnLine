@@ -38,7 +38,7 @@ var general = {
 				$('#login').prepend(html)
 				$(html)	.attr('class','')
 				_toggle($(html))
-				
+
 			},'html')
 		} else {
 			_toggle($in)
@@ -82,12 +82,12 @@ recover = {
 		$.post(URL, data,function (r) {
 			if (r.success) {
 				notify.success('Siga las instrucciones del email', 'Email enviado')
+				typeof callback == "function" && callback()
 			} else {
 				notify.error(r.err, 'Error: '+ r.code)
 				echo(r);
 			 }	
 			btn.load.hide()
-			typeof callback == "function" && callback()
 		 },JSON)	
 	 }
  }, 
@@ -164,9 +164,11 @@ $(function(){
 		 })
 		.on('submit','#recover form',function(e){
 			e.preventDefault()
+			
 			recover.send(
-				general.toggle($('#newPass'))
-			)		
+				()=>general.toggle($('#newPass'))
+			)
+					
 		 })
 		.on('click','.logout',function(){
 			deleteAllCookies();
