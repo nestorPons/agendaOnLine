@@ -2848,12 +2848,12 @@ $(function(){
 		.on('click','#btnReset',menu.reset)
 		.on('click','#btnOptions #chckOpUsersDel',menu.options)
 		.on('change','#selShowByTime', function(){historial.get($(this).val())})
-		.find('[name="menu[]"]').click(function(){
-			var capa = $(this).data('capa') ;
+		.find('[name="menu[]"]').parent().click(function(){
+			var capa = $(this).find('a').data('capa') ;
 			if (capa == 'main'){
 				mostrarCapa('main' ,  true ) 
 			}else{
-				mostrarCapa($(this).data('capa'));
+				mostrarCapa($(this).find('a').data('capa'));
 			}
 			$('.app-bar-pullmenu ').hide('blind');
 		 })
