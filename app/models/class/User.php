@@ -35,6 +35,7 @@ class User extends \core\BaseClass {
 	public function password($pass){
 		if (!empty($pass)) {
 			$pass = password_hash($pass,PASSWORD_BCRYPT);
+			$this->set(['status'=>0]); 
 			return $this->set(['pass'=>$pass]);
 		} else {
 			return $this->get('pass');

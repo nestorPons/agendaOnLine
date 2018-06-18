@@ -1,5 +1,4 @@
 <?php 
-
     $User = new \models\User(false, $_POST['email']); 
     if ($User->id){
         $Mail = new \models\PHPMailer(true);
@@ -11,6 +10,7 @@
         $Mail->Subject =  "Reestablece contraseña";
 
         $r['success'] = $Mail->send($User);
+
     } else {
        $r = core\Error::array('E025');
     }

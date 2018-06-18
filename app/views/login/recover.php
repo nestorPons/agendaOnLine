@@ -4,7 +4,7 @@
     <hr>
     <form id="frmRecover">
         <input type="hidden" id="empresa"  value="<?php  ?>">
-        <p>Introduzca email el email de la cuenta registrada</p>
+        <p>Introduzca su email</p>
         <div class="iconClass-container icon-left">
             <input type="email" class="email" name="email" id="email" placeholder="Introduzca email." required>
             <span class="iconClass-inside icon-mail-1"></span>

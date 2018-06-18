@@ -1531,7 +1531,6 @@ familias = {
 	 },
  },
 crearCita ={
-	tiempoServicios : 0,
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
@@ -1640,18 +1639,20 @@ crearCita ={
 			}
 			
 		 },	
-		load : function ($this) {
-			tiempoServicios = 0
-			var lblTS = $('#tSer')[0]
+		load : function () {
 
-			if( $this.is(':checked') )
-				tiempoServicios += $this.data('time')
-			else 
-				tiempoServicios -= $this.data('time')
+			var tiempoServicios = 0, 
+				lblTS = $('#tSer'), 
+				$sec = $('#crearCita'), 
+				serviciosSeleccionados = $sec.find('.idServicios:checked')
 
-			crearCita.horas.pintar(Fecha.id)
-		
-			lblTS.innerHTML = tiempoServicios;
+				serviciosSeleccionados.each(function(){
+					tiempoServicios += $(this).data('time')
+				})
+
+			lblTS.text(tiempoServicios)
+			crearCita.horas.pintar(Fecha.id,tiempoServicios)
+	
 		 } ,
 		crear: function (id_table, callback){
 			var data = {
@@ -1663,58 +1664,28 @@ crearCita ={
 					
 			$.post(INDEX , data , function(html){
 				var m = document.getElementById('tablas')
-				m.innerHTML = html
-				crearCita.horas.pintar(id_table)				
+				m.innerHTML = html	
+				crearCita.horas.load()
 			})
 
 		 },		
-		pintar: function(id_table, tiempoServicios){
+		pintar: function(id_table, tiempoServicios = 0){
 
 			var self = crearCita, 	
-				section = $('#crearCita') 
-			section.find('#tablas .reservado').removeClass('reservado').find('input').attr('disabled',false)
+				$sec = $('#crearCita'),  
+				ts = parseInt(Math.ceil(tiempoServicios/15)),
+				$dia = $sec.find('#'+ id_table), 
+				$horas = $dia.find('.horas'), 
+				count = 0
 
-			var horas = crearCita.horas ,
-				_esPasada = function( hora ) {
-				
-	 			var diff_fechas = Fecha.restar(id_table); 
-				//sumo los minutos a la fecha actua
-				var _return = false;
-				
-				if ( diff_fechas<0 ){
+			$dia.removeClass('reservado').find('input').attr('disabled',false)
+	
+			for (let i = $horas.length - 1  ; i >= 0 ; i--){
+				let $this = $dia.find('#hora'+i)
+				if ( $this.hasClass('ocupado')) count = ts 
 
-					_return = true
-					
-				} else if ( diff_fechas == 0 ){
-					
-					var minTime = document.minTime * 60000;
-					var a = new Date(hora*1000);
-					var milisegundos = new Date().getTime();
-					var f = new Date(milisegundos + minTime);
-
-					_return =  (a<f)
-					
-				}
-				return  _return
-			},
-				ts = parseInt(Math.ceil(tiempoServicios/15))||0 ,
-				_reservar= ( me ) =>  me.attr('disabled',true).parent('label').addClass('reservado') ,
-				_fueraHorario  = ( me ) =>  me.hasClass('disabled') ,
-				diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS) ,
-				count = ts ,
-				horas = section.find('#'+ id_table+' .horas')
-
-			for (let i = horas.length - 1  ; i >= 0 ; i--){
-				let $this = section.find('#'+ id_table+' #hora'+i)
-				
-				if (diaFestivo ){
-					_reservar($this) 
-				}else{
-					if ( $this.hasClass('ocupado')) count = ts 
-
-					if ( count > 0 ) _reservar($this) 
-					count -- 
-				}
+      			if ( count > 0 ) $this.attr('disabled',true).parent('label').addClass('reservado')  
+				count -- 		
 			}
 		 },
 		sincronizar: function(callback){
@@ -1781,8 +1752,8 @@ crearCita ={
 			} else if(index==2&&crearCita.validate.service()){
 				if(crearCita.validate.name())_slider(function(){
 					if (_hora!=0){
-						$('#crearCita #'+Fecha.id + ' #'+_hora).attr('checked',true);
-						crearCita.dialog();
+						$('#crearCita #'+Fecha.id + ' #'+_hora).attr('checked',true)
+						crearCita.dialog()
 					}
 				});
 			};
@@ -2780,7 +2751,6 @@ $(function(){
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
 		.on('blur','#cliente',crearCita.validate.name)
 		.on("swipeleft",'.tablas')
-		.on('click','.idServicios',function(){crearCita.horas.load($(this))})
 		.on('click','.cancelar',function(){mostrarCapa('main')})
 	$('#familias')
 		.on('click','table .icon-edit',function(){
