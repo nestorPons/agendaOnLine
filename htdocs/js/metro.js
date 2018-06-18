@@ -2794,7 +2794,7 @@ $.widget("metro.dropdown", {
             this.options.effect = METRO_SHOW_TYPE;
         }
 
-        toggle.on('click.'+name, function(e){
+        toggle.parent().on('click.'+name, function(e){
             parent.siblings(parent[0].tagName).removeClass("active-container");
             $(".active-container").removeClass("active-container");
 

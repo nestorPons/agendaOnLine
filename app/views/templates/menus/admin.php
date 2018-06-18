@@ -48,10 +48,8 @@
 			</li>
 			<li>
 				<a id="menu0" name='menu[]' class="app-bar-element selected" data-capa="main">
-					<span class="icon-wallet"></span>
-					
-					<span class="caption ">agendas</span>
-					
+					<span class="icon-wallet"></span>		
+					<span class="caption ">agendas</span>				
 				</a>
 			</li>
 			<li>

@@ -285,8 +285,7 @@ input[type="color"] {
 		clear: both;
 	 }
 	ul{
-		border:solid;
-		border-width: 0 0 0 1px;
+		border: none;
 		li {
 			padding-top:  15;
 		}
@@ -346,29 +345,28 @@ input[type="color"] {
 	.app-bar-menu {
 		display: block;
 		float: left;
-		li , li a {
+		li{
 			padding: 0;
 			line-height: 3.125rem;
-			padding: 0 .625rem;
 			cursor: pointer;
 			color: inherit;
 			display: block;
 			float: left;
 			position: relative;
-			height: 3.125rem;
+			a{
+				width: 90%;
+				padding: 0 0 0 10px;
+			}
 			@media (max-width: 800px){
 				display: table;
 			}
 			.d-menu{
 				top: 100%;
 				border: 2px solid @default_color;
-				li{
-					.d-menu { 
-						.d-menu{
-							top: -0.625rem;
-  							left: 100%;
-						}
-					}
+				a{
+					width: 90%; 
+					padding: 0 0 0 15px;
+					height: 3rem;
 				}
 			 }
 			&:after{
@@ -389,8 +387,7 @@ input[type="color"] {
 		}
 	 }
 	.app-bar-pullmenu .app-bar-menu {
-		width: 100%;
-		
+		width: 100%;	
 		position: relative;
 		float: none;
 		display: none;
