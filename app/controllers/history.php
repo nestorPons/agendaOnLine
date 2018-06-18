@@ -1,6 +1,7 @@
 <?php
 $days = $_POST['days']??DEFAULT_HISTORY_DAYS; 
 $results =$Logs->get($days);
+
 $accion = "null";
 
 if (isset($_POST['action'])) {

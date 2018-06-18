@@ -21,16 +21,17 @@
                 <td class="estado"><?=$status?></td>    
             </tr>
 
-            <?php 
+            <?php
+ 
                 $len = count($results);
                 for($i = 0; $i < $len ; $i++){
                     $r = $results[$i];
-                    $id = $r[0];
-                    $date = $r[1];
-                    $user = $r[2];
-                    $status = $r[5]?'Ok':'Error';
-                    $table = $r[6];
-                    $action = $r[3];
+                    $id = $r['id'];
+                    $date = $r['date'];
+                    $user = $r['nombre'];
+                    $status = $r['status']?'Ok':'Error';
+                    $table = $r['table'];
+                    $action = $r['action'];
                     $colorClass = $status == 0 ? 'red' : 'green';
                     switch ($action){
                         case 1:

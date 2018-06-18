@@ -17,8 +17,11 @@
     public function get(int $days){
         $end = date('Y-m-d H:m:s',strtotime ( '+1 hour' , strtotime(date('Y-m-d H:m:s'))));
         $ini = date('Y-m-d H:m:s',strtotime ( '-'. $days .' day' , strtotime($end)));
-
-        return $this->getBetween('date', $ini, $end, 'ORDER BY id DESC'); 
+        
+        $sql = "SELECT *, (SELECT nombre FROM usuarios u WHERE u.id = idUser) as nombre FROM `logs` 
+        WHERE date BETWEEN '$ini' AND '$end' 
+        ORDER BY id DESC;" ;
+        return $this->conn->all($sql);
     }
     private static function formatAction($arg){
 

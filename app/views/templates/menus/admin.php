@@ -75,6 +75,18 @@
 				</ul>
 			</li>
 			<li>
+				<a id="menu5"  name='menu[]'  data-capa="notas">
+					<span class="icon-pencil-1"></span>
+					<span class="caption">Notas</span>
+				</a>
+			</li>
+			<li>
+				<a id="menu9"  name='menu[]'  data-capa="history">
+					<span class="icon-clock"></span>
+					<span class="caption">Historial</span>
+				</a>
+			</li>
+			<li>
 				<a id="menu8"  class="dropdown-toggle">
 					<span class="icon-cog"></span>
 					<span class="caption">Config</span>
@@ -87,15 +99,6 @@
 					<li><a name='menu[]' data-capa="agendas">agendas</a></li>	
 					<li><a name='menu[]' data-capa="estilos">Estilos</a></li>	
 				</ul>
-			</li>
-			<li>
-				<a id="menu5"  name='menu[]'  data-capa="notas">
-					<i id="icon-info-circled"></i>
-					Notas
-				</a>
-			</li>
-			<li>
-				<a id="menu9" name='menu[]' data-capa="history">Historia</a>
 			</li>
 
 			
