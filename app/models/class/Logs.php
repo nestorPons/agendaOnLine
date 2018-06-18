@@ -21,7 +21,7 @@
         $sql = "SELECT *, (SELECT nombre FROM usuarios u WHERE u.id = idUser) as nombre FROM `logs` 
         WHERE date BETWEEN '$ini' AND '$end' 
         ORDER BY id DESC;" ;
-        return $this->conn->all($sql);
+        return $this->conn->all($sql, MYSQLI_ASSOC);
     }
     private static function formatAction($arg){
 

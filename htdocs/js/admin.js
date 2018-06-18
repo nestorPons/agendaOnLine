@@ -1676,7 +1676,7 @@ crearCita ={
 				ts = parseInt(Math.ceil(tiempoServicios/15)),
 				$dia = $sec.find('#'+ id_table), 
 				$horas = $dia.find('.horas'), 
-				count = 0
+				count = ts-1 
 
 			$dia.removeClass('reservado').find('input').attr('disabled',false)
 	
@@ -1685,7 +1685,7 @@ crearCita ={
 				if ( $this.hasClass('ocupado')) count = ts 
 
       			if ( count > 0 ) $this.attr('disabled',true).parent('label').addClass('reservado')  
-				count -- 		
+				count-- 		
 			}
 		 },
 		sincronizar: function(callback){

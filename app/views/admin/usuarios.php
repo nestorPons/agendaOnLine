@@ -10,11 +10,11 @@
 				<th class="num">Num</th>
 				<th class="name">nombre</th>
 				<?php if(!$Device->isMovile){?>
-					<th>Telefono</th>
-					<th>Email</th>
-					<th>obs</th>
-					<th>admin</th>
-					<?php
+					<th class="tel">Telefono</th>
+					<th class="email">Email</th>
+					<th class="obs">obs</th>
+					<th class="admin">admin</th>
+				<?php
 				}?>	
 			</tr>
 		</thead>

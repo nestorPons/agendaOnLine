@@ -6,8 +6,8 @@
                 <th class="id">Id</th>
                 <th class="icono">Icono</th>
                 <th class="fecha">Fecha</th>
-                <th class="idUsuario">Usuario</th>
                 <th class="accion">Acción</th>
+                <th class="idUsuario">Usuario</th>
                 <th class="estado">Estado</th>
             </tr>	
         </thead>
@@ -16,8 +16,8 @@
                 <td class="id"><?=$id?></td>
                 <td class="icono"><a class= "icon-<?=$ico?>" ></a></td>
                 <td class="fecha"><?=$date?></td>
-                <td class="idUsuario"><?=$user?></td>
                 <td class="accion"><?=$accion?></td>
+                <td class="idUsuario"><?=$user?></td>
                 <td class="estado"><?=$status?></td>    
             </tr>
 
@@ -30,7 +30,7 @@
                     $date = $r['date'];
                     $user = $r['nombre'];
                     $status = $r['status']?'Ok':'Error';
-                    $table = $r['table'];
+                    $table = $r['tables'];
                     $action = $r['action'];
                     $colorClass = $status == 0 ? 'red' : 'green';
                     switch ($action){
