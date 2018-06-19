@@ -88,6 +88,7 @@ INSERT INTO `servicios` (`id`, `codigo`, `descripcion`, `precio`, `tiempo`, `idF
 (79, 'MANPER', 'Manicura con esmaltado permanente', 31, 60,  0),
 (80, 'MANTRA', 'Manicura con tratamiento', 26, 45,  0),
 (81, 'MANVIN', 'Manicura Vinylux', 16, 30,  0),
+(82, 'MAQ', 'Maquillaje', 20, 30,  1),
 (83, 'MAQLUX', 'Maquillaje fiesta', 30, 60, 1),
 (84, 'MBRA', 'Medios brazos', 75, 15,  2),
 (85, 'MBRAH', 'Medios brazos Hombre', 85, 15,  2),
@@ -118,15 +119,16 @@ INSERT INTO `servicios` (`id`, `codigo`, `descripcion`, `precio`, `tiempo`, `idF
 (110, 'TIN', 'Tinte pestañas', 12, 15, 1),
 (111, 'TRAP', 'Trapecio', 85, 20,  2),
 (112, 'TRTU', 'Uñas quebradas', 8, 15,  0),
+(113, 'UÑAS', 'Uñas porcelana', 8, 15,  0),
 (114, 'UÑASGEL', 'Uñas de gel', 40, 90,  0),
+(115, 'VITC', 'Uñas de gel', 40, 90,  0),
 (116, 'WHITE', 'Tratamiento White', 68, 60, 1),
 (120, 'PEDINT', 'Pedicura Integral', 40, 75,  0),
 (121, 'MAQNOV', 'Maquillaje Novia', 45, 90,  1),
 (122, 'close2h', 'cerrado 2 horas', 0, 120,  5),
+(123, 'ENTRNOV', 'entrevista novia', 0, 120,  5),
 (124, 'TLRA', 'Tratamiento Regeneración Absoluta', 60, 75,  1),
 (125, 'LIFTI', 'Lifting Pestañas', 55, 60,  0);
-
-
 
 
 INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, `idioma`) VALUES
@@ -1419,4 +1421,11 @@ INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, 
 (1518, 'Elena Dolz', 'elenusky88@gmail.com', '319cc9b915524932f4d4765167e734109b30e48e', '692385873', 0, NULL, NULL),
 (1519, 'Ana Maria Altamirano*', NULL, NULL, '638028192', 0, NULL, NULL),
 (1520, 'Silvia Martinez*', NULL, NULL, '610289226', 0, NULL, NULL),
-(1521, 'pilar Moran*', NULL, NULL, '627219757', 0, NULL, NULL);
+(1521, 'pilar Moran*', NULL, NULL, '627219757', 0, NULL, NULL),
+(1522, 'Yara Mas Gimenez*', NULL, NULL, '633232713', 0, NULL, NULL),
+(1523, 'Cristina Ronda*', NULL, NULL, '679102037', 0, NULL, NULL),
+(1524, 'Maria Beltran*', NULL, NULL, '654504125', 0, NULL, NULL),
+(1525, 'Alicia Desalduch*', NULL, NULL, '638600484', 0, NULL, NULL),
+(1526, 'Alicia Besalduch*', NULL, NULL, NULL, 0, NULL, NULL),
+(1527, 'Noelia Ladero*', NULL, NULL, '605648662', 0, NULL, NULL),
+(1528, 'Ana Peset*', NULL, NULL, NULL, 0, NULL, NULL);

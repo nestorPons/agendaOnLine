@@ -1,7 +1,8 @@
 <?php namespace core ;
 class BaseClass{
 
-    public $names,
+    public 
+        $names,
         $type = MYSQLI_ASSOC,
         $multi_query = false,
         $conn, 
@@ -29,7 +30,7 @@ class BaseClass{
     public function db () {
         return $this->db ; 
      }
-    protected function query(){
+    public function query(){
         $sql = $this->sql;
         $this->sql = '';
         
@@ -115,7 +116,7 @@ class BaseClass{
         $sql = "SELECT * FROM {$this->table} WHERE $column = '$value' " ;
         return $this->conn->row($sql) ;
      }
-    public function getBetween ( $column, $val1, $val2, $args ){
+    public function getBetween ( String $column, String $val1, String $val2, String $args = '' ){
         $sql = "SELECT * FROM {$this->table} WHERE $column BETWEEN '$val1' AND '$val2' $args;" ;
         return $this->conn->all($sql) ;
      }
@@ -132,7 +133,7 @@ class BaseClass{
         return $r;
      }
     public function saveById ( int $id , array $args = null  ) {
-         
+
         $columns = null ; 
         $values = null ;
         

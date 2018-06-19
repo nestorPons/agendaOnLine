@@ -42,11 +42,9 @@ class Conexion extends \conf\UserConn {
 	public function selectDb(string $db){
 		return mysqli_select_db ( $this->conexion, $db );
 	 }
-	public function query($sql){
-		$this->result = mysqli_query( $this->conexion, $sql) or die(mysqli_error($this->conexion));
-		
+	public function query($sql){	
+		$this->result = mysqli_query( $this->conexion, $sql) or die(mysqli_error($this->conexion));	
 		return $this->result ;
-	
 	 }
 
 	//Funcion original multi query 

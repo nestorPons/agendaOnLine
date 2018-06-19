@@ -2,10 +2,12 @@
 	<?php 	
 	foreach ($Agendas->get() as $key => $agenda){
 		if ($key>=CONFIG['totalAgendas']) break;
-		$id = $agenda[0]??-1;
-		$nombre = $agenda[1]??'';
-		$mostrar = $agenda[2]??'';
-		$checked=($key==0)?"checked":"";
+
+		if(!(isset($zoneUsers)&&$agenda[2]==0)){
+			$id = $agenda[0]??-1;
+			$nombre = $agenda[1]??'';
+			$mostrar = $agenda[2]??'';
+			$checked=($key==0)?"checked":"";
 			?>
 			<label  for="agenda<?=$id?>">
 				<input type='radio' name="agenda[]"  id="agenda<?=$id?>" value='<?=$id?>' <?= $checked?>>
@@ -15,7 +17,8 @@
 			</label>
 			<?php
 		}
-	?>	
+	}
+		?>	
 </div>
 
 <div class="iconClass-container icon-left">

@@ -125,7 +125,7 @@ CREATE TABLE `usuarios` (
   `id` int(11) PRIMARY KEY AUTO_INCREMENT ,
   `nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `pass` varchar(255) NOT NULL,
+  `pass` varchar(255) DEFAULT NULL,
   `tel` varchar(20) DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
@@ -134,7 +134,7 @@ CREATE TABLE `usuarios` (
   `dateBaja` datetime DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
   `attempts` tinyint(4) NOT NULL DEFAULT '0',
-  `pin` SMALLINT(4) NULL
+  `pin` SMALLINT(4) DEFAULT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE `logs` (
