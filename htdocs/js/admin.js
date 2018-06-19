@@ -1275,9 +1275,21 @@ agendas = {
 		}
 	 }, 
 	guardar: function (callback){
-		var data = $('#agendas #frmAg').serializeArray() ;
-		data.push({name : 'controller' , value : 'agendas'})
-		data.push({name : 'action' , value : SAVE})
+		var $frm = $('#agendas #frmAg'), 
+			data = {
+				id: new Array(), 
+				nombre: new Array(), 
+				chck: new Array(), 
+				controller: 'agendas', 
+				action: SAVE
+			},
+			$datos = $frm.find('div.tr.datos')
+
+		$datos.each(function(i) {
+			data.id[i] = $(this).find('span.fnDel').attr('id')
+			data.nombre[i] = $(this).find('.col2 input').val()
+			data.chck[i] = $(this).find('.col3 input').is(':checked')?1:0
+		})
 
 		$.ajax({
 			type: "POST",
@@ -1311,6 +1323,7 @@ agendas = {
 		.always(function(r){
 			typeof callback == "function" && callback();
 		})
+	
 	 },
 	guardarNombre: function(data){
 		

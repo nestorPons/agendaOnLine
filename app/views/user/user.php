@@ -27,7 +27,7 @@
 	</div>
 	<p>
 		<button type="submit" class="btn-success btnLoad" id="btnGuardarCita" data-value="Guardar">Guardar</button>
-		<input type="button" class="btn-danger cerrar" name="cancelar" value="Cancelar"> 
+		<input type="button" class="btn-danger cancelar" name="cancelar" value="Cancelar"> 
 	</p>
 </form>
 

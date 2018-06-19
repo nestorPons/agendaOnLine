@@ -363,7 +363,7 @@ var historial = {
 	numeracion:function(){
 		var num = $('#historial #tableHistory tr').length
 		$('#lblHis').html(num)
-	},
+	 },
 	row: function (data) {
 		var html = "" ,
 			table = document.getElementById('tableHistory'),
@@ -393,7 +393,7 @@ var historial = {
 		}
 		table.innerHTML = table.innerHTML + html
 		historial.numeracion()
-	}
+	 }
  }
 var cita = {
 	del : function (id) {
@@ -507,25 +507,26 @@ var usuario = {
 	},
  }
 $(function(){	
-	$('body').on('click',".idDateAction",function(){
-		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
-	})
+	$('body')
+		.on('click','.cancelar', cerrarMenu)
+		.on('click',".idDateAction",function(){
+			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
+		 })
 	$('input:password').blur(function(){
 		var pass1 = $('#pass').val()		
 		var pass2 = $('#rpass').val()
 		validarPass(pass1,pass2)
-	})
+	 })
 
 	$('.tile-content').click(function(e){menuAbrir($(this).parent())})
 	$('.nextSteeper').click(function(){
 		var val = $('.steperCapa:visible').data('value')
 		crearCita.stepper(val+1)
-	})
+	 })
 	$('#crearCita')
 		.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
 		.on('change','#lstSerSelect',function(){servicios.mostrar($(this).val())})
-		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})
-		.on('click','.cancelar', cerrarMenu)	
+		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})	
 		.on('click','.horas',crearCita.dialog)
 		.on('click','.idServicios',function(){crearCita.horas.load($(this))})
 		.find('#tablas')

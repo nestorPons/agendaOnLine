@@ -10,14 +10,11 @@ switch($action){
 		$Agendas->multi_query = true ;
 
 		for ($i=0 ; $i < CONFIG['num_ag'] ; $i++){
-			
-			$a = $_POST['chck'][$i];
 
-			$data = array(
-				'mostrar' => ($chck==-1)?0:in_array($a,$chck)?1:0,
-				'nombre' => ($_POST['nombre'][$i])??"agenda$a"
-			);
-			$Agendas->saveById($a , $data );
+			$Agendas->saveById($_POST['id'][$i] , [
+				'mostrar' => $_POST['chck'][$i],
+				'nombre' => ($_POST['nombre'][$i])??"agenda".$_POST['id'][$id]
+			] );
 
 		}
 		$return = $Agendas->multi_query();

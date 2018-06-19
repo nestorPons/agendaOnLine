@@ -17,7 +17,7 @@
 			$checked = $agenda[2]==0?"":"checked";
 			$nom = $agenda[1];
 			?>
-			<div class ="tr">
+			<div class ="tr datos">
 				<div class="col1">
 					<span id=<?=$i?> class="icon-trash fnDel"></span>
 				</div>
