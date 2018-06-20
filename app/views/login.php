@@ -34,12 +34,14 @@
 					<button class="btn-success btnLoad"  id="btnLogin" value="Entrar" default>Entrar</button>
 
 				</form>
+<!-- a falta de implementar los botones de facebook y g+ 
 					<div id="frameSocialMedia">
 						<div id="tileSocialMedia">
 						</div>
 						<button class = "facebook  image-button icon-facebook"  id='fb-facebookLogin'> conectar...</button>
 						<button class = "google  image-button icon-gplus "  id='idGoogle'> conectar...</button>
 					</div>
+-->
 					<div class="login-help">
 						<p>
 							¿Olvidaste la contraseña?
