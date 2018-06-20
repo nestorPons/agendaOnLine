@@ -69,7 +69,7 @@ class Device{
             $this->type = 'tablet';
             $this->isTablet = true;
         } else
-        if ($this->width<=590) {
+        if ($this->width<=480) {
             $this->type = 'movile';
             $this->isMovile = true;
         } else

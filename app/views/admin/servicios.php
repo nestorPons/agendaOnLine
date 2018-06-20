@@ -6,10 +6,10 @@
 		<table class = "tablas	">
 			<thead>
 				<tr>
-					<th>Opc<span class="responsive">iones</span></th>
-					<th>codigo </th>
-					<th>descripcion</th>
-					<th><i class="icon-clock"></i></th>
+					<th class="tileOpc">Opc</th>
+					<th class="tileCod">Codigo</th>
+					<th class="tileDes">Descripcion</th>
+					<th class="tileTiem">Tiempo</i></th>
 				</tr>	
 			</thead>
 			<tbody>

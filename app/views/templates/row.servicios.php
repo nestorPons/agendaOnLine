@@ -15,8 +15,8 @@ $baja = $serv[6]==1?'ocultar_baja':'';
     familia = "<?=$familia?>"
     value=<?= $id?> >
     <td class="ico"><a name="editar[]" class= "icon-edit x6" value="<?= $id?>"></a></td>
-    <td name='cod'  id = "<?=$id?>"  class='aling-left cod'><?= $codigo?></td>
-    <td name='des' class="nom"><?=$descripcion?> </td>
+    <td name='cod'  id="<?=$id?>"  class='aling-left cod'><?= $codigo?></td>
+    <td name='des' class="des"><?=$descripcion?> </td>
     <td name='time' class ="ico" ><?= $tiempo?></td>
     <td name='price' class="hidden" data-value=<?= $precio?>></td>
 </tr>

@@ -7,13 +7,13 @@
 		<thead>
 			<tr>
 				<th>Opcion</th>
-				<th class="num">Num</th>
-				<th class="name">nombre</th>
+				<th class="tileId">Id</th>
+				<th class="tileName">Nombre</th>
 				<?php if(!$Device->isMovile){?>
-					<th class="tel">Telefono</th>
-					<th class="email">Email</th>
-					<th class="obs">obs</th>
-					<th class="admin">admin</th>
+					<th class="tileTel">Teléfono</th>
+					<th class="tileEmail">Email</th>
+					<th class="tileObs">Obs</th>
+					<th class="tileAdmin">Admin</th>
 				<?php
 				}?>	
 			</tr>
