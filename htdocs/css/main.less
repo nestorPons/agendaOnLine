@@ -354,7 +354,6 @@ input[type="color"] {
 			float: left;
 			position: relative;
 			a{
-				color: inherit;
 				width: 90%;
 				padding: 0 0 0 10px;
 				margin-right: 10px;
@@ -378,8 +377,8 @@ input[type="color"] {
 				padding-right: 1.5rem;
 				&.active-toggle{
 					&:before{
-						-webkit-transform: rotate(45deg);
-						transform: rotate(45deg);
+						-webkit-transform: rotate(-45deg);
+						transform: rotate(-45deg);
 					}
 				}
 				&:before{
@@ -420,13 +419,12 @@ input[type="color"] {
 				a {
 					background-color: inherit;
 					width: 100%;
-					color: #fff;
+					color: @base;
 				}
 			}
 			.dropdown-toggle:before {
-				border-color: #fff;
-				-webkit-transform: rotate(-45deg);
-						transform: rotate(-45deg);
+				-webkit-transform: rotate(45deg);
+						transform: rotate(45deg);
 			}		
 			.d-menu {
 				top: 0;
@@ -654,7 +652,7 @@ input[type="color"] {
 .dropdown-toggle:before {
     display: block;
     position: absolute;
-    color: transparent;
+    color: @base;
     font-size: 0;
     content: "";
     height: 5px;
@@ -667,8 +665,8 @@ input[type="color"] {
     margin-left: -1rem;
     margin-top: -0.1625rem;
     z-index: 2;
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
  }
 .hidden{
 	display:none;
