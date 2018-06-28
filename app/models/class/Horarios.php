@@ -60,7 +60,7 @@ class Horarios extends \core\BaseClass {
 		$this->sql = "INSERT INTO horarios (`agenda`, `dia_inicio`, `dia_fin`, `hora_inicio`, `hora_fin`)
             VALUES ($agenda, 1 , 5, '9:00:00','20:00:00'), ($agenda, 6, 6, '9:00:00','14:00:00');";
 		return $this->query($this->sql);
-	}
+	 }
 
 	public function add ( $datos ){
 		
@@ -77,16 +77,28 @@ class Horarios extends \core\BaseClass {
 		}
 		return $this->conn->multi_query($sql);
 	 }	
-	public function cls_status($hour  , $arr_busy_hours){
+	public function cls_status($hour, $arr_hours){
+
 		//return to class
 		$str_h =  $hour . ':00';
-		$this->uniTime = (array_key_exists( $str_h , $arr_busy_hours)===false)
-		? $this->uniTime 
-		: ceil($arr_busy_hours[$str_h] / 15) ;
+		
+		$this->uniTime = (array_key_exists( $str_h , $arr_hours)===false)
+		?  $this->uniTime 
+		: ceil($arr_hours[$str_h] / 15) ;
 
+		$return = $this->uniTime;
 
-		return $this->uniTime!=0;
+		$this->uniTime != 0 ? $this->uniTime -= 1 : 0 ;
+
+		return  $return;
 	 }	
+	public function set_arr_busy($arr_hours){
+		foreach($arr_hours as $key => $val){
+			echo $key; 
+			$arr[] = $key; 
+		}		
+		return $arr; 
+	}
 	public function out_time($hour, $date, $minTime){
 		$date = $date . ' ' . $hour;
 		$date = date('Ymd H:i',strtotime($date));
