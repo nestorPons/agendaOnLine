@@ -1,7 +1,7 @@
 <?php namespace models;
 
 class Empresa extends \core\BaseClass {
-   private $data, $code, $conf_css, $conf;
+   private $data, $code, $conf_css, $conf, $plan;
 
     function __construct($codeEmpresa){
         parent::__construct('empresas', 'aa_db', 2);
@@ -12,6 +12,9 @@ class Empresa extends \core\BaseClass {
 
         $this->data = $this->getBySQL("replace(`nombre_empresa`,' ','') = '$codeEmpresa' LIMIT 1",  MYSQLI_ASSOC)[0]??false;   
         $this->code = \core\Tools::normalize($this->data['nombre_empresa']); 
+        $planes = new \core\BaseClass('planes','aa_db',2); 
+        $this->plan = $planes->getById($this->data['plan']); 
+        
         parent::__construct('config', PREFIX_DB. $this->code, 2);
         
     }
@@ -32,7 +35,7 @@ class Empresa extends \core\BaseClass {
         return $this->getAll('*',MYSQLI_ASSOC )[0]??false;
     }
     public function getConf(){
-        $this->conf = array_merge($this->data(), $this->conf(), $this->conf_css()); 
+        $this->conf = array_merge($this->data(), $this->conf(), $this->conf_css(), $this->plan); 
         return $this->conf;  
     }
 

@@ -26,9 +26,9 @@ INSERT INTO `config_css` VALUES ();
 INSERT INTO `servicios` (`id`, `codigo`, `descripcion`, `precio`, `tiempo`, `idFamilia`, `baja`) VALUES
 (0, 'COD001', 'Servicio de prueba', 0, 10, 0, 0),(1, 'COD002', 'Servicio de prueba dos', 0, 30, 0, 0);
 
-INSERT INTO `data` (`id`, `agenda`, `idUsuario`, `fecha`, `hora`, `obs`, `usuarioCogeCita`, `tiempo_servicios`) VALUES
-(0, 1, 1, CURRENT_TIMESTAMP, '14:45:00', '', 1, 10),
-(1, 1, 2, CURRENT_TIMESTAMP, '11:00:00', '', 2, 30);
+INSERT INTO `data` (`id`, `agenda`, `idUsuario`, `fecha`, `hora`, `obs`, `usuarioCogeCita`) VALUES
+(0, 1, 1, CURRENT_TIMESTAMP, '14:45:00', '', 1),
+(1, 1, 2, CURRENT_TIMESTAMP, '11:00:00', '', 2);
 
 INSERT INTO `cita` (`idCita`,`servicio`) 
 VALUES (0,0), (1,1);

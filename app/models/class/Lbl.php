@@ -39,7 +39,7 @@ class Lbl {
 
     }
     public function getById ($value) {
-        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion
+        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
             FROM cita C JOIN data D ON C.idCita = D.id 
             INNER JOIN usuarios	U ON D.idUsuario = U.id 
             LEFT JOIN servicios A ON C.servicio = A.id 
@@ -52,7 +52,7 @@ class Lbl {
         $end  = $end ?? $ini ; 
         $filter = $agenda!=null?"D.agenda = $agenda AND":"";
 
-        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion
+        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
                 FROM cita C JOIN data D ON C.idCita = D.id 
                 INNER JOIN usuarios	U ON D.idUsuario = U.id 
                 LEFT JOIN servicios A ON C.servicio = A.id
@@ -70,6 +70,7 @@ class Lbl {
             for( $i = 0 ; $i < count($data) ; $i++ ){
 
                 if (!isset($datosagenda[$data[$i]['idCita']])){
+ 
                     $datosagenda[$data[$i]['idCita']] 
                     = array(
                         'idCita'=>$data[$i]['idCita'],
@@ -80,11 +81,10 @@ class Lbl {
                         'obs'=>$data[$i]['obs'],
                         'idUsuario'=>$data[$i]['idUsuario'],
                         'nombre'=>$data[$i]['nombre'],
-                        'tiempoTotal' => 0 ,
+                        'tiempoTotal' => $data[$i]['tiempo_servicios'], 
                         'servicios' => array()
                     );
                 }
-                $datosagenda[$data[$i]['idCita']]['tiempoTotal'] += (int)$data[$i]['tiempo'] ;
                 $datosagenda[$data[$i]['idCita']]['servicios'][] = array(
                     'idCodigo'=>$data[$i]['idCodigo'],
                     'codigo'=>$data[$i]['codigo'],
@@ -102,16 +102,7 @@ class Lbl {
         } 
         
     }
-    private function tiempoTotal ($servicios) {
 
-        $tiempoTotal = 0 ;
-
-        foreach ($servicios as $val ){
-            $tiempoTotal += (int)$val['tiempo'] ;  
-        }
-
-        return $tiempoTotal ;
-    }
     private function print ($data) {
 
         foreach ($data as $val){
@@ -120,7 +111,8 @@ class Lbl {
 
             $id_time = strtotime( $val['fecha'] . " " . $val['hora'] );
 
-            $rows = ceil($this->tiempoTotal($val['servicios']) / 15) ;
+            $rows = ceil($val['tiempoTotal'] / 15) ;
+
             $exten = $rows>1? "extend" :'' ; 
             $show_nota =  empty($this->obs)?'':'show' ;
             $servicies = $this->printArt($val['servicios']) ; 

@@ -26,7 +26,7 @@
 		</div>
 		<footer class="login about">
 			<p class="about-author">
-				&copy; 2016 <a href="https://www.agendaonline.es" target="_blank">agendaOnLine v2.1</a>
+				&copy; 2018 <a href="https://www.reservatucita.es" target="_blank">reservaTuCita v1.1</a>
 				Creado por Néstor Pons
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>			

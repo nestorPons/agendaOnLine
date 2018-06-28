@@ -12,20 +12,22 @@ class Security {
 
      }
     public function checkSession($pageIn){
-        /*
-        var_dump(isset($_SESSION));
-        var_dump(isset($_SESSION['SKey']));
-        var_dump($_SESSION['SKey']==$_COOKIE['token']);
-        var_dump($_SESSION['agent']==$_SERVER['HTTP_USER_AGENT']);
-        var_dump($_SESSION['ip'] == $_SERVER['REMOTE_ADDR']);
-        var_dump($_SESSION['device'] == self::getDevice());
-        */
+   /*     
+        
+       echo "1>>>" .  var_dump(isset($_SESSION)) . BR;
+        echo "2>>>" . var_dump(isset($_SESSION['SKey'])) .BR;
+        echo "3>>>" . var_dump($_SESSION['SKey']==$_COOKIE['token']) .BR;
+        echo "4>>>" .var_dump($_SESSION['agent']==$_SERVER['HTTP_USER_AGENT']).BR;
+        echo "5>>>" .var_dump($_SESSION['ip'] == $_SERVER['REMOTE_ADDR']).BR;
+        echo "6>>>" .var_dump($_SESSION['device'] == self::getDevice()).BR;
+echo BR;
+    */
         return !in_array($pageIn, $this->pageExcep)      
             ?isset($_SESSION)
                 &&isset($_SESSION['SKey'])
                 &&$_SESSION['SKey']==$_COOKIE['token']
                 &&$_SESSION['agent']==$_SERVER['HTTP_USER_AGENT']
-                &&$_SESSION['ip'] == $_SERVER['REMOTE_ADDR']   
+                //&&$_SESSION['ip'] == $_SERVER['REMOTE_ADDR']   
                 &&$_SESSION['device'] == self::getDevice()
             :true;
             

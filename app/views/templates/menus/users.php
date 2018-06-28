@@ -9,7 +9,7 @@
 	</ul>
 	<ul class="app-bar-menu place-right" data-flexdirection="reverse">
 		<li><span class="app-bar-divider"></li>
-		<li><div  class="responsive " id="reloj"></div></li>
+		<li class="noHover"><div  class="responsive" id="reloj"></div></li>
 		<li>
 			<a href="/<?=CODE_EMPRESA?>?destroy=true">
 				<span id="mnuUserSalirSession" class="icon-link-ext">Cerrar sesión</span>

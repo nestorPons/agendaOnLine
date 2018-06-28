@@ -13,7 +13,6 @@ if (!empty($_POST['oldPass']) && !empty($_POST['newPass'])){
      
     echo json_encode($r) ;
 } else {
-
     $url = (isset($_POST['action'])) ? 
         URL_AJAX . $_POST['controller'] . '.php' :
         URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 

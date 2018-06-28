@@ -27,8 +27,8 @@ if (!empty($_FILES["fileLogo"]["tmp_name"])){
 		//redimensionar imagen a 64X64 y guardo con nombre logo.png
 		$ruta_imagen = $target_file;
 
-		$miniatura_ancho_maximo = 64;
-		$miniatura_alto_maximo = 64;
+		$miniatura_ancho_maximo = 128;
+		$miniatura_alto_maximo = 128;
 
 		$info_imagen = getimagesize($ruta_imagen);
 		$imagen_ancho = $info_imagen[0];
@@ -49,6 +49,7 @@ if (!empty($_FILES["fileLogo"]["tmp_name"])){
 			$miniatura_ancho = $miniatura_ancho_maximo;
 			$miniatura_alto = $miniatura_alto_maximo;
 		}
+
 		switch ( $imagen_tipo ){
 			case "image/jpeg":
 				$imagen = imagecreatefromjpeg( $ruta_imagen );

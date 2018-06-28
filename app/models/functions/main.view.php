@@ -57,24 +57,23 @@ function view($fecha_inicio = null, $existen_array = false ){
 							
 							?>
 							<tr id='<?=$h?>' class="hora h<?= $h . ' '.$disabled?> " data-hour='<?= $str_hora?>'>
-								<td  class="<?= $clasehora ?> "><?= $str_hora?> </td>
+
 								<?php
 								$agendas = $Agenda->get(); 
 
-								//for ($a=0;$a<CONFIG['totalAgendas'];$a++){ 
 								foreach($agendas as $k => $agenda){
 									if ($k>=CONFIG['totalAgendas']) break; 
 									$a = $agenda[0];
 
-									$label = $lbl->html[$h][$a] ?? false ;
+									$label = $lbl->html[$h][$a] ?? "<i class='icon-plus fnCogerCita'></i>" ;
 
 									$estadoCelda = (isset($array_horas[$a]) && in_array($str_hora,$array_horas[$a]))? 'dentro_horario':'fueras_horario';
 									?>
 									<td id = "<?= generateId($fecha , $str_hora, $a) ?>" 
 										class="celda <?php  if( $label ); echo $class . " " . $estadoCelda ?> 
 										" agenda="<?= $a?>" >
-										<?php
-																							
+										<span class="hora alFondo <?= $clasehora ?> "><?= $str_hora?></span>
+										<?php			
 										echo $label;
 
 										?>

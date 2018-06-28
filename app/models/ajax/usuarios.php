@@ -8,7 +8,8 @@
     unset($data['action']) ;
 
     switch ($action){
-        case SAVE:
+        case SAVE:  
+            if(empty($data['email'])) unset($data['email']); 
             $r['success'] = $Users->saveById( $data['id'] , $data ) ; 
             $r['id'] = $Users->getId(); 
             break;

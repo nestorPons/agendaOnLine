@@ -25,7 +25,7 @@ time, mark, audio, video {
     border: 0;
 	font: inherit;
     vertical-align: baseline;
-}
+ }
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
@@ -53,6 +53,10 @@ table {
 input :-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset; 
  }
+::-webkit-scrollbar{
+	display: none
+}
+
 body{
    line-height: 1;
 	box-sizing: border-box;
@@ -128,7 +132,10 @@ a,i , .a{
 	-moz-transition: background 0.1s;
 	-o-transition: background 0.1s;
 	transition: background 0.1s;
+	&:-webkit-any-link { color:@base}
  }
+
+
 
 input, button, select, textarea {
 	width: 100%;
@@ -163,6 +170,7 @@ input[type="radio"], [type="checkbox"]{
 input[type="color"] {
 	display: inline-block;
 	width: 30px;
+	height: 20px;
  }
  
 .animate-spin {
@@ -299,9 +307,12 @@ input[type="color"] {
 		display: block;
 		float: left;
 		position: relative;
-		height: 3rem;
+		height: 50px;
 		a{
 			color: @base !important;
+			&:hover{
+				color:inherit !important; 
+			}
 		}
 		.icon{
 			padding: 1px; 
@@ -692,10 +703,14 @@ input[type="color"] {
 				margin-bottom: 4px;
 				font-size: 0.8rem; 
 			}
-			input, select,textarea{
+			input, select, textarea{
 				padding-left: 2rem;
 				position: relative;
 				background-color: @base;
+			}
+			input[type="color"]{
+				padding-left: 0;
+				width: 50%;
 			}
 			.iconClass-inside{
 				color: @text-icon;
@@ -805,6 +820,7 @@ input[type="color"] {
 	padding :5px;
 	overflow : hidden;
 	border : 1px solid;
+
 	
 	div {
 		font-size: 1em;
@@ -1472,6 +1488,9 @@ input[type="color"] {
 			&-plus{
 			display:none;
 			text-align:center;
+			position: relative;
+			top: 5px;
+			left: 5%;	
 			}
 		}
 		.iconClass-container{
@@ -1687,6 +1706,7 @@ input[type="color"] {
 	&_9{width: 9em}
 	&_10{width: 10em}
  }
+
 #config{
 	.chck-container{
 		display:inline-block;
@@ -2058,13 +2078,16 @@ input[type="color"] {
 		}
 		.tablas{
 			.tileName { 
-				width: 20ch;
+				width: 35%;
 			}
 			.tel{
 				width: 12ch;
 			}
 			.tileId{
-				width: 5ch;
+				width: 5%;
+			}
+			.tileOpc{
+				width: 10%;
 			}
 		}
 		tr:not(:first-of-type){
@@ -2133,7 +2156,18 @@ input[type="color"] {
 	}
  }
   //secciones 
- #main{
+#main{
+	.tablas{
+		.alFondo{
+			font-size: 0.8em;
+			float: right;
+			position: relative;
+			vertical-align: middle;
+			top: 5.5px;
+			color: #999; 
+			z-index: 2;
+		}
+	 }
 	.celda{
 		.note{
 			.icon{
@@ -2179,6 +2213,9 @@ input[type="color"] {
 		&.fuera_horario{
 			&.num{
 				background:none;
+			}
+			*{
+				color: #fff; 
 			}
 		}
 	 }
@@ -2302,7 +2339,7 @@ input[type="color"] {
 // Auxiliares
 .inline{
 	display: inline-block; 
-}
+ }
 .template {
 	display :  none !important;
  }

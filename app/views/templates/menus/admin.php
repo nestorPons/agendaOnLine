@@ -28,7 +28,7 @@
 
 	<hr>
 	<h3>o puede contactarnos en ...</h3> 
-	<a href="<?=ADMIN_WEB?>" >www.agendaOnLine.es</a>
+	<a href="<?=ADMIN_WEB?>" >www.ReservaTuCita.es</a>
 	<a href="mailto:<?=ADMIN_EMAIL?>?Subject=Contacto agendaOnLine" 	
 		target="_top">
 		<?=ADMIN_EMAIL?>

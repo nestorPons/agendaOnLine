@@ -6,7 +6,6 @@
 		<table class = "tablas" >	
 			<thead>
 				<tr>
-					<th class='num'>hora</th>
 					<?php
 					for ($a=0;$a<$Agendas->count();$a++){
 						$id = $agendas[$a][0];

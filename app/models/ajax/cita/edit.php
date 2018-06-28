@@ -6,8 +6,9 @@ $arr_cita['fecha'] = $_POST['fecha'];
 $arr_cita['hora'] = $_POST['hora']; 
 $arr_cita['agenda'] = (int)$_POST['agenda'];  
 $arr_cita['idUsuario'] = $_POST['idUsuario']??err('usuario'); 
-$arr_cita['obs'] = $_POST['obs']??''; 
+$arr_cita['obs'] = $_POST['obs']??NULL; 
 $arr_cita['lastMod'] = date('Y-m-d H:i:s');
+$arr_cita['tiempo_servicios'] = $_POST['tiempoServicios']??0;
 
 $arrSerPost = $_POST['servicios'] ?? null ;
 $arrSerDb = $Cita->getBy('idCita',$idCita,'servicio');

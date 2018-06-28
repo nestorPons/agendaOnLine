@@ -1,6 +1,5 @@
 
 if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
-var _hora = 0; 
 //Funcion para menu responsive 
 //No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
 function menuEsMovil(tab){
@@ -70,8 +69,15 @@ function mostrarCapa(capa, callback){
 			}
 
 		},'html')
+	 } else {
+		
+		capa=='crearCita' && crearCita.load()
+
 	 }
-	
+
+
+
+
 	if($('#config').is(':visible')&&config.change) config.guardar();
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
 	if($('#crearCita').is(':visible')) crearCita.reset();
@@ -163,6 +169,7 @@ servicios = {
 					.find('#precio').val(price).end()
 					.find('#familia').val(fam).end()
 					.find('#eliminar').val('Eliminar').end()
+					.find('#lstFamilias option[value="'+fam+'"]').prop('selected',true)
 					.find('h1').html('Editando...')
 
 			}else{ 
@@ -349,6 +356,7 @@ main ={
 	arrSer : new Array(), 
 	last : new Object(),
 	idsControl : new Object(),
+	idCita : -1, 
 	set: {
 		nameAgenda : function(id, name){
 			$('#nombreagenda' + id).text(name);
@@ -362,13 +370,14 @@ main ={
 				cliente :  { 
 					id : lbl.find('.nombre').attr('id') , 
 					nombre : lbl.find('.nombre').text().trim()
-				},
+				 },
 				fecha :  Fecha.sql(lbl.parents('.dia').attr('id')) ,
 				hora : lbl.parents('tr').data('hour') ,
 				obs :  lbl.find('.note').text().trim() ,
 				servicios : new Array() ,
-				tiempoTotal : 0
+				tiempoServicios :parseInt(lbl.attr('tiempo'))
 			 }
+
 			lbl.find('.codigo').each(function(i,o){
 				var id =$(this).attr('id_codigo') , 
 					codigo = $(this).html() , 
@@ -377,9 +386,12 @@ main ={
 
 				main.data[idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
 				main.arrSer.push({id ,  codigo ,  descripcion , tiempo}) 
-				main.data[idCita].tiempoTotal += parseInt(tiempo)	
 			 })
-	 	 }
+		  }, 
+		tiempoServicios : function(){
+			var ts = main.data[main.idCita].tiempoServicios <0 ? 10: main.data[main.idCita].tiempoServicios
+			$('#dlgEditCita').find('#tiempoServicios').val(ts)
+		 }
 	 }, 
 	sincronizar: function (dir,callback){
 		
@@ -437,7 +449,6 @@ main ={
 						tt += parseInt($this.tiempo)
 					})
 
-					data.uTiempo = Math.ceil(tt / 15)  
 					if (isDel) main.lbl.delete(data.idCita ,true)
 					if (isAdd) main.lbl.create(data)
 				})
@@ -496,7 +507,7 @@ main ={
 		.done(function(html){
 			body.append(html)
 			main.deleteDuplicate() 
-			main.lbl.droppable()
+			main.lbl.load()
 			typeof callback == "function" && callback()
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
 		
@@ -553,27 +564,32 @@ main ={
 		})
 	 },
 	edit : function (idCita, idCelda ) {
-
 		if (!idCita)  return false
-		var lbl = $('#idCita_'+idCita+'.lbl')  
-		main.set.data(idCita)
+		main.idCita = idCita
+
+		var lbl = $('#idCita_'+main.idCita+'.lbl') 
+		main.lbl.obj= lbl
+
+		main.set.data(main.idCita)
 
 		main.last = {
-			idCita : main.data[idCita].idCita,
-			agenda : main.data[idCita].agenda,
-			tiempoTotal : main.data[idCita].tiempoTotal , 
-			hora : main.data[idCita].hora , 
-			fecha : main.data[idCita].fecha, 
+			idCita : main.data[main.idCita].idCita,
+			agenda : main.data[main.idCita].agenda,
+			tiempoServicios : main.data[main.idCita].tiempoServicios , 
+			hora : main.data[main.idCita].hora , 
+			fecha : main.data[main.idCita].fecha, 
 			cliente : {
-				id : main.data[idCita].cliente.id, 
-				nombre : main.data[idCita].cliente.nombre
+				id : main.data[main.idCita].cliente.id, 
+				nombre : main.data[main.idCita].cliente.nombre
 			},
-			obs : main.data[idCita].obs 
-		}
+			obs : main.data[main.idCita].obs 
+		 }
 	
 		var _addServiceToLbl = function (callback){
-			var arrSer = main.data[idCita].servicios
-			var lblSer = lbl.find('.servicios') , html = ''
+
+			var arrSer = main.data[main.idCita].servicios, 
+				lblSer = main.lbl.obj.find('.servicios'),
+				html = ''
 			lblSer.empty() 
 
 			for(let i = 0 ; i < arrSer.length ; i++){
@@ -591,30 +607,30 @@ main ={
 
 			lblSer.html(html)
 
-			if (main.last.tiempoTotal != main.data[idCita].tiempoTotal){
-
-				var t = Math.ceil(main.data[idCita].tiempoTotal / 15) 
-				var l = Math.ceil(main.last.tiempoTotal / 15) 
-				lbl.removeClass('row_'+l).addClass('row_'+t)
-			}
+			main.lbl.obj.removeClassPrefix('row_').addClass('row_'+
+				Math.ceil(main.data[main.idCita].tiempoServicios / 15) 
+			)
+	
 			typeof callback == "function" && callback();
 		 }
 		var _delRow = function(div){
 			var cod = div.find('.codigo')
 			var idCod = cod.attr('id_codigo')
 
-			main.data[idCita].tiempoTotal -= cod.attr('tiempo')
+			main.data[main.idCita].tiempoServicios -= cod.attr('tiempo')
 
-			var arrSer = main.data[idCita].servicios
+			var arrSer = main.data[main.idCita].servicios
 			var index = arrSer.indexOf(idCod)
 
-			main.data[idCita].servicios.splice(index, 1)
+			main.data[main.idCita].servicios.splice(index, 1)
 			div.fadeOut('fast').remove()
 
+			main.set.tiempoServicios()
 		 }
-		var _addRow = function (id , codigo , descripcion ,tiempo ){
-
-			$('#dlgEditCita .template')
+		var _addRow = function (id , codigo , descripcion ,tiempo, callback ){
+			var $dlg = $('#dlgEditCita')
+			
+			$dlg.find('.template')
 				.clone()
 					.removeClass('template')
 					.find('.codigo')
@@ -629,41 +645,43 @@ main ={
 					.on('click','.fnDelSer',function(){
 						_delRow($(this).parent())
 					})
-
+			typeof callback == "function" && callback()
 		 }
 		var _eventAddService = function () {
+			
 			$('#dlgEditCita').on('change','#lstServ',function(){
 				var select  = $(this).find(':selected')
-				var id = select.val() , codigo = select.attr('codigo') , descripcion = select.text() , tiempo = select.attr('tiempo')
+					id = select.val() , 
+					codigo = select.attr('codigo') , 
+					descripcion = select.text() , 
+					tiempo = select.attr('tiempo')
 
-				main.data[idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
-				main.data[idCita].tiempoTotal += parseInt(tiempo)	
-				_addRow (id ,  codigo ,  descripcion , tiempo)
+				main.data[main.idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
+				main.data[main.idCita].tiempoServicios += parseInt(tiempo)	
+				_addRow (id ,  codigo ,  descripcion , tiempo, main.set.tiempoServicios)
+
 
 				$(this).val('')
 			})
 		 }
 		var _save = function () {
-
 			var dlg = $('#dlgEditCita') , duration = 0 , arrIdSer = new Array() ,data = new Array()
 
 			dlg.find('input').each(function(i,v){
 				data[$(this).attr('id')] = $(this).val()
 			})
 
-			if (main.last.cliente.id != main.data[ main.last.idCita].cliente.id ){
-			}
-				let str = normalize(data['cliente'])
-				let selCli = $('#lstClientes [data-name="'+str+'"]')
+			let str = normalize(data['cliente']), 
+				selCli = $('#lstClientes [data-name="'+str+'"]')
 
-				main.data[idCita].cliente.id =  selCli.data('id')
-				main.data[idCita].cliente.nombre =  selCli.val()
+			main.data[main.idCita].cliente.id =  selCli.data('id')
+			main.data[main.idCita].cliente.nombre =  selCli.val()
+			main.data[main.idCita].fecha = data['fecha']
+			main.data[main.idCita].hora = data['hora']
+			main.data[main.idCita].obs = data['obs']
+			main.data[main.idCita].tiempoServicios = data['tiempoServicios']
 
-			main.data[ main.last.idCita].fecha = data['fecha']
-			main.data[ main.last.idCita].hora = data['hora']
-			main.data[ main.last.idCita].obs = data['obs']
-
-			$.each(main.data[ main.last.idCita].servicios, function( i , v){
+			$.each(main.data[ main.idCita].servicios, function( i , v){
 
 				arrIdSer.push(v.id)
 
@@ -671,33 +689,32 @@ main ={
 
 			var sendData = {
 				action : EDIT ,
-				idCita :  main.last.idCita ,
-				agenda : main.data[ main.last.idCita].agenda ,
-				idUsuario : main.data[ main.last.idCita].cliente.id || false ,
+				idCita :  main.idCita ,
+				agenda : main.data[ main.idCita].agenda ,
+				idUsuario : main.data[ main.idCita].cliente.id || false ,
 				fecha :  Fecha.sql(dlg.find('#fecha').val()) ,
 				hora : dlg.find('#hora').val() ,
 				obs :  dlg.find('#obs').val(),
 				servicios : arrIdSer ,
-				status : false 
+				status : false , 
+				tiempoServicios: main.data[main.idCita].tiempoServicios
 			}
 
 			main.save(sendData,function(){
-
-				main.lbl.edit(main.data[ main.last.idCita], main.last)
+				main.lbl.edit(main.data[main.idCita], main.last)
 				_addServiceToLbl(function(){
 					dialog.close('dlgEditCita')
 					if(!$.isEmpty(sendData.obs)) {
-						lbl
+						main.lbl.obj
 							.find('.text_note').text(sendData.obs).end()
 							.find('.note').addClass('show')
 					}else{
-						lbl
+						main.lbl.obj
 							.find('.text_note').text(sendData.obs).end()
 							.find('.note').removeClass('show')
 					}
 				})
-
-
+				
 			})		
 		 }
 
@@ -705,14 +722,14 @@ main ={
 
 			// se ha editado arrastrando label
 			let decode = generateId.decode(idCelda)
-			main.data[idCita].agenda = decode.agenda
-			main.data[idCita].fecha = decode.date
-			main.data[idCita].hora = decode.hour
+			main.data[main.idCita].agenda = decode.agenda
+			main.data[main.idCita].fecha = decode.date
+			main.data[main.idCita].hora = decode.hour
 			
 			//Hay que adecuar el array servicios para mandar solo los id 
-			let edata = main.data[idCita],
-				len = main.data[idCita].servicios.length,
-				ser = main.data[idCita].servicios
+			let edata = main.data[main.idCita],
+				len = main.data[main.idCita].servicios.length,
+				ser = main.data[main.idCita].servicios
 			
 			edata.servicios = new Array ;
 			edata.idUsuario =edata.cliente['id']
@@ -724,11 +741,11 @@ main ={
 
 			main.save(edata)
 
-		} else {		
+		 } else {		
 
 			var 
 			fnCancel = function(){
-				main.del(main.data[idCita].idCita)
+				main.del(main.data[main.idCita].idCita)
 			 }, 
 			callback = function(isNew){
 
@@ -737,33 +754,35 @@ main ={
 				$('#dlgEditCita #codigos').html('') 
 
 				section
-					.data('idCita',idCita)
-					.find('#id').val(idCita).end()
+					.data('idCita',main.idCita)
+					.find('#id').val(main.idCita).end()
 					.find('#cliente')
-						.val(main.data[idCita].cliente.nombre)
+						.val(main.data[main.idCita].cliente.nombre)
 						.end()
 					.find('#obs')
-						.val(main.data[idCita].obs)
+						.val(main.data[main.idCita].obs||'')
 						.end()
 					.find('#fecha')
-						.val(main.data[idCita].fecha)
+						.val(main.data[main.idCita].fecha)
 						.end()
 					.find('#hora')
-						.val(main.data[idCita].hora)
-
-				$.each(main.data[idCita].servicios , function(i,a){
-					_addRow( a.id , a.codigo , a.descripcion , a.tiempo)
+						.val(main.data[main.idCita].hora)
+					.find('#tiempoServicios')
+						.val(main.data[main.idCita].tiempoServicios)
+						
+				$.each(main.data[main.idCita].servicios , function(i,a){
+					_addRow( a.id , a.codigo , a.descripcion , a.tiempo,  main.set.tiempoServicios)
 				})
 
 				if (isNew) _eventAddService()
 				
-				lastTime = main.data[idCita].tiempoTotal
+				lastTime = main.data[main.idCita].tiempoServicios
 
 			 }
 
 			dialog.open('dlgEditCita',_save, fnCancel,  callback)
 			
-		}
+		 }
 	 },
 	del: function(idCita){
 		data = {
@@ -773,7 +792,7 @@ main ={
 			fecha : Fecha.sql(Fecha.general)
 		 }	
 
-		if (main.lbl.delete(idCita)){
+		if (main.lbl.delete(data.id)){
 			$.post(INDEX,data,function(r){
 
 				if 	(r.success) {
@@ -805,6 +824,10 @@ main ={
 			.always($this.find('.icon-load').fadeOut());
 		}
 	 },
+	unidadTiempo : function(tiempoServicios ){
+
+		return Math.ceil(tiempoServicios / 15)
+	 }, 
 	inactivas:{ 
 		click :	function(){
 			var status = localStorage.getItem("showRows")==1?0:1
@@ -833,11 +856,16 @@ main ={
 	lbl:{
 		widht :  '25' ,
 		height: new Array,
-		clone : new Object(), 
-		idLastcelda : 0 , 
+		clone : new Object, 
+		idLastcelda : 0 ,
+		obj : new Object, 
+		load: function(){
+			main.lbl.style()
+			main.lbl.droppable()
+		 }, 
 		create: function(data){
 		
-			//agenda,fecha,hora,idCita,idUsuario,uTiempo,nota,servicios.id
+			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
 			var self = main , lbl = main.lbl ,htmlSer = '' 
 
 			var idCelda =  generateId.encode( data.agenda , data.fecha , data.hora )
@@ -851,12 +879,13 @@ main ={
 		 },
 		edit: function (data, last){
 			var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
+			main.lbl.obj.attr('tiempo',  data.tiempoServicios )
 
 			if (data.cliente.id != last.cliente.id){
-					object.find('.nombre')
-						.attr('id', main.data[idCita].cliente.id)
-						.find('.text-value').html(main.data[idCita].cliente.nombre)
-				} 
+				object.find('.nombre')
+					.attr('id', data.cliente.id)
+					.find('.text-value').html(data.cliente.nombre)
+		     } 
 			if (data.fecha != last.fecha || data.hora != last.hora){
 					let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
 						lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
@@ -869,29 +898,29 @@ main ={
 			if (data.obs != last.obs) object.find('#obs').val(data.obs)
 				
 			},
-		container : function (data, htmlSer) {	
-				var html = "\
-					<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+data.uTiempo+"'> \
-						<div id ='"+data.idUsuario+"' class='nombre'> \
-							<span class ='icon-user-1'></span> \
-							<span>"+data.nombre+"</span> \
-						</div> \
-						<div class='iconos aling-right'>  \
-							<div class='icons_crud'>\
-								<span class ='fnEdit icon-pencil-1'></span>  \
-								<span class ='fnDel icon-trash'></span>  \
-							</div>\
-							<span class ='fnMove icon-move '></span>  \
-						</div> \
-						<div class='servicios "+data.uTiempo+"'>"+htmlSer+"</div> \
-						<div class='note '>"+data.nota+"</div> \
+		container : function (data, htmlSer) {
+
+			var html = "\
+				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+main.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
+					<div id ='"+data.idUsuario+"' class='nombre'> \
+						<span class ='icon-user-1'></span> \
+						<span>"+data.nombre+"</span> \
 					</div> \
-				"
+					<div class='iconos aling-right'>  \
+						<div class='icons_crud'>\
+							<span class ='fnEdit icon-pencil-1'></span>  \
+							<span class ='fnDel icon-trash'></span>  \
+						</div>\
+						<span class ='fnMove icon-move '></span>  \
+					</div> \
+					<div class='servicios "+main.unidadTiempo(data.tiempoServicios)+"'>"+htmlSer+"</div> \
+					<div class='note '>"+data.nota+"</div> \
+				</div> \
+			"
 
-				return html 					
-			}, 
+			return html 					
+		 }, 
 		service : function (data) {
-
 				var html = "\
 					<div>\
 						<span class ='icon-angle-right'></span>\
@@ -909,7 +938,7 @@ main ={
 				lbl.draggable()
 				
 				$('.lbl')
-					.css('z-index', 0)
+					.css('z-index',2)
 					.width(main.lbl.widht)
 				lbl.color()	
 
@@ -925,36 +954,51 @@ main ={
 
 			},
 		color: function(callback){	
-				var dias= $('.dia');
-				var agendas = ($('#main thead th').length) - 1 ;
-				var idsCitas = new Array;
-				var $this ;
-				var color = 'color1';
+			var $sec = $("#main") , 
+				dias= $sec.find('.dia'),
+				agendas = ($sec.find('thead th').length) - 1, 
+				colorPares = new Array(), 
+				colorImpares = new Array(), 
+				$lstClientes = $('#lstClientes')
 
-				dias.each(function(){
+			dias.each(function(){
+			
+				$(this)
+					.find('color1').removeClass('color1').end()
+					.find('color2').removeClass('color2').end()
+					.find('color3').removeClass('color3').end()
+					.find('color-red').removeClass('color-red')
 				
-					$(this)
-						.find('color1').removeClass('color1').end()
-						.find('color2').removeClass('color2').end()
-						.find('color3').removeClass('color3').end()
-						.find('color-red').removeClass('color-red')
 
-					for(let a = 1; a <= agendas; a++){
-						
-						let idCita = 0;
-						$(this).find('.lbl')
-							.each(function(){
-														
-								color = color == 'color1'?'color2':'color1';
-															
-								$(this).removeClass('color1 color2 color3 color-admin')
-								$(this).addClass(color);
 
-							})
-					}
-				})
-				typeof callback == "function" && callback();
-			},
+					let idCita = 0;
+					$(this).find('.lbl')
+						.each(function(){
+							let a = $(this).parent().attr('agenda'), 
+								id = $(this).find('.nombre').attr('id'), 
+								colorCliente = $lstClientes.find('option[data-id="'+id+'"]').data('color')							
+							if (!$.isEmpty(colorCliente)){
+								$(this).css('background-color',colorCliente)
+							} else {
+								if(a%2==0){
+									if(colorPares[a] == 'undefined') colorPares[a] = 'color1'
+									color = colorPares[a]
+									colorPares[a] = colorPares[a] == 'color1'?'color2':'color1'
+								}else{
+									if(colorImpares[a] == 'undefined') colorImpares[a] = 'color2'
+									color = colorImpares[a]
+									colorImpares[a] = colorImpares[a] == 'color1'?'color2':'color1'
+								}
+								$(this)
+									.removeClass('color1 color2 color3 color-admin')
+									.addClass(color);
+							}					
+
+						})
+				
+			})
+			typeof callback == "function" && callback();
+		 },
 		draggable : function($this){
 				$('.lbl').each(function(){
 					var dia = $(this).parents('.dia')
@@ -990,7 +1034,7 @@ main ={
 		droppable : function () {
 			$( ".celda" ).droppable({
 					accept : ".lbl",
-					classes: {"ui-droppable-hover": "ui-state-hover"},
+					classes: {"ui-droppable-hover": "ui-state-hover"}, 
 					drop: function( event, ui ) {
 
 							var posi = $(this).position()
@@ -1001,7 +1045,9 @@ main ={
 								drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
 									//end of animation.. if you want to add some code here
 								})
-								$(this).html(main.lbl.clone)
+								$(this)
+									.find('.fnCogerCita').remove().end()
+									.append(main.lbl.clone)
 								
 								main.lbl.style()
 
@@ -1021,8 +1067,6 @@ main ={
 								
 							}	
 							main.lbl.clone = null
-						
-
 					},				
 				})
 
@@ -1050,7 +1094,7 @@ main ={
 				
 					}
 			}
-		}
+		 }
 	 },
 menu = {
 	status: function (capa){
@@ -1073,6 +1117,7 @@ menu = {
 				menu.enabled(show,reset)
 				break;
 			case 'crearCita':
+				menu.enabled(search)
 				break;
 			case 'usuarios':
 				menu.enabled(add,search,options)
@@ -1109,7 +1154,7 @@ menu = {
 				df.options = false
 				options.find('#showByTime').removeClass('disabled')
 				break
-		}
+		 }
 		if (df.options) options.find('#rowsHiddens').removeClass('disabled')
 		$('#navbar').resize()
 	 },
@@ -1223,6 +1268,9 @@ menu = {
 					break;
 				case 'servicios':
 					servicios.buscar();
+					break;
+				case 'crearCita':
+					crearCita.servicios.buscar($('#txtBuscar').val());
 					break;
 			}
 		}
@@ -1483,7 +1531,7 @@ familias = {
 			$('.menuServicios').each(function(){
 				$(this).find('#lstSerMain').find('#'+id).remove()
 				$(this).find('#lstSerSelect').find('#'+id).remove()
-			})
+			 })
 			$('#sevicios .fam' + id ).remove() 
 			$('#crearCita .fam' + id ).remove() 
 			typeof callback == "function" && callback()
@@ -1547,17 +1595,31 @@ crearCita ={
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
+
 		if (!$.isEmpty(clase)){
 			var clase_id = clase.replace(/\D/g,'');
 			servicios.mostrar(clase_id) ;
 		}
-		cargarDatepicker();
+		cargarDatepicker()	
+		crearCita.load()
 	 },
 	set : {
 		nameAgenda :function(id,name){
 			$('#crearCita #lblagenda'+id).text(name)
-		}
+		 }
 	 }, 
+	servicios: {
+		buscar : function(val){
+			var $sec = $('#crearCita'), 
+				$conSer = $sec.find('.contenedorServicios')
+
+			if($sec.is(':visible')){
+				$conSer
+				.find('tr').hide()
+				.find('.descripcion:contains("'+val+'")').parents('tr').show()
+			}
+		}
+	 },
 	idUser : function () {
 		var cli = $('#crearCita #cliente').val();
 		var  nombre = normalize(cli);
@@ -1591,7 +1653,7 @@ crearCita ={
 				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
 				nota : sec.find('#crearCitaNota').val(),
-				uTiempo : Math.ceil(parseInt(sec.find('#tSer').text()) / 15) 
+				tiempoServicios : parseInt(sec.find('#tSer').text()) 
 			}
 			$.extend(crearCita.data, data)
 
@@ -1602,7 +1664,6 @@ crearCita ={
 				.find('#lblSer').html(strServ)
 				
 		})
-
 	 },
 	guardar: function(){
 		var self = crearCita 
@@ -1640,6 +1701,13 @@ crearCita ={
 		}
 
 	 },
+	load: function(){
+		$('#btnSearch').hide()
+		if(crearCita.data.agenda){
+			$sec = $('#crearCita')
+			$sec.find('#agenda'+crearCita.data.agenda).prop('checked', true)
+		}
+	 }, 
 	horas: {
 		iniciar: function(){	
 
@@ -1665,6 +1733,11 @@ crearCita ={
 
 			lblTS.text(tiempoServicios)
 			crearCita.horas.pintar(Fecha.id,tiempoServicios)
+
+			if (!$.isEmpty(crearCita.data.hora)){
+				$('#crearCita .dia.activa').find('.horas[value="'+crearCita.data.hora+'"]').prop('checked',true)
+				crearCita.dialog()
+			}
 	
 		 } ,
 		crear: function (id_table, callback){
@@ -1713,8 +1786,7 @@ crearCita ={
 	reset: function(){
 		$('.steperCapa li').hide(function(){
 			$('#step0').show()
-		});
-		_hora =0 
+		})
 		btn.load.reset()
 		$('#crearCita')
 			.find('.dialog').hide().end()
@@ -1745,32 +1817,33 @@ crearCita ={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-			dialog.close('dlgGuardar');
+		crearCita.data.hora = '';
+		crearCita.data.agenda = 0 
+		dialog.close('dlgGuardar');
 	 },
 	stepper: function(index){
 		var $visible = $('.steperCapa:visible')
 		var $stepper = $('#stepper'+index)
-		if($visible.attr('id')==$stepper.attr('id'))return false;
+		if($visible.attr('id')==$stepper.attr('id'))return false
 		if (!$stepper.is(':visible')&&$visible.length){
 			if(index==0){
 				_slider()
-
+				
 			}else if(index==1 &&crearCita.validate.name()){
+				$('#btnSearch').show()
 				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
 				crearCita.data.nombre =  $('#crearCita #cliente').val() 
-				$('.tblHoras').empty()
-
+				$('.tblHoras').show()
+					
 				_slider(servicios.init) 
 
 			} else if(index==2&&crearCita.validate.service()){
+				$('#btnSearch').hide()
 				if(crearCita.validate.name())_slider(function(){
-					if (_hora!=0){
-						$('#crearCita #'+Fecha.id + ' #'+_hora).attr('checked',true)
-						crearCita.dialog()
-					}
+
 				});
-			};
-		}
+			}
+		 }
 		function _slider(callback){
 			var dir = $visible.data('value')>0||1
 			var dirEntrada = index-dir<0?'right':'left'
@@ -1786,7 +1859,7 @@ crearCita ={
 					.show("slide", { direction: dirEntrada }, 750, function(){$('.tile-active').height('auto')})
 			})
 			typeof callback == "function" && callback()
-		}
+		 }
 	 },
 	validate : {
 		form : function (){
@@ -2177,6 +2250,7 @@ horario = {
  },
 usuarios = {
 	controller : 'usuarios' , 
+	id: 0, 
 	init : function () {
 		usuarios.select('A')
 	 },
@@ -2216,14 +2290,15 @@ usuarios = {
 			data = {
 				id:idUsuario||-1, 
 				nombre: nombreUsuario||frm.nombre,
-				email: frm.email||'',
-				tel: frm.tel||'',
-				obs: frm.obs||'',
+				email: frm.email||null,
+				tel: frm.tel||null,
+				obs: frm.obs||null,
 				status: $.isEmpty(frm.activa)?0:2,
 				admin : $.isEmpty(frm.admin)?0:1,
+				color: (frm.sinColor)?null:frm.color, 
 				controller: usuarios.controller,
 				action: SAVE}
-					
+
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -2247,6 +2322,7 @@ usuarios = {
 
 					//EDITANDO....
 					$('#rowUsuarios'+data.id)
+						.data('color', data.color)
 						.find(' td:nth-child(3)')
 							.html(data.nombre)
 							.data('value',data.nombre)
@@ -2304,6 +2380,7 @@ usuarios = {
 						.removeClass('template')
 						.attr('id', 'rowUsuarios'+data.id)
 						.data('value',data.id)
+						.data('color',data.color)
 					.find('[name=id]').html(data.id).end()
 					.find('[name=nom]')
 						.html(data.nombre)
@@ -2333,18 +2410,21 @@ usuarios = {
 		}
 	 },
 	dialog: function (id){
+		usuarios.id = id 
 		var _fnLoad = function (r) {
 			$('#dlgUsuarios').find('#id').val(id)
 					
 				if (id!=-1){
-					var $this = $("#usuarios #rowUsuarios"+id);
+					var $this = $("#usuarios #rowUsuarios"+id)
 					
-					var nom = $this.find("[name='nom']").text();
-					var email = $this.find("[name='email']").data("value");
-					var tel = $this.find("[name='tel']").text();
-					var obs = $this.find("[name='obs']").data("value");
-					var admin = $this.find("[name='admin']").data("value");
-					var baja = $this.hasClass('mostrar_baja');
+					var nom = $this.find("[name='nom']").text()
+					var email = $this.find("[name='email']").data("value")
+					var tel = $this.find("[name='tel']").text()
+					var obs = $this.find("[name='obs']").data("value")
+					var admin = $this.find("[name='admin']").data("value")
+					var baja = $this.hasClass('mostrar_baja')
+					var color = $this.data('color')
+					var sinColor = $this.data('color')?false:true
 
 					$("#dlgUsuarios")
 						.find('#nombre').val(nom).end()
@@ -2353,19 +2433,22 @@ usuarios = {
 						.find("#obs").val(obs).end()
 						.find("#admin").attr('checked', admin!=0).end()
 						.find("#activa").attr('checked', baja).end()
-						.find('#eliminar').val('Eliminar');
+						.find('#eliminar').val('Eliminar').end()
+						.find('#color').val(color).end()
+						.find('#sinColor').prop('checked', sinColor)
 				}else{
 					$("#dlgUsuarios")
 						.find("#nombre").val($('#buscarTxt').val()).end()
 						.find("#activa").attr('checked', false).end()
 						.find("#admin").attr('checked', false).end()
-						.find('#eliminar').val('Cancelar');
+						.find('#eliminar').val('Cancelar')
 				}
 		 } , 
 		_fnDel = function (r) { 
 			usuarios.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
 		 }
-		dialog.open('dlgUsuarios',function(){usuarios.guardar(id)},_fnDel,_fnLoad)
+
+		dialog.open('dlgUsuarios',function(){usuarios.guardar(usuarios.id)},_fnDel,_fnLoad)
 
 	 },
 	historial: function ($this){
@@ -2401,7 +2484,7 @@ usuarios = {
 			.find('a.c3').removeClass('c3').end()
 			.find('#menu'+letra).addClass('c3').end()
 			.find('tbody tr:visible').hide().end()
-			.find('.name[id^='+letra.toLowerCase()+']').parent().show()
+			.find('.name[id^="'+letra.toLowerCase()+'"]').parent().show()
 	 },
 	buscar: function (txt){
 		var txt =  normalize(txt);
@@ -2454,9 +2537,6 @@ estilos = {
 		$('#btnTest').css('border-radius' , value)
 	 },
 	save : function () {
-		
-
-
 		var data = {
 			color1 : $('#btnColor1').val() ,
 			color2 : $('#btnColor2').val() ,
@@ -2467,8 +2547,8 @@ estilos = {
 			action : SAVE
 		}
 		$.post(INDEX,data,function(r){ 
-			//if (r) location.reload(); 
-		},'json')
+			if (r.success) location.reload() 
+		},JSON)
 	 }, 
 	_getTheColor : function  (colorVal) {
 		var theColor = "";
@@ -2693,9 +2773,11 @@ $(function(){
 	cargarDatepicker()
 	colorearMenuDiasSemana()
 	main.inactivas.change(localStorage.getItem("showRows"))
-	main.lbl.widht = $('#main .dia.activa tr.active').find('.celda').first().width() - 11 
-	main.lbl.style()
-	main.lbl.droppable()
+	main.lbl.widht = $('#main #tablasEncabezado .tablas tr .aling-center').first().width() - 13
+	main.lbl.load()
+
+//AKI:: parche para paliar el error del inicio
+//	main.sincronizar()
 
 	$('body').on('click',".idDateAction",function(){
 		
@@ -2759,6 +2841,14 @@ $(function(){
 
 	$('#crearCita')
 		.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
+		.on('click','.idServicios',function(){
+			let id = $(this).data('familia')
+			$('#crearCita .menuServicios').each(function(){
+				$(this)
+					.find('.c3').removeClass('c3').end()
+					.find('#'+id).addClass('c3')
+			})
+		 })
 		.on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
 		.on('click','.horas',crearCita.dialog)
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
@@ -2783,6 +2873,11 @@ $(function(){
 			$(this).css({'z-index': main.z_index })	
 		 })
 		.on('click','.row_1, .row_2',function(){main.lbl.resize($(this))})
+		.on('click','.fnCogerCita',function(){
+			crearCita.data.agenda = $(this).parent().attr('agenda')
+			crearCita.data.hora = $(this).parents('tr').data('hour')
+			mostrarCapa('crearCita')
+		})
 		.on('click','#mainLstDiasSemana a',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 			var diaB = parseInt($(this).data('value'));
@@ -2817,7 +2912,7 @@ $(function(){
 		.on('change','#selectTablasEncabezado',function(){
 			main.responsive($(this))
 		 })
-		 .on('change','.nombreagenda',function(){
+		.on('change','.nombreagenda',function(){
 
 			var data = {
 				id : $(this).data('agenda'), 

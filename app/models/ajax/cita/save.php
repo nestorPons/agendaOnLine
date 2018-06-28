@@ -22,7 +22,8 @@ if ($result_data <= 1 || 1 ){
 			'fecha' => $fecha,
 			'hora' => $hora, 
 			'obs' => $_POST['nota']??"", 
-			'usuarioCogeCita' => $_SESSION['id_usuario']
+			'usuarioCogeCita' => $_SESSION['id_usuario'],
+			'tiempo_servicios' => $_POST['tiempoServicios']
 		])){
 		
 		$id_servicio = $Data->getId();

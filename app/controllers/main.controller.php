@@ -1,7 +1,7 @@
 <?php
-
 try {
     require_once $url_base . 'app/conf/autoload.php' ;
+
     $Security = new \core\Security;
     $Forms = new models\Forms($_POST, ['fileLogo','tel','chck']);
     
@@ -17,33 +17,29 @@ try {
     
 // LE BOUQUET 
 
-/*
-    include URL_SCRIPTS . 'exportacion.php';
-    
-
+/*    include URL_SCRIPTS . 'exportacion.php';
     exit(0); 
 */
 
 
     // Condicion para cuando la empresa no esta creada no cargue la configuracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
+
     if (isset($_GET['empresa'])){
-        
         $Logs = new models\Logs;
 
         if (file_exists(URL_EMPRESA)){     
             require_once URL_FUNCTIONS . 'compilaLess.php' ;
-            
-            if(!$Security->checkSession($controller)) {
+
+            if(!$Security->checkSession($controller) && $controller != 'validar') {
                 $controller = 'logout';
                 $mensErr = \core\Error::E010;
-                exit();
+                die($mensErr);
             }
 
             require  URL_CONTROLLERS . $controller . '.php';
             
         }else{
-
             include(PUBLIC_FOLDER . "error404.php");
             
         }
@@ -58,4 +54,5 @@ try {
  } 
 catch (\Exception $e) {
     die($e->getMessage() . "::" . $e->getFile() . "::" . $e->getLine());
+
  }

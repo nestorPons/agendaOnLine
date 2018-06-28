@@ -7,7 +7,7 @@ if (isset($_POST['action'])) {
     
 } else {
     
-    $users  = $Users->getAll('*',MYSQLI_ASSOC) ;
+    $users  = $Users->getAll('*',MYSQLI_ASSOC,'nombre') ;
     require_once URL_VIEWS_ADMIN . 'usuarios.php' ; 
 
 }

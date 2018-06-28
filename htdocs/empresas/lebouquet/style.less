@@ -988,12 +988,15 @@ a,i , .a{
 	background-color: @color !important;
 	color: @base !important;
 	border-color:  @base !important;
-	a, li, &-pullbutton, .app-bar-element{
+	li:not(.noHover), &-pullbutton, .app-bar-element{
 		&:active, &:hover{
-			.color-sel;
-			.fg-white{.color-sel;}
-			.tile-container{
-				color: @base !important;
+			background-color: @base;
+			*{
+				.color-sel;
+				.fg-white{.color-sel;}
+				.tile-container{
+					color: @base !important;
+				}
 			}
 		}
 	}

@@ -81,7 +81,8 @@ class Forms{
         } else return false;
      }
     public static function sanitize($post){
-        if (empty($post)) die(Error::E005);
+
+        if (empty($post)) die(\core\Error::E005);
 
         if(isset($post['controller'])) unset($post['controller']);
         if(isset($post['action'])) unset($post['action']);

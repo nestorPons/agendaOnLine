@@ -1,6 +1,6 @@
+
 const EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
-
 var general = {  
 	loaded : ['secLogin'],
 	dir1 : RIGHT, 
@@ -178,7 +178,7 @@ $(function(){
 			pin = $(this).val()
 			if(pin.length == 4) $('#frmPinpass').submit()
 		})
-			
+
 	$('#ancho').val(screen.width)
 	if(!$.isEmpty($_GET['args'])){
 		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''

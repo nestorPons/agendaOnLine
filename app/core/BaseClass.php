@@ -36,9 +36,9 @@ class BaseClass{
         
         return $this->conn->query($sql);
      }
-    public function getAll ( string $return = '*' , $type = MYSQLI_NUM ) {
-
-        $query = $this->conn->query("SELECT $return FROM {$this->table}") ;
+    public function getAll ( string $return = '*' , $type = MYSQLI_NUM , String $order = '') {
+        $filter = empty($order)?'':'ORDER BY '.$order;
+        $query = $this->conn->query("SELECT $return FROM {$this->table} " . $filter ) ;
         return $query->fetch_all( $type );
         
      }
@@ -142,8 +142,8 @@ class BaseClass{
             if (!is_null($args)){
                 unset($args['id']);
                 foreach ($args as $column => $value ) {
-                    $columns .=  $column . ',' ;
-                    $values .= '"' . $value . '",' ; 
+                        $columns .=  $column . ',' ;
+                        $values .= '"' . $value . '",' ; 
                  }    
             }
             $columns = trim( $columns , ',' ) ;
@@ -193,7 +193,7 @@ class BaseClass{
 
         $str = ''; 
         foreach ($args as $column => $value ) {
-            $str .=  $column . ' ="' . $value . '",' ; 
+            $str .=  $column . ' ="' . $value . '",' ;
         }
         $str = trim( $str , ',') ; 
         $str .= (!is_null($id))?" WHERE id = $id":'';

@@ -77,19 +77,15 @@ class Horarios extends \core\BaseClass {
 		}
 		return $this->conn->multi_query($sql);
 	 }	
-	public function cls_status($hour  , $arr_busy_hours , $exit_cls = 'busy'){
+	public function cls_status($hour  , $arr_busy_hours){
 		//return to class
 		$str_h =  $hour . ':00';
-		
 		$this->uniTime = (array_key_exists( $str_h , $arr_busy_hours)===false)
-		?  $this->uniTime 
+		? $this->uniTime 
 		: ceil($arr_busy_hours[$str_h] / 15) ;
 
-		$cls = $this->uniTime  != 0 ? $exit_cls : '' ;
 
-		$this->uniTime != 0 ? $this->uniTime -= 1 : 0 ;
-
-		return  $cls;
+		return $this->uniTime!=0;
 	 }	
 	public function out_time($hour, $date, $minTime){
 		$date = $date . ' ' . $hour;

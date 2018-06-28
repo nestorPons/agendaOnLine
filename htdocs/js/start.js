@@ -43,14 +43,15 @@ var url = function (){
 		return  '/js/login.js';
 	}
 }
-
 loadSync('/js/jquery.min.js' , function(){
 	loadAsync('/js/jquery-ui.min.js',function(){
 		loadAsync('/js/metro.js',function(){
 			loadSync('/js/jquery.mask.min.js',function(){
-				loadAsync('/js/funciones.js',function(){
-					loadAsync(url(),function(){
-						if (window.innerWidth < 800) loadAsync('/js/jquery.mobile.min.js' )	
+				loadSync('/js/funciones.js',function(){
+					loadSync(url(),function(){
+						if (window.innerWidth < 800) {
+							loadAsync('/js/jquery.mobile.min.js' )	
+						}
 					})
 				})
 			})

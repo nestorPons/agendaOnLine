@@ -3,6 +3,8 @@
 $dataPost = $_POST['citas'] ?? false;
 
 $data = $Data->getBy('fecha' , $_POST['fecha']);
+$mCita = array(); 
+
 //Arreglo primer array
 foreach($data as $value){
 
@@ -38,5 +40,5 @@ function _getCita($id,$data){
         $mCita[] = array_merge($val,$serv); 
     }
     
-    return [$data,$mCita];   
+    return [$data,$mCita??false];   
  }

@@ -14,6 +14,21 @@ var nombreEmpresa = $('body').data('empresa')
 var horarios = new Array()
 var festivos = new Array()
 
+//Contains para que sea insensible a mayusculas y minusculas
+jQuery.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
+ return function( elem ) {
+  return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+ }
+})
+$.fn.removeClassPrefix = function(prefix) {
+    this.each(function(i, el) {
+        var classes = el.className.split(" ").filter(function(c) {
+            return c.lastIndexOf(prefix, 0) !== 0;
+        });
+        el.className = $.trim(classes.join(" "));
+    });
+    return this;
+};
 jQuery.isEmpty = function(){
 	var isEmpty = false 
 	for (var i = 0; i < arguments.length; i++) {
@@ -384,7 +399,7 @@ var dialog = {
 	 },
 	close:function (objName,callback){
 
-		var $this = $('#'+objName) || $('.dialog:visible');
+		var $this = $('#'+objName) || $('.dialog').is(':visible');
 
 		//en el caso que existan passwords formaear el diseño
 		validar.pass.reset($('#'+objName) )

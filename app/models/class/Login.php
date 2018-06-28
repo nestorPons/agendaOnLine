@@ -133,15 +133,15 @@ class Login extends \core\BaseClass {
      }
     public function createSession(bool $remember = false){
         global $Security;
-      
-
+        
         $Security->loadSession(
             $this->id,
             $_REQUEST['empresa'],
             $this->admin
 	    );
-        $this->attempts(0);
 
+        $this->attempts(0);
+        
         if ($remember) $this->authByCookie();
         
         $this->Logs->set($this->id, 'login'); 

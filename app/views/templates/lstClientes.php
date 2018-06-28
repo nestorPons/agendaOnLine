@@ -2,16 +2,18 @@
 <datalist id ='lstClientes'>
 	<?php
     $Users  = new core\BaseClass('usuarios') ; 
-    $users = $Users->getAll('id , nombre');
+    $users = $Users->getAll('id , nombre, color', MYSQLI_ASSOC);
 	foreach($users as $user){
-        $name = $user[1] ; 
-        $id  = $user[0]
+        $name = $user['nombre'] ; 
+        $id  = $user['id']; 
+		$color = $user['color'];
 
 		?>
 		<option 
             data-id="<?=$id?>" 
 			data-name="<?=\core\Tools::normalize($name)?>" 
-			value="<?=$name?>">
+			value="<?=$name?>"
+			data-color = "<?=$color?>">
 		</option>
 		<?php
 	}

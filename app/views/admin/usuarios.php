@@ -6,7 +6,7 @@
 	<table class="tablas">					
 		<thead>
 			<tr>
-				<th>Opcion</th>
+				<th class="tileOpc">Opcion</th>
 				<th class="tileId">Id</th>
 				<th class="tileName">Nombre</th>
 				<?php if(!$Device->isMovile){?>
@@ -42,6 +42,7 @@
 				$admin = $user['admin'] ; 
 				$obs = $user['obs'] ; 
 				$activa = $user['status'] ; 
+				$color = $user['color'] ; 
 				$email_status= empty($email)?"No":"Si";
 				$obs_status =empty($obs)?"No":"Si";
 				$clase = empty($user['dateBaja'])?'':'ocultar_baja';

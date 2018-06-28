@@ -1,10 +1,29 @@
 <?php
-$cita1 = new \core\BaseClass('cita1','lebouquet_es'); 
+
+
+$conn = new \core\Conexion('rtc_lebouquet',0); 
+$arr = $conn->all("SELECT idCita, SUM(servicios.tiempo) as tiempo_servicios
+FROM servicios JOIN cita ON cita.servicio = servicios.id
+GROUP BY cita.idCita");
+
+foreach($arr as $a){
+    $sql = "UPDATE data SET tiempo_servicios = {$a[1]}  WHERE id = {$a[0]} AND tiempo_servicios=0"; 
+echo($sql) .BR;
+    $conn->query($sql);
+}
+
+die('OK');
+
+/*
+$cita1 = new \core\BaseClass('cita1','lebouquet_es');
+$cita2 = new \core\BaseClass('cita2','lebouquet_es'); 
 $data = new \core\BaseClass('data','rtc_lebouquet'); 
 $cita = new \core\BaseClass('cita','rtc_lebouquet'); 
 $servicios = new \core\BaseClass('servicios','rtc_lebouquet'); 
-$cita1->sql ="SELECT * FROM cita1 WHERE Fecha >= NOW()";
-$arr = $cita1->query();
+$cita1->sql ="SELECT * FROM cita1 WHERE Fecha >='2018-06-19'";
+$cita2->sql ="SELECT * FROM cita2 WHERE Fecha >='2018-06-19'";
+$arr1 = $cita1->query();
+$arr2 = $cita2->query();
 
 
 const HORAS =array(
@@ -18,22 +37,48 @@ const HORAS =array(
 
 $idCita = -1; 
 $ser = '' ; 
-foreach($arr as $val){
+$new = false; 
+foreach($arr1 as $val){
     if($idCita != $val['IdCita']){
+        $new = true; 
+        $idCita = $val['IdCita'] ;
+        
         $data->saveById(-1,[
             'agenda'=>1, 
             'idUsuario'=>$val['IdUsuario'], 
             'fecha'=>$val['Fecha'], 
             'hora'=>HORAS[$val['Hora']] ,
         ]); 
-        $idCita = $val['IdCita'] ;
+        $newIdCita = $data->getId(); 
     }
-echo $val['Servicio'] . BR;
-    if($idCita != $val['IdCita'] || $ser != $val['Servicio'] ){
+    if($new || $ser != $val['Servicio'] ){
+        $new = false ;
+        $ser = $val['Servicio'];
         $cita->saveById(-1,[
-            'idCita'=>$data->getId() , 
+            'idCita'=>$newIdCita , 
             'servicio'=>$servicios->getBy('codigo', $val['Servicio'],'id')[0]
         ]);
-        $ser = $val['Servicio']; 
     }
 }
+$idCita = -1; 
+$ser = '' ; 
+foreach($arr2 as $val){
+    if($idCita != $val['IdCita']){
+        $idCita = $val['IdCita'] ;
+        $data->saveById(-1,[
+            'agenda'=>2, 
+            'idUsuario'=>$val['IdUsuario'], 
+            'fecha'=>$val['Fecha'], 
+            'hora'=>HORAS[$val['Hora']] ,
+        ]); 
+        $newIdCita = $data->getId();
+    }
+    if($idCita != $val['IdCita'] || $ser != $val['Servicio'] ){
+        $cita->saveById(-1,[
+            'idCita'=>$newIdCita , 
+            'servicio'=>$servicios->getBy('codigo', $val['Servicio'],'id')[0]
+            ]);
+            $ser = $val['Servicio']; 
+    }
+}
+*/

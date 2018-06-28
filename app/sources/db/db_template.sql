@@ -54,8 +54,7 @@ CREATE TABLE `data` (
   `hora` time NOT NULL,
   `obs` text COLLATE utf8_spanish2_ci,
   `usuarioCogeCita` int(11) DEFAULT NULL,
-  `lastMod` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-  `tiempo_servicios`  int(3) DEFAULT NULL
+  `lastMod` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 CREATE TABLE `del_cita` (
@@ -73,8 +72,7 @@ CREATE TABLE `del_data` (
   `obs` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
   `usuarioCogeCita` int(11) DEFAULT NULL,
   `fechaDel` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `lastMod` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-  `tiempo_servicios` int(3) DEFAULT NULL
+  `lastMod` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `familias` (
@@ -124,20 +122,19 @@ CREATE TABLE `tblreseteopass` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `usuarios` (
-  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT ,
   `nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `email` varchar(50) NULL DEFAULT NULL,
-  `pass` varchar(255) NULL DEFAULT NULL,
-  `tel` varchar(20) NULL DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `pass` varchar(255) DEFAULT NULL,
+  `tel` varchar(20) DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
   `idioma` tinyint(1) NOT NULL DEFAULT '1',
   `dateReg` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `dateBaja` datetime NULL DEFAULT NULL,
+  `dateBaja` datetime DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
   `attempts` tinyint(4) NOT NULL DEFAULT '0',
-  `pin` SMALLINT(4) NULL DEFAULT NULL, 
-  `color` varchar(8) NULL DEFAULT NULL
+  `pin` SMALLINT(4) DEFAULT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE `logs` (

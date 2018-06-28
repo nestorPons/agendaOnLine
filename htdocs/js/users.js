@@ -21,8 +21,9 @@ var servicios = {
 	},
  }
 var crearCita ={
-	tiempoServicios : 0 ,
-	data : new Object() , 
+	data : {
+		tiempoServicios: 0, 
+	}, 
 	init : function(){
 
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
@@ -74,12 +75,12 @@ var crearCita ={
 
 	 },
 	guardar: function(){
-		var self = crearCita 
-		self.data.controller = 'cita'
-		self.data.action = 'save'
-		self.data.cliente = $('body').attr('idUser')
 		
-		if(self.validate.form()){
+		crearCita.data.controller = 'cita'
+		crearCita.data.action = 'save'
+		crearCita.data.cliente = $('body').attr('idUser')
+		
+		if(crearCita.validate.form()){
 			$.post(INDEX,crearCita.data,function( rsp ){
 
 				if(rsp.ocupado){
@@ -89,8 +90,8 @@ var crearCita ={
 				}else{	
 
 					notify.success('Cita reservada conéxito' , 'Guardado' );
-					self.data.idCita = rsp.idCita
-					self.data.servicios = rsp.services
+					crearCita.data.idCita = rsp.idCita
+					crearCita.data.servicios = rsp.services
 					cerrarMenu()
 
 				}
@@ -125,13 +126,13 @@ var crearCita ={
 			var lblTS = $('#tSer')[0]
 		
 			if( $this.is(':checked') )
-				crearCita.tiempoServicios += $this.data('time')
+				crearCita.data.tiempoServicios += $this.data('time')
 			else 
-				crearCita.tiempoServicios -= $this.data('time')
+				crearCita.data.tiempoServicios -= $this.data('time')
 
 			crearCita.horas.pintar(Fecha.id)
 		
-			lblTS.innerHTML = crearCita.tiempoServicios;
+			lblTS.innerHTML = crearCita.data.tiempoServicios;
 		 } ,
 
 		crear: function (id_table, callback){
