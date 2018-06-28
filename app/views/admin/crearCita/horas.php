@@ -9,13 +9,12 @@
             $h = $array_horas[$i];
             $hh = $array_horas[$i+$midle]??0;
             
-            $cls_status_1 = $Horarios->cls_status($h, $arr_horas_ocupadas)||
-                $Horarios->out_time($h,$id_fecha, CONFIG['minTime']) 
-                ?'ocupado':'';
-
-            $cls_status_2 =  $Horarios->cls_status($hh, $arr_horas_ocupadas) ||
-                $Horarios->out_time($hh,$id_fecha, CONFIG['minTime'])
-                ?'ocupado':'';
+            $cls_status_1 = in_array($h,$arr_horas_ocupadas)||
+            $Horarios->out_time($h,$id_fecha, CONFIG['minTime'])
+            ?'ocupado':''; 
+            $cls_status_2 = in_array($hh,$arr_horas_ocupadas)||
+            $Horarios->out_time($hh,$id_fecha, CONFIG['minTime'])
+            ?'ocupado':''; 
 
             $std_radio_1 =  empty($cls_status_1) ? '' :'disabled';
             $std_radio_2 =  empty($cls_status_2) ? '' :'disabled';

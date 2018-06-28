@@ -93,9 +93,16 @@ class Horarios extends \core\BaseClass {
 		return  $return;
 	 }	
 	public function set_arr_busy($arr_hours){
+
+		$arr=array(); 
 		foreach($arr_hours as $key => $val){
-			echo $key; 
-			$arr[] = $key; 
+			$unit = ceil($val/15) ;
+			for($i = 0; $i < $unit; $i++){
+				$min = $i * 15 ;
+				$date = new \DateTime($key);
+				$date->modify("+$min minute"); 
+				$arr[] = $date->format('H:i');
+			}
 		}		
 		return $arr; 
 	}

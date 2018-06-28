@@ -12,15 +12,9 @@ $Horarios2 =new models\Horarios ;
 $lbl = new models\Lbl ;
 
 $lbl->loadDates( $fecha ,$fecha , $ag ) ;
-$arr_horas_ocupadas = array_column($lbl->data, 'tiempoTotal' , 'hora') ;
-$Horarios->set_arr_busy($arr_horas_ocupadas); 
-//print_r($lbl->data);
 
-/*
-foreach($arr_horas_ocupadas as $arr){
-    echo $arr[0] . '>> >>' . $arr[1]; 
-}
-*/
+$arr_horas_ocupadas = $Horarios->set_arr_busy(array_column($lbl->data, 'tiempoTotal' , 'hora')); 
+
 $horas = $Horarios->hours($dia_semana,$_POST['agenda']);
 $array_horas = $horas[$dia_semana][$ag]??false;
 

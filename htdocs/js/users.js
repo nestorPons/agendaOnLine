@@ -23,7 +23,7 @@ var servicios = {
 var crearCita ={
 	data : {
 		tiempoServicios: 0, 
-	}, 
+	 }, 
 	init : function(){
 
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
