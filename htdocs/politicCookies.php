@@ -27,10 +27,10 @@
 <p style="padding-left: 30px;"><strong><em><span style="text-decoration: underline;">El Usuario acepta expresamente, por la utilización de este Site, el tratamiento de la información recabada en la forma y con los fines anteriormente mencionados.</span></em></strong><em> Y asimismo reconoce conocer la posibilidad de rechazar el tratamiento de tales datos o información rechazando el uso de Cookies mediante la selección de la configuración apropiada a tal fin en su navegador. Si bien esta opción de bloqueo de Cookies en su navegador puede no permitirle el uso pleno de todas las funcionalidades del Website.</em></p>
 <p style="padding-left: 30px;"><em>Puede usted permitir, bloquear o eliminar las cookies instaladas en su equipo mediante la configuración de las opciones del navegador instalado en su ordenador:</em><strong><em> </em></strong></p>
 <ul style="padding-left: 30px;">
-<li><em><a href="http://support.google.com/chrome/bin/answer.py?hl=es&amp;answer=95647" target="_blank">Chrome</a></em></li>
-<li><em><a href="http://windows.microsoft.com/es-es/windows7/how-to-manage-cookies-in-internet-explorer-9" target="_blank">Explorer</a></em></li>
-<li><em><a href="http://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-que-los-sitios-we" target="_blank">Firefox</a></em></li>
-<li><em><a href="http://support.apple.com/kb/ph5042" target="_blank">Safari</a></em></li>
+<li><em><a href="https://support.google.com/chrome/bin/answer.py?hl=es&amp;answer=95647" target="_blank">Chrome</a></em></li>
+<li><em><a href="https://windows.microsoft.com/es-es/windows7/how-to-manage-cookies-in-internet-explorer-9" target="_blank">Explorer</a></em></li>
+<li><em><a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-que-los-sitios-we" target="_blank">Firefox</a></em></li>
+<li><em><a href="https://support.apple.com/kb/ph5042" target="_blank">Safari</a></em></li>
 </ul>
 <p style="padding-left: 30px;"><em>Si tiene dudas sobre esta política de cookies, puede contactar con <?=$name_company?> en info@<?=$name_company?>(punto)com </em></p>
         </body>

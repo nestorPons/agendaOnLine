@@ -387,32 +387,11 @@ a,i , .a{
 	 }
 
 	&-help {
-		margin: 20px 0;
-		color: #0081a6;
-		text-align: center;
 		a {
 		  color: @t1;
-		  text-decoration: none;
-			:hover {
-			  text-decoration: underline;
-			}
 		}
 	}
-	@media screen and (max-width: 800px) {
-		margin: 0 auto;
-		width: 100%;
-		height: 100%;
-		border: none;
-		.border-radius(0,0,0,0);
-		.box-shadow(0,0,0,0);
-	}
-	@media screen and (max-width: 490px) {
-		top: 0;
-		margin-top: 0;
-		input[type="radio"], [type="checkbox"] {
-			transform:scale(1.5,1.5);
-		}
-	}
+
 	.capasPrincipales{
 		display:none;
 		top:45px;
@@ -720,16 +699,7 @@ a,i , .a{
 		}
 	}
  }
-@media (max-width: 800px){
-	.tile(@alto:180px,	@espacio: 5px, );
- }
-@media (max-width: 425px){
-	.tile(@alto:160px,	@espacio: 4px );
- }
-@media (max-width: 320px){
-	.tile(@alto:150px,	@espacio: 4px, );
-	font-size: @fontSize;
- }
+
 .bg{
 	&-color{background-color: @b1 !important}
 	&-c1{background-color:@b1 !important}

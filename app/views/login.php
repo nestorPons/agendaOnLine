@@ -1,18 +1,19 @@
 <?php 
 	include URL_TEMPLATES . '/header.php' ;
+
 	$url_validate= URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. CODE_EMPRESA .'/'. 'validar';
-	?>
+?>
 	<title>Agenda Online zona login</title>
 	</head>
 	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
 		<div id="login" class="login login-form ">
 			<section id="secLogin">
-				<a href= "http:\\<?=CONFIG['web']??''?>"  target="_blank">
+				<a href= "<?=CONFIG['web']??''?>"  target="_blank">
 					<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
 				</a>
 				<h1 class="heading">Agenda <?=CODE_EMPRESA?></span></h1>
 				<hr>
-				<form id="loginUsuario" method="post" action='<?= $url_validate ?>' defaultbutton="Entrar"
+				<form id="loginUsuario" method="POST" action='<?= $url_validate ?>' defaultbutton="Entrar"
 					data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña."
 					data-popover-background="bg-red" data-popover-color="fg-white">
 					<input type="hidden"  id="ancho" name="ancho">

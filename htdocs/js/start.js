@@ -44,6 +44,8 @@ var url = function (){
 	}
 }
 loadSync('/js/jquery.min.js' , function(){
+	//Para cargar jquery en electron
+	if (typeof module!='undefined') {$ = jQuery = module.exports}
 	loadAsync('/js/jquery-ui.min.js',function(){
 		loadAsync('/js/metro.js',function(){
 			loadSync('/js/jquery.mask.min.js',function(){

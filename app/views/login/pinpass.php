@@ -7,6 +7,9 @@
 	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
 		<div id="login" class="login login-form ">
             <section id="pinpass">
+                <a href= "<?=CONFIG['web']??''?>"  target="_blank">
+					<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
+				</a>
                 <h1 class="heading">Introduzca pin</h1>
                 <hr>
                 <form id="frmPinpass" method="post" action='<?= $url_validate ?>' defaultbutton="Entrar" >
@@ -26,7 +29,7 @@
 		</div>
 		<footer class="login about">
 			<p class="about-author">
-				&copy; 2018 <a href="https://www.reservatucita.es" target="_blank">reservaTuCita v1.1</a>
+				&copy; 2018 <a href="www.reservatucita.es" target="_blank">reservaTuCita v1.1</a>
 				Creado por Néstor Pons
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>			

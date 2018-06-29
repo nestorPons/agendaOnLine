@@ -23,7 +23,7 @@ define('URL_VIEWS' , APP_FOLDER . 'views/' );
     define('URL_VIEWS_USER' , URL_VIEWS . 'user/' );
     define('URL_MENUS' , URL_TEMPLATES . 'menus/' );
 
-define('URL_PROTOCOL', stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://');
+define('URL_PROTOCOL', 'https://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
 const PREFIX_DB = 'rtc_'; 
@@ -41,6 +41,6 @@ const BR = '<br>';
 const _NEW = -1; 
 
 //datos de administrador
-define ('ADMIN_WEB','http://57230b1799704ccc80ad7f3bbfad7c95.yatu.ws');
+define ('ADMIN_WEB','https://www.reservatucita.com');
 define ('ADMIN_NAME' , 'Nestor Pons') ; 
 define ('ADMIN_EMAIL' , 'nestorpons@gmail.com') ; 
