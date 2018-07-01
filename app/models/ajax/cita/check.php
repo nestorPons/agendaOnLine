@@ -1,7 +1,7 @@
 <?php
 //check cita
 $dataPost = $_POST['citas'] ?? false;
-
+$r = array(); 
 $data = $Data->getBy('fecha' , $_POST['fecha']);
 $mCita = array(); 
 

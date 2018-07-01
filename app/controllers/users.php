@@ -2,8 +2,6 @@
 require_once URL_FUNCTIONS .'tools.php';
 
 $User = new models\User($_SESSION['id_usuario']);
-$zoneUsers = true ;
-
 if (isset($_POST['action'])) {
     require_once URL_AJAX . $_POST['controller'] . '.php' ;
 } else {

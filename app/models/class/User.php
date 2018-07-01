@@ -3,7 +3,7 @@
 class User extends \core\BaseClass {
 	
 	private $user, $pass ;
-	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $token = 'undefined';
+	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
 	
 	public function __construct( $id , $email = false){
 		
@@ -24,6 +24,7 @@ class User extends \core\BaseClass {
 			$this->idioma = $this->user['idioma'];
 			$this->admin = $this->user['admin'];
 			$this->status = $this->user['status'];
+			$this->pin = $this->user['pin'];
 		} 
 	 }
 	public function get($args){
@@ -109,5 +110,11 @@ class User extends \core\BaseClass {
 	public function statusActive($get){
 		if (!$this->checkToken($get['args'])) return false;
 		return $this->set(['status'=> 0]);
+	 }
+	public function isAdmin(){
+		 return $this->admin==1;
+	 }
+	public function isUser(){
+		 return $this->admin==0;
 	 }
  }

@@ -4,7 +4,11 @@
         <span class ='icon-user-1'></span> 
         <span class = 'text-value'><?=$val['nombre']?></span>
     </div>
-    <div class='iconos'>    
+    <div class='iconos'> 
+        <?php if($number_services >= $rows){?>
+            <span class ='icon-angle-down fnExtend' ></span>  
+            <?php
+        }?>
         <div class='icons_crud'>           
             <span class ='icon-pencil-1 fnEdit '></span> 
             <span class ='icon-trash fnDel'></span>  

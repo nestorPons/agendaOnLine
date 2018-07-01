@@ -1,6 +1,6 @@
 <?php
     include URL_TEMPLATES . '/header.php' ;
-	$url_validate= URL_ABSOLUT . CODE_EMPRESA .'/'. 'validar';
+	$url_validate= '/'. CODE_EMPRESA .'/'. 'validar';
 ?>
 	<title>Agenda Online zona login</title>
 	</head>
@@ -12,7 +12,7 @@
 				</a>
                 <h1 class="heading">Introduzca pin</h1>
                 <hr>
-                <form id="frmPinpass" method="post" action='<?= $url_validate ?>' defaultbutton="Entrar" >
+                <form id="frmPinpass" method="POST" action='<?= $url_validate ?>' defaultbutton="Entrar" >
                     <input type="hidden"  id="ancho" name="ancho">
                     <input type="hidden" id="empresa"  value="<?php  ?>">
                     <div class="iconClass-container">

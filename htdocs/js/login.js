@@ -1,5 +1,6 @@
 
-const EMPRESA = $('body').data('empresa'), 
+const 
+	EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
 var general = {  
 	loaded : ['secLogin'],
@@ -44,7 +45,7 @@ var general = {
 			_toggle($in)
 		}
 
-	}
+	 }
  }
 var error = function (mns){
 	$('#loginUsuarioPopoverTxt').html(mns)

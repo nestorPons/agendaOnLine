@@ -1,7 +1,7 @@
 <?php 
 	include URL_TEMPLATES . '/header.php' ;
 
-	$url_validate= URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. CODE_EMPRESA .'/'. 'validar';
+	$url_validate= '/'. CODE_EMPRESA .'/'. 'validar';
 ?>
 	<title>Agenda Online zona login</title>
 	</head>
@@ -29,7 +29,7 @@
 					</div>
 					<div id="chkNoCerrarSesion">
 						<input type="checkbox" id="recordar"  name="recordar" value="1" >
-						<span class="info">No cerrar sesión.</span>
+						<span class="info">Iniciar sesión con un pin.</span>
 					</div>
 
 					<button class="btn-success btnLoad"  id="btnLogin" value="Entrar" default>Entrar</button>

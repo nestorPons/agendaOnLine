@@ -2,7 +2,7 @@
 	include URL_TEMPLATES . '/header.php' ;
     $idUser = substr($_GET['args'],-4);
     $token = $_GET['args'];
-    $url = URL_PROTOCOL .  $_SERVER['SERVER_NAME'] .'/'. CODE_EMPRESA .'/'. 'validar';
+    $url= '/'. CODE_EMPRESA .'/'. 'validar';
 	?>
 	<title>Agenda Online zona login</title>
 	</head>

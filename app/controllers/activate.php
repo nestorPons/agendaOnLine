@@ -6,5 +6,5 @@ $User = new User($idUser);
 if ($User->statusActive($_GET)) {
     header('location:'. URL_LOGIN .'?success=Usuario activado con exito');
 } else {
-    echo 'error=>' . \core\Error::$last;
+    header('location:'. URL_LOGIN .'?error=' .\core\Error::$last);
 }

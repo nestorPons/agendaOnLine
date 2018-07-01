@@ -10,6 +10,7 @@ class Lbl {
     private $obs ; 
     private $tiempo ;
     private $servicios ;
+    private $number_services; 
 
     //position
     private $day ;
@@ -116,6 +117,7 @@ class Lbl {
             $exten = $rows>1? "extend" :'' ; 
             $show_nota =  empty($this->obs)?'':'show' ;
             $servicies = $this->printArt($val['servicios']) ; 
+            $number_services = $this->number_services;
             $note = $this->printNote($val['obs']) ;
 
             ob_start();
@@ -127,13 +129,14 @@ class Lbl {
     }
     private function printArt($arr){
         $str = '';
-
+        $s = 0 ;
         foreach ($arr as $key => $val ){
+            $s++; 
             ob_start();
             require $this->dir_row_code ; 
             $str .= ob_get_clean();
         }
-    
+        $this->number_services = $s;
         return $str;
     }
     private function printNote($obs){

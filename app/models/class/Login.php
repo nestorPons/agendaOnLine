@@ -2,10 +2,10 @@
 
 class Login extends \core\BaseClass {
 	private $num, $selector, $validator,  $pass, $Logs;
-	public $email, $id, $dateBaja, $admin, $user;	
+	public $email, $id, $dateBaja, $admin, $user, $pin;	
 	public function __construct(){
 		parent::__construct('usuarios');	
-          $this->Logs = new \models\Logs; 	
+        $this->Logs = new \models\Logs; 	
 	 }
     public function findUserById(int $id){
         if ($this->user = parent::getById($id))
@@ -23,6 +23,7 @@ class Login extends \core\BaseClass {
         $this->id = $User->id;
         $this->email = $User->email;
         $this->admin = $User->admin;
+        $this->pin = $User->pin; 
                 
      }
     private function loadData(){

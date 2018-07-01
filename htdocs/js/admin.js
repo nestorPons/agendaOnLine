@@ -395,9 +395,12 @@ main ={
 	 }, 
 	sincronizar: function (dir,callback){
 		
-		var self = main , section = main.section , body = main.body
+		var section = main.section , body = main.body
 
-		if (!section.find('#'+Fecha.id).length) self.crearDias(callback)
+		if (!section.find('#'+Fecha.id).length)
+			main.crearDias(callback)
+		else
+			main.check()
 
 		//no lo meto en fin de carga para avanzar mas rapido
 		if (Fecha.id != section.find('.dia.activa').attr('id')) {
@@ -411,7 +414,8 @@ main ={
 				body.show("slide", { direction: ent }, 750,);
 			})
 		} 	
-			 main.check()
+		
+		
 
 	 },
 	activeDay : function () {
@@ -419,6 +423,7 @@ main ={
 		$('#' + Fecha.id).addClass('activa')
 	 }, 
 	check : function () {
+
 		var _citas = function(){
 				var citas = new Array();
 				$('#'+Fecha.id).find('.lbl').each(function(){
@@ -864,12 +869,13 @@ main ={
 			main.lbl.droppable()
 		 }, 
 		create: function(data){
-		
+	
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
-			var self = main , lbl = main.lbl ,htmlSer = '' 
+			var lbl = main.lbl,
+				htmlSer = '', 
+				idCelda =  generateId.encode( data.agenda , data.fecha , data.hora ), 
+				celda = document.getElementById(idCelda)
 
-			var idCelda =  generateId.encode( data.agenda , data.fecha , data.hora )
-			var celda = document.getElementById(idCelda)
 			$.each(data.servicios, function ( id , serv ) {
 				htmlSer += lbl.service(serv)
 			})
@@ -993,7 +999,14 @@ main ={
 									.removeClass('color1 color2 color3 color-admin')
 									.addClass(color);
 							}					
-
+							//Si hay igual de servicios que lineas escondo el nombre 
+							var tiempo = Math.ceil($(this).attr('tiempo')/15), 
+								servicios=$(this).find('.servicio').length
+							if (tiempo<=servicios){
+								$(this).find('.nombre').hide()
+								$(this).find()
+							} 
+							
 						})
 				
 			})
@@ -1009,7 +1022,7 @@ main ={
 					$(this).draggable( {
 						//containment: "#"+limit , 
 						disabled : false, 
-						opacity : 0.70 , 
+						opacity : 0.50 , 
 						zIndex: 100 ,
 						revert: function(ob){
 							if (ob == false){
@@ -1025,7 +1038,7 @@ main ={
 						stop : function(e, ui){
 						 },
 						start : function ( e, ui) {
-							main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',1)
+							main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
 							main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
 						 },
 					}) 
@@ -1051,7 +1064,10 @@ main ={
 								
 								main.lbl.style()
 
-								$('#' + main.lbl.idLastCelda).empty()
+								$('#' + main.lbl.idLastCelda)
+									.append('<i class="icon-plus fnCogerCita"></i>')
+									.find('.lbl').remove()
+									
 								var idCita = drag.attr('idcita')
 								var idCelda = $(this).attr('id')
 
@@ -1062,7 +1078,7 @@ main ={
 								drag.draggable("option", "revert", true)	
 								$('.ui-draggable-dragging').remove()
 								$('#'+main.lbl.idLastCelda)
-									.html(main.lbl.clone)
+									.append(main.lbl.clone)
 								main.lbl.draggable()
 								
 							}	
@@ -1072,30 +1088,43 @@ main ={
 
 			},	
 		resize : function($this){
-				//if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
+
+			var unidadTiempo = Math.ceil($this.attr('tiempo')/15), 
+				totalServicios = $this.find('.servicio').length + 1
+
+			if(unidadTiempo < totalServicios){
 				if ($this.hasClass('initial')){
 					$this
 						.removeClass('initial') 
-						.animate({	height: main.lbl.height[$this.attr('id')] })
-						.find('.nombre').hide().end()
+						.find('.nombre').hide({duration:500}).end()
+						.find('.icon-angle-up')
+							.removeClass('icon-angle-up parpadea')
+							.addClass('icon-angle-down')
+						.end()
+						.removeClassPrefix('row_', {duration:500})
+						.addClass('row_' + unidadTiempo, {duration:500})
+
 					if ($this.hasClass('with_6'))
 						$this.find('.icons_crud').hide()
-					} 
-				else
-					{
-					main.lbl.height[$this.attr('id')] = $this.height()
+				} else {
 
-					$this
-						.addClass('initial') 	
-						.animate({height: $this.get(0).scrollHeight})
-						.find('.nombre').show().end()
+					$this	
+						.find('.nombre').show({duration:500}).end()
+						.find('.icon-angle-down')
+							.removeClass('icon-angle-down')
+							.addClass('icon-angle-up parpadea')
+						.end()
+						.removeClassPrefix('row_', {duration:500})
+						.addClass('initial row_'+totalServicios, {duration:500}) 	
+
 					if ($this.hasClass('with_6'))
 						$this.find('.icons_crud').css('display','inline-block')
 				
-					}
+				}
 			}
-		 }
-	 },
+		}
+	}
+ },
 menu = {
 	status: function (capa){
 		var add = $('#btnAdd'),
@@ -2773,11 +2802,8 @@ $(function(){
 	cargarDatepicker()
 	colorearMenuDiasSemana()
 	main.inactivas.change(localStorage.getItem("showRows"))
-	main.lbl.widht = $('#main #tablasEncabezado .tablas tr .aling-center').first().width() - 13
+	main.lbl.widht = $('#main #tablasEncabezado .tablas tr .aling-center').first().width() - 4
 	main.lbl.load()
-
-//AKI:: parche para paliar el error del inicio
-//	main.sincronizar()
 
 	$('body').on('click',".idDateAction",function(){
 		
@@ -2871,8 +2897,8 @@ $(function(){
 		.on('click','.lbl',function(e){
 			main.z_index +=  1 
 			$(this).css({'z-index': main.z_index })	
+			main.lbl.resize($(this))
 		 })
-		.on('click','.row_1, .row_2',function(){main.lbl.resize($(this))})
 		.on('click','.fnCogerCita',function(){
 			crearCita.data.agenda = $(this).parent().attr('agenda')
 			crearCita.data.hora = $(this).parents('tr').data('hour')

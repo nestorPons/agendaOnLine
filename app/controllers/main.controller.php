@@ -21,9 +21,6 @@ try {
     exit(0); 
 */
 
-
-
-
     // Condicion para cuando la empresa no esta creada no cargue la configuracion  de la empresa 
     if (isset($_REQUEST['empresa'])) require_once $url_base . 'app/conf/config.php' ;
 
@@ -35,8 +32,8 @@ try {
 
             if(!$Security->checkSession($controller) && $controller != 'validar') {
                 $controller = 'logout';
-                $mensErr = \core\Error::E010;
-                die($mensErr);
+                require  URL_CONTROLLERS . $controller . '.php?err='. \core\Error::E010;
+                exit(0);
             }
 
             require  URL_CONTROLLERS . $controller . '.php';

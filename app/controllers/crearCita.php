@@ -1,7 +1,7 @@
 <?php 
-$Agendas = new \models\Agendas(isset($zoneUsers)); 
+$Agendas = new \models\Agendas($User->isUser()); 
 
-if ( !isset($zoneUsers)){
+if ($User->isAdmin()){
     $cls_users = new core\BaseClass('usuarios') ;
     $users  = $cls_users->getAll( '*' ,  MYSQLI_ASSOC  ) ;
 } 

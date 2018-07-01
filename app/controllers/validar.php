@@ -17,6 +17,12 @@ $return = include URL_SCRIPTS . 'validates/' . $script;
 
 if (isset($return['action'])){
 	$args = isset($return['args']) ? '?' . $return['args'] :  '' ; 
+	//COMPROBAR EL PIN
+	if(isset($_POST['recordar'])){
+		if(empty($Login->pin)){
+			$return['action'] = 'newPin'; 
+		}
+	}
 	$action = $return['action']. $args ;
 } else $action = 'login';
 
