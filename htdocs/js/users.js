@@ -21,17 +21,33 @@ var servicios = {
 	},
  }
 var crearCita ={
-	data : {
-		tiempoServicios: 0, 
-	 }, 
+	data : new Object(), 
 	init : function(){
-
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
+
 		if (!$.isEmpty(clase)){
-			clase_id = clase.replace(/\D/g,'');
+			var clase_id = clase.replace(/\D/g,'');
 			servicios.mostrar(clase_id) ;
 		}
-		cargarDatepicker();
+		cargarDatepicker()	
+		crearCita.load()
+	 },
+	set : {
+		nameAgenda :function(id,name){
+			$('#crearCita #lblagenda'+id).text(name)
+		 }
+	 }, 
+	servicios: {
+		buscar : function(val){
+			var $sec = $('#crearCita'), 
+				$conSer = $sec.find('.contenedorServicios')
+
+			if($sec.is(':visible')){
+				$conSer
+				.find('tr').hide()
+				.find('.descripcion:contains("'+val+'")').parents('tr').show()
+			}
+		}
 	 },
 	idUser : function () {
 		var cli = $('#crearCita #cliente').val();
@@ -39,77 +55,88 @@ var crearCita ={
 		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
 	 }, 
 	cliente: function (){
-		
-		var nombre = $('#crearCita #cliente').val();
-		usuarios.guardar(0,nombre,btn.load.hide);
+		//guardo cliente mediante formulario crearCita
+		var $cliente = $('#crearCita #cliente'),
+			nombre = $cliente.val()
+
+		usuarios.guardar(-1,nombre)	
+		dialog.close()
 	 },
 	dialog: function (){
-		var self = crearCita , sec =  $('#frmCrearCita') , 
+		var self = crearCita , sec =  $('#crearCita') , 
 			idSer = new Array() ,
 			strServ ="" 
 
 		sec.find('[name="servicios[]"]:checked').each(function(){
-			strServ += $(this).siblings('label').find('.descripcion').text() + ", ";
+			strServ += $(this).attr('id') + ", "
 			idSer.push($(this).val())
 		})
 
 		dialog.open('dlgGuardar',self.guardar, dialog.close,function(){
-			strServ = strServ.slice(0,-2);			
+
+			strServ = strServ.slice(0,-2)		
 			data = {
 				fecha : Fecha.general , 
-				hora : sec.find('.horas:checked').val() , 
-				agenda : sec.data.agenda,
-				nameCli :sec.data.nombre, 
+				hora : sec.find('.horas:checked').val(), 
+				agenda : crearCita.data.agenda,
+				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
-				nota : sec.find('#crearCitaNota').val()  ,
-				uTiempo : Math.ceil(parseInt(sec.find('#tSer').text()) / 15) 
+				nota : sec.find('#crearCitaNota').val(),
+				tiempoServicios : parseInt(sec.find('#tSer').text()) 
 			}
 			$.extend(crearCita.data, data)
 
 			$('#dlgGuardar')
-				.find('#lblhora').html(crearCita.data.hora).end()
-				.find('#lblfecha').html(crearCita.data.fecha).end()
-				.find('#lblCliente').parent('p').html('Reserva la cita')
-				$('#lblSer').parent('p').empty()//html(strServ).end()
+				.find('#lblHora').html(data.hora).end()
+				.find('#lblFecha').html(Fecha.print()).end()
+				.find('#lblCliente').html(data.nameCli).end()
+				.find('#lblSer').html(strServ)
+				
 		})
-
 	 },
 	guardar: function(){
-		
-		crearCita.data.controller = 'cita'
-		crearCita.data.action = 'save'
-		crearCita.data.cliente = $('body').attr('idUser')
-		
-		if(crearCita.validate.form()){
+		var self = crearCita 
+		self.data.controller = 'cita'
+		self.data.action = 'save'
+
+		if(self.validate.form()){
 			$.post(INDEX,crearCita.data,function( rsp ){
+				if(rsp.success){
+					if(rsp.ocupado){
 
-				if(rsp.ocupado){
+						notify.error( rsp.mns.body , rsp.mns.tile )
 
-					notify.error( rsp.mns.body , rsp.mns.tile );
+					}else{	
+						self.data.idCita = rsp.idCita
+						self.data.idUsuario = rsp.idUser
+						self.data.servicios = rsp.services
+						main.lbl.create(self.data)
 
-				}else{	
-
-					notify.success('Cita reservada conéxito' , 'Guardado' );
-					crearCita.data.idCita = rsp.idCita
-					crearCita.data.servicios = rsp.services
-					cerrarMenu()
-
+						mostrarCapa('main' , true )			
+					}
+				} else {
+					echo(rsp)
+					notify.error('Error inesperado')
 				}
-
-				$('.dia').remove()
-				dialog.close('dlgGuardar');
-			},'json')
+				dialog.close('dlgGuardar')
+			},JSON)
 			.fail(function( jqXHR, textStatus, errorThrown){
-				notify.error('Error enviando los datos');
-				echo (jqXHR)
+				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;
 			})
 		}else{
-			notify.error('Complete todos los datos');
-			return false;
+			notify.error('Complete todos los datos')
+			return false
 		}
 
 	 },
+	load: function(){
+		$('#btnSearch').hide()
+		if(crearCita.data.agenda){
+			$sec = $('#crearCita')
+			$sec.find('#agenda'+crearCita.data.agenda).prop('checked', true)
+		}
+	 }, 
 	horas: {
 		iniciar: function(){	
 
@@ -122,118 +149,74 @@ var crearCita ={
 			}
 			
 		 },	
-		load : function ($this) {
-			var lblTS = $('#tSer')[0]
-		
-			if( $this.is(':checked') )
-				crearCita.data.tiempoServicios += $this.data('time')
-			else 
-				crearCita.data.tiempoServicios -= $this.data('time')
+		load : function () {
 
-			crearCita.horas.pintar(Fecha.id)
-		
-			lblTS.innerHTML = crearCita.data.tiempoServicios;
+			var tiempoServicios = 0, 
+				lblTS = $('#tSer'), 
+				$sec = $('#crearCita'), 
+				serviciosSeleccionados = $sec.find('.idServicios:checked')
+
+				serviciosSeleccionados.each(function(){
+					tiempoServicios += $(this).data('time')
+				})
+
+			lblTS.text(tiempoServicios)
+			crearCita.horas.pintar(Fecha.id,tiempoServicios)
+
+			if (!$.isEmpty(crearCita.data.hora)){
+				$('#crearCita .dia.activa').find('.horas[value="'+crearCita.data.hora+'"]').prop('checked',true)
+				crearCita.dialog()
+			}
+	
 		 } ,
-
 		crear: function (id_table, callback){
 			var data = {
 				agenda: crearCita.data.agenda,
 				fecha:id_table , 
 				controller : 'crearCita.horas'}
 
-			$.post(INDEX,data,function(html){
-				
-				$('#tablas')
-					.fadeOut(function(){
-						$(this)
-							.html(html)
-							.fadeIn()
-						crearCita.horas.pintar(id_table)				
-						typeof callback == "function" && callback()
-					})
-
-			},'html')
+			if ($('#crearCita #'+id_table).length) $('#crearCita #'+id_table).remove()
+					
+			$.post(INDEX , data , function(html){
+				var m = document.getElementById('tablas')
+				m.innerHTML = html	
+				crearCita.horas.load()
+			})
 
 		 },		
-		pintar: function(id_table){
+		pintar: function(id_table, tiempoServicios = 0){
 
 			var self = crearCita, 	
-				section = $('#crearCita') 
-			section.find('#tablas .reservado').removeClass('reservado').find('input').attr('disabled',false)
+				$sec = $('#crearCita'),  
+				ts = parseInt(Math.ceil(tiempoServicios/15)),
+				$dia = $sec.find('#'+ id_table), 
+				$horas = $dia.find('.horas'), 
+				count = ts-1 
 
-			var horas = crearCita.horas ,
-				_esPasada = function( hora ) {
-				
-	 			var diff_fechas = Fecha.restar(id_table); 
-				//sumo los minutos a la fecha actua
-				var _return = false;
-				
-				if ( diff_fechas<0 ){
+			$dia.removeClass('reservado').find('input').attr('disabled',false)
+	
+			for (let i = $horas.length - 1  ; i >= 0 ; i--){
+				let $this = $dia.find('#hora'+i)
+				if ( $this.hasClass('ocupado')) count = ts 
 
-					_return = true
-					
-				} else if ( diff_fechas == 0 ){
-					
-					var minTime = document.minTime * 60000;
-					var a = new Date(hora*1000);
-					var milisegundos = new Date().getTime();
-					var f = new Date(milisegundos + minTime);
-
-					_return =  (a<f)
-					
-				}
-				return  _return
-			},
-				ts = parseInt(Math.ceil(self.tiempoServicios/15))||0 ,
-				_reservar= ( me ) =>  me.attr('disabled',true).parent('label').addClass('reservado') ,
-				_fueraHorario  = ( me ) =>  me.hasClass('disabled') ,
-				diaFestivo = !$.inArray(Fecha.md(id_table),FESTIVOS) ,
-				count = ts ,
-				horas = section.find('#'+ id_table+' .horas')
-
-			for (let i = horas.length - 1  ; i >= 0 ; i--){
-				let $this = section.find('#'+ id_table+' #hora'+i)
-				
-				if (diaFestivo ){
-					_reservar($this) 
-				}else{
-					if ( $this.hasClass('ocupado')) count = ts 
-
-					if ( count > 0 ) _reservar($this) 
-					count -- 
-				}
+      			if ( count > 0 ) $this.attr('disabled',true).parent('label').addClass('reservado')  
+				count-- 		
 			}
 		 },
 		sincronizar: function(callback){
 
-			var context = $('#tablas'),
-				activa = context.find('.activa'),
-				activar = context.find('#'+ Fecha.id),
-				_toggle = function(){
-					activa.removeClass('activa')
-					activar.addClass('activa')
-					context.fadeIn() 
-				}
-			context.fadeOut(function () {
+			var context = $('#tablas')
+			var activa = context.find('.activa')
+			var activar = context.find('#'+ Fecha.id)
 
-				if(!activar.length) {
-					crearCita.horas.crear(Fecha.id, function(){
-						activar = context.find('#'+ Fecha.id)
-						_toggle()
-					})
-				 } else {
-					_toggle()
-				 }
-
-			})
+			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },
 	reset: function(){
 		$('.steperCapa li').hide(function(){
 			$('#step0').show()
-		});
-		_hora =0 ;
-		btn.load.reset();
+		})
+		btn.load.reset()
 		$('#crearCita')
 			.find('.dialog').hide().end()
 			.find('.steperCapa').hide().end()
@@ -263,29 +246,33 @@ var crearCita ={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-			dialog.close('dlgGuardar');
+		crearCita.data.hora = '';
+		crearCita.data.agenda = 0 
+		dialog.close('dlgGuardar');
 	 },
 	stepper: function(index){
-		var $visible = $('.steperCapa:visible'),
-			$stepper = $('#stepper'+index)
-
-		if($visible.attr('id')==$stepper.attr('id'))return false;
+		var $visible = $('.steperCapa:visible')
+		var $stepper = $('#stepper'+index)
+		if($visible.attr('id')==$stepper.attr('id'))return false
 		if (!$stepper.is(':visible')&&$visible.length){
 			if(index==0){
 				_slider()
-
-			}else if(index==1){
+				
+			}else if(index==1 &&crearCita.validate.name()){
+				$('#btnSearch').show()
 				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
 				crearCita.data.nombre =  $('#crearCita #cliente').val() 
-				$('.tblHoras').empty()
-
-				_slider() 
+				$('.tblHoras').show()
+					
+				_slider(servicios.init) 
 
 			} else if(index==2&&crearCita.validate.service()){
-				_slider()
+				$('#btnSearch').hide()
+				if(crearCita.validate.name())_slider(function(){
 
+				});
 			}
-		}
+		 }
 		function _slider(callback){
 			var dir = $visible.data('value')>0||1
 			var dirEntrada = index-dir<0?'right':'left'
@@ -293,7 +280,7 @@ var crearCita ={
 
 			$('.stepper') //esto es para colorear el stepper activo
 				.find('li').removeClass('current').end()
-				.find('#step'+index).addClass('current')
+				.find('#step'+index).addClass('current');
 			$('#crearCita').find('.steperCapa').hide()
 			$visible.hide("slide", { direction: dirSalida }, 750,function(){
 				$stepper
@@ -301,47 +288,17 @@ var crearCita ={
 					.show("slide", { direction: dirEntrada }, 750, function(){$('.tile-active').height('auto')})
 			})
 			typeof callback == "function" && callback()
-		}
+		 }
 	 },
 	validate : {
 		form : function (){
 			return $('#crearCita [name="servicios[]"]:checked').length!==0
 				&&$('#crearCita #cliente').val()!==""
 				&&$('#crearCita [name="hora[]"]:checked').length!==0;
-		},
+		 },
 		name : function () {
-			var $this =  $('#crearCita #cliente');	
-			var cliente = $this.val().trim();
-
-			if(cliente!=""){
-				str = normalize(cliente)
-				var selCli = $('#lstClientes [data-name="'+str+'"]')
-
-				if (selCli.length==0){
-					$this.addClass('input-error');
-
-					dialog.create('dlgCliente',crearCita.cliente, null ,function(){
-						dialog.open('dlgCliente');
-					})
-
-				}else{
-					crearCita.data.cliente = selCli.data('id') 
-					$('#crearCita #lblCliente').html($this.val())
-					$this
-						.removeClass('input-error')
-						.addClass('input-success');	
-
-					return true;
-				}
-
-			}else{
-				$this
-					.addClass('input-error')
-					.removeClass('input-success');
-				$this.popover('show');
-				return false;
-			}
-		}, 
+			return true;
+		 }, 
 		service: function(){
 			crearCita.horas.sincronizar();
 			$('#crearCita #lblSer').empty();
@@ -356,9 +313,8 @@ var crearCita ={
 				})
 				return true;
 			}
-		}
+		 }
 	 },
-
  }
 var historial = { 
 	numeracion:function(){

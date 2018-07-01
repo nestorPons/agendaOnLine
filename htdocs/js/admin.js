@@ -1091,14 +1091,14 @@ main ={
 
 			var unidadTiempo = Math.ceil($this.attr('tiempo')/15), 
 				totalServicios = $this.find('.servicio').length + 1
-
-			if(unidadTiempo < totalServicios){
+				//if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
+			if(unidadTiempo <= totalServicios)
 				if ($this.hasClass('initial')){
 					$this
 						.removeClass('initial') 
 						.find('.nombre').hide({duration:500}).end()
 						.find('.icon-angle-up')
-							.removeClass('icon-angle-up parpadea')
+							.removeClass('icon-angle-up')
 							.addClass('icon-angle-down')
 						.end()
 						.removeClassPrefix('row_', {duration:500})
@@ -1112,7 +1112,7 @@ main ={
 						.find('.nombre').show({duration:500}).end()
 						.find('.icon-angle-down')
 							.removeClass('icon-angle-down')
-							.addClass('icon-angle-up parpadea')
+							.addClass('icon-angle-up')
 						.end()
 						.removeClassPrefix('row_', {duration:500})
 						.addClass('initial row_'+totalServicios, {duration:500}) 	
@@ -1122,9 +1122,8 @@ main ={
 				
 				}
 			}
-		}
-	}
- },
+		 }
+	 },
 menu = {
 	status: function (capa){
 		var add = $('#btnAdd'),

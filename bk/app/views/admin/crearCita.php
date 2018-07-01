@@ -18,4 +18,3 @@
 			</div>
 		</form>	
 	</div>	
-	<!--<script  src="/js/crearCita.js" async></script>-->
