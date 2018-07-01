@@ -1,4 +1,5 @@
 <?php 
+$User = new \models\User($_SESSION['id_usuario']); 
 $Agendas = new \models\Agendas($User->isUser()); 
 
 if ($User->isAdmin()){
