@@ -10,7 +10,7 @@ class Device{
         $this->getOs();
         $this->getBrowser();
         $this->getDevice();
-    }
+     }
     private function getOs(){
         if (preg_match('/linux/i', $this->agente)) {
             $this->os = 'linux';
@@ -65,24 +65,25 @@ class Device{
      }
     public function getDevice(){      
 
-        if ($this->width<=800) {
-            $this->type = 'tablet';
-            $this->isTablet = true;
-        } else
-        if ($this->width<=480) {
-            $this->type = 'movile';
-            $this->isMovile = true;
-        } else
-        if ($this->width<=300) {
-            $this->type = 'watch';
-            $this->isWatch = true;
-        } else {
-            $this->type = 'laptop';
-            $this->isLaptop = true;
+        switch($this->width){
+            case ($this->width <= 300):
+                $this->type = 'watch';
+                $this->isWatch = true;
+                break; 
+
+            case ($this->width <= 560):
+                $this->type = 'movile';
+                $this->isMovile = true;
+                break; 
+            case ($this->width <= 800): 
+                $this->type = 'tablet';
+                $this->isTablet = true;
+                break; 
+            default: 
+                $this->type = 'laptop';
+                $this->isLaptop = true;
         }
- 
+
         return $this->type;
      }
-
-
 }

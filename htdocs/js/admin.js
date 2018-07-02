@@ -3,10 +3,8 @@ if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 //Funcion para menu responsive 
 //No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
 function menuEsMovil(tab){
-	$('.esMovil .dia [agenda]').each(function(){
-		$(this).hide()
-	})
-	$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').fadeIn()
+	$('.esMovil .dia').find('[agenda]:visible').hide()
+	$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').show()
 
 	return true
  }
@@ -2801,7 +2799,8 @@ $(function(){
 	cargarDatepicker()
 	colorearMenuDiasSemana()
 	main.inactivas.change(localStorage.getItem("showRows"))
-	main.lbl.widht = $('#main #tablasEncabezado .tablas tr .aling-center').first().width() - 4
+	main.lbl.widht = $('.celda:visible').first().width() - 4
+
 	main.lbl.load()
 
 	$('body').on('click',".idDateAction",function(){
@@ -2810,7 +2809,10 @@ $(function(){
 			sincronizar($(this).data('action'));
 		}
 	 })
-	$('.tabcontrol').tabcontrol()
+	$('.tabcontrol')
+		.tabcontrol()
+	 	
+
 	$('html')
 		.on('click','.close',function(e){dialog.close()})
 		.on('change','input',function(){$(this).removeClass('input-error')})
@@ -2894,7 +2896,7 @@ $(function(){
 
 	$('#main')
 		.on('click','.lbl',function(e){
-			main.z_index +=  1 
+			main.z_index =(main.z_index<=2)?3:2; 
 			$(this).css({'z-index': main.z_index })	
 			main.lbl.resize($(this))
 		 })

@@ -43,9 +43,9 @@ function view($fecha_inicio = null, $existen_array = false ){
 						$str_hora = date('H:i', $h);
 
 						if ($array_horas) {	
-//AKI :: si es movil hay que poner pestañas
-//$class = $Device->isMovile&&$a!=1?' hidden_responsive ':'';
-							$class="";
+							// si es movil hay que poner pestañas
+							$class = $Device->isMovile?' hidden_responsive ':'';
+
 							$disabled = 'active' ;
 							if  (!_inArray($str_hora,$array_horas)) {
 								$class .= "fuera_horario " ;  

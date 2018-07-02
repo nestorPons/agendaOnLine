@@ -23,11 +23,9 @@ define('CONFIG', array_merge($Empresa->getConf(),$myAgenda));
 //Guardo los anchos de pantalla para posteriores configuraciones
 //crear cookie configAOl para ancho de pantalla y otras configuraciones
 //Si coy a validar existe un Post->ancho 
-if(!isset($_COOKIE['width']) && isset($_POST['ancho']))
-   setcookie('width',  $_POST['ancho'], time() + strtotime( '+360 days' ));  
 
 //Si voy a admin o otro lado creo la clase dispositivo 
-$Device = new \models\Device($_COOKIE['width']??false);
+$Device = new \models\Device($_SESSION['ancho']??false);
 
 define('CLASS_BACKGROUND', classBackGround());
 

@@ -27,7 +27,7 @@ if(!isset($_COOKIE['width']) && isset($_POST['ancho']))
    setcookie('width',  $_POST['ancho'], time() + strtotime( '+360 days' ));  
 
 //Si voy a admin o otro lado creo la clase dispositivo 
-$Device = new \models\Device($_COOKIE['width']??false);
+$Device = new \models\Device($_POST['ancho']??false);
 
 define('CLASS_BACKGROUND', classBackGround());
 

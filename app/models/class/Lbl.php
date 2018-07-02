@@ -20,6 +20,7 @@ class Lbl {
     //tamaño
     private $width;
     private $height;
+    private $device; 
 
     //publicas
     public $html = null;
@@ -35,9 +36,8 @@ class Lbl {
     private $dir_note =  URL_TEMPLATES . 'lbl/note.php' ; 
     
     function __CONSTRUCT(){
-
         $this->conn = new \core\Conexion(NAME_DB);
-
+        $this->device = new \models\Device($_SESSION['ancho']); 
     }
     public function getById ($value) {
         $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
@@ -103,7 +103,6 @@ class Lbl {
         } 
         
     }
-
     private function print ($data) {
 
         foreach ($data as $val){
@@ -119,6 +118,7 @@ class Lbl {
             $servicies = $this->printArt($val['servicios']) ; 
             $number_services = $this->number_services;
             $note = $this->printNote($val['obs']) ;
+            $noMovile = !$this->device->isMovile; 
 
             ob_start();
             require $this->dir_container ; 

@@ -69,20 +69,19 @@ echo BR;
 
      }
     public function loadSession($idUser,$company, $admin=0 ){
-
+        $_SESSION['ancho'] = $_POST['ancho']; 
         $_SESSION['id_usuario'] = $idUser;
         $_SESSION['bd'] =$company ; 
         $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'];
         $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
         $_SESSION['admin_sesion']= $admin;
         $_SESSION['SKey'] = bin2hex(random_bytes(20));
+        
+
         self::cookieToken($_SESSION['SKey']);
 
         $_SESSION['LastActivity'] =$_SERVER['REQUEST_TIME'];
         $_SESSION['device'] = self::getDevice();
-
-        // AKI ::  hay que implementarlo
-        $_SESSION['count'] = 0 ; 
 
      }
     private static function cookieToken($salt){

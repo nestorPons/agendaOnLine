@@ -10,8 +10,8 @@
 		}?>
 	</ul>
 	
-		<!--uso attr name para el clone popup-->
-	<select id="lstSerSelect" name='idFamilia' class="responsiveDesing_show">
+	<!--uso attr name para el clone popup-->
+	<select id="lstSerSelect" name='idFamilia' class="responsiveDesing_show lstServicios">
 		<?php 
 		$n = 0 ;
 		

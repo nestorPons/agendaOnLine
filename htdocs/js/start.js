@@ -44,6 +44,7 @@ var url = function (){
 	}
 }
 loadSync('/js/jquery.min.js' , function(){
+	if (window.innerWidth < 800) {loadAsync('/js/jquery.mobile.min.js' )}
 	//Para cargar jquery en electron
 	if (typeof module!='undefined') {$ = jQuery = module.exports}
 	loadAsync('/js/jquery-ui.min.js',function(){
@@ -51,9 +52,6 @@ loadSync('/js/jquery.min.js' , function(){
 			loadSync('/js/jquery.mask.min.js',function(){
 				loadSync('/js/funciones.js',function(){
 					loadSync(url(),function(){
-						if (window.innerWidth < 800) {
-							loadAsync('/js/jquery.mobile.min.js' )	
-						}
 					})
 				})
 			})

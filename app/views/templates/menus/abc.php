@@ -1,7 +1,18 @@
 <div id="menuABC" class="menu abc">
  	<?php
 	$abecedario = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
-	if (!$Device->isMovile){
+
+	if ($Device->isMovile){
+		?>
+		<select id='lstABC' class='lstMenu responsiveDesing_show'>
+		<?php
+		for ($a = 0;$a <= count($abecedario)-1;$a++){
+			echo "<option value='$abecedario[$a]'>".$abecedario[$a]."</option>";
+		}
+		?>
+		</select>
+		<?php
+	}else{
 		?>
 		<ul id='mainLstABC' class='lstMenu responsiveDesing_hidden'>
 			<li>
@@ -14,16 +25,7 @@
 				?>
 			</li>
 		</ul>
-		<?php
-	}else{
-		?>
-		<select id='lstABC' class='lstMenu responsiveDesing_show'>
-		<?php
-		for ($a = 0;$a <= count($abecedario)-1;$a++){
-			echo "<option value='$abecedario[$a]'>".$abecedario[$a]."</option>";
-		}
-		?>
-		</select>	
+			
 		<?php
 	}
 	?>
