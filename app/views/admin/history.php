@@ -1,5 +1,10 @@
+<?php 
+   $len = count($results);
+?>
 <h1 id="tituloHistorial">Historial</h1>
-<div class="cuerpo">
+<h4 id="totalRegistrosHistorial">Total registros: <?= $len?></h4>
+<div class="cuerpo">   
+    
     <table class = "tablas">
         <thead>
             <tr>
@@ -13,17 +18,16 @@
         </thead>
         <tbody>
             <tr id="" class ="template">
-                <td class="id"><?=$id?></td>
-                <td class="icono"><a class= "icon-<?=$ico?>" ></a></td>
-                <td class="fecha"><?=$date?></td>
-                <td class="accion"><?=$accion?></td>
-                <td class="idUsuario"><?=$user?></td>
-                <td class="estado"><?=$status?></td>    
+                <td class="id"></td>
+                <td class="icono"><a class= "" ></a></td>
+                <td class="fecha"></td>
+                <td class="accion"></td>
+                <td class="idUsuario"></td>
+                <td class="estado"></td>    
             </tr>
 
             <?php
  
-                $len = count($results);
                 for($i = 0; $i < $len ; $i++){
                     $r = $results[$i];
                     $id = $r['id'];

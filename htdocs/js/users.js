@@ -50,12 +50,10 @@ var crearCita ={
 		}
 	 },
 	idUser : function () {
-		var cli = $('#crearCita #cliente').val();
-		var  nombre = normalize(cli);
-		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
+		return $('body').attr('iduser');
 	 }, 
 	cliente: function (){
-		//guardo cliente mediante formulario crearCita
+		//guardo cliente mediante formulario creafrCita
 		var $cliente = $('#crearCita #cliente'),
 			nombre = $cliente.val()
 
@@ -64,16 +62,14 @@ var crearCita ={
 	 },
 	dialog: function (){
 		var self = crearCita , sec =  $('#crearCita') , 
-			idSer = new Array() ,
-			strServ ="" 
-
+		idSer = new Array() ,
+		strServ ="" 
+		
 		sec.find('[name="servicios[]"]:checked').each(function(){
 			strServ += $(this).attr('id') + ", "
 			idSer.push($(this).val())
 		})
-
-		dialog.open('dlgGuardar',self.guardar, dialog.close,function(){
-
+		var _load = function(){
 			strServ = strServ.slice(0,-2)		
 			data = {
 				fecha : Fecha.general , 
@@ -87,12 +83,13 @@ var crearCita ={
 			$.extend(crearCita.data, data)
 
 			$('#dlgGuardar')
-				.find('#lblHora').html(data.hora).end()
-				.find('#lblFecha').html(Fecha.print()).end()
+				.find('#lblhora').html(data.hora).end()
+				.find('#lblfecha').html(Fecha.print()).end()
 				.find('#lblCliente').html(data.nameCli).end()
 				.find('#lblSer').html(strServ)
 				
-		})
+		}
+		dialog.open('dlgGuardar',self.guardar, dialog.close,_load)
 	 },
 	guardar: function(){
 		var self = crearCita 
@@ -110,9 +107,12 @@ var crearCita ={
 						self.data.idCita = rsp.idCita
 						self.data.idUsuario = rsp.idUser
 						self.data.servicios = rsp.services
-						main.lbl.create(self.data)
 
-						mostrarCapa('main' , true )			
+						//Cambiar en solo en usuarios
+						historial.row(crearCita.data)
+
+
+						cerrarMenu()	
 					}
 				} else {
 					echo(rsp)
@@ -262,6 +262,8 @@ var crearCita ={
 				$('#btnSearch').show()
 				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
 				crearCita.data.nombre =  $('#crearCita #cliente').val() 
+				//Solo en usuarios
+				crearCita.data.cliente = crearCita.idUser
 				$('.tblHoras').show()
 					
 				_slider(servicios.init) 
@@ -321,10 +323,12 @@ var historial = {
 		var num = $('#historial #tableHistory tr').length
 		$('#lblHis').html(num)
 	 },
+//AKI :: acondicionando el array
+
 	row: function (data) {
 		var html = "" ,
 			table = document.getElementById('tableHistory'),
-			count = data.idCitaSer.length - 1 
+			count = data.servicios.length - 1 
 			_insert = function(idCitaSer, idSer, idCita, fecha , hora, des){
 				html += "\
 					<tr id=tr"+idCitaSer+" \
@@ -603,7 +607,7 @@ function cerrarMenu(){
 			width: ancho
 		},750)
 		$last.removeAttr('style')
-	}
+	 }
 	$last = $this
 	ancho = $this.width()
 	alto = $this.height()

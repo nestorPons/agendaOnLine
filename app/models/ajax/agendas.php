@@ -7,17 +7,13 @@ switch($action){
 	case "save":
 		$chck = $_POST['chck']??0;
 
-		$Agendas->multi_query = true ;
-
-		for ($i=0 ; $i < CONFIG['num_ag'] ; $i++){
-
-			$Agendas->saveById($_POST['id'][$i] , [
+		for ($i=0 ; $i <= CONFIG['num_ag'] ; $i++){
+			$return  = $Agendas->saveById($_POST['id'][$i] , [
 				'mostrar' => $_POST['chck'][$i],
 				'nombre' => ($_POST['nombre'][$i])??"agenda".$_POST['id'][$id]
-			] );
-
+			]);
+			if(!$return) break; 
 		}
-		$return = $Agendas->multi_query();
 		break;
 	case "add":
 		$H = new \models\Horarios; 

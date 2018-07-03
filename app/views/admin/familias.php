@@ -1,5 +1,5 @@
 <h1>Familias</h1>
-<table class="tablas-mini">
+<table class="tablas">
 	<thead>
 		<tr>
 			<th>Editar</th>

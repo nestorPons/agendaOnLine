@@ -1,5 +1,4 @@
 
-if ($('#navbar').is(':hidden')) $('#navbar').show('blind')
 //Funcion para menu responsive 
 //No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
 function menuEsMovil(tab){
@@ -2732,25 +2731,12 @@ historial = {
 	get : function(days=1){
 		let data = {
 			controller :'history', 
-			action : GET , 
 			days : days
 		}
-		$.post(INDEX, data,	function (r, textStatus, jqXHR) {
-			for(let i=0, len=r.datos.length-1; i<=len; i++){
-				let d = r.datos[i]
-				if(!$('#historial table #historia_'+d[0]).length){
-					historial.crear.linea({
-						id: d[0], 
-						fecha: d[1],
-						idUsuario: d[2], 
-						accion: d[3], 
-						estado: d[5]?'Ok':'Error', 
-						tabla: d[6]
-					})
-				}
 
-			}		
-		},JSON)
+		$.post(INDEX, data,	function (html) {
+			$('#history').html(html)
+		},'html')
 	},
 	crear: {
 		linea: function(d){
@@ -2786,8 +2772,8 @@ historial = {
 			
 			$obj.find('.template').clone()
 				.find('.id').text(d.id).end()
-				.find('.icono').html('<a class= "icon-'+ico+'" ></a>').end()
 				.find('.fecha').text(d.fecha).end()
+				.find('.icono i').addClass('icon'+ico)
 				.find('.idUsuario').text(d.idUsuario).end()
 				.find('.accion').text(d.accion).end()
 				.find('.estado').text(d.estado).end()
@@ -2982,7 +2968,12 @@ $(function(){
 		.on('click','#btnDel',menu.del)
 		.on('click','#btnReset',menu.reset)
 		.on('click','#btnOptions #chckOpUsersDel',menu.options)
-		.on('change','#selShowByTime', function(){historial.get($(this).val())})
+		.find('#showByTime')
+			.on('click','input', function(){
+					$(this).prop('checked',true)
+					historial.get($(this).val())
+				}
+			).end()
 		.find('[name="menu[]"]').parent().click(function(){
 			var capa = $(this).find('a').data('capa') ;
 			if (capa == 'main'){

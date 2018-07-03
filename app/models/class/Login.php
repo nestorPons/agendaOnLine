@@ -150,9 +150,9 @@ class Login extends \core\BaseClass {
         return ($this->admin>0)?'admin':'users' ;
      }
     public function logout($deleteCookies = false) {
-
-        $this->Logs->set($_SESSION['id_usuario'], 'logout');
-
+        if(isset($_SESSION['id_usuario']))
+            $this->Logs->set($_SESSION['id_usuario'], 'logout');
+            
        if($deleteCookies){
         foreach($_COOKIE as $key => $val)
             setcookie($key, '', time() - 3600, '/');    

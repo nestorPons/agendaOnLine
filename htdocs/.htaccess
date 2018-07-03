@@ -17,4 +17,4 @@ RewriteRule ^empresas/^([0-9a-z_-]+)/(.*)$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([0-9a-z_-]+)/([^/]+)/([^/]+)/?$ app.php?empresa=$1&controller=$2&args=$3 [L,QSA]
 RewriteRule ^([0-9a-z_-]+)/([^/]+)/?$ app.php?empresa=$1&controller=$2 [L,QSA]
-RewriteRule ^([0-9a-z_-]+)/?$ https://%{HTTP_HOST}/app.php?empresa=$1 [L,QSA]
+RewriteRule ^([0-9a-z_-]+)/?$ https://%{HTTP_HOST}/app.php?empresa=$1 [R=301,L,QSA]

@@ -124,12 +124,9 @@
 					<label for = "chckOpUsersDel" >	Mostrar eliminados.</label>
 				</li>
 				<li id=showByTime class=disabled>
-					<label for = "selShowByTime" >Filtro tiempo.</label>
-					<select id=selShowByTime>
-						<option value=1>Ayer</option>
-						<option value=7>Última semana</option>
-						<option value=30>Último mes</option>
-					</select>
+					<label><input type="radio" value=1 checked>Último dia</label><br>
+					<label><input type="radio" value=7 >Última semana</label><br>
+					<label><input type="radio" value=30 >Último mes</label><br>
 				</li>
 
 			</ul>
