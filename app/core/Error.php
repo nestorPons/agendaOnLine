@@ -52,8 +52,12 @@ class Error {
         
     }
     public static function E010(){
+       $Login = new \models\Login; 
+       $Login->logout(); 
+       /*
        echo "error<SCRIPT>window.location='/".CODE_EMPRESA."?logout=true&err=".self::E010."';</SCRIPT>"; 
        return false;
+       */
     }
     public static function array($err){
         if (defined ('self::'.$err))

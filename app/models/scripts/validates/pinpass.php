@@ -14,4 +14,6 @@ if(isset($_COOKIE["auth"]) && $Login->authToken($_COOKIE["auth"])){
         $Login->statusReset();
         return err(\core\Error::E024,4) ;
     }
-} else ['action'=>'logout'];
+} else {
+    $Login->logout();
+};

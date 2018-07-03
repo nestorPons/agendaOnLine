@@ -31,9 +31,9 @@ try {
             require_once URL_FUNCTIONS . 'compilaLess.php' ;
 
             if(!$Security->checkSession($controller) && $controller != 'validar') {
-                $controller = 'logout';
-                require  URL_CONTROLLERS . $controller . '.php?err='. \core\Error::E010;
-                exit(0);
+                $Login = new \models\Login; 
+                $Login->logout();
+
             }
 
             require  URL_CONTROLLERS . $controller . '.php';

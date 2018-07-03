@@ -323,15 +323,16 @@ var historial = {
 		var num = $('#historial #tableHistory tr').length
 		$('#lblHis').html(num)
 	 },
-//AKI :: acondicionando el array
-
 	row: function (data) {
+
+		//AKI:: //
+		return true;
 		var html = "" ,
 			table = document.getElementById('tableHistory'),
 			count = data.servicios.length - 1 
-			_insert = function(idCitaSer, idSer, idCita, fecha , hora, des){
+			_insert = function( idSer, idCita, fecha , hora, des){
 				html += "\
-					<tr id=tr"+idCitaSer+" \
+					<tr id=tr"+" \
 						class="+ idCitaSer + idSer + " \
 						idCita="+  idCita + " \
 						idser=" +idSer+ " \
@@ -350,8 +351,8 @@ var historial = {
 			var descripcion = 
 				$('.contenedorServicios').find('#rowServicios'+data.servicios[i]).find('.descripcion').text()
 								
-			_insert(data.idCitaSer[i],data.servicios[i],data.idCita,data.fecha,data.hora,descripcion)
-		}
+			_insert(data.servicios[i].id,data.servicios[i],data.idCita,data.fecha,data.hora,descripcion)
+		 }
 		table.innerHTML = table.innerHTML + html
 		historial.numeracion()
 	 }

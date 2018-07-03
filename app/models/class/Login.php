@@ -3,6 +3,8 @@
 class Login extends \core\BaseClass {
 	private $num, $selector, $validator,  $pass, $Logs;
 	public $email, $id, $dateBaja, $admin, $user, $pin;	
+    const  URL_LOGIN = '/'.CODE_EMPRESA; 
+
 	public function __construct(){
 		parent::__construct('usuarios');	
         $this->Logs = new \models\Logs; 	
@@ -82,10 +84,10 @@ class Login extends \core\BaseClass {
     public function statusReset(){
         $this->attempts(0);
         
-        $Mail = new Mail;
+        $Mail = new Mail(new User($this->id));
         $Mail->url_menssage = URL_SOURCES . 'mailActive.php';
-        $User = new User($this->id);
-        $Mail->send($User);
+        $Mail->send();
+        $this->logout();
      }
     public function codeToken(){
       
@@ -150,6 +152,7 @@ class Login extends \core\BaseClass {
         return ($this->admin>0)?'admin':'users' ;
      }
     public function logout($deleteCookies = false) {
+ 
         if(isset($_SESSION['id_usuario']))
             $this->Logs->set($_SESSION['id_usuario'], 'logout');
             
@@ -171,7 +174,12 @@ class Login extends \core\BaseClass {
          }
         // Finalmente, destruye la sesión 
         session_destroy(); 
-        return true;
+
+        $idUser = $_SESSION['id_usuario']??false;
+        $Login = new \models\Login; 
+        header('location:'.URL_LOGIN.'?err='.\core\Error::getLast());
+        exit(1);
+
      }
     public static function example(){
         $demo = PREFIX_DB . 'demo'; 

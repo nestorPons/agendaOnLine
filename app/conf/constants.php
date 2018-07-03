@@ -29,7 +29,7 @@ define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 const PREFIX_DB = 'rtc_'; 
 const MARGIN_DAYS = 6;
 const DEFAULT_HISTORY_DAYS = 1;
-const NUM_MAX_ATTEMPT = 7; //attempts for crack brute force pass
+const NUM_MAX_ATTEMPT = 5; //attempts for crack brute force pass
 
 // Constantes de desarrollo
 const SAVE = 'save';
