@@ -109,10 +109,8 @@ var crearCita ={
 						self.data.servicios = rsp.services
 
 						//Cambiar en solo en usuarios
-						historial.row(crearCita.data)
-
-
-						cerrarMenu()	
+						historial.reset()
+    					cerrarMenu()	
 					}
 				} else {
 					echo(rsp)
@@ -320,41 +318,19 @@ var crearCita ={
  }
 var historial = { 
 	numeracion:function(){
-		var num = $('#historial #tableHistory tr').length
+		var num = $('section#historial div.cita').length
 		$('#lblHis').html(num)
 	 },
-	row: function (data) {
-
-		//AKI:: //
-		return true;
-		var html = "" ,
-			table = document.getElementById('tableHistory'),
-			count = data.servicios.length - 1 
-			_insert = function( idSer, idCita, fecha , hora, des){
-				html += "\
-					<tr id=tr"+" \
-						class="+ idCitaSer + idSer + " \
-						idCita="+  idCita + " \
-						idser=" +idSer+ " \
-						fecha=" + fecha + " \
-						hora="+ hora + "> \
-						<td idSer="+idCitaSer+">\
-							<i class='icon-cancel fnDel'></i>\
-							<i class='icon-load c5 animate-spin hidden'></i>\
-						</td>\
-						<td class='padding5'>"+fecha+" a las "+hora+"</td>\
-						<td class='padding5 aling-left'>"+des+"</td> \
-					</tr>"
-			}
-
-		for (i = 0; i <= count; ++i) {
-			var descripcion = 
-				$('.contenedorServicios').find('#rowServicios'+data.servicios[i]).find('.descripcion').text()
-								
-			_insert(data.servicios[i].id,data.servicios[i],data.idCita,data.fecha,data.hora,descripcion)
-		 }
-		table.innerHTML = table.innerHTML + html
-		historial.numeracion()
+	 reset: function(){
+		var data = {
+			controller : 'users', 
+			action: 'view', 
+			section: 'historial'
+		}
+		$.post(INDEX, data,function (html, textStatus, jqXHR) {
+			$('section#historial').find('.contenido').html(html)
+			historial.numeracion()
+		},'html')
 	 }
  }
 var cita = {

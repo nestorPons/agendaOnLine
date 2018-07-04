@@ -59,15 +59,19 @@ class User extends \core\BaseClass {
 
 		return $return ;
 	 }
-	public function getHistory(){
-		$sql = 'SELECT C.id, D.id as idCita, D.fecha, D.hora , S.descripcion , S.id as idSer 
-				FROM cita C JOIN data D ON C.idCita = D.id 
-				LEFT JOIN servicios S ON C.servicio = S.id 
-				WHERE D.idUsuario = '. $this->id .' AND D.fecha >= CURRENT_DATE() 	
-				ORDER BY D.fecha, D.hora ';
+	public function getData(){
+		$Data = new \core\BaseClass('data'); 
+		return $Data->getBy(['idUsuario','fecha <= CURRENT_DATE()'],[$this->id,'TRUE'] );
+	 }
+	public function getCitas($idCita){
+		
+		$sql = "SELECT C.id, S.descripcion , S.id as idSer 
+			FROM cita C 
+			JOIN servicios S ON C.servicio = S.id
+			WHERE C.idCita = $idCita";  
 
 		return  $this->conn->all($sql , MYSQLI_ASSOC ) ;
-	 }
+	}
 	public function status(int $arg = null) {
 		return (empty($arg))
 			? $this->get('status')

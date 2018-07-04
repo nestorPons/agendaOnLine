@@ -43,6 +43,7 @@
 				</div>
 				<div class="contenido">
 					<h1 class="margin0">Historial</h1>
+						<br>
 						<?php include URL_VIEWS_USER . 'historial.php'?>
 					<input type="button" class="btn-danger cancelar" name="cancelar" value="Cerrar"> 
 				</div>

@@ -22,9 +22,10 @@ function sincronizar( dias, date , callback ){
 
 	//slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
 
-
 	main.sincronizar(dias)
 	notas.sync(Fecha.general)
+
+
 	if ($('#crearCita').find('div').length )
 		crearCita.horas.sincronizar()
 
@@ -71,9 +72,6 @@ function mostrarCapa(capa, callback){
 		capa=='crearCita' && crearCita.load()
 
 	 }
-
-
-
 
 	if($('#config').is(':visible')&&config.change) config.guardar();
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
@@ -411,8 +409,9 @@ main ={
 				body.show("slide", { direction: ent }, 750,);
 			})
 		} 	
-		
-		
+
+		//Si hay una cita fuera de horario que se muestren las celdas fuera de horario
+		if($('.dia.activa tr.disabled').find('.lbl').length) main.inactivas.click()
 
 	 },
 	activeDay : function () {
@@ -1050,28 +1049,29 @@ main ={
 							var posi = $(this).position()
 							var drag  = ui.draggable
 							var css_margin = 1 ;
+							var idCita = drag.attr('idcita')
+							var idCelda = $(this).attr('id')
 
-							if (confirm('Desea modificar la cita ')) {
+							if (idCelda != main.lbl.idLastCelda && confirm('Desea modificar la cita ')) {
 								drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
 									//end of animation.. if you want to add some code here
 								})
 								$(this)
-									.find('.fnCogerCita').remove().end()
-									.append(main.lbl.clone)
+								.find('.fnCogerCita').remove().end()
+								.append(main.lbl.clone)
 								
 								main.lbl.style()
-
+								
 								$('#' + main.lbl.idLastCelda)
-									.append('<i class="icon-plus fnCogerCita"></i>')
-									.find('.lbl').remove()
-									
-								var idCita = drag.attr('idcita')
-								var idCelda = $(this).attr('id')
+								.append('<i class="icon-plus fnCogerCita"></i>')
+								.find('.lbl').remove()
+								
 
+								
 								main.edit(idCita , idCelda )
 								
 							} else {
-								//aki :: error arrastrando el dragable y cancelando
+								
 								drag.draggable("option", "revert", true)	
 								$('.ui-draggable-dragging').remove()
 								$('#'+main.lbl.idLastCelda)
@@ -1673,7 +1673,7 @@ crearCita ={
 			strServ = strServ.slice(0,-2)		
 			data = {
 				fecha : Fecha.general , 
-				hora : sec.find('.horas:checked').val(), 
+				hora : crearCita.data.hora, 
 				agenda : crearCita.data.agenda,
 				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
@@ -1842,8 +1842,8 @@ crearCita ={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-		crearCita.data.hora = '';
-		crearCita.data.agenda = 0 
+		crearCita.data.hora = 'undefined';
+		crearCita.data.agenda = 'undefined' 
 		dialog.close('dlgGuardar');
 	 },
 	stepper: function(index){
@@ -1890,7 +1890,7 @@ crearCita ={
 		form : function (){
 			return $('#crearCita [name="servicios[]"]:checked').length!==0
 				&&$('#crearCita #cliente').val()!==""
-				&&$('#crearCita [name="hora[]"]:checked').length!==0;
+				&&crearCita.data.hora!='undefined';
 		 },
 		name : function () {
 			var $this =  $('#crearCita #cliente');	
@@ -2684,7 +2684,6 @@ notas = {
 	 },
 	sync : function(fecha){
 	    var $obj = $('#notas table tbody')
-		if (!$obj.length) return false
 		$obj.find('tr').addClass('ocultar').removeClass('mostrar')
 
 		let data = {
@@ -2693,18 +2692,21 @@ notas = {
 			fecha : fecha
 		}
 		$.post(INDEX, data, function (r, textStatus, jqXHR) {
-			if(r.success){
 
+			if(r.success){
+				$('#menu5').addClass('c3')
 				for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
 	
 					notas.crear.linea(datos[i])							
-				}
-				
+				}		
+			} else {
+				$('#menu5').removeClass('c3')
 			}
 			return r.success
 		},JSON)
-
+		
 		$obj.find('.'+Fecha.id).removeClass('ocultar').addClass('mostrar')	
+
 	 },
 	crear : {
 		linea : function (d){
@@ -2781,13 +2783,16 @@ historial = {
 		}
 	}
  }
-$(function(){
-	cargarDatepicker()
-	colorearMenuDiasSemana()
-	main.inactivas.change(localStorage.getItem("showRows"))
-	main.lbl.widht = $('.celda:visible').first().width() - 4
-
-	main.lbl.load()
+ $(function(){
+	 cargarDatepicker()
+	 colorearMenuDiasSemana()
+	 
+	 main.inactivas.change(localStorage.getItem("showRows"))
+	 main.lbl.widht = $('.celda:visible').first().width() - 4
+	 
+	 main.lbl.load()
+	 
+	
 
 	$('body').on('click',".idDateAction",function(){
 		
@@ -2862,12 +2867,17 @@ $(function(){
 					.find('#'+id).addClass('c3')
 			})
 		 })
+		 .on('click', '.horas', function(){
+			crearCita.data.hora = $(this).val()
+		 })
 		.on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
 		.on('click','.horas',crearCita.dialog)
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
 		.on('blur','#cliente',crearCita.validate.name)
 		.on("swipeleft",'.tablas')
 		.on('click','.cancelar',function(){mostrarCapa('main')})
+
+
 	$('#familias')
 		.on('click','table .icon-edit',function(){
 			familias.dialog($(this).attr('value'));
@@ -3036,4 +3046,7 @@ $(function(){
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 	$('#horarios')
 		 .on('click', '#agenda_horario',function(){horario.mostrar($(this).attr('value'))})
+
+		 
+		notas.sync(Fecha.general)
  })
