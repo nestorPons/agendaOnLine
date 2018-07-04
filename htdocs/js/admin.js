@@ -1,4 +1,4 @@
-
+'strict'
 //Funcion para menu responsive 
 //No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
 function menuEsMovil(tab){
@@ -406,7 +406,7 @@ main ={
 			body.hide("slide", { direction: sal }, 750,function(){
 				$('.dia.activa').removeClass('activa')
 				section.find('#'+ Fecha.id).addClass('activa')
-				body.show("slide", { direction: ent }, 750,);
+				body.show("slide", { direction: ent }, 750)
 			})
 		} 	
 
@@ -2702,7 +2702,7 @@ notas = {
 					notas.crear.linea(datos[i])							
 				}		
 			} else {
-				$('#menu5').removeClass('c3')
+				$('#menu5').removeClass('c4')
 			}
 			return r.success
 		},JSON)
