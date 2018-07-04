@@ -53,6 +53,12 @@
 				</a>
 			</li>
 			<li>
+				<a id="menu5"  name='menu[]'  data-capa="notas">
+					<span class="icon-pencil-1"></span>
+					<span class="caption">Notas</span>
+				</a>
+			</li>
+			<li>
 				<a id="menu2" name='menu[]' class="app-bar-element" data-capa="usuarios">
 					<span class="icon-users"></span>
 					<span class="caption">Clientes</span>
@@ -72,12 +78,7 @@
 					</li>
 				</ul>
 			</li>
-			<li>
-				<a id="menu5"  name='menu[]'  data-capa="notas">
-					<span class="icon-pencil-1"></span>
-					<span class="caption">Notas</span>
-				</a>
-			</li>
+
 			<li>
 				<a id="menu9"  name='menu[]'  data-capa="history">
 					<span class="icon-clock"></span>

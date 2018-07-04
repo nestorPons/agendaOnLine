@@ -13,7 +13,7 @@
 
 //saturados 
 @color_sat_1: saturate(@t1,75%);
-@color_sat_2: saturate(@t2,75%);
+@color_sat_2: saturate(@color_secon,75%);
 @color_sat_3: saturate(@b2,75%);
 @color_sat_4: saturate(@b1,75%);
 //
@@ -57,6 +57,7 @@ input :-webkit-autofill {
 	-webkit-text-fill-color: @text-color !important;
  }
 body{
+	font-family: @main-font;
 	background-color: @base;
 	.inputs();
 	input[type=submit],  input[type=button], input[type=reset], button, {

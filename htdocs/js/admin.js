@@ -901,6 +901,9 @@ main ={
 				
 			},
 		container : function (data, htmlSer) {
+			var html_icono_desplegar = (data.servicios.length <= data.tiempoServicios) 
+				? "<span class ='icon-angle-down fnExtend' ></span>"
+				:""
 
 			var html = "\
 				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+main.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
@@ -908,8 +911,9 @@ main ={
 						<span class ='icon-user-1'></span> \
 						<span>"+data.nombre+"</span> \
 					</div> \
-					<div class='iconos aling-right'>  \
-						<div class='icons_crud'>\
+					<div class='iconos'>"+ 
+					html_icono_desplegar
+					+"<div class='icons_crud'>\
 							<span class ='fnEdit icon-pencil-1'></span>  \
 							<span class ='fnDel icon-trash'></span>  \
 						</div>\
@@ -924,7 +928,7 @@ main ={
 		 }, 
 		service : function (data) {
 				var html = "\
-					<div>\
+					<div class='servicio'>\
 						<span class ='icon-angle-right'></span>\
 						<span class='codigo' des_codigo='"+data.descripcion+"' \
 						id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
@@ -1065,10 +1069,8 @@ main ={
 								$('#' + main.lbl.idLastCelda)
 								.append('<i class="icon-plus fnCogerCita"></i>')
 								.find('.lbl').remove()
-								
-
-								
-								main.edit(idCita , idCelda )
+																
+								main.edit(idCita , idCelda)
 								
 							} else {
 								
@@ -1089,13 +1091,13 @@ main ={
 			var unidadTiempo = Math.ceil($this.attr('tiempo')/15), 
 				totalServicios = $this.find('.servicio').length + 1
 				//if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
-			if(unidadTiempo <= totalServicios)
+			if(unidadTiempo < totalServicios)
 				if ($this.hasClass('initial')){
 					$this
 						.removeClass('initial') 
 						.find('.nombre').hide({duration:500}).end()
 						.find('.icon-angle-up')
-							.removeClass('icon-angle-up')
+							.removeClass('icon-angle-up parpadear')
 							.addClass('icon-angle-down')
 						.end()
 						.removeClassPrefix('row_', {duration:500})
@@ -1109,7 +1111,7 @@ main ={
 						.find('.nombre').show({duration:500}).end()
 						.find('.icon-angle-down')
 							.removeClass('icon-angle-down')
-							.addClass('icon-angle-up')
+							.addClass('icon-angle-up parpadear')
 						.end()
 						.removeClassPrefix('row_', {duration:500})
 						.addClass('initial row_'+totalServicios, {duration:500}) 	
@@ -2694,7 +2696,7 @@ notas = {
 		$.post(INDEX, data, function (r, textStatus, jqXHR) {
 
 			if(r.success){
-				$('#menu5').addClass('c3')
+				$('#menu5').addClass('c4')
 				for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
 	
 					notas.crear.linea(datos[i])							
@@ -2783,12 +2785,12 @@ historial = {
 		}
 	}
  }
- $(function(){
+$(function(){
 	 cargarDatepicker()
 	 colorearMenuDiasSemana()
 	 
 	 main.inactivas.change(localStorage.getItem("showRows"))
-	 main.lbl.widht = $('.celda:visible').first().width() - 4
+	 main.lbl.widht = $('.celda:visible').first().width() - 2 
 	 
 	 main.lbl.load()
 	 
@@ -3048,5 +3050,5 @@ historial = {
 		 .on('click', '#agenda_horario',function(){horario.mostrar($(this).attr('value'))})
 
 		 
-		notas.sync(Fecha.general)
+	notas.sync(Fecha.general)
  })
