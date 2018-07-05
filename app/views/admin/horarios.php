@@ -54,8 +54,8 @@
 				<span class="caption">Hora fin</span>
 				<input class="idHoraFin" type="time" value="<?= $horario['hora_fin']?>" step="900" >
 			</div>
-		</div>			
+		</div>
 		<?php
 	}?>		
 </form>
-
+<script>$.getScript("/js/horarios.js")</script>

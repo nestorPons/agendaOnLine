@@ -34,3 +34,5 @@
 </form>
 <br>
 <a href="mailto:<?= ADMIN_EMAIL?>">Solicita otra agenda al administrador</a>
+
+<script>$.getScript("/js/agendas.js")</script>

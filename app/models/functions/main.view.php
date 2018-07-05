@@ -64,7 +64,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 								foreach($agendas as $k => $agenda){
 									if ($k>=CONFIG['totalAgendas']) break; 
 									$a = $agenda[0];
-
+									
 									$label = $lbl->html[$h][$a] ?? "<i class='icon-plus fnCogerCita'></i>" ;
 
 									$estadoCelda = (isset($array_horas[$a]) && in_array($str_hora,$array_horas[$a]))? 'dentro_horario':'fueras_horario';

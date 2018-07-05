@@ -23,3 +23,4 @@
 		</table>
 	</div>
 </div>
+<script>$.getScript("/js/servicios.js")</script>

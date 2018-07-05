@@ -367,6 +367,7 @@ var dialog = {
 	isOpen : null, 
 	open:function(objName,fnOk,fnCancel,callback){
 		dialog.isOpen = objName
+
 		var $this = dialog.section.find('#'+objName), 
 			loads = dialog.loads,
 			_open = function($this){
@@ -410,8 +411,6 @@ var dialog = {
 		typeof callback == "function" && callback();
 	 },
 	create: function (objName,fnOk,fnCancel,callback){
-
-		var section = $('#dialogs')
 			
 			var data = {
 				controller : 'dialogs' , 
@@ -419,13 +418,13 @@ var dialog = {
 			}
 
 			 $.post(INDEX,data,function(html){
-				var $this
-				section
+
+				$('#dialogs')
 					.append(html)
 					.promise()
 					.done(function(){
 					
-					$this = section.find('#'+objName)
+					var $this = $('#dialogs').find('#'+objName)
 
 						$this.draggable({		
 							disabled : false, 
@@ -442,21 +441,21 @@ var dialog = {
 
 							})
 							
+					$this.on('click','.fnClose',function(){
+						dialog.close(objName)
+					})
+					$this.on('click','.btn-danger',function(e){
+						typeof fnCancel == "function"?fnCancel():dialog.close(objName)
+					})
+					$this.on('click','.btn-success',function(e){
+						typeof fnOk == "function" && fnOk()
+					})
+			
+	
+					typeof callback == "function" && callback(true)
 				})
 				
 
-				$this.on('click','.fnClose',function(){
-					dialog.close(objName)
-				})
-				$this.on('click','.btn-danger',function(e){
-					typeof fnCancel == "function"?fnCancel():dialog.close(objName)
-				})
-				$this.on('click','.btn-success',function(e){
-					typeof fnOk == "function" && fnOk()
-				})
-		
-
-				typeof callback == "function" && callback(true)
 
 			 },'html')
 

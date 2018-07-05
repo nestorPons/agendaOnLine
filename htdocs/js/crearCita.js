@@ -5,7 +5,7 @@ crearCita ={
 
 		if (!$.isEmpty(clase)){
 			var clase_id = clase.replace(/\D/g,'');
-			servicios.mostrar(clase_id) ;
+			crearCita.servicios.mostrar(clase_id) ;
 		}
 		cargarDatepicker()	
 		crearCita.load()
@@ -25,7 +25,36 @@ crearCita ={
 				.find('tr').hide()
 				.find('.descripcion:contains("'+val+'")').parents('tr').show()
 			}
-		}
+		},
+		mostrar: function(id_familia, no_validate) {
+			var id = id_familia, no_validate = no_validate || false
+			
+			if (no_validate && $('#servicios .fam'+ id).is(':visible') || $('#crearCita .fam'+ id).is(':visible')  ) return false ;
+	
+			var id = $.isEmpty(id)?0:id;
+	
+			$('.contenedorServicios').each(function(){
+				var $this = $(this)
+				$this.find('tbody tr').hide(function() {
+					$this.find('.fam'+id).show()		
+				})
+			})
+	
+			$('.menuServicios').each(function(){
+				$(this)
+					.find('.c3').removeClass('c3').end()
+					.find('#'+id).addClass('c3');
+			})
+		},
+		init : function () {
+
+			var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
+			if (!$.isEmpty( clase )){
+				clase_id = clase.replace(/\D/g,'')
+				crearCita.servicios.mostrar(clase_id) ;
+			 }
+			
+			},
 	 },
 	idUser : function () {
 		var cli = $('#crearCita #cliente').val();
@@ -55,7 +84,7 @@ crearCita ={
 			strServ = strServ.slice(0,-2)		
 			data = {
 				fecha : Fecha.general , 
-				hora : sec.find('.horas:checked').val(), 
+				hora : crearCita.data.hora, 
 				agenda : crearCita.data.agenda,
 				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
@@ -224,8 +253,8 @@ crearCita ={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-		crearCita.data.hora = '';
-		crearCita.data.agenda = 0 
+		crearCita.data.hora = 'undefined';
+		crearCita.data.agenda = 'undefined' 
 		dialog.close('dlgGuardar');
 	 },
 	stepper: function(index){
@@ -242,7 +271,7 @@ crearCita ={
 				crearCita.data.nombre =  $('#crearCita #cliente').val() 
 				$('.tblHoras').show()
 					
-				_slider(servicios.init) 
+				_slider(crearCita.servicios.init) 
 
 			} else if(index==2&&crearCita.validate.service()){
 				$('#btnSearch').hide()
@@ -272,7 +301,7 @@ crearCita ={
 		form : function (){
 			return $('#crearCita [name="servicios[]"]:checked').length!==0
 				&&$('#crearCita #cliente').val()!==""
-				&&$('#crearCita [name="hora[]"]:checked').length!==0;
+				&&crearCita.data.hora!='undefined';
 		 },
 		name : function () {
 			var $this =  $('#crearCita #cliente');	
@@ -320,21 +349,24 @@ crearCita ={
 			}
 		 }
 	 },
-
  }
- $('#crearCita')
- .on('click','a',function(){servicios.mostrar($(this).attr('id'))})
- .on('click','.idServicios',function(){
-     let id = $(this).data('familia')
-     $('#crearCita .menuServicios').each(function(){
-         $(this)
-             .find('.c3').removeClass('c3').end()
-             .find('#'+id).addClass('c3')
-     })
-  })
- .on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
- .on('click','.horas',crearCita.dialog)
- .on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
- .on('blur','#cliente',crearCita.validate.name)
- .on("swipeleft",'.tablas')
- .on('click','.cancelar',function(){mostrarCapa('main')})
+
+$('#crearCita')
+.on('click','a',function(){crearCita.servicios.mostrar($(this).attr('id'))})
+.on('click','.idServicios',function(){
+	let id = $(this).data('familia')
+	$('#crearCita .menuServicios').each(function(){
+		$(this)
+			.find('.c3').removeClass('c3').end()
+			.find('#'+id).addClass('c3')
+	})
+	})
+	.on('click', '.horas', function(){
+	crearCita.data.hora = $(this).val()
+	})
+.on('change','.lstServicios ',function(){crearCita.servicios.mostrar($(this).val())})
+.on('click','.horas',crearCita.dialog)
+.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
+.on('blur','#cliente',crearCita.validate.name)
+.on("swipeleft",'.tablas')
+.on('click','.cancelar',function(){mostrarCapa('main')})

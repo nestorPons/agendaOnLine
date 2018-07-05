@@ -1,6 +1,6 @@
  <div id='idCita_<?=$val['idCita']?>' idcita=<?=$val['idCita']?> 
     lastMod="<?=$val['lastMod']?>"  
-    class='lbl row_<?=$rows?> <?php if($noMovile){echo('width_'.CONFIG['totalAgendas']);}?>' 
+    class='lbl row_<?=$rows?> <?= $color?> <?php if($noMovile){echo('width_'.CONFIG['totalAgendas']);}?>' 
     tiempo="<?=$val['tiempoTotal']?>">
     <div id ='<?=$val['idUsuario']?>' class='nombre'>
         <span class ='icon-user-1'></span> 

@@ -26,3 +26,4 @@
 		?>	
 	</tbody>
 </table>
+<script>$.getScript("/js/familias.js")</script>

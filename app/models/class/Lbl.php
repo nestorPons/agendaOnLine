@@ -104,11 +104,23 @@ class Lbl {
         
     }
     private function print ($data) {
-
+        
+        usort($data, function($a ,$b){
+            return (strtotime($a['fecha']) - strtotime($b['fecha']))
+            -(strtotime($a['hora']) - strtotime($b['hora']))
+            -($a['agenda']) - ($b['agenda']);  
+        });
+        
         foreach ($data as $val){
 
             $a = $val['agenda'];
-
+            $c[$a] = (!isset($c[$a])
+                ?(($a%2==0)?'color1':'color2')
+                :  $c[$a]=='color1')
+                    ?'color2'
+                    :'color1';
+            
+            
             $id_time = strtotime( $val['fecha'] . " " . $val['hora'] );
 
             $rows = ceil($val['tiempoTotal'] / 15) ;
@@ -119,6 +131,7 @@ class Lbl {
             $number_services = $this->number_services;
             $note = $this->printNote($val['obs']) ;
             $noMovile = !$this->device->isMovile; 
+            $color = $c[$a]; 
 
             ob_start();
             require $this->dir_container ; 

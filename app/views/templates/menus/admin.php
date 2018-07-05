@@ -36,8 +36,6 @@
 </div>
 
 <nav  id= "navbar" class="app-bar" data-role="appbar" >
-	<img id= "btnContacto" src="/img/logo.png" class="app-bar-element branding">
-	<span class="app-bar-divider"></span>
 	
 	<ul class="app-bar-menu">
 			<li>
@@ -102,14 +100,19 @@
 
 			
 	</ul>
-<!--menu herramientas-->
-		<span class="app-bar-divider"></span>
-	<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
+	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
 			<a href="/<?=CODE_EMPRESA?>/logout">
-				<span id="mnuUserSalirSession" class="icon icon-logout"></span>
-			</a>
-		</li>
+			<span id="mnuUserSalirSession" class="icon icon-logout"></span>
+		</a>
+	</li>
+	<li id= "btnContacto" class="app-bar-element no-flexible place-right">
+		<i  class=" icon-mail"></i>
+	</li>
+</ul>
+<!--menu herramientas-->
+
+		<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
 		 <div id="btnSearch" class="app-bar-element no-flexible place-right disabled ">
 			<span  class="icon icon-search"></span>
 			<span  class="menulbl">Buscar</span>

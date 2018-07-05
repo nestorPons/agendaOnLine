@@ -53,3 +53,4 @@
 		</tbody>
 	</table>
 </div> 
+<script>$.getScript("/js/usuarios.js")</script>
