@@ -23,3 +23,4 @@
 	?>
 	</tbody>
 </table>
+<script>$.getScript("/js/festivos.js")</script>

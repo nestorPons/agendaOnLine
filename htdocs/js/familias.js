@@ -200,3 +200,10 @@ var familias = {
  .on('click','table .icon-edit',function(){
      familias.dialog($(this).attr('value'));
  })
+
+ $('#familias input[name*="mostrar"]')
+ .change(function(){
+	 var mostrar = ($(this).is(':checked'))?1:0;
+	 var id = $(this).attr('id');
+	 familias.chckGuardar(id, mostrar);
+ });

@@ -21,19 +21,17 @@ function sincronizar( dias, date , callback ){
 	Fecha.id = Fecha.number(Fecha.general)
 
 	//slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
-
-	main.sincronizar(dias)
-	notas.sync(Fecha.general)
-
-
-	if ($('#crearCita').find('div').length )
-		crearCita.horas.sincronizar()
-
-	colorearMenuDiasSemana();
 	
+	colorearMenuDiasSemana();
 
+	//Sincronizamos el panel principal
+	main.sincronizar(dias)
+	//Sincronizamos las notas
+	notas.sync(Fecha.general)
+	//Sincronizamos crearCita
+	if(typeof crearCita.horas!='undefined') crearCita.horas.sincronizar()
 	//Sincronizamos historial
-	historial.sinc()
+	if(typeof historial!='undefined') historial.sinc()
 
 	var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 	$.each(datepicker, function( index , me ){
@@ -56,13 +54,9 @@ function mostrarCapa(capa, callback){
 
 	if($('#'+capa).is(':empty') ){
 		$.post(INDEX,data,function(html){
-AKI:: 
+ 
 			$('#'+capa).html(html).promise().done(__INIT__);
 			function __INIT__ (){
-				capa=='crearCita' && crearCita.init()
-				capa=='servicios' && servicios.init()
-				capa=='usuarios' && usuarios.init()
-				capa=='estilos' && estilos.init()
 				capa=='notas' && notas.init()
 			}
 
@@ -662,7 +656,7 @@ main ={
 			var html_icono_desplegar = (data.servicios.length <= data.tiempoServicios) 
 				? "<span class ='icon-angle-down fnExtend' ></span>"
 				:""
-
+			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
 			var html = "\
 				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+main.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
 					<div id ='"+data.idUsuario+"' class='nombre'> \
@@ -678,7 +672,10 @@ main ={
 						<span class ='fnMove icon-move '></span>  \
 					</div> \
 					<div class='servicios "+main.unidadTiempo(data.tiempoServicios)+"'>"+htmlSer+"</div> \
-					<div class='note '>"+data.nota+"</div> \
+					<div class='note "+ claseNotas + "'> \
+						<span class='icon-note'></span> \
+						<span class='text_note'>"+data.nota+"</span> \
+					</div> \
 				</div> \
 			"
 
@@ -845,9 +842,10 @@ main ={
 
 			},	
 		resize : function($this){
+			var tamanyoNota = Math.ceil($this.find('.text_note').height()/$('.celda:visible').first().height())
 
 			var unidadTiempo = Math.ceil($this.attr('tiempo')/15), 
-				totalServicios = $this.find('.servicio').length + 1
+				totalServicios = $this.find('.servicio').length + tamanyoNota + 1
 				//if ($this.hasClass('row_2')&&$this.find('.codigo').length==1) return false
 			if(unidadTiempo < totalServicios)
 				if ($this.hasClass('initial')){
@@ -880,7 +878,7 @@ main ={
 				}
 			}
 		 }
-	 },
+},
 menu = {
 	status: function (capa){
 		var add = $('#btnAdd'),
@@ -1075,224 +1073,7 @@ menu = {
 
 		servicios.init();	
 	 },
- },
- 
-config ={
-	change : false,
-	controller : 'config' ,
-	set: {
-		nameAgenda : function(id, name){
-			$('#nameAgendaConfig' + id).val(name);
-		}
-	 }, 
-	pass: 	function (){ 
-		var $frm = $('#dlgCambiarPass'),
-			newPass = $frm.find('#pass').val(),
-			repeatPass = $frm.find('#repeatPass').val(),
-			oldPass =  $frm.find('#oldPass').val()
-
-		if(repeatPass==newPass && !$.isEmpty(oldPass)){
-			var data = {
-				oldPass : SHA(oldPass),
-				newPass: SHA(newPass) ,
-				controller: config.controller, 
-				action: SAVE
-				}
-			$.post(INDEX,data,function(r){
-				if(r.success){
-					notify.success('Contraseña cambiada' , 'Guardada') 
-					dialog.reset()
-					dialog.close('dlgCambiarPass')				
-				}else{
-					notify.error( r.err ) 
-					btn.load.hide()
-				}
-			},'json')
-			.fail(function( jqXHR, textStatus, errorThrown ){
-				alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
-			})
-		}else{
-			btn.load.status=false;
-			notify.error('Algun dato no esta correcto, /n verifique el formulario.') ;
-		}
-		},
-	guardar: function (callback){
-
-		var data = new FormData($("#config form")[0]) 
-
-		data.append("controller", config.controller )
-		data.append("action", true )
-
-		$.ajax({
-			url: INDEX,
-			type: "POST",
-			data: data,
-			contentType: false,
-			processData: false
-		})
-		.done(function(r){
-			if (r.success){
-				notify.success('Guardado con éxito.')
-				var n = ($('#showInactivas').is(":checked"))?1:0
-				main.inactivas.change(n)
-				
-				$("#config #respuestaLogo").html("<img src="+r+"/logo.png></img>") 
-			} else {	
-				notify.error('No se ha podido guardar los datos')	
-			}
-	 		typeof callback == "function" && callback()
-		})
-		.fail(function( jqXHR, textStatus, errorThrown ){
-			alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
-	 		typeof callback == "function" && callback()
-		})
-
-		config.change = false
-		},
-
-  },
-general = {
-	guardar: function (callback){
-
-		if (general.validar()){
-			var  data = $('#general form').serializeArray()
-			data.push({name : 'controller' , value : 'general'})
-			data.push({name : 'action' , value : SAVE})
-
-			$.post(INDEX, data , function(r) {
-				if (r.success){
-					notify.success( 'Configuración guardada') 
-					typeof callback == "function" && callback()
-				} else {
-					_err(r.err)
-				}		
-			},'json')
-			.fail(function(r){console.log(r)})
-		} else _err()
-
-		function _err(input){
-			notify.error( 'No se pudo guardar los datos.<br> Compruebe todos los campos')
-			if(input) $('#general form').find('[name='+input+']').addClass('input-error')
-			typeof callback == "function" && callback()
-		 }
-	 },
-	validar: function () {
-		//AKI :: implementar validacion de formularios !!important
-		var r = true
-		$('#generalFrm input').each(function(){
-			let val = $(this).val() 
-			if (val=='') r = false
-		})
-		
-		return r
-	 }
- },
-festivo = {
-	dialog : function () {
-		dialog.open('dlgFestivos',festivo.guardar, festivo.eliminar)
-	 },
-	eliminar:	function ($this){
-		var self = this 
-		var id = $this.parent().parent().attr('id');
-		var f =  $this.parent().parent().find('[name="mes[]"]').text();
-
-		$('#festivos #'+id).fadeTo("slow", 0.30);
-		data = {
-			id : id ,
-			controller : 'festivos',
-			action : DEL
-		}
-		$.post(INDEX,data,function(){
-			$('#festivos #'+id).hide("explode")
-
-			var index = $.inArray(Fecha.md(f),FESTIVOS)
-			if (index>-1) FESTIVOS.splice(index,1)
-		},'json');
-	 },
-	guardar:	function (callback){
-		var nombre = $('#dlgFestivos #nombre').val() ,
-			fecha = $('#dlgFestivos #fecha').val() ,
-			fila = $('#tblFestivos tr:first').clone(),
-			data = {
-				nombre : nombre ,
-				fecha : fecha 	,			
-				controller : festivos ,
-				action : SAVE}
-
-		if ( $.isEmpty( nombre , fecha ) ){
-			notify.error('faltan rellenar los campos' , ' Error festivos') 
-			return false 
-		 }
-
-
-		if($.isEmpty(nombre)){
-			$('#nuevo [name="nombre[]"]').popover('show');
-		 }else{
-			if($.isEmpty(fecha)){
-				$('#nuevo #dpFestivos').popover('show');
-			 }else{
-				hideShow('#nuevo .icon-plus')
-				$('#nuevo .icon-load').css('display','inline-activa')
-				$.post(INDEX ,data,function(r){
-					$('#festivos')
-						.find('#tblFestivos').append('\
-						<tr id="'+r.id+'">\
-							<td><a name="eliminar[]"  class= "icon-cancel"></a></td>\
-							<td  class=""><span name="nombre[]">'+r.nombre+'</span></td>\
-							<td> <span  name="mes[]" >'+Fecha.print(r.fecha)+'</span></td>\
-						</tr>\
-					').end()
-					
-					hideShow('#nuevo .icon-plus','#nuevo .icon-load')
-					
-					FESTIVOS.push(Fecha.md(r.fecha)) ;
-
-					dialog.close() 
-
-				},'json').fail(function(rsp){"ERROR=>"+echo(rsp);})
-			 }
-		 }
-	 },
- },
-
-
-estilos = {
-	border : false , 
-	init : function () {
-		this.border = $('#sldBorderRadius').data('position') ;
-	 },
-	test : function ( value ) {
-		this.border = value ;
-		$('#btnTest').css('border-radius' , value)
-	 },
-	save : function () {
-		var data = {
-			color1 : $('#btnColor1').val() ,
-			color2 : $('#btnColor2').val() ,
-			border : this.border , 
-			text1 : $('#btnText1').val() , 
-			text2 : $('#btnText2').val() , 
-			controller : 'estilos' , 
-			action : SAVE
-		}
-		$.post(INDEX,data,function(r){ 
-			if (r.success) location.reload() 
-		},JSON)
-	 }, 
-	_getTheColor : function  (colorVal) {
-		var theColor = "";
-		if ( colorVal < 50 ) {
-					myRed = 255;
-					myGreen = parseInt( ( ( colorVal * 2 ) * 255 ) / 100 );
-			}
-		else 	{
-					myRed = parseInt( ( ( 100 - colorVal ) * 2 ) * 255 / 100 );
-					myGreen = 255;
-			}
-		theColor = "rgb(" + myRed + "," + myGreen + ",0)"; 
-		return( theColor ); 
-	}
- }, 
+},
 notas = {
 	nombreDlg : 'dlgNotas',
 	dir : 'right',
@@ -1428,65 +1209,7 @@ notas = {
 				.end().appendTo('#notas tbody')
 		 },
 	 }, 
- },
-historial = {
-	sinc: function(){
-		if(!$('#historial table').length) return false
-		historial.get()
-	}, 
-	get : function(days=1){
-		let data = {
-			controller :'history', 
-			days : days
-		}
-
-		$.post(INDEX, data,	function (html) {
-			$('#history').html(html)
-		},'html')
-	},
-	crear: {
-		linea: function(d){
-
-			//Si existe que no haga nada en historia no se editan los datos solo se crean 
-			$obj = $('#history table tbody')
-			if($obj.find('#historia_'+d.id).length) return false
-			
-			switch(parseInt(d.accion)){
-				case 1: 
-					ico = 'plus'; 
-					accion = "Nueva cita";
-				break
-				case 2: 
-					ico = 'trash-empty';
-					accion = "Cita eliminada";
-				break
-				case 3: 
-					ico = 'edit';
-					accion = "Cita modificada";
-				break
-				case 4: 
-					ico = 'logout';
-					accion = "Salida usuario";
-				break
-				case 5: 
-					ico = 'login';    
-					accion = "Entrada usuario";
-				break
-			}
-
-			 
-			
-			$obj.find('.template').clone()
-				.find('.id').text(d.id).end()
-				.find('.fecha').text(d.fecha).end()
-				.find('.icono i').addClass('icon'+ico)
-				.find('.idUsuario').text(d.idUsuario).end()
-				.find('.accion').text(d.accion).end()
-				.find('.estado').text(d.estado).end()
-			
-		}
-	}
- }
+}
 $(function(){
 	 cargarDatepicker()
 	 colorearMenuDiasSemana()
@@ -1552,20 +1275,6 @@ $(function(){
 			}
 		});
 
-	$('#config')
-		.on('change','input',function(){
-			config.change = true;
-		})
-
-
-
-	$('#general')
-		.on('click','#btnCambiarPass',function(){
-			dialog.open('dlgCambiarPass',config.pass,null,function(){
-				dialog.open('dlgCambiarPass')
-			})
-		})
-
 	$('#main')
 		.on('click','.lbl',function(e){
 			main.z_index =(main.z_index<=2)?3:2; 
@@ -1573,8 +1282,9 @@ $(function(){
 			main.lbl.resize($(this))
 		 })
 		.on('click','.fnCogerCita',function(){
-			crearCita.data.agenda = $(this).parent().attr('agenda')
-			crearCita.data.hora = $(this).parents('tr').data('hour')
+			localStorage.setItem('agenda', $(this).parent().attr('agenda'))
+			localStorage.setItem('hora', $(this).parents('tr').data('hour'))
+
 			mostrarCapa('crearCita')
 		})
 		.on('click','#mainLstDiasSemana a',function(){
@@ -1670,25 +1380,9 @@ $(function(){
 			$('.app-bar-pullmenu ').hide('blind');
 		 })
 
-
-
-	$("#festivos")
-		.on('click',"[name='eliminar[]']",function(){festivo.eliminar($(this))})
-
-	
-
-
-		$('#familias input[name*="mostrar"]')
-			.change(function(){
-				var mostrar = ($(this).is(':checked'))?1:0;
-				var id = $(this).attr('id');
-				familias.chckGuardar(id, mostrar);
-			});
-
-
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 
 	notas.sync(Fecha.general)
 	main.lbl.load()
- })
+})

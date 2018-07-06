@@ -46,3 +46,4 @@
         </div>
     </div>
 </div>
+<script>$.getScript("/js/estilos.js")</script>

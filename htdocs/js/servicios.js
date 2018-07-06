@@ -252,3 +252,4 @@ var servicios = {
  .on( "click", "[name*='editar']", function(e){servicios.dialog($(this).attr('value'))})
  .find('option:first-child').attr('selected','selected')
  
+ servicios.init()

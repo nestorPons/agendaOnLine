@@ -43,3 +43,4 @@
 <p class="submit">
 	<button type="button" class="btn-primary" id="btnCambiarPass" data-value="Contraseña">Contraseña</button>
 </p>
+<script>$.getScript("/js/general.js")</script>

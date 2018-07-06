@@ -294,3 +294,5 @@ $("#usuarios")
 		mostrarCapa('main')
 		sincronizar(null, $(this).parent().parent().data('fecha'))
 	})
+
+	usuarios.init()

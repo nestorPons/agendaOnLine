@@ -1,4 +1,5 @@
-crearCita ={
+'strict'
+var crearCita ={
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
@@ -7,6 +8,14 @@ crearCita ={
 			var clase_id = clase.replace(/\D/g,'');
 			crearCita.servicios.mostrar(clase_id) ;
 		}
+
+		if(localStorage.getItem('hora')){
+			crearCita.data.hora = localStorage.getItem('hora')
+			crearCita.data.agenda = localStorage.getItem('agenda')
+			localStorage.removeItem('hora')
+			localStorage.removeItem('agenda') 
+		}
+
 		cargarDatepicker()	
 		crearCita.load()
 	 },
@@ -88,7 +97,7 @@ crearCita ={
 				agenda : crearCita.data.agenda,
 				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
-				nota : sec.find('#crearCitaNota').val(),
+				nota : crearCita.data.nota,
 				tiempoServicios : parseInt(sec.find('#tSer').text()) 
 			}
 			$.extend(crearCita.data, data)
@@ -117,6 +126,7 @@ crearCita ={
 						self.data.idCita = rsp.idCita
 						self.data.idUsuario = rsp.idUser
 						self.data.servicios = rsp.services
+						self.data.nota = crearCita.data.nota
 						main.lbl.create(self.data)
 
 						mostrarCapa('main' , true )			
@@ -266,9 +276,11 @@ crearCita ={
 				_slider()
 				
 			}else if(index==1 &&crearCita.validate.name()){
+				let $crearCita = $('#crearCita')
 				$('#btnSearch').show()
-				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
-				crearCita.data.nombre =  $('#crearCita #cliente').val() 
+				crearCita.data.agenda = $crearCita.find('input[name="agenda[]"]:checked').val()
+				crearCita.data.nombre =  $crearCita.find('#cliente').val()
+				crearCita.data.nota = $crearCita.find('#crearCitaNota').val() 
 				$('.tblHoras').show()
 					
 				_slider(crearCita.servicios.init) 
@@ -370,3 +382,5 @@ $('#crearCita')
 .on('blur','#cliente',crearCita.validate.name)
 .on("swipeleft",'.tablas')
 .on('click','.cancelar',function(){mostrarCapa('main')})
+
+crearCita.init()
