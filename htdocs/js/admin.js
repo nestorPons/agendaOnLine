@@ -8,6 +8,7 @@ function menuEsMovil(tab){
 	return true
  }
 function sincronizar( dias, date , callback ){
+	if(!main.cargado) return false
 	var fecha = date||Fecha.general ,
 		datepicker = $('.datepicker')
 
@@ -91,9 +92,9 @@ function sliderConfigBorder ( value, slider ) {
  }	
 var 
 main ={	
-	xhr : new Object(), 
 	section : $("#main") , 
 	body : $('#main .cuerpo') ,
+	cargado : true, 
 	z_index : 2 ,
 	data : new Object(), 
 	arrSer : new Array(), 
@@ -138,12 +139,16 @@ main ={
 	 }, 
 	sincronizar: function (dir,callback){
 		
+		main.cargado =false 
 		var section = main.section , body = main.body
 
-		if (!section.find('#'+Fecha.id).length)
-			main.crearDias(callback)
-		else
+		if (!section.find('#'+Fecha.id).length){
+			main.crearDias(function(){main.cargado=true})
+
+		} else { 
 			main.check()
+			main.cargado=true
+		}
 
 		//no lo meto en fin de carga para avanzar mas rapido
 		if (Fecha.id != section.find('.dia.activa').attr('id')) {
@@ -244,9 +249,8 @@ main ={
 		$.each(dias,function(){
 			ids.push($(this).attr('id'));
 		})
-		if(crearCita.xhr && crearCita.xhr.readyState != 4) xhr.abort()
         
-		crearCita.xhr = $.ajax({
+		$.ajax({
 			type:"POST",
 			url: INDEX ,
 			dataType: 'html',
@@ -614,6 +618,7 @@ main ={
 		idLastcelda : 0 ,
 		obj : new Object, 
 		load: function(){
+			main.lbl.draggable()
 			main.lbl.droppable()
 		 }, 
 		create: function(data){
@@ -768,37 +773,36 @@ main ={
 			typeof callback == "function" && callback();
 		 },
 		draggable : function($this){
-				$('.lbl').each(function(){
-					var dia = $(this).parents('.dia')
-					var limit = dia.attr('id')
-					var c = dia.find('#05201709111200')
-					var posi = c.position()
-									
-					$(this).draggable( {
-						//containment: "#"+limit , 
-						disabled : false, 
-						opacity : 0.50 , 
-						zIndex: 100 ,
-						revert: function(ob){
-							if (ob == false){
-								$('.ui-draggable-dragging').remove()
-								$('#'+main.lbl.idLastCelda)
-									.html(main.lbl.clone)
-								main.lbl.draggable()
-								return true
-							}
-						 }, 
-						revertDuration: 500,
-						handle :$(this).find('.fnMove'), 
-						stop : function(e, ui){
-						 },
-						start : function ( e, ui) {
-							main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
-							main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
-						 },
-					}) 
-				})
-			},
+			$('.lbl').each(function(){
+				var dia = $(this).parents('.dia')
+				var limit = dia.attr('id')
+				var c = dia.find('#05201709111200')
+				var posi = c.position()
+			
+				$(this).draggable( {
+					disabled : false, 
+					opacity : 0.50 , 
+					zIndex: 100 ,
+					revert: function(ob){
+						if (ob == false){
+							$('.ui-draggable-dragging').remove()
+							$('#'+main.lbl.idLastCelda)
+								.html(main.lbl.clone)
+							main.lbl.draggable()
+							return true
+						}
+					 }, 
+					revertDuration: 500,
+					handle :$(this).find('.fnMove'), 
+					stop : function(e, ui){
+					 },
+					start : function ( e, ui) {
+						main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
+						main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
+					 },
+				}) 
+			})
+		},
 		droppable : function () {
 			$( ".celda" ).droppable({
 					accept : ".lbl",
@@ -839,7 +843,6 @@ main ={
 							main.lbl.clone = null
 					},				
 				})
-
 			},	
 		resize : function($this){
 			var tamanyoNota = Math.ceil($this.find('.text_note').height()/$('.celda:visible').first().height())

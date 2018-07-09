@@ -714,6 +714,11 @@ a,i , .a{
 	&-grey{background-color:@grey-bg !important}
 	&-white{background-color:#fff;}
  }
+ .color_lbl(@color){
+		background-color: @color !important;
+		color: @text-color !important;
+		border-color: @grey !important;
+ }
 .color{
 	&0{
 		color: @grey;
@@ -723,21 +728,11 @@ a,i , .a{
 			background-color: @grey;
 		}
 	}
-	&1{
-		background-color: @b1;
-		color: @text-color ;
-		border-color: @grey !important;
-		input[type="text"]{
-			//color: @text1;
-		}
+	&1 *{
+		.color_lbl(@b1); 
 	}
-	&2{
-		background-color: @b2 ;
-		color: @text-color ;
-		border-color: @grey !important;
-		input[type="text"]{
-			//color: @text2;
-		}
+	&2 *{ 
+		.color_lbl(@b1);
 	}
 	&3{
 		background-color: tint(@blue,90%);

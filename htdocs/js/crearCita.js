@@ -9,13 +9,6 @@ var crearCita ={
 			crearCita.servicios.mostrar(clase_id) ;
 		}
 
-		if(localStorage.getItem('hora')){
-			crearCita.data.hora = localStorage.getItem('hora')
-			crearCita.data.agenda = localStorage.getItem('agenda')
-			localStorage.removeItem('hora')
-			localStorage.removeItem('agenda') 
-		}
-
 		cargarDatepicker()	
 		crearCita.load()
 	 },
@@ -128,7 +121,8 @@ var crearCita ={
 						self.data.servicios = rsp.services
 						self.data.nota = crearCita.data.nota
 						main.lbl.create(self.data)
-
+						
+						crearCita.reset()
 						mostrarCapa('main' , true )			
 					}
 				} else {
@@ -148,10 +142,14 @@ var crearCita ={
 
 	 },
 	load: function(){
+				
 		$('#btnSearch').hide()
-		if(crearCita.data.agenda){
+		if(localStorage.getItem('agenda')){
 			$sec = $('#crearCita')
-			$sec.find('#agenda'+crearCita.data.agenda).prop('checked', true)
+			$sec.find('#agenda'+localStorage.getItem('agenda')).prop('checked', true)
+			crearCita.data.hora = localStorage.getItem('hora')
+			localStorage.removeItem('hora')
+			localStorage.removeItem('agenda') 
 		}
 	 }, 
 	horas: {
@@ -221,11 +219,6 @@ var crearCita ={
 			}
 		 },
 		sincronizar: function(callback){
-
-			var context = $('#tablas')
-			var activa = context.find('.activa')
-			var activar = context.find('#'+ Fecha.id)
-
 			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },
@@ -263,8 +256,8 @@ var crearCita ={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-		crearCita.data.hora = 'undefined';
-		crearCita.data.agenda = 'undefined' 
+		crearCita.data.hora = null
+		crearCita.data.agenda = null 
 		dialog.close('dlgGuardar');
 	 },
 	stepper: function(index){
