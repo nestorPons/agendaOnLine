@@ -1,5 +1,4 @@
-<h1>Familias</h1>
-<table class="tablas">
+<table class="tablas colorear-filas">
 	<thead>
 		<tr>
 			<th>Editar</th>
@@ -26,4 +25,3 @@
 		?>	
 	</tbody>
 </table>
-<script>$.getScript("/js/familias.js")</script>

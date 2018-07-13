@@ -6,9 +6,10 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
+
 @radio_popover: 10px;
 @base: #fff ;
-@t1:spin(@color,-30); 
+@t1:mix(@color,@text-color, 50%); 
 @t2:spin(@color, 20);
  
 //saturados 
@@ -28,6 +29,9 @@
 @green: desaturate(#00FF00,lightness(@color));
 @blue :desaturate(#0000FF,lightness(@color));
 @yellow :desaturate(#FFFF00,lightness(@color));
+@cian: desaturate(#00FFFF,lightness(@color));
+@pink: desaturate(#FF00FF,lightness(@color));
+@purple: desaturate(#8000FF,lightness(@color));
 
 @grey:#8a8a7b;
 @grey-bg:mix(@grey,#fff,50%);
@@ -93,9 +97,6 @@ hr{
     background-color: @color;
  }
 a,i , .a{
-	&:hover{
-		color:@auxiliar;
-	}
 	&.btn-danger{
 		.buttons(); 
 	}
@@ -195,7 +196,7 @@ a,i , .a{
 	#conTxtBuscar{
 		background-color: @color;
 	}
-	.color-menu();
+	.color-menu(5%);
 	.selected {
 
 		.caption {	
@@ -214,7 +215,7 @@ a,i , .a{
 			color: @base;
 			background-color: @color;
 		}
-		.color-sel;
+		.color-sel(5%);
 	}
 	&-drop-container{
 		border-color: @color !important;
@@ -232,7 +233,7 @@ a,i , .a{
 		}
 	}
 	&-pullmenubar{
-		.color-menu();
+		.color-menu(5%);
 
 	}
 		.app-bar-pullmenu {
@@ -242,7 +243,7 @@ a,i , .a{
 	}
 	.app-bar-pullbutton{
 		&:hover, &:active{
-			.color-sel;
+			.color-sel(5%);
 		}
 	}
 
@@ -375,6 +376,11 @@ a,i , .a{
 .invalid{
 	border-color: #ff0000 ;
  }
+.lstMenu{
+	a:hover{
+		color: @auxiliar;
+	}
+ }
 .load{
 	margin: 50px auto;
  }
@@ -484,15 +490,6 @@ a,i , .a{
 .tablas{
 	&.encabezado, .enca	bezado {
 		font-family: @title-font;
-	}
-	&-group {
-		.inputs(@width:auto;@padding: 0px;@margin:0px auto;@fontSize: 1em;@display: inline-block);
-	}
-	tr:nth-child(odd) td {
-		color:darken(@text2,15%);
-	}
-	tr:nth-child(even) td {
-		color:darken(@text1,15%);
 	}
  }
 .menu{
@@ -626,49 +623,7 @@ a,i , .a{
 				}
 			}
 		}
-		&.fuera_horario{
-			&.color1{
-				background: repeating-linear-gradient(135deg, @b1,@b1,@b1 5px,#fff 5px, #fff 10px);
-				color: @text1;
-				input[type="text"]{
-					color: @text1;
-				}
-			}
-			&.color2{
-				background: repeating-linear-gradient(
-					135deg,
-					@b2,
-					@b2 5px,
-					#fff 5px,
-					#fff 10px
-				);
-				color: @text2;
-				input[type="text"]{
-					color: @text2;
-				}
-			}
-			&.color-admin{
-				@col-bg:  tint(@red,90%) ;
-				@col-text: darken(@red,30%);
-				background: repeating-linear-gradient(
-					135deg,
-					@col-bg,
-					@col-bg 5px,
-					#fff 5px,
-					#fff 10px
-				);
-				color: @col-text;
-				input[type="text"]{
-					color: @col-text;
-				}
-			}
-		}
 	}	
-	.fuera_horario, .fueras_horario{
-		border-color: @base;
-		color: @base;
-		background-color: @grey-bg; 
-	}
  }
 
 #usuarios{
@@ -714,11 +669,6 @@ a,i , .a{
 	&-grey{background-color:@grey-bg !important}
 	&-white{background-color:#fff;}
  }
- .color_lbl(@color){
-		background-color: @color !important;
-		color: @text-color !important;
-		border-color: @grey !important;
- }
 .color{
 	&0{
 		color: @grey;
@@ -728,11 +678,20 @@ a,i , .a{
 			background-color: @grey;
 		}
 	}
-	&1 *{
-		.color_lbl(@b1); 
+	&1{
+	 
+			background-color: @b1 !important;
+			color: @text-color !important;
+			border-color: @grey !important;
+		
 	}
-	&2 *{ 
-		.color_lbl(@b1);
+	&2{
+
+			background-color: @b2 !important;
+			color: @text-color !important;
+			border-color: @grey !important;
+			
+		
 	}
 	&3{
 		background-color: tint(@blue,90%);
@@ -950,16 +909,17 @@ a,i , .a{
 		}
 	}
  }
-.color-menu(){
-	background-color: @color !important;
+.color-menu(@porcentaje){
+	@menu-color: darken(@color,@porcentaje);
+	background-color: @menu-color !important;
 	color: @base !important;
 	border-color:  @base !important;
 	li:not(.noHover), &-pullbutton, .app-bar-element{
 		&:active, &:hover{
 			background-color: @base;
 			*{
-				.color-sel;
-				.fg-white{.color-sel;}
+				.color-sel(@porcentaje);
+				.fg-white{.color-sel(@porcentaje);}
 				.tile-container{
 					color: @base !important;
 				}
@@ -968,14 +928,15 @@ a,i , .a{
 	}
  }
 
-.color-sel(){
+.color-sel(@porcentaje){
+	@menu-color: darken(@color,@porcentaje);
 	background-color: @base;
-	color: @color;
-	li a {color: @color;}
-		border-color: @color;
-		&:before {border-color: @color;}
+	color: @menu-color;
+	li a {color: @menu-color;}
+		border-color: @menu-color;
+		&:before {border-color: @menu-color;}
 	li:hover a{
-		background-color: @color;
+		background-color: @menu-color;
 		color: @base;
 	}
  }
@@ -1018,3 +979,54 @@ a,i , .a{
 #lstSerMain a { 
 	color: @text-color;
  }
+.sidenav{
+	background-color: darken(@color_secon, 70%);
+	color: @base;
+	a{
+		border-radius: @radius;
+	}
+	.d-menu{
+		color:@base;
+		background-color: darken(@color, 50%);
+	}
+
+	color-menu(@color){
+		@c : lighten(hsl(@color,70%,50%),10%);
+		color: @c;
+		&:hover{
+			:first-child{
+		//		color: saturate(@c,20%);
+			}
+		}
+
+	}
+	ul{
+		li:nth-child(1){
+			color-menu(@pink); 
+		}
+		li:nth-child(2){
+			color-menu(@base);  
+		}
+		li:nth-child(3){
+			color-menu(@blue);  
+		}
+		li:nth-child(4){
+			color-menu(@b2);  
+		}
+		li:nth-child(5){
+			color-menu(@red);  
+		}
+		li:nth-child(6){
+			color-menu(@text2);  
+		}
+		li:nth-child(7){
+			color-menu(@text1);  
+		}
+		li:nth-child(8){
+			color-menu(@purple);  
+		}
+	}
+}
+#boton-menu{
+	border-radius: @radius; 
+}

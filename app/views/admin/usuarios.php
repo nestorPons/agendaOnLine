@@ -3,7 +3,7 @@
 	<?php include URL_TEMPLATES . 'menus/abc.php'  ?>
 </div>	
 <div class="cuerpo">
-	<table class="tablas">					
+	<table class="tablas colorear-filas">					
 		<thead>
 			<tr>
 				<th class="tileOpc">Opcion</th>
@@ -30,6 +30,7 @@
 			$activa = '' ; 
 			$email_status= '';
 			$obs_status = '';
+			$status = 0;
 			$clase = 'template';
 			include (URL_TEMPLATES .'row.users.php');			
 			//****//
@@ -42,7 +43,8 @@
 				$admin = $user['admin'] ; 
 				$obs = $user['obs'] ; 
 				$activa = $user['status'] ; 
-				$color = $user['color'] ; 
+				$color = $user['color'] ;
+				$status = $user['status'] ; 
 				$email_status= empty($email)?"No":"Si";
 				$obs_status =empty($obs)?"No":"Si";
 				$clase = empty($user['dateBaja'])?'':'ocultar_baja';
@@ -53,4 +55,3 @@
 		</tbody>
 	</table>
 </div> 
-<script>$.getScript("/js/usuarios.js")</script>

@@ -67,7 +67,5 @@ var festivo = {
 	 },
  }
 
- $("#festivos")
+$("#festivos")
      .on('click',"[name='eliminar[]']",function(){festivo.eliminar($(this))})
-
- 

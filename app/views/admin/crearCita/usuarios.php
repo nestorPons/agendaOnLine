@@ -35,8 +35,8 @@
 	<textarea id="crearCitaNota" name='nota' class="txt" rows=1 placeholder='Nota para la cita'  data-autoresize ></textarea>
 	<span class="iconClass-inside icon-note"></span>
 </div>
-<div class="iconClass-container">
+
 	<button type="button" class="btn-success siguiente">Siguiente<i class="icon-angle-right"></i></button>
 	<button type="button" class="btn-danger cancelar">Cancelar</button>
-</div>
+
 <br>

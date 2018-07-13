@@ -172,7 +172,7 @@ var usuarios = {
 					var tel = $this.find("[name='tel']").text()
 					var obs = $this.find("[name='obs']").data("value")
 					var admin = $this.find("[name='admin']").data("value")
-					var baja = $this.hasClass('mostrar_baja')
+					var baja = ($this.hasClass('mostrar_baja')||$this.data('status')!=0)
 					var color = $this.data('color')
 					var sinColor = $this.data('color')?false:true
 
@@ -228,21 +228,15 @@ var usuarios = {
 		*/
 	 },
 	select: function (letra) {
-
+	//Coloreal filas de las tablas
 		var $sec = $('#usuarios')
 		$sec 
 			.find('a.c3').removeClass('c3').end()
 			.find('#menu'+letra).addClass('c3').end()
 			.find('tbody tr:visible').hide().end()
 			.find('.name[id^="'+letra.toLowerCase()+'"]').parent().show()
-	 },
-	buscar: function (txt){
-		var txt =  normalize(txt);
-		usuarios.select(txt.toUpperCase());
-		var txt = txt.replace(/\s/g, "");
-		txt = txt.toLowerCase();
-		$("#usuarios").find(".body").hide().end()
-	 },
+		colorear_filas($sec.find('.colorear-filas'))
+	},
 	validate : {
 		form : function(){
 			var value = $('#dlgUsuarios	#nombre').val()
@@ -288,11 +282,6 @@ $("#usuarios")
 		usuarios.select($(this).html());
 	})
 	.on('change','#lstABC',function(){usuarios.select($(this).val())})
-	.on('click','.icon-search',function(){
-		$('#popupHistorial').hide()
-		$('.popup-overlay').hide()
-		mostrarCapa('main')
-		sincronizar(null, $(this).parent().parent().data('fecha'))
-	})
 
-	usuarios.init()
+
+usuarios.init()

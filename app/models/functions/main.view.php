@@ -75,7 +75,6 @@ function view($fecha_inicio = null, $existen_array = false ){
 										<span class="hora alFondo <?= $clasehora ?> "><?= $str_hora?></span>
 										<?php			
 										echo $label;
-
 										?>
 									</td>
 									<?php

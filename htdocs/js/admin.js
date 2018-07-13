@@ -8,7 +8,6 @@ function menuEsMovil(tab){
 	return true
  }
 function sincronizar( dias, date , callback ){
-	if(!main.cargado) return false
 	var fecha = date||Fecha.general ,
 		datepicker = $('.datepicker')
 
@@ -30,9 +29,9 @@ function sincronizar( dias, date , callback ){
 	//Sincronizamos las notas
 	notas.sync(Fecha.general)
 	//Sincronizamos crearCita
-	if(typeof crearCita.horas!='undefined') crearCita.horas.sincronizar()
+	if(typeof crearCita.horas=='object') crearCita.horas.sincronizar()
 	//Sincronizamos historial
-	if(typeof historial!='undefined') historial.sinc()
+	if(typeof historial.sinc=='function') historial.sinc()
 
 	var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 	$.each(datepicker, function( index , me ){
@@ -45,21 +44,24 @@ function sincronizar( dias, date , callback ){
 
  }
 function mostrarCapa(capa, callback){
+
 	var data = { 
 		controller : capa ,  
 		fecha :  Fecha.sql ,
-	 }
-	if($('#'+capa).is(':visible')) return false;
+	 }, 
+	 $capa = $('#'+capa)
+	if($capa.is(':visible')) return false;
 	$('#chckOpUsersDel').prop( "checked", false ) ;
 	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
 
-	if($('#'+capa).is(':empty') ){
+	if($capa.is(':empty') ){
 		$.post(INDEX,data,function(html){
- 
+
 			$('#'+capa).html(html).promise().done(__INIT__);
 			function __INIT__ (){
 				capa=='notas' && notas.init()
 			}
+			$.getScript("/js/"+capa+".js")
 
 		},'html')
 	 } else {
@@ -67,26 +69,26 @@ function mostrarCapa(capa, callback){
 		capa=='crearCita' && crearCita.load()
 
 	 }
-
 	if($('#config').is(':visible')&&config.change) config.guardar();
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
 	if($('#crearCita').is(':visible')) crearCita.reset();
 
 	$('.capasPrincipales').hide()
-	$('#'+capa).fadeIn()
+	$capa.fadeIn()
 
 	menu.status(capa)
 
 	if(capa=='main') $('#'+Fecha.id).show()
-
+		
 	btn.load.reset()
 
 	$('html,body').animate({scrollTop:0}, 500)
-	$('#navbar')
-		.find('.selected').removeClass('selected').end()
-		.find('[data-capa="'+capa+'"]').addClass('selected')
+	
+	//Titulo de la seccion
+	$('#navbar').find('#tile_seccion').text($capa.data('nombre'))
+
 	typeof callback == "function" && callback()
-	}
+ }
 function sliderConfigBorder ( value, slider ) {
 	estilos.test( value ) 
  }	
@@ -94,13 +96,15 @@ var
 main ={	
 	section : $("#main") , 
 	body : $('#main .cuerpo') ,
-	cargado : true, 
 	z_index : 2 ,
 	data : new Object(), 
 	arrSer : new Array(), 
 	last : new Object(),
 	idsControl : new Object(),
-	idCita : -1, 
+	idCita : -1,
+	login: {
+		ancho : 0 
+	 }, 
 	set: {
 		nameAgenda : function(id, name){
 			$('#nombreagenda' + id).text(name);
@@ -139,16 +143,12 @@ main ={
 	 }, 
 	sincronizar: function (dir,callback){
 		
-		main.cargado =false 
 		var section = main.section , body = main.body
 
-		if (!section.find('#'+Fecha.id).length){
-			main.crearDias(function(){main.cargado=true})
-
-		} else { 
+		if (!section.find('#'+Fecha.id).length)
+			main.crearDias(callback)
+		else
 			main.check()
-			main.cargado=true
-		}
 
 		//no lo meto en fin de carga para avanzar mas rapido
 		if (Fecha.id != section.find('.dia.activa').attr('id')) {
@@ -161,12 +161,7 @@ main ={
 				section.find('#'+ Fecha.id).addClass('activa')
 				body.show("slide", { direction: ent }, 750)
 
-				//Si hay una cita fuera de horario que se muestren las celdas fuera de horario
-				if($('#'+Fecha.id).find('tr.disabled').find('.lbl').length) 
-					main.inactivas.change(true, false)
-				else
-					if(localStorage.getItem("showRows")==0) 
-						main.inactivas.change(false, false)
+				main.inactivas.comprobar()
 			})
 		} 	
 
@@ -249,6 +244,7 @@ main ={
 		$.each(dias,function(){
 			ids.push($(this).attr('id'));
 		})
+		
         
 		$.ajax({
 			type:"POST",
@@ -588,13 +584,12 @@ main ={
 	 }, 
 	inactivas:{ 
 		click :	function(){
-			var status = localStorage.getItem("showRows")==1?0:1
+			var status = localStorage.getItem("showRows")==1||$('.dia.activa').find('.fuera_horario').is(':visible')?0:1
 			main.inactivas.change(status)
 	
 		},
 		change :function (std, save = true){
-			if( std == 1 ){
-				
+			if( std == 1 ){			
 				$('#btnShow')
 					.find('.menulbl').html('Ocultar').end()
 					.find('.on').show().end()
@@ -609,8 +604,16 @@ main ={
 
 			}	
 			if(save) localStorage.setItem("showRows", std)		
+		}, 
+		comprobar : function(){
+			//Si hay una cita fuera de horario que se muestren las celdas fuera de horario
+			if($('#'+Fecha.id).find('tr').find('.fuera_horario').find('.lbl').length) 
+				main.inactivas.change(true, false)
+			else
+				if(localStorage.getItem("showRows")==0) 
+					main.inactivas.change(false, false)
 		}	
-		},
+	 },
 	lbl:{
 		widht :  '25' ,
 		height: new Array,
@@ -772,14 +775,15 @@ main ={
 			})
 			typeof callback == "function" && callback();
 		 },
-		draggable : function($this){
+		draggable : function(){
 			$('.lbl').each(function(){
 				var dia = $(this).parents('.dia')
 				var limit = dia.attr('id')
 				var c = dia.find('#05201709111200')
 				var posi = c.position()
-			
+								
 				$(this).draggable( {
+					//containment: "#"+limit , 
 					disabled : false, 
 					opacity : 0.50 , 
 					zIndex: 100 ,
@@ -791,18 +795,18 @@ main ={
 							main.lbl.draggable()
 							return true
 						}
-					 }, 
+						}, 
 					revertDuration: 500,
 					handle :$(this).find('.fnMove'), 
 					stop : function(e, ui){
-					 },
+						},
 					start : function ( e, ui) {
 						main.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
 						main.lbl.idLastCelda = $(this).parents('.celda').attr('id')
-					 },
+						},
 				}) 
 			})
-		},
+		 },
 		droppable : function () {
 			$( ".celda" ).droppable({
 					accept : ".lbl",
@@ -843,6 +847,7 @@ main ={
 							main.lbl.clone = null
 					},				
 				})
+
 			},	
 		resize : function($this){
 			var tamanyoNota = Math.ceil($this.find('.text_note').height()/$('.celda:visible').first().height())
@@ -883,6 +888,58 @@ main ={
 		 }
 },
 menu = {
+	nav: {
+		open: (estado=null)=>{
+			 
+			if(!$.isEmpty(estado)){
+				estado= estado>2?0:estado
+				localStorage.setItem("menuOpen",estado)
+
+			} else {
+		
+				if($.isEmpty(localStorage.getItem("menuOpen"))){
+			
+					localStorage.setItem("menuOpen",1)
+				}
+				
+				return parseInt(localStorage.getItem("menuOpen"))				
+			}
+			
+		 },
+		estado: (estado, callback)=>{
+			if(!estado){
+				estado = 1
+				menu.nav.open(1)
+			}
+			
+			switch (parseInt(estado)){
+				case 1: 				
+					$('#mySidenav').width(50)
+						.find('a').width(20).end()
+						.find('.caption').hide()							
+					$('#login')
+						.width((main.login.ancho - 25))
+						.animate({'left':25}, callback)
+				break
+				case 2: 
+					$('#mySidenav').width(150)
+						.find('a').width(120).end()
+						.find('.caption').show()
+
+					$('#login')
+						.width((main.login.ancho - '90'))
+						.animate({'left':90}, callback)
+			
+				break
+				default:
+					$('#mySidenav').width(0)
+					$('#login')
+						.removeAttr( 'style' )	
+					callback
+				
+			}
+		 }
+	 }, 
 	status: function (capa){
 		var add = $('#btnAdd'),
 			reset 	= $('#btnReset'),
@@ -906,16 +963,16 @@ menu = {
 				menu.enabled(search)
 				break;
 			case 'usuarios':
-				menu.enabled(add,search,options)
+				menu.enabled(add,search)
 				break;
 			case 'servicios':
-				 menu.enabled(add,search,options)
+				 menu.enabled(add,search)
 				 break;
 			case 'config':
 				menu.enabled(save)
 				 break;
 			case 'familias':
-				menu.enabled(add,options)
+				menu.enabled(add)
 				break;
 			case 'horarios':
 				menu.enabled(add,save,del)
@@ -936,7 +993,7 @@ menu = {
 				menu.enabled(add)
 				break
 			case 'history':
-				menu.enabled(options)
+				menu.enabled()
 				df.options = false
 				options.find('#showByTime').removeClass('disabled')
 				break
@@ -947,13 +1004,13 @@ menu = {
 	save:function (){
 		var _loadShow = function (){
 			$('#btnSave')
-				.find('.icon-floppy').hide().end()
-				.find('.icon-load').css('display','inherit')
+			.find('.animate').css('display','inherit')
+			.siblings("[class*='lnr-']").hide().end()
 		 }()
 		var _loadHide = function (){
 			$('#btnSave')
-				.find('.icon-load').hide().end()
-				.find('.icon-floppy').show()
+				.find('.animate').hide().end()
+				.siblings("[class*='lnr-']").show()
 		 }
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'config':
@@ -1025,15 +1082,10 @@ menu = {
 		}
 	 },
 	reset:function(){
-		/*
-		$('#btnReset .icon-undo')
-			.attr('class','icon-load animate-spin')
-			.show()
-		*/
 		switch($('.capasPrincipales:visible').attr('id')) {
 			case 'main':
 				main.refresh('main' , function () {
-					$('#btnReset .icon-undo').removeClass('icon-load animate-spin')
+					$('#btnReset .animate').hide()
 				}) 
 			break;
 		}
@@ -1047,26 +1099,15 @@ menu = {
 			arguments[i].removeClass('disabled')
 	 },
 	load:function (){
-		if($('#txtBuscar').val()!=""){
-			switch($('.capasPrincipales:visible').attr('id')) {
-				case 'usuarios':
-					usuarios.buscar($('#txtBuscar').val());
-					break;
-				case 'servicios':
-					servicios.buscar();
-					break;
-				case 'crearCita':
-					crearCita.servicios.buscar($('#txtBuscar').val());
-					break;
-			}
-		}
+
 		menu.exit()
+
 	 },
 	exit: function (){
-			$('#txtBuscar')
-			.val("")
-			.parent()
-				.hide('slide',{direction:'right'})
+		$('#txtBuscar').val("")
+			.parent().hide('slide',{direction:'right'})
+
+		$('#btnSearch').find('.menulbl').show(500)
 	 },
 	options : function($this){
 		if ($('#btnOptions #chckOpUsersDel').is(':checked'))
@@ -1076,6 +1117,20 @@ menu = {
 
 		servicios.init();	
 	 },
+	buscar :function(txt, sec, col){
+
+		$sec = $("#"+sec)
+		$encontrados =txt.match(/^@$/)
+			?$sec.find('td.email:contains('+txt+')')
+			:$sec.find('td.busqueda:contains('+txt+')')
+		if($encontrados.length){
+			$sec.find("tbody tr").hide().end()
+			$encontrados.parents('tr').show()
+		} else{
+			$sec.find("tbody tr").hide()
+		}
+		colorear_filas($('.colorear-filas:visible'))
+	}
 },
 notas = {
 	nombreDlg : 'dlgNotas',
@@ -1083,6 +1138,9 @@ notas = {
 	init : function(){
 		cargarDatepicker();
 	 },
+	load : function(){
+		$('#tile_seccion').text('Notas')
+	},
 	dialog:function(id=-1){
 		var fnLoad = function () {
 		var  $dlg = $('#'+notas.nombreDlg)
@@ -1179,10 +1237,11 @@ notas = {
 			action : GET , 
 			fecha : fecha
 		}
+		$('div#mySidenav a#menu5.hay-nota').removeClass('hay-nota')
 		$.post(INDEX, data, function (r, textStatus, jqXHR) {
-
+			
 			if(r.success){
-				$('#menu5').addClass('c4')
+				$('div#mySidenav a#menu5').addClass('hay-nota')
 				for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
 	
 					notas.crear.linea(datos[i])							
@@ -1214,18 +1273,34 @@ notas = {
 	 }, 
 }
 $(function(){
-	 cargarDatepicker()
-	 colorearMenuDiasSemana()
-	 
-	 main.inactivas.change(localStorage.getItem("showRows"))
-	 main.lbl.widht = $('.celda:visible').first().width() - 2 	
+	main.login.ancho = $('#login').width()
+	main.inactivas.change(localStorage.getItem("showRows"))
+	main.inactivas.comprobar()
+	//Si inicia la primera vez introduzca valor por defecto	para menu
+	//if(localStorage.getItem("menuOpen")==null) localStorage.setItem("menuOpen",1)
 
-	$('body').on('click',".idDateAction",function(){
+	cargarDatepicker()
+	colorearMenuDiasSemana()
+
+	menu.nav.estado(localStorage.getItem("menuOpen"), function(){
+		main.lbl.widht = $('.celda:visible').first().width() - 2 
+		main.login.ancho = $('#login').width()
+	})
+
+	$('body')
+		.on('click',".idDateAction",function(){
 		
 		if(!$(this).data('disabled')) {
 			sincronizar($(this).data('action'));
 		}
-	 })
+		  })
+		.on('click','#boton-menu', function(){
+			var estado = parseInt(localStorage.getItem("menuOpen"))+1
+
+			menu.nav.open(estado)
+			menu.nav.estado(estado)
+
+		})
 	$('.tabcontrol')
 		.tabcontrol()
 	 	
@@ -1328,9 +1403,13 @@ $(function(){
 
 			var data = {
 				id : $(this).data('agenda'), 
-				nombre : $(this).val()
-			 }
-			 agendas.guardarNombre(data)
+				nombre : $(this).val(),
+				controller: 'agendas',
+			 	action:'saveName'
+			}
+			 $.post(INDEX,data,function(r){
+				 
+			 },JSON)
 
 		 })
 		.find('.cuerpo')
@@ -1343,15 +1422,22 @@ $(function(){
 		.on('click','#btnSearch',function(){
 			if ($('#txtBuscar').is(':hidden')){
 				$('#txtBuscar')
-					.parent()
-						.show('slide',{direction:'right'})
-					.end()
+					.parent().show('slide',{direction:'right'}).end()
 					.focus()
+				$(this).find('.menulbl').hide(500)
 
 			}else{
 				menu.load();
 			}
 		 })
+		.on('change','#txtBuscar',function(){
+			if($('#txtBuscar').val()!=""){
+				menu.buscar(
+					$('#txtBuscar').val(),
+					$('.capasPrincipales:visible').attr('id')
+				)
+			}
+		})
 		.on('click','#btnReset',function(){
 			if($('#usuarios').is(':visible')) usuarios.select('A');
 		 })
@@ -1373,19 +1459,25 @@ $(function(){
 					historial.get($(this).val())
 				}
 			).end()
+
+	$('#mySidenav')
 		.find('[name="menu[]"]').parent().click(function(){
+			$('.app-bar-pullmenu ').hide('blind');
+			$('#mySidenav .selected').removeClass('selected')
+			$(this).find('a').addClass('selected')
+
 			var capa = $(this).find('a').data('capa') ;
 			if (capa == 'main'){
 				mostrarCapa('main' ,  true ) 
 			}else{
 				mostrarCapa($(this).find('a').data('capa'));
 			}
-			$('.app-bar-pullmenu ').hide('blind');
 		 })
-
+		 
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 
-	notas.sync(Fecha.general)
+
 	main.lbl.load()
+	$('#tile_seccion').text('Reserva de citas')
 })

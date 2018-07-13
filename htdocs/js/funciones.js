@@ -33,8 +33,9 @@ jQuery.isEmpty = function(){
 	var isEmpty = false 
 	for (var i = 0; i < arguments.length; i++) {
 		let arg = arguments[i] ;
+
 		isEmpty =
-		typeof arg == 'undefined' || arg === null || arg === false|| arg <1 ||arg === ''?true:
+		arg === undefined || arg === null || arg === 'null' || arg === false|| arg <1 ||arg === ''?true:
 		typeof arg == 'number' && isNaN(arg)?true:
 		arg instanceof Date && isNaN(Number(arg))?true:
 		arg.length==0;
@@ -578,16 +579,17 @@ function formatofecha (fechaTxt,formatOut){
 	return (fch); 
  }
 function fechaActual(arg){ 
-	var arg = arg||null;
-	var fecha_actual = new Date();
-	var mes = fecha_actual.getMonth()+1;
-	var r =  arg=="y"?fecha_actual.getFullYear()
+	var arg = arg||null, 
+		fecha_actual = new Date(), 
+		mes = fecha_actual.getMonth()+1, 
+		dia = fecha_actual.getDate()
+	
+	if(dia<=9)dia="0"+dia
+	if(mes<=9)mes="0"+mes
+	return  arg=="y"?fecha_actual.getFullYear()
 				:arg=="m"?mes
 				:arg=="d"?fecha_actual.getDate()
-				:fecha_actual.getFullYear() +"-"+ mes +"-"+ fecha_actual.getDate();
-
-
-	return  r;
+				:fecha_actual.getFullYear() +"-"+ mes +"-"+ dia
  }
 function cargarDatepicker(callback){
 	var $dp = $('.datepicker');
@@ -653,7 +655,7 @@ function colorearMenuDiasSemana(arg){
 	if(d==7||$.inArray(fes,festivos.year)!=-1)
 		$('.datepicker').css('color','#e04747')
 	else
-		$('.datepicker').css('color','inherit')
+		$('.datepicker').css('color','initial')
 	
 
  }
@@ -1007,6 +1009,10 @@ function deleteAllCookies() {
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
  }
+function colorear_filas($this){
+	$this = $this.find('tbody tr').css('background','').filter(':visible')
+	if($this.length) $this.filter(':even').css('background','#eee')
+}
 $(function(){
 	$('.time').mask('00:00');
 	$('.tel').mask('##000000000');

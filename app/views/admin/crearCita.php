@@ -9,13 +9,9 @@
 				<?php require_once URL_VIEWS_ADMIN . "crearCita/servicios.php" ?>
 			</div>
 			<div id="stepper2" class="steperCapa" data-value=2>	
-				<?php 
-				include URL_TEMPLATES . "datepicker.php" ;
-				?>
 				<h2>tiempo total de los servicios:<span id='tSer' class="resaltado"></span> min.</h2>	
 				<div id="tablas" class="tablas tblhoras">
 				</div>
 			</div>
 		</form>	
-	</div>	
-	<script>$.getScript("/js/crearCita.js")</script>
+	</div>

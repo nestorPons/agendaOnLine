@@ -8,7 +8,7 @@ header('Content-Type: application/json');
 				if (isset($data['npass'])) {
 					
 					if ( $User->validatePass($data['npass']) && $User->validateEmail($data['email'])){
-						$data['pass'] =  $data['npass'];
+						$data['pass'] = $data['npass'];
 						unset($data['npass']);
 						unset($data['opass']);
 						

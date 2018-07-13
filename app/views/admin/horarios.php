@@ -1,6 +1,3 @@
-<h1>horarios</h1>
-<hr>
-
 <form id='frmHorario'>
 	<div class="iconClass-container icon-left">
 	<span class="caption">Agendas</span>
@@ -20,7 +17,7 @@
 		<div id="horario_<?=$horario['id']?>" agenda="<?=$horario['agenda']?>" 
 		class="lineaHorarios <?php if(!$horario['agenda']==0)echo'ocultar';?>">
 
-			<input type="checkbox" class="" value=""> 
+			<input type="checkbox" class="" value="<?=$horario['id']?>"> 
 
 			<div class="iconClass-container icon-left inline">
 				<span class="caption">Inicio dia semana </span>
@@ -58,4 +55,3 @@
 		<?php
 	}?>		
 </form>
-<script>$.getScript("/js/horarios.js")</script>

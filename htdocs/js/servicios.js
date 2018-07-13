@@ -1,33 +1,26 @@
 var servicios = {
 	controller : 'servicios',
 	init : function () {
-
 		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
 		if (!$.isEmpty( clase )){
 			clase_id = clase.replace(/\D/g,'')
-			servicios.mostrar(clase_id) ;
+			servicios.mostrar(clase_id)
+			
 		 }
-		
-		},
-	buscar: function(){
-		$('#servicios .capaServicios').fadeIn();
-		$("#servicios tr").fadeOut();
-		$("#servicios .encabezado:first").fadeIn();
-		var txt = normalize($('#txtBuscar').val());
-		$("[name*='"+txt+"']").not('.ocultar_baja').fadeIn();
-		},
+		 
+	 },
 	mostrar: function(id_familia, no_validate) {
 		var id = id_familia, no_validate = no_validate || false
 		
 		if (no_validate && $('#servicios .fam'+ id).is(':visible') || $('#crearCita .fam'+ id).is(':visible')  ) return false ;
 
-		var id = $.isEmpty(id)?0:id;
+		var id = $.isEmpty(id)?0:id
 
 		$('.contenedorServicios').each(function(){
-			var $this = $(this)
-			$this.find('tbody tr').hide(function() {
-				$this.find('.fam'+id).show()		
-			})
+			$(this)
+				.find('tbody tr').hide().end()
+				.find('.fam'+id).show()		
+			
 		})
 
 		$('.menuServicios').each(function(){
@@ -35,8 +28,9 @@ var servicios = {
 				.find('.c3').removeClass('c3').end()
 				.find('#'+id).addClass('c3');
 		})
-
-		},
+		colorear_filas($('#servicios table'))
+		
+	 },
 	dialog:function(id){
 		var fnLoad = function (isNew) {
 			var dlg = $('#dlgServicios')
@@ -86,7 +80,7 @@ var servicios = {
 		}
 
 		dialog.open('dlgServicios',servicios.guardar,servicios.eliminar,fnLoad)
-		},
+	 },
 	guardar: function (){
 		var _fnOk = function (rsp , isNew){
 				if (rsp.success) {
@@ -111,7 +105,7 @@ var servicios = {
 		  }else{
 			btn.load.hide()
 		  }		
-		 },
+	 },
 	eliminar: function() {
 
 		var id= $('#dlgServicios #id').val().trim(), 
@@ -141,7 +135,7 @@ var servicios = {
 		}else{
 			dialog.close('dlgServicios');
 		}
-		},
+	 },
 	actualizar: function(datos){
 
 		$('#servicios #rowServicios'+datos.id)

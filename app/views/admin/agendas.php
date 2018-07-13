@@ -1,4 +1,3 @@
-<h1>Configuracion agendas</h1>
 <form id="frmAg">
 	<div class="table">
 		<div class="tr">
@@ -34,5 +33,3 @@
 </form>
 <br>
 <a href="mailto:<?= ADMIN_EMAIL?>">Solicita otra agenda al administrador</a>
-
-<script>$.getScript("/js/agendas.js")</script>

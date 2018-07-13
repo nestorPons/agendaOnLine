@@ -1,5 +1,5 @@
 'strict'
-var crearCita ={
+var crearCita={
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
@@ -8,6 +8,7 @@ var crearCita ={
 			var clase_id = clase.replace(/\D/g,'');
 			crearCita.servicios.mostrar(clase_id) ;
 		}
+
 
 		cargarDatepicker()	
 		crearCita.load()
@@ -121,8 +122,7 @@ var crearCita ={
 						self.data.servicios = rsp.services
 						self.data.nota = crearCita.data.nota
 						main.lbl.create(self.data)
-						
-						crearCita.reset()
+
 						mostrarCapa('main' , true )			
 					}
 				} else {
@@ -142,12 +142,12 @@ var crearCita ={
 
 	 },
 	load: function(){
-				
+		crearCita.reset()
 		$('#btnSearch').hide()
-		if(localStorage.getItem('agenda')){
-			$sec = $('#crearCita')
-			$sec.find('#agenda'+localStorage.getItem('agenda')).prop('checked', true)
+		if(localStorage.getItem('hora')){
 			crearCita.data.hora = localStorage.getItem('hora')
+			crearCita.data.agenda = localStorage.getItem('agenda')
+			$('#crearCita').find('#agenda'+crearCita.data.agenda).prop('checked', true)
 			localStorage.removeItem('hora')
 			localStorage.removeItem('agenda') 
 		}
@@ -177,7 +177,7 @@ var crearCita ={
 
 			lblTS.text(tiempoServicios)
 			crearCita.horas.pintar(Fecha.id,tiempoServicios)
-
+	
 			if (!$.isEmpty(crearCita.data.hora)){
 				$('#crearCita .dia.activa').find('.horas[value="'+crearCita.data.hora+'"]').prop('checked',true)
 				crearCita.dialog()
@@ -219,6 +219,7 @@ var crearCita ={
 			}
 		 },
 		sincronizar: function(callback){
+
 			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },
@@ -258,7 +259,7 @@ var crearCita ={
 
 		crearCita.data.hora = null
 		crearCita.data.agenda = null 
-		dialog.close('dlgGuardar');
+		dialog.close('dlgGuardar')
 	 },
 	stepper: function(index){
 		var $visible = $('.steperCapa:visible')
@@ -269,13 +270,10 @@ var crearCita ={
 				_slider()
 				
 			}else if(index==1 &&crearCita.validate.name()){
-				let $crearCita = $('#crearCita')
+				
 				$('#btnSearch').show()
-				crearCita.data.agenda = $crearCita.find('input[name="agenda[]"]:checked').val()
-				crearCita.data.nombre =  $crearCita.find('#cliente').val()
-				crearCita.data.nota = $crearCita.find('#crearCitaNota').val() 
 				$('.tblHoras').show()
-					
+				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
 				_slider(crearCita.servicios.init) 
 
 			} else if(index==2&&crearCita.validate.service()){
@@ -372,7 +370,17 @@ $('#crearCita')
 .on('change','.lstServicios ',function(){crearCita.servicios.mostrar($(this).val())})
 .on('click','.horas',crearCita.dialog)
 .on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
-.on('blur','#cliente',crearCita.validate.name)
+.on('blur','#cliente',function(){
+	if(crearCita.validate.name()){
+		crearCita.data.nombre =  $(this).val()
+	}
+})
+.on('click','[name="agenda[]"]',function(){
+	crearCita.data.agenda = $(this).val()
+})
+.on('change','#crearCitaNota',function(){
+	crearCita.data.nota = $this.val() 
+})
 .on("swipeleft",'.tablas')
 .on('click','.cancelar',function(){mostrarCapa('main')})
 

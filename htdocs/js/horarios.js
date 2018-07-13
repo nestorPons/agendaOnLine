@@ -87,60 +87,39 @@ var horario = {
 					notify.error('No se pudo guardare el horario')
 				}
 			})
-			/*
-			$.each(horarios,function( index , me ){
- 
-				data.push({
-					id:	me.id,
-					agenda: $(this).find('.numero_agenda').val(),
-					dia: $(this).find('.dia_semana').val(),
-					inicio: $(this).find('.hora_inicio').val(),
-					fin: $(this).find('.hora_fin').val()
-				})
-			})
-			$.ajax({
-				type:"POST",
-				data: { action : SAVE , data : data , controller : horario.controller },
-				url: INDEX,
-				dataType: 'json'
-			})
-			.done(function(r,s){
-				if(r)
-				location.reload();
-				else	
-				notify.error('No se pudo guardar el horario!!')
-				
-				typeof callback == "function" && callback();
-			})
-			.fail(function(rsp){echo("fail =>"+rsp.sql);})
-		}else{
-			notify.error('Debe de completar todos los campos.','Validar formulario');
-			btn.load.hide();
-		}
-		*/
 	 },
 	del: function(){
+
 		var selects = $('#horarios #frmHorario input:checked');
 
-		var data =  new Array();
+		var data =  {
+			controller : 'horarios',
+			action : DEL, 
+			ids : new Array()
+		}		
 		
 		$.each(selects ,function(){
-			data.push($(this).val());
+			data.ids.push($(this).val());
 		})
-		var jsonString = JSON.stringify(data);
+
 		
-		$.post(INDEX,{ ids : data , action : DEL , controller : horario.controller },function(r){
-			if(r){
+		$.post(INDEX,data,function(r){
+			if(r.success){
 				location.reload();
+			}else{
+				notify.error('No se ha podido guardar!!')
 			}
 		}, 'json')
 	 },
 	 mostrar: function(){
 		let $sec = $('#horarios'), 
-			val = $sec.find('#agenda_horario').val()
+			val = $sec.find('#agenda_horario').val(), 
+			$selects = $sec.find('#frmHorario input:checked')
+		//Reseteo los checkbox al cambiar de horario
+		$selects.prop('checked',false)
 
 		$sec
-			.find('.lineaHorarios').fadeOut().addClass('ocultar')
+			.find('.lineaHorarios').hide().addClass('ocultar')
 			.end()
 			.find('div[agenda='+val+']').fadeIn().removeClass('ocultar')
 	 },
@@ -154,7 +133,6 @@ var horario = {
 		return return_function;
 	 },
  }
- $('#horarios')
- .on('click', '#agenda_horario',alert)
+ $('#horarios').on('click', '#agenda_horario',horario.mostrar)
 
- 
+ horario.mostrar()

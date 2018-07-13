@@ -1,5 +1,3 @@
-<h1>Festivos</h1>
-
 <table id="tblFestivos" class="tablas">
 	<thead>
 		<tr>
@@ -23,4 +21,3 @@
 	?>
 	</tbody>
 </table>
-<script>$.getScript("/js/festivos.js")</script>

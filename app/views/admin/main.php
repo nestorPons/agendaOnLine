@@ -2,7 +2,6 @@
 	<div class="cabecera-content">
 		<?php 
 			if (!$Device->isMovile){ require_once URL_TEMPLATES . "diasSemana.php"; }
-			include_once URL_TEMPLATES . "datepicker.php";
 		?>
 	</div>
 </div>

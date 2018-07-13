@@ -1,4 +1,4 @@
-<table id="tableHistory" class="tablas-group">
+<table id="tableHistory">
 <?php
 
 	foreach($records as  $r){	

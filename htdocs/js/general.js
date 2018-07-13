@@ -36,7 +36,7 @@ var general = {
 	 }
  }
 
- $('#general')
+$('#general')
  .on('click','#btnCambiarPass',function(){
      dialog.open('dlgCambiarPass',config.pass,null,function(){
          dialog.open('dlgCambiarPass')

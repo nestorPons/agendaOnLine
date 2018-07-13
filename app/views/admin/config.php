@@ -1,5 +1,3 @@
-
-<h1>Configuración</h1>
 <form id="frmConfig" enctype="multipart/form-data"  class="chck-container" type="POST">
 	<div>
 		<input type='checkbox' name='showInactivas' id='showInactivas' value=1  <?php if(!empty(CONFIG['ShowRow']))echo'checked'?>/>

@@ -1,24 +1,34 @@
 'strict'
 var historial = {
-	sinc: function(){
-		if(!$('#historial table').length) return false
+	sinc: function(){	
+		if($('#historial table').length==0) return false
 		historial.get()
+
 	}, 
 	get : function(days=1){
-		let data = {
-			controller :'history', 
-			days : days
-		}
+		var $sec = $('#historial'), 
+			$dia = $sec.find('.dia'), 
+			$diaActivo = $dia.filter('#'+Fecha.general)
+			data = {
+				controller :'historial', 
+				fecha : Fecha.general
+			}	
 
-		$.post(INDEX, data,	function (html) {
-			$('#history').html(html)
-		},'html')
+		$dia.hide()
+		
+		if(!$diaActivo.length||Fecha.actual==Fecha.general){
+			$.post(INDEX, data,	function (html) {
+				$sec.append(html)			
+			},'html')
+		} else {
+			$diaActivo.fadeIn()
+		}
 	},
 	crear: {
 		linea: function(d){
 
 			//Si existe que no haga nada en historia no se editan los datos solo se crean 
-			$obj = $('#history table tbody')
+			$obj = $('#historial table tbody')
 			if($obj.find('#historia_'+d.id).length) return false
 			
 			switch(parseInt(d.accion)){

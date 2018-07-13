@@ -111,4 +111,5 @@ $('#agendas')
         })
         .on('click','.fnDel',function(){
             agendas.del($(this).attr('id'))
-        })
+		})
+		

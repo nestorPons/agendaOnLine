@@ -1,11 +1,10 @@
 <?php 
-    global $Users;
+    global $Users, $Forms;
     
     $data = $_POST ;
     $action = $data['action'];
 
-    unset($data['controller']) ;
-    unset($data['action']) ;
+   $data = $Forms->sanitize($_POST);
 
     switch ($action){
         case SAVE:  

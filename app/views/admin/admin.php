@@ -15,20 +15,21 @@
 		<?php include URL_TEMPLATES . "menus/admin.php"?>
 
 		<div id='login' class='login'>
-			<section id='main' class="capasPrincipales activa" ><?php include URL_CONTROLLERS . "main.php"?></section>
-			<section id='usuarios' class="capasPrincipales" ></section>
-			<section id='horarios' class="capasPrincipales" ></section>
-			<section id='crearCita' class="capasPrincipales" ></section>
-			<section id='servicios' class="capasPrincipales" ></section>
-			<section id='familias' class="capasPrincipales" ></section>
-			<section id='general' class="capasPrincipales" ></section>
-			<section id='config' class="capasPrincipales" ></section>
-			<section id='estilos' class="capasPrincipales" ></section>
-			<section id='festivos' class="capasPrincipales" ></section>
-			<section id='agendas' class="capasPrincipales" ></section>
-			<section id='notas' class="capasPrincipales" ></section>
-			<section id='history' class="capasPrincipales" ></section>
+			<section id='main' data-nombre="Principal" class="capasPrincipales activa" ><?php include URL_CONTROLLERS . "main.php"?></section>
+			<section id='notas' data-nombre="Notas" class="capasPrincipales" ><?php include URL_CONTROLLERS . "notas.php"?></section>
+			<section id='usuarios' data-nombre="Clientes" class="capasPrincipales" ></section>
+			<section id='horarios' data-nombre="Horarios" class="capasPrincipales" ></section>
+			<section id='crearCita' data-nombre="Crear cita" class="capasPrincipales" ></section>
+			<section id='servicios' data-nombre="Servicios" class="capasPrincipales" ></section>
+			<section id='familias' data-nombre="Familias" class="capasPrincipales" ></section>
+			<section id='general' data-nombre="Datos" class="capasPrincipales" ></section>
+			<section id='config' data-nombre="Configuración" class="capasPrincipales" ></section>
+			<section id='estilos' data-nombre="Estilo" class="capasPrincipales" ></section>
+			<section id='festivos' data-nombre="Festivos" class="capasPrincipales" ></section>
+			<section id='agendas' data-nombre="Edición agendas" class="capasPrincipales" ></section>
+			<section id='historial' data-nombre="Historial" class="capasPrincipales" ></section>
 		</div>
 		<div id="dialogs" class="popup-overlay"></div>
+		<?php include URL_TEMPLATES . "menus/navbar.php"?>
 	</body>
 </html>

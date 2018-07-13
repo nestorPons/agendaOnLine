@@ -467,6 +467,12 @@ $(function(){
 		.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})	
 		.on('click','.horas',crearCita.dialog)
 		.on('click','.idServicios',function(){crearCita.horas.load($(this))})
+		.on('click','[name="agenda[]"]',function(){
+			crearCita.data.agenda = $(this).val()
+		 })
+		.on('change','#crearCitaNota',function(){
+			crearCita.data.nota = $this.val() 
+		 })
 		.find('#tablas')
 			.on("swipeleft",function(){sincronizar(null,1)})
 			.on("swiperight",function(){sincronizar(null,-1)})

@@ -3,7 +3,7 @@
 
 	<?php require_once URL_MENUS. 'servicios.php'?>
 	<div class="cuerpo">
-		<table class = "tablas	">
+		<table class = "tablas colorear-filas">
 			<thead>
 				<tr>
 					<th class="tileOpc">Opc</th>
@@ -23,4 +23,3 @@
 		</table>
 	</div>
 </div>
-<script>$.getScript("/js/servicios.js")</script>
