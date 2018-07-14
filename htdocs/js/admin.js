@@ -8,40 +8,43 @@ function menuEsMovil(tab){
 	return true
  }
 function sincronizar( dias, date , callback ){
-	var fecha = date||Fecha.general ,
-		datepicker = $('.datepicker')
+	if(main.cargado){
+		var fecha = date||Fecha.general ,
+			$datepicker= $('.datepicker')
 
-	if (dias)
-		fecha =  Fecha.calcular(dias, fecha);
-	else
-		dias = 0;
-	
-	Fecha.anterior = Fecha.general
-	Fecha.general = Fecha.sql(fecha)
-	Fecha.id = Fecha.number(Fecha.general)
+		if (dias)
+			fecha =  Fecha.calcular(dias, fecha);
+		else
+			dias = 0;
+		
+		Fecha.anterior = Fecha.general
+		Fecha.general = Fecha.sql(fecha)
+		Fecha.id = Fecha.number(Fecha.general)
 
-	//slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
-	
-	colorearMenuDiasSemana();
+		//slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
+		
+		colorearMenuDiasSemana();
 
-	//Sincronizamos el panel principal
-	main.sincronizar(dias)
-	//Sincronizamos las notas
-	notas.sync(Fecha.general)
-	//Sincronizamos crearCita
-	if(typeof crearCita.horas=='object') crearCita.horas.sincronizar()
-	//Sincronizamos historial
-	if(typeof historial.sinc=='function') historial.sinc()
+		//Sincronizamos el panel principal
+		main.sincronizar(dias)
+		//Sincronizamos las notas
+		notas.sync(Fecha.general)
+		//Sincronizamos crearCita
+		if(typeof crearCita.horas=='object') crearCita.horas.sincronizar()
+		//Sincronizamos historial
+		if(typeof historial.sinc=='function') historial.sinc()
 
-	var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
-	$.each(datepicker, function( index , me ){
-		(diaFestivo)?$(this).addClass('c-red'):$(this).removeClass('c-red')
+		var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
 
-		$(this)
+
+		(diaFestivo)?$datepicker.addClass('c-red'):$datepicker.removeClass('c-red')
+
+		$datepicker
 			.val(Fecha.print(fecha))
 			.datepicker("setDate",Fecha.print(fecha));
-	 })
 
+		$('.tabcontrol').tabcontrol()
+	}
  }
 function mostrarCapa(capa, callback){
 
@@ -105,6 +108,7 @@ main ={
 	login: {
 		ancho : 0 
 	 }, 
+	cargado : true, 
 	set: {
 		nameAgenda : function(id, name){
 			$('#nombreagenda' + id).text(name);
@@ -142,7 +146,7 @@ main ={
 		 }
 	 }, 
 	sincronizar: function (dir,callback){
-		
+		main.cargado = false
 		var section = main.section , body = main.body
 
 		if (!section.find('#'+Fecha.id).length)
@@ -162,9 +166,10 @@ main ={
 				body.show("slide", { direction: ent }, 750)
 
 				main.inactivas.comprobar()
+				main.cargado = true
 			})
 		} 	
-
+		$('.tabcontrol').tabcontrol()
 
 	 },
 	activeDay : function () {
@@ -907,11 +912,18 @@ menu = {
 			
 		 },
 		estado: (estado, callback)=>{
-			if(!estado){
+			//Inicia el 
+			if($.isEmpty(estado) && estado != 0){
 				estado = 1
 				menu.nav.open(1)
 			}
-			
+
+			// si es un movil solo tiene dos estados 
+			if(Device.isCel() && estado > 1 ) {
+					localStorage.setItem("menuOpen",0)
+				estado = 0			
+			}
+		
 			switch (parseInt(estado)){
 				case 1: 				
 					$('#mySidenav').width(50)
@@ -920,6 +932,7 @@ menu = {
 					$('#login')
 						.width((main.login.ancho - 25))
 						.animate({'left':25}, callback)
+					localStorage.setItem("menuOpen",1)
 				break
 				case 2: 
 					$('#mySidenav').width(150)
@@ -929,6 +942,7 @@ menu = {
 					$('#login')
 						.width((main.login.ancho - '90'))
 						.animate({'left':90}, callback)
+					localStorage.setItem("menuOpen",2)
 			
 				break
 				default:
@@ -936,6 +950,7 @@ menu = {
 					$('#login')
 						.removeAttr( 'style' )	
 					callback
+					localStorage.setItem("menuOpen",0)
 				
 			}
 		 }
@@ -1140,7 +1155,7 @@ notas = {
 	 },
 	load : function(){
 		$('#tile_seccion').text('Notas')
-	},
+	 },
 	dialog:function(id=-1){
 		var fnLoad = function () {
 		var  $dlg = $('#'+notas.nombreDlg)
@@ -1271,13 +1286,27 @@ notas = {
 				.end().appendTo('#notas tbody')
 		 },
 	 }, 
+}, 
+Device = {
+	cel: false, 
+	init : function(){
+		this.cel = ($(window).width()<=375)
+	}, 
+	isCel: function(val = false){
+		if($.isEmpty(val)){
+			return this.cel
+		} else  {
+			this.cel = val
+		}
+	}
 }
 $(function(){
 	main.login.ancho = $('#login').width()
 	main.inactivas.change(localStorage.getItem("showRows"))
 	main.inactivas.comprobar()
-	//Si inicia la primera vez introduzca valor por defecto	para menu
-	//if(localStorage.getItem("menuOpen")==null) localStorage.setItem("menuOpen",1)
+
+	//Construyo la "clase" device para saber el dispositivo usado
+ 	Device.init()
 
 	cargarDatepicker()
 	colorearMenuDiasSemana()
@@ -1301,9 +1330,7 @@ $(function(){
 			menu.nav.estado(estado)
 
 		})
-	$('.tabcontrol')
-		.tabcontrol()
-	 	
+	$('.tabcontrol').tabcontrol()	
 
 	$('html')
 		.on('click','.close',function(e){dialog.close()})
@@ -1462,6 +1489,11 @@ $(function(){
 
 	$('#mySidenav')
 		.find('[name="menu[]"]').parent().click(function(){
+			if(Device.isCel()) {
+				menu.nav.open(0)	
+				menu.nav.estado(0)
+			}
+
 			$('.app-bar-pullmenu ').hide('blind');
 			$('#mySidenav .selected').removeClass('selected')
 			$(this).find('a').addClass('selected')
@@ -1476,7 +1508,6 @@ $(function(){
 		 
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
-
 
 	main.lbl.load()
 	$('#tile_seccion').text('Reserva de citas')

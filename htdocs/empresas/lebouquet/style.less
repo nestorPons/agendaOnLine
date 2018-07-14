@@ -6,7 +6,6 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
-
 @radio_popover: 10px;
 @base: #fff ;
 @t1:mix(@color,@text-color, 50%); 
@@ -980,52 +979,16 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	background-color: darken(@color_secon, 70%);
+	background-color: darken(@color, 15%);
 	color: @base;
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
 		color:@base;
-		background-color: darken(@color, 50%);
+		background-color: darken(@color, 30%);
 	}
 
-	color-menu(@color){
-		@c : lighten(hsl(@color,70%,50%),10%);
-		color: @c;
-		&:hover{
-			:first-child{
-		//		color: saturate(@c,20%);
-			}
-		}
-
-	}
-	ul{
-		li:nth-child(1){
-			color-menu(@pink); 
-		}
-		li:nth-child(2){
-			color-menu(@base);  
-		}
-		li:nth-child(3){
-			color-menu(@blue);  
-		}
-		li:nth-child(4){
-			color-menu(@b2);  
-		}
-		li:nth-child(5){
-			color-menu(@red);  
-		}
-		li:nth-child(6){
-			color-menu(@text2);  
-		}
-		li:nth-child(7){
-			color-menu(@text1);  
-		}
-		li:nth-child(8){
-			color-menu(@purple);  
-		}
-	}
 }
 #boton-menu{
 	border-radius: @radius; 
