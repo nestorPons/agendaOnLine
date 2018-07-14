@@ -3,26 +3,29 @@
     class='lbl row_<?=$rows?> <?= $color?> <?php if($noMovile){echo('width_'.CONFIG['totalAgendas']);}?>' 
     tiempo="<?=$val['tiempoTotal']?>">
     <div id ='<?=$val['idUsuario']?>' class='nombre'>
-        <span class ='icon-user-1'></span> 
-        <span class = 'text-value'><?=$val['nombre']?></span>
+        <i class ='icon-user-1'></i> 
+        <i class = 'text-value'><?=$val['nombre']?></i>
     </div>
     <div class='iconos'> 
+    <?php if($val['idUsuario']==$val['usuarioCogeCita']&&$val['admin']!=1){?>
+        <i class ='lnr-laptop-phone' title="La cita ha sido cogida por el usuario"></i>  
+    <?php }?>
         <?php if($number_services >= $rows){?>
-            <span class ='icon-angle-down fnExtend' ></span>  
+            <i class ='icon-angle-down fnExtend' title="Desplegar cita" ></i>  
             <?php
         }?>
         <div class='icons_crud'>           
-            <span class ='icon-pencil-1 fnEdit '></span> 
-            <span class ='icon-trash fnDel'></span>  
+            <i class ='icon-pencil-1 fnEdit ' title="Editar cita"></i> 
+            <i class ='icon-trash fnDel' title="Eliminar cita"></i>  
         </div>
-        <span class ='icon-move fnMove'></span> 
+        <i class ='icon-move fnMove' Title="Mover cita"></i> 
     </div>
    										  
     <div class='servicios <?=$rows?>'>          
        <?= $servicies?>
     </div> 
      <div class='note <?=$val['obs']?'show':''?>'>
-        <span class ='icon-note'></span>   
-        <span class ='text_note'><?=$val['obs']??null?></span>
+        <i class ='icon-note'></i>   
+        <i class ='text_note'><?=$val['obs']??null?></i>
      </div> 	
 </div>

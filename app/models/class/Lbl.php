@@ -40,7 +40,7 @@ class Lbl {
         $this->device = new \models\Device($_SESSION['ancho']); 
     }
     public function getById ($value) {
-        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
+        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, D.usuarioCogeCita, U.admin,  A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
             FROM cita C JOIN data D ON C.idCita = D.id 
             INNER JOIN usuarios	U ON D.idUsuario = U.id 
             LEFT JOIN servicios A ON C.servicio = A.id 
@@ -53,7 +53,7 @@ class Lbl {
         $end  = $end ?? $ini ; 
         $filter = $agenda!=null?"D.agenda = $agenda AND":"";
 
-        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
+        $sql = "SELECT D.id AS idCita, U.id AS idUsuario, D.usuarioCogeCita,U.admin, A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
                 FROM cita C JOIN data D ON C.idCita = D.id 
                 INNER JOIN usuarios	U ON D.idUsuario = U.id 
                 LEFT JOIN servicios A ON C.servicio = A.id
@@ -64,6 +64,7 @@ class Lbl {
     }
     private function data ($sql) {
         $idLast = 0 ;
+  
         $data=$this->conn->all($sql,MYSQLI_ASSOC);
 
         if (count($data)>0) {
@@ -81,6 +82,8 @@ class Lbl {
                         'agenda'=>$data[$i]['agenda'],
                         'obs'=>$data[$i]['obs'],
                         'idUsuario'=>$data[$i]['idUsuario'],
+                        'usuarioCogeCita'=>$data[$i]['usuarioCogeCita'],
+                        'admin'=>$data[$i]['admin'],
                         'nombre'=>$data[$i]['nombre'],
                         'tiempoTotal' => $data[$i]['tiempo_servicios'], 
                         'servicios' => array()
