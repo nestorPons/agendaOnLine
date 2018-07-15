@@ -26,7 +26,6 @@
         ORDER BY id DESC;" ;
         return $this->conn->all($sql, MYSQLI_ASSOC);
       
-        
     }
     private static function formatAction($arg){
 

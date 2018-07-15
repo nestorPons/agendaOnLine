@@ -17,6 +17,14 @@
 					<td class="hisSer"></td>
 					<td class="hisagenda"></td>
 				</tr>
+				<?php foreach($User->historial() as $h ){?>
+					<td><span class ="icon-search"></span></td>
+					<td class="hisfecha"><?=$h['fecha']?></td>
+					<td class="hishoras"><?=$h['hora']?></td>
+					<td class="hisIdCita"><?=$h['idCita']?></td>
+					<td class="hisSer"><?=$h['servicio']?></td>
+					<td class="hisagenda"><?=$h['agenda']?></td>
+				<?php }?>
 			<tbody>
 		</table>
 	</div>

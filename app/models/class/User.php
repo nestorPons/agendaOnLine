@@ -71,7 +71,7 @@ class User extends \core\BaseClass {
 			WHERE C.idCita = $idCita";  
 
 		return  $this->conn->all($sql , MYSQLI_ASSOC ) ;
-	}
+	 }
 	public function status(int $arg = null) {
 		return (empty($arg))
 			? $this->get('status')
@@ -121,4 +121,13 @@ class User extends \core\BaseClass {
 	public function isUser(){
 		 return $this->admin==0;
 	 }
- }
+	public function historial($ini, $end){
+		$ini = date('Y-m-d H:m:s',strtotime($ini . '00:00:00'));
+        $end = date('Y-m-d H:m:s',strtotime($end . '24:59:59'));
+        $sql = "SELECT d.id as idCita, d.fecha, d.hora, d.agenda
+AKI::	
+			FROM data d
+			WHERE date BETWEEN '$ini' AND '$end' AND idUsuario = {$this->id}
+			ORDER BY id DESC;" ;
+	}
+}

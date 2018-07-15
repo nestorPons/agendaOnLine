@@ -201,31 +201,41 @@ var usuarios = {
 		dialog.open('dlgUsuarios',function(){usuarios.guardar(usuarios.id)},_fnDel,_fnLoad)
 
 	 },
-	historial: function ($this){
-		alert('temporalemente inhabilitado')
-		/*
-    	var id =$this.parent().parent().data('value');  
-
-		$.getJSON(INDEX,{id:id},function(data){
-			dialog.create('dlgHistorial',null, null, function(){
-				$('#contenedorHistorial').empty();
-				for (let i = 0; i<data.length;i++){
-				  
-				  $('#dlgHistorial .plantilla')
-					.clone(true,true)
-					  .removeClass('plantilla')
-					  .data('fecha',data[i].Fecha)
-					  .find('.hisAgenda').html(data[i].Agenda).end()
-					  .find('.hisIdCita').html(data[i].IdCita).end()
-					  .find('.hisFecha').html(Fecha.print(data[i].Fecha)).end()
-					  .find('.hisHoras').html(data[i].Hora).end()
-					  .find('.hisSer').html(data[i].Codigo).end()
-					  .appendTo('#dlgHistorial .tablas')
-				}
-				dialog.open('dlgHistorial');
-			});
-		})
-		*/
+	historial: function (id){
+		var $template = $('#dlgHistorial')
+		var data = {
+			controller : 'dialogs',
+			view : 'dlgHistorial', 
+			id:id
+		}
+		//Si esta el contenedor
+		if($template.length){
+echo(2)
+			$.post(INDEX,data,function(data){
+				dialog.create('dlgHistorial',null, null, function(){
+					$('#contenedorHistorial').empty();
+					for (let i = 0; i<data.length;i++){
+					
+					$('#dlgHistorial .plantilla')
+						.clone(true,true)
+						.removeClass('plantilla')
+						.data('fecha',data[i].Fecha)
+						.find('.hisAgenda').html(data[i].Agenda).end()
+						.find('.hisIdCita').html(data[i].IdCita).end()
+						.find('.hisFecha').html(Fecha.print(data[i].Fecha)).end()
+						.find('.hisHoras').html(data[i].Hora).end()
+						.find('.hisSer').html(data[i].Codigo).end()
+						.appendTo('#dlgHistorial .tablas')
+					}
+				},JSON)
+			})
+		} else { 
+echo(1)
+			$.post(INDEX,data,function(html){
+				$('#dialogs').append(html)
+				dialog.open('dlgHistorial')
+			},'html')			
+		}
 	 },
 	select: function (letra) {
 	//Coloreal filas de las tablas
@@ -277,7 +287,9 @@ $("#usuarios")
 		var id = $(this).parents('tr:first').data('value')
 		usuarios.dialog(id)
 	})
-	.on('click',"[name^='historia']",function(e){usuarios.historial($(this))})
+	.on('click',"[name='historia']",function(e){
+		usuarios.historial($(this).parents('tr').data('value'))
+	})
 	.on('click','#mainLstABC a',function(){
 		usuarios.select($(this).html());
 	})

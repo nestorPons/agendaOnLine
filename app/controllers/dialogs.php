@@ -1,6 +1,5 @@
 <?php 
-
-require_once URL_ROOT . 'app/conf/config.php';
-require_once URL_FUNCTIONS . 'tools.php';
-
-require_once URL_TEMPLATES . $_POST['controller'] . '/' . $_POST['view'] . '.phtml' ;
+if ($_POST['view']='dlgHistorial'){
+    $User = new models\User($_POST['id']); 
+}
+require_once URL_TEMPLATES . 'dialogs/' . $_POST['view'] . '.phtml' ;

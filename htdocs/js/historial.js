@@ -4,7 +4,7 @@ var historial = {
 		if($('#historial table').length==0) return false
 		historial.get()
 
-	}, 
+	 }, 
 	get : function(days=1){
 		var $sec = $('#historial'), 
 			$dia = $sec.find('.dia'), 
@@ -23,7 +23,7 @@ var historial = {
 		} else {
 			$diaActivo.fadeIn()
 		}
-	},
+	 },
 	crear: {
 		linea: function(d){
 
