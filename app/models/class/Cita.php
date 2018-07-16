@@ -34,8 +34,5 @@ class Cita extends \core\BaseClass {
         } 
         
     }
-    public function seachDelete($arr1 , $arr2){
-        
-    }
 
 }

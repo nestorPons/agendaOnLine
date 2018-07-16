@@ -6,7 +6,7 @@ class User extends \core\BaseClass {
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
 	
 	public function __construct( $id , $email = false){
-		
+
 		parent::__construct('usuarios');
 
 		$this->user = ($id)
@@ -121,13 +121,22 @@ class User extends \core\BaseClass {
 	public function isUser(){
 		 return $this->admin==0;
 	 }
-	public function historial($ini, $end){
-		$ini = date('Y-m-d H:m:s',strtotime($ini . '00:00:00'));
-        $end = date('Y-m-d H:m:s',strtotime($end . '24:59:59'));
-        $sql = "SELECT d.id as idCita, d.fecha, d.hora, d.agenda
-AKI::	
-			FROM data d
-			WHERE date BETWEEN '$ini' AND '$end' AND idUsuario = {$this->id}
-			ORDER BY id DESC;" ;
+	public function history( \DateTime $ini, \DateTime $end, $totalRecords){
+		$ini = $ini->format('Y-m-d H:i:s');
+		$end = $end->format('Y-m-d H:i:s');
+		$Data = new \core\BaseClass('data');
+		$Cita = new \core\BaseClass('cita');
+		$Serv = new \core\BaseClass('servicios');
+
+		$data = $Data->getBy('idUsuario',$this->id, '*', MYSQLI_ASSOC, 'LIMIT ' . $totalRecords);
+		$arr = [];
+		foreach($data as $i => $d){
+			$arr[$i] = $d;
+			$services = $Cita->getBy('idCita',$d['id'],'servicio');
+			foreach($services as $s){
+				$arr[$i]['servicios'][] = $Serv->getById($s,'descripcion'); 
+			}
+		}
+		return($arr);
 	}
 }

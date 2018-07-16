@@ -201,41 +201,53 @@ var usuarios = {
 		dialog.open('dlgUsuarios',function(){usuarios.guardar(usuarios.id)},_fnDel,_fnLoad)
 
 	 },
-	historial: function (id){
-		var $template = $('#dlgHistorial')
+	historial: function (id, limit=10){
 		var data = {
-			controller : 'dialogs',
-			view : 'dlgHistorial', 
-			id:id
-		}
-		//Si esta el contenedor
-		if($template.length){
-echo(2)
-			$.post(INDEX,data,function(data){
-				dialog.create('dlgHistorial',null, null, function(){
-					$('#contenedorHistorial').empty();
-					for (let i = 0; i<data.length;i++){
+			controller : 'usuarios',
+			action : 'historial', 
+			id:id, 
+			limit : limit
+		 }
+		
+		$.post(INDEX,data,function(datos){	
+
+			dialog.open('dlgHistorial',null, null, function(){
+				var $this=$('#dlgHistorial'), 
+					d = datos.data , 
+					len = d.length
+
+				$this.find('tbody td').remove()			
+
+				for (let i = 0; i<len ;i++){
+					let servicios = d[i].servicios 
 					
-					$('#dlgHistorial .plantilla')
-						.clone(true,true)
-						.removeClass('plantilla')
-						.data('fecha',data[i].Fecha)
-						.find('.hisAgenda').html(data[i].Agenda).end()
-						.find('.hisIdCita').html(data[i].IdCita).end()
-						.find('.hisFecha').html(Fecha.print(data[i].Fecha)).end()
-						.find('.hisHoras').html(data[i].Hora).end()
-						.find('.hisSer').html(data[i].Codigo).end()
-						.appendTo('#dlgHistorial .tablas')
-					}
-				},JSON)
-			})
-		} else { 
-echo(1)
-			$.post(INDEX,data,function(html){
-				$('#dialogs').append(html)
-				dialog.open('dlgHistorial')
-			},'html')			
-		}
+
+						$this
+							.find('#hisCita')
+							.clone(true,true)						
+							.removeClass('template')
+							.removeAttr('id')
+							.find('.hisAgenda').html(d[i].agenda).end()
+							.find('.hisIdCita').html(d[i].id).end()
+							.find('.hisFecha').html(Fecha.print(d[i].fecha)).end()
+							.find('.hisHoras').html(d[i].hora).end()
+							.appendTo($this.find('table'))
+					
+					servicios.forEach(e => {
+						let $clone = 
+						$this
+							.find('#hisServicios')
+							.clone(true,true)
+							.removeClass('template')
+							.removeAttr('id')
+						$clone
+							.find('.hisServicio')
+								.text(e)
+						$clone.appendTo($this.find('table'))
+					})		
+				}
+			},JSON)
+		})
 	 },
 	select: function (letra) {
 	//Coloreal filas de las tablas
@@ -246,7 +258,7 @@ echo(1)
 			.find('tbody tr:visible').hide().end()
 			.find('.name[id^="'+letra.toLowerCase()+'"]').parent().show()
 		colorear_filas($sec.find('.colorear-filas'))
-	},
+	 },
 	validate : {
 		form : function(){
 			var value = $('#dlgUsuarios	#nombre').val()
@@ -276,9 +288,7 @@ echo(1)
 					return true ;
 				}
 			}
-		 },	
-		
-
+		 }	
 	 }
  }
 $("#usuarios")
@@ -288,12 +298,19 @@ $("#usuarios")
 		usuarios.dialog(id)
 	})
 	.on('click',"[name='historia']",function(e){
-		usuarios.historial($(this).parents('tr').data('value'))
+		usuarios.id = $(this).parents('tr').data('value')
+		usuarios.historial(usuarios.id)
 	})
 	.on('click','#mainLstABC a',function(){
 		usuarios.select($(this).html());
 	})
 	.on('change','#lstABC',function(){usuarios.select($(this).val())})
+	
+$('#dialogs')
+	.on('change','#ultimosServicios',function(){
+		usuarios.historial(usuarios.id,$(this).val())
+	})
+	.on('click','.fnBuscarCita', function(){
 
-
+	})
 usuarios.init()

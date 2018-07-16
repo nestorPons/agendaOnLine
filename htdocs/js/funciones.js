@@ -365,7 +365,7 @@ var input = {
 var dialog = {
 	loads: new Array,
 	section : $('#dialogs') , 
-	isOpen : null, 
+	isOpen : null,  
 	open:function(objName,fnOk,fnCancel,callback){
 		dialog.isOpen = objName
 
@@ -384,10 +384,10 @@ var dialog = {
 		if(loads.indexOf(objName)==-1){
 			
 			loads.push(objName)	
-			dialog.create(objName,fnOk,fnCancel,function(){
+			dialog.create(objName,fnOk,fnCancel,function($this){
 
 				_open( $('#dialogs #'+objName))
-				typeof callback == "function" && callback(true)	
+				typeof callback == "function" && callback($this)	
 
 			})
 
@@ -395,13 +395,13 @@ var dialog = {
 	
 			dialog.reset(objName)
 			_open($this)
-			typeof callback == "function" && callback(false)	
+			typeof callback == "function" && callback($this)	
 			
 		}
 	 },
 	close:function (objName,callback){
 
-		var $this = $('#'+objName) || $('.dialog').is(':visible');
+		var $this = $('#'+objName) || $('.dialog').is(':visible')
 
 		//en el caso que existan passwords formaear el diseño
 		validar.pass.reset($('#'+objName) )
@@ -409,7 +409,8 @@ var dialog = {
 		$this.fadeOut()
 		$('#dialogs').fadeOut()
 		dialog.isOpen = null
-		typeof callback == "function" && callback();
+
+		typeof callback == "function" && callback(true);
 	 },
 	create: function (objName,fnOk,fnCancel,callback){
 			
@@ -448,19 +449,14 @@ var dialog = {
 					$this.on('click','.btn-danger',function(e){
 						typeof fnCancel == "function"?fnCancel():dialog.close(objName)
 					})
-					$this.on('click','.btn-success',function(e){
-						typeof fnOk == "function" && fnOk()
-					})
+					if(typeof fnOk == "function"){
+						$this.on('click','.btn-success',fnOk)
+					}
 			
 	
-					typeof callback == "function" && callback(true)
+					typeof callback == "function" && callback($this)
 				})
-				
-
-
 			 },'html')
-
-
 	 },
 	reset : function(objName){
 		var $this = $('#'+objName)

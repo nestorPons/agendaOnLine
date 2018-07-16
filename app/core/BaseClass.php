@@ -51,7 +51,7 @@ class BaseClass{
         return  $this->format($result);
     
      }  
-    public function getBy ( $column , $value , string $return = '*', $type = MYSQLI_ASSOC ) {
+    public function getBy ( $column , $value , string $return = '*', $type = MYSQLI_ASSOC, string $filter = '') {
         //varios valores ponerlos en un array
         $filters = '';
 
@@ -66,7 +66,7 @@ class BaseClass{
             $value = $this->conn->scape($value) ;
             $filters = (string)$column ." = '".(string)$value ."'";  
         }
-        $sql = "SELECT $return FROM {$this->table} WHERE $filters ;";
+        $sql = "SELECT $return FROM {$this->table} WHERE $filters $filter;";
 
         $query = $this->conn->query($sql);
         $result = $query->fetch_all($type); 

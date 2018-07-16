@@ -1,6 +1,6 @@
-<tr id="rowUsuarios<?=$id?>" class="<?=$clase?> ocultar" data-value ="<?=$id?>" data-color="<?=$color??''?>" data-status=<?=$status?>> 
+<tr id="rowUsuarios<?=$id?>" class="<?=$clase?> " data-value ="<?=$id?>" data-color="<?=$color??''?>" data-status=<?=$status?>> 
     <td> 
-        <span name="historia" class= "icon-doc-text x6 a" title="Historial de usuario"></span>
+        <span name="historia" class= "icon-doc-text " title="Historial de usuario"></span>
         <span name="editar[]" class= "icon-edit x6 a"  title="Editar usuario"></span>
     </td>
     <td name="id" class="id">	<?=$id. " " ;?></td>

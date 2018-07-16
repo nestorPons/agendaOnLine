@@ -1,31 +1,50 @@
+<!--<div id="dlgHistorial" class="dialog">
+	<span class="icon-cancel fnClose"></span>
+	<div class="content-popup">
+		<div class="template">
+			<i class ="icon-search"></i>
+			<span class="hisFecha"></span> <span class="hisHoras"></span> Nº cita <span class="hisIdCita"></span> 
+			 agenda <span class="hisAgenda"></span> los servicios: 
+			<div class="hisServicios">
+				<div class="hisServicio template"></div>
+			</div>
+		</div>
+		<div id="contenedor-historial"></div>
+	</div>
+</div>
+-->
 <div id="dlgHistorial" class="dialog">
 	<span class="icon-cancel fnClose"></span>
 	<div class="content-popup">
-	<div class="close"><a href="#" class="icon-cancel-circled2 close"></a></div>
-		<table class="tablas">
+		<select name="" id="ultimosServicios">
+			<option value="10" selected>mostrar 10</option>
+			<option value="20">mostrar 20</option>
+			<option value="50">mostrar 50</option>
+		</select>
+<!--
+implemenar busqueda por periodo de tiempo 
+		input.iconClass
+			
+		<input id="historialInicio" type="date">
+		<input id="historialFinal" type="date">
+
+-->
+		<table class="">
 			<thead>
 				<tr class = "encabezado">
-					<th>Opc</th><th>agenda</th><th>Cita</th><th>fecha</th><th>hora</th><th>Servicio</th>
+					<th>Opc</th><th>Fecha</th><th>Hora</th><th>Agenda</th>
 				</tr>
-			<thead>
-			<tbody>
-				<tr class="template">
-					<td><span class ="icon-search"></span></td>
-					<td class="hisfecha"></td>
-					<td class="hishoras"></td>
-					<td class="hisIdCita"></td>
-					<td class="hisSer"></td>
-					<td class="hisagenda"></td>
+				<tr id="hisCita" class="template">
+					<td><span class ="icon-search fnBuscarCita" tittle = "Ir a la cita" ></span></td>
+					<td class="hisFecha"></td>
+					<td class="hisHoras"></td>
+					<td class="hisAgenda"></td>
 				</tr>
-				<?php foreach($User->historial() as $h ){?>
-					<td><span class ="icon-search"></span></td>
-					<td class="hisfecha"><?=$h['fecha']?></td>
-					<td class="hishoras"><?=$h['hora']?></td>
-					<td class="hisIdCita"><?=$h['idCita']?></td>
-					<td class="hisSer"><?=$h['servicio']?></td>
-					<td class="hisagenda"><?=$h['agenda']?></td>
-				<?php }?>
-			<tbody>
+				<tr id="hisServicios" class="template">
+					<td><i class="icon-angle-right"></i></td>
+					<td colspan=4 class="hisServicio"></td>
+				</tr>
+			</thead>
 		</table>
 	</div>
 </div>

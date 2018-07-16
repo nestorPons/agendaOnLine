@@ -125,10 +125,11 @@ thead{
 	}
 
  }
-span.icon-plus{
+[class*="icon-"], [class*="lnr-"]{
 	cursor: pointer;
  }
-a,i , .a{
+
+a, i, .a{
 	cursor: pointer;
 	border-radius: 2px;
 	-webkit-transition: background 0.1s;
@@ -323,6 +324,12 @@ input[type="color"] {
 	line-height: 1.5em;
     z-index: 1050;
 	text-align:center;
+	table{
+		width : 100%;
+		thead{
+			font-size: 0.8em; 
+		}
+	}
 	.icon-cancel{
 	    color: #777777;
 		float: right;
@@ -335,7 +342,7 @@ input[type="color"] {
 		border-collapse: separate;
 		border-spacing: 5px;
 	 }
-	button{
+	button, input{
 		margin: 0 auto;
 	    margin-top: 10px;
 	 }
@@ -360,6 +367,13 @@ input[type="color"] {
 		input[type="checkbox"],input[type="radio"]{
 			float: left; 
 		} 
+	}
+	#contenedor-historial{
+		text-align: justify;
+		&>div{
+			margin: 3px auto; 
+			display: block;
+		}
 	}
 	@media (max-width: 320px){
 		width:auto;
@@ -1547,9 +1561,6 @@ input[type="color"] {
 			left: 5px;
 		}
 	}
-	#conTxtBuscar{
-		background-color: inherit;
-	}
 	&:before, &:after {
 		display: table;
 		content: "";
@@ -1739,6 +1750,7 @@ input[type="color"] {
 		@media (max-width: 800px) {display:none;}
 	 }
 	#conTxtBuscar{
+		background-color: inherit;
 		display:none;
 		position:fixed;
 		width: 100%;
@@ -1754,6 +1766,7 @@ input[type="color"] {
 			width: 350px;
 			margin: 10px 20px auto;
 			float: right;
+			padding-left: 20px;
 			@media (max-width: 425px){
 				width:210px;
 				margin: 10px auto;
