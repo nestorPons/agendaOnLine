@@ -7,7 +7,7 @@
 	</script>
     <title>Menu agenda On line zona usuarios</title>
 </head>
-<body user="user" iduser = <?=$_SESSION['id_usuario']?>>
+<body id="user" user="user" iduser = <?=$_SESSION['id_usuario']?>>
 <?php require_once URL_MENUS . 'users.php'?>
 <div id="login" class="login">	
 	<div class="tile-container" id="contenedorMenuPrincipal">

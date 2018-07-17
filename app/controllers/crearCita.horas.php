@@ -9,6 +9,7 @@ $dia_semana = date('w',strtotime($fecha)) ;
 $Horarios = new models\Horarios ;
 $Horarios2 =new models\Horarios ;
 
+
 $lbl = new models\Lbl ;
 
 $lbl->loadDates( $fecha ,$fecha , $ag ) ;

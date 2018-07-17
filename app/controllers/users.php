@@ -2,6 +2,7 @@
 require_once URL_FUNCTIONS .'tools.php';
 
 $User = new models\User($_SESSION['id_usuario']);
+
 if (isset($_POST['action'])) {
     if ($_POST['action'] == 'view'){
         if($_POST['section']=='historial') $historial = $User->getData(); 

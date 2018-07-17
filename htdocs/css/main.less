@@ -1837,40 +1837,40 @@ input[type="color"] {
 		}
 	 }
 	 
-	.contenedor-datepicker{
+ }
+.contenedor-datepicker{
+	display: inline-flex;
+	margin: 8 14;
+	text-align: center;
+	width: 100%;
+	max-width: 358px;
+	opacity: 0.5;
+	i{
+		position: relative;
 		display: inline-flex;
-		margin: 8 14;
-		text-align: center;
+		color: #888;
+		z-index:10;
+		top:9px;
+	}
+	.icon-right-open{
+		left: 87%;
+	}
+	.icon-left-open{
+		left: 46px;	
+	}
+	.datepicker{
+		text-align:center;
+		font-size: 1.1em;
 		width: 100%;
-		max-width: 358px;
-		opacity: 0.5;
-		i{
-			position: relative;
-			display: inline-flex;
-			color: #888;
-			z-index:10;
-			top:9px;
-		}
-		.icon-right-open{
-			left: 87%;
-		}
-		.icon-left-open{
-			left: 46px;	
-		}
-		.datepicker{
-			text-align:center;
-			font-size: 1.1em;
-			width: 100%;
-		}
-		@media (max-width: 425px){
-			max-width: 210; 
-			margin: 8 0 ;
-			.icon-right-open {
-				left: 79%;	
-			}
+	}
+	@media (max-width: 425px){
+		max-width: 210; 
+		margin: 8 0 ;
+		.icon-right-open {
+			left: 79%;	
 		}
 	}
- }
+}
 #nota{
 	 margin: 1% 5% auto;
 	 width:90%;
@@ -1987,28 +1987,17 @@ input[type="color"] {
 	}
  }
 #user{
-	background-color: #fff;
-	.icon-load{
-		margin:0;
-	}
-	.login{
-		width:auto;
-		margin: auto;
-	}
-	#crearCita{
-		.contenedorTablas{
-			margin: 5px;
+	nav{
+		a * {
+			font-size: 1em; 
 		}
-	}
-	#logo{
-		width:auto;
-		max-height: 45px;
-	}
-	.tablas{
-		.activa{
-			display:inline-block;
+		#logo{
+			height:50px;
+			float: left;
 		}
+
 	}
+
  }
  section#historial{
 	div.cita{

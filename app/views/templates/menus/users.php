@@ -1,6 +1,6 @@
-<div  id= "navbar" class="app-bar" data-role="appbar">
-	<a href="/" class="app-bar-element branding">
-		<img id="logo" src="/img/logo.png" width="64">
+<nav  id= "navbar" class="app-bar" data-role="appbar">
+	<a href= "<?=CONFIG['web']??''?>"  target="_blank">
+		<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
 	</a>
 	<span class="app-bar-divider"></span>
 	<ul class="app-bar-menu ">
@@ -16,4 +16,4 @@
 			</a>
 		</li>
 	</ul>
-</div>
+</nav>
