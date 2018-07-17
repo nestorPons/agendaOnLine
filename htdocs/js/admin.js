@@ -20,9 +20,7 @@ function sincronizar( dias, date , callback ){
 		Fecha.anterior = Fecha.general
 		Fecha.general = Fecha.sql(fecha)
 		Fecha.id = Fecha.number(Fecha.general)
-
-		//slideDias($('.deslizanteFechas'),Fecha.restar(Fecha.anterior,Fecha.general))
-		
+	
 		colorearMenuDiasSemana();
 
 		//Sincronizamos el panel principal
@@ -145,31 +143,35 @@ main ={
 			$('#dlgEditCita').find('#tiempoServicios').val(ts)
 		 }
 	 }, 
-	sincronizar: function (dir,callback){
+	sincronizar: function (dir){
 		main.cargado = false
-		var section = main.section , body = main.body
+		var section = main.section , 
+			body = main.body, 
+			_pasarDia = function(dir){
+				if (Fecha.id != section.find('.dia.activa').attr('id')) {
+					var dir= dir||0,
+						ent = (dir>0||dir=='right')?'right':'left',
+						sal = (ent=='right')?'left':'right'
+			
+					body.hide("slide", { direction: sal }, 750,function(){
+						$('.dia.activa').removeClass('activa')
+						section.find('#'+ Fecha.id).addClass('activa')
+						body.show("slide", { direction: ent }, 750)
+
+						main.inactivas.comprobar()
+						main.cargado = true
+					})
+				} 	
+				$('.tabcontrol').tabcontrol()
+			}
 
 		if (!section.find('#'+Fecha.id).length)
-			main.crearDias(callback)
-		else
-			main.check()
+				main.crearDias(_pasarDia)
+			else{
+				main.check()
+				_pasarDia()
+			}
 
-		//no lo meto en fin de carga para avanzar mas rapido
-		if (Fecha.id != section.find('.dia.activa').attr('id')) {
-			var dir= dir||0,
-				ent = (dir>0||dir=='right')?'right':'left',
-				sal = (ent=='right')?'left':'right'
-	
-			body.hide("slide", { direction: sal }, 750,function(){
-				$('.dia.activa').removeClass('activa')
-				section.find('#'+ Fecha.id).addClass('activa')
-				body.show("slide", { direction: ent }, 750)
-
-				main.inactivas.comprobar()
-				main.cargado = true
-			})
-		} 	
-		$('.tabcontrol').tabcontrol()
 
 	 },
 	activeDay : function () {
@@ -246,6 +248,7 @@ main ={
 		var dias = body.find('.dia')
 		var ids = new Array();
 
+		// Se crea array de dias cargados
 		$.each(dias,function(){
 			ids.push($(this).attr('id'));
 		})
@@ -265,7 +268,7 @@ main ={
 		})
 		.done(function(html){
 			body.append(html)
-			main.deleteDuplicate() 
+		 
 			main.lbl.load()
 			typeof callback == "function" && callback()
 		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
@@ -286,14 +289,7 @@ main ={
 					.addClass($this.data('color'));
 			})
 	 },
-	deleteDuplicate: function(){
-		var section = $('#main')
-		section.find('.dia').each(function( i , self ){
-			var days =  section.find(' #' + self.id ) 
-			var num = days.length
-			if (num > 1)  $('#main #'+ self.id).first().remove()
-		})
-	 },
+
 	save: function(data, callback){
 
 		data.controller= 'cita'
@@ -969,6 +965,7 @@ menu = {
 				options : true
 			}
 		options.find('li').addClass('disabled')
+
 		menu.disabled(add,del,reset,search,save,show,edit,options,calendar)
 
 		switch(capa) {
@@ -1123,7 +1120,6 @@ menu = {
 		$('#txtBuscar').val("")
 			.parent().hide('slide',{direction:'right'})
 
-		$('#btnSearch').find('.menulbl').show(500)
 	 },
 	options : function($this){
 		if ($('#btnOptions #chckOpUsersDel').is(':checked'))
@@ -1134,7 +1130,6 @@ menu = {
 		servicios.init();	
 	 },
 	buscar :function(txt, sec, col){
-
 		$sec = $("#"+sec)
 		$encontrados =txt.match(/^@$/)
 			?$sec.find('td.email:contains('+txt+')')
@@ -1146,7 +1141,7 @@ menu = {
 			$sec.find("tbody tr").hide()
 		}
 		colorear_filas($('.colorear-filas:visible'))
-	}
+	 }
 },
 notas = {
 	nombreDlg : 'dlgNotas',
@@ -1452,8 +1447,6 @@ $(function(){
 				$('#txtBuscar')
 					.parent().show('slide',{direction:'right'}).end()
 					.focus()
-				$(this).find('.menulbl').hide(500)
-
 			}else{
 				menu.load();
 			}

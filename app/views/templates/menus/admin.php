@@ -67,12 +67,12 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 	</div>
 	<ul id="tools" class="app-bar-menu no-flexible" data-flexdirection="reverse">
 		<div id="btnSearch" class="app-bar-element no-flexible   ">
-			<span  class="lnr-magnifier"></span>
+			<span  class="icono-nav lnr-magnifier"></span>
 			<span  class="menulbl">Buscar</span>
 		</div>
 		<div id="btnOptions" class="app-bar-element no-flexible  ">
 			<a class="dropdown-toggle no-flexible   ">
-				<span class="icon-cog"></span>
+				<span class="icono-nav icon-cog"></span>
 				<span  class="menulbl">Opciones</span>
 			</a>
 			<ul class="d-menu" data-role="dropdown">
@@ -89,30 +89,30 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 		</div>
 
 		<div id="btnReset" class="app-bar-element no-flexible ">
-			<span  class="lnr-undo"></span>
+			<span  class="icono-nav lnr-undo"></span>
 			<span  class="menulbl">Refrescar</span>
 		</div>
 		<div id="btnAdd" class="app-bar-element no-flexible  " data-value=0>
-			<span  class="lnr-plus-circle" ></span>
+			<span  class="icono-nav lnr-plus-circle" ></span>
 			<span  class="menulbl">Nuevo</span>
 		</div>
 		<div id="btnDel" class="app-bar-element no-flexible   ">
-			<span  class="lnr-trash"></span>
+			<span  class="icono-nav lnr-trash"></span>
 			<span  class="menulbl">Eliminar</span>
 		</div>
 			<div id="btnSave" class="app-bar-element no-flexible   ">
-			<span  class="lnr-thumbs-up" ></span>
-			<span class="lnr-sync animate-spin"></span>
+			<span class="icono-nav lnr-thumbs-up " ></span>
+			<span class="icono-nav lnr-sync animate-spin"></span>
 			<span class="menulbl">Guardar</span>
 		</div>
 			<div id="btnEdit" class="app-bar-element no-flexible   ">
-			<span  class=" icon-edit" ></span>
-			<span class="icon-load animate-spin"></span>
+			<span class="icono-nav icon-edit" ></span>
+			<span class="icono-nav icon-load animate-spin"></span>
 			<span class="menulbl">Editar</span>
 		</div>
 		<div id="btnShow" class="app-bar-element no-flexible " >
-				<span class="off lnr-star <?=CONFIG['ShowRow']==1?"hidden":""?>"></span>
-				<span class="on lnr-star-empty <?=CONFIG['ShowRow']==1?"":"hidden"?>"></span>
+				<span class="icono-nav off lnr-star <?=CONFIG['ShowRow']==1?"hidden":""?>"></span>
+				<span class="icono-nav on lnr-star-empty <?=CONFIG['ShowRow']==1?"":"hidden"?>"></span>
 				<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>
