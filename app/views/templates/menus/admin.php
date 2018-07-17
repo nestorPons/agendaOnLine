@@ -42,8 +42,20 @@
 $cls_festivos = (!empty(FESTIVOS)) && (in_array(Date('md') , FESTIVOS )) ? 'c-red' : '' ;
 $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 ?>
-	<div class = "contenedor-datepicker">
 
+	
+	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse">
+		<li id="btnExit" class="app-bar-element no-flexible place-right">
+			<a href="/<?=CODE_EMPRESA?>/logout" id="mnuUserSalirSession" class="lnr-power-switch ">
+		</a>
+		</li>
+		<li id= "btnContacto" class="app-bar-element no-flexible place-right">
+			<i  class=" lnr-envelope"></i>
+		</li>
+	</ul>
+<!--menu herramientas-->
+
+	<div class = "contenedor-datepicker">
 		<i data-action="-1" class="icon-left-open idDateAction" data-disabled=false></i>
 		<i data-action="1" class="icon-right-open idDateAction" data-disabled=false></i>
 		
@@ -53,76 +65,58 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 		data-festivos-show=true data-min-date=<?= $minDate??null;?>>
 		
 	</div>
-	
-	<?php 
-	if(!$Device->isMovile){?>
-		<h1 id="tile_seccion">Reserva de citas</h1>
-	<?php }?>
-
-	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse">
-		<li id="btnExit" class="app-bar-element no-flexible place-right">
-			<a href="/<?=CODE_EMPRESA?>/logout" id="mnuUserSalirSession" class="lnr-power-switch ">
-		</a>
-	</li>
-	<li id= "btnContacto" class="app-bar-element no-flexible place-right">
-		<i  class=" lnr-envelope"></i>
-	</li>
-</ul>
-<!--menu herramientas-->
-
-		<ul class="herramientas app-bar-menu place-right no-flexible" data-flexdirection="reverse">
-		 <div id="btnSearch" class="app-bar-element no-flexible place-right disabled ">
+	<ul id="tools" class="app-bar-menu no-flexible" data-flexdirection="reverse">
+		<div id="btnSearch" class="app-bar-element no-flexible   ">
 			<span  class="lnr-magnifier"></span>
 			<span  class="menulbl">Buscar</span>
 		</div>
-		<div id="btnOptions" class="app-bar-element no-flexible place-right disabled">
-			<a class="dropdown-toggle no-flexible place-right  ">
+		<div id="btnOptions" class="app-bar-element no-flexible  ">
+			<a class="dropdown-toggle no-flexible   ">
 				<span class="icon-cog"></span>
 				<span  class="menulbl">Opciones</span>
 			</a>
 			<ul class="d-menu" data-role="dropdown">
-				<li id=rowsHiddens class=disabled>
+				<li id=rowsHiddens class=>
 					<input type="checkbox" id="chckOpUsersDel">
 					<label for = "chckOpUsersDel" >	Mostrar eliminados.</label>
 				</li>
-				<li id=showByTime class=disabled>
+				<li id=showByTime class=>
 					<label><input type="radio" value=1 checked>Último dia</label><br>
 					<label><input type="radio" value=7 >Última semana</label><br>
 					<label><input type="radio" value=30 >Último mes</label><br>
 				</li>
-
 			</ul>
 		</div>
 
-		 <div id="btnReset" class="app-bar-element no-flexible place-right">
+		<div id="btnReset" class="app-bar-element no-flexible ">
 			<span  class="lnr-undo"></span>
 			<span  class="menulbl">Refrescar</span>
 		</div>
-		 <div id="btnDel" class="app-bar-element no-flexible place-right disabled ">
-			<span  class="lnr-trash"></span>
-			<span  class="menulbl">Eliminar</span>
-		</div>
-		 <div id="btnAdd" class="app-bar-element no-flexible place-right disabled" data-value=0>
+		<div id="btnAdd" class="app-bar-element no-flexible  " data-value=0>
 			<span  class="lnr-plus-circle" ></span>
 			<span  class="menulbl">Nuevo</span>
 		</div>
-		 <div id="btnSave" class="app-bar-element no-flexible place-right disabled ">
+		<div id="btnDel" class="app-bar-element no-flexible   ">
+			<span  class="lnr-trash"></span>
+			<span  class="menulbl">Eliminar</span>
+		</div>
+			<div id="btnSave" class="app-bar-element no-flexible   ">
 			<span  class="lnr-thumbs-up" ></span>
 			<span class="lnr-sync animate-spin"></span>
 			<span class="menulbl">Guardar</span>
 		</div>
-		 <div id="btnEdit" class="app-bar-element no-flexible place-right disabled ">
+			<div id="btnEdit" class="app-bar-element no-flexible   ">
 			<span  class=" icon-edit" ></span>
 			<span class="icon-load animate-spin"></span>
 			<span class="menulbl">Editar</span>
 		</div>
-		<div id="btnShow" class="app-bar-element no-flexible place-right" >
+		<div id="btnShow" class="app-bar-element no-flexible " >
 				<span class="off lnr-star <?=CONFIG['ShowRow']==1?"hidden":""?>"></span>
 				<span class="on lnr-star-empty <?=CONFIG['ShowRow']==1?"":"hidden"?>"></span>
 				<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>
-	<div id="conTxtBuscar" class=" place-right"> 
+	<div id="conTxtBuscar" class=" "> 
 		<input type="search" name="txtName" id="txtBuscar">
 	</div>
 </nav>

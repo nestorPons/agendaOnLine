@@ -964,18 +964,19 @@ menu = {
 			edit  	= $('#btnEdit'),
 			options = $('#btnOptions'),
 			del  	= $('#btnDel'),
+			calendar = $('.contenedor-datepicker'), 
 			df 		= {
 				options : true
 			}
 		options.find('li').addClass('disabled')
-		menu.disabled(add,reset,search,save,show,edit,options)
+		menu.disabled(add,del,reset,search,save,show,edit,options,calendar)
 
 		switch(capa) {
 			case 'main':
-				menu.enabled(show,reset)
+				menu.enabled(show,calendar)
 				break;
 			case 'crearCita':
-				menu.enabled(search)
+				menu.enabled(search,calendar)
 				break;
 			case 'usuarios':
 				menu.enabled(add,search)
@@ -1008,7 +1009,7 @@ menu = {
 				menu.enabled(add)
 				break
 			case 'history':
-				menu.enabled()
+				menu.enabled(calendar)
 				df.options = false
 				options.find('#showByTime').removeClass('disabled')
 				break
@@ -1107,11 +1108,11 @@ menu = {
 	 },
 	disabled:function (){
 		for(let i = 0; i < arguments.length; i++)
-			arguments[i].addClass('disabled')
+			arguments[i].hide(100)
 	 },
 	enabled: function (){
 		for(let i = 0; i < arguments.length; i++)
-			arguments[i].removeClass('disabled')
+			arguments[i].show(100)
 	 },
 	load:function (){
 
@@ -1509,6 +1510,7 @@ $(function(){
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 
-	main.lbl.load()
 	$('#tile_seccion').text('Reserva de citas')
+	main.lbl.load()
+	menu.status('main')
 })

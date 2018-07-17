@@ -64,7 +64,6 @@ class Device{
 
      }
     public function getDevice(){      
-
         switch($this->width){
             case ($this->width <= 300):
                 $this->type = 'watch';

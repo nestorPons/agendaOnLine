@@ -960,20 +960,26 @@ a,i , .a{
 	color: @red;
  }
 .ui{
-	&-datepicker-title{
-		font-family: @title-font;
-	}
-	&-widget-header{
-		background-color: @b1 ;
-	}
-	&-widget-content &-corner-all {
-		.ui-datepicker-next .ui-icon{
-			color: @text1;
-		}
-		.ui-datepicker-prev .ui-icon{
-			color: @text1;
+	&-datepicker{
+		border-radius : @radius ;
+		&-title{
+			font-family: @title-font;
 		}
 	}
+		&-widget-header{
+			*{
+				border-radius: @radius;
+			}
+			background-color: @b1 ;
+		}
+		&-widget-content &-corner-all {
+			.ui-datepicker-next .ui-icon{
+				color: @text1;
+			}
+			.ui-datepicker-prev .ui-icon{
+				color: @text1;
+			}
+		}
  }
 #lstSerMain a { 
 	color: @text-color;
