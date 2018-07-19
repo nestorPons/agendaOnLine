@@ -22,18 +22,20 @@
 				</div>
 			</div>
 		</section>
-		<section id="config"  name="tile" class="tile tile-secon" data-role="tile">
+		<!--
+			<section id="config"  name="tile" class="tile tile-secon" data-role="tile">
 			<div class="tile-content iconic">
 				<div class="mensaje">
-					<span class="icon icon-user-1"></span>
-					<span class="tile-label">Mis datos</span>
+					<span class="icon icon-config"></span>
+					<span class="tile-label">Configuración</span>
 				</div> 	
 				<div class="contenido">
 					
 				</div>
 			</div>
 		</section>
-		<section id="historial" class="tile-wide "  name="tile" data-role="tile">
+		-->
+		<section id="historial" class="tile<?php if(!$Device->isMovile)echo"-wide" ?> "  name="tile" data-role="tile">
 			<div class="tile-content iconic">
 				<div class="mensaje">
 					<h3><span id='mensajeHistorial'></span></h3>

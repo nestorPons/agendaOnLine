@@ -761,26 +761,26 @@ a,i , .a{
 	.tile{
 		border-radius : @radius;
 		background-color: @green;
-		&-secon {
-			background-color: @yellow;
+	}
+	section:nth-child(1n) {
+		background-color: @yellow;
+	}
+	section:nth-child(2n) {
+		background-color: @color;
+	}
+	section:nth-child(3n){
+		
+		background-color: @blue;
+	}
+	section#eliminar{
+		background-color: @red;
+	}
+	section:nth-child(5n){
+		.contenido{
+			background-color: @base;
+			color: @grey;
 		}
-		&-badge {
-			background-color: @color;
-		}
-		&-wide{
-			
-			background-color: @blue;
-		}
-		&-small{
-			background-color: @red;
-		}
-		&-content{
-			.contenido{
-				background-color: @base;
-				color: @grey;
-			}
 
-		}
 	}
  }
 .charm{

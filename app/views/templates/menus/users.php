@@ -10,11 +10,14 @@
 		<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
 	</a>
 	<span class="app-bar-divider"></span>
-	<ul class="app-bar-menu ">
-		<li class="noHover" id='lblUser'>
-			<span>Bienvenid@ </span>
-			<span id="lblNombre"><?=$User->nombre?></span><li>
-	</ul>
+	<?php if(!$Device->isMovile){ ?>
+		<ul class="app-bar-menu ">
+			<li class="noHover" id='lblUser'>
+				<span>Bienvenid@ </span>
+				<span id="lblNombre"><?=$User->nombre?></span><li>
+		</ul>
+		<?php 
+	}?>
 	<ul class="app-bar-menu place-right" data-flexdirection="reverse">
 		<li><span class="lnr-home"></span></li>		
 		<li id="btnConfig">

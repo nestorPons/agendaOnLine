@@ -21,18 +21,12 @@
                         <input type="number" class="pin" id="newpinpass"  name="newpinpass" placeholder="Introduzca su numero pin" 
                          min=0001 max=9999 title="Pin de 4 dígitos" required>
                         <span class="iconClass-inside icon-key icon-left"></span>
-                        <?php if(!$Device->isLaptop){?>
-                            <span class="iconClass-inside icon-cancel-circled2 icon-right clear-input"></span>
-                        <?php }?>
                     </div>
                     <div class="iconClass-container">
                         <span class="caption">Repita el numero Pin</span>
                         <input type="number" class="pin" id="newpinpass"  name="newpinpass" placeholder="Introduzca su numero pin" 
                          min=0001 max=9999 title="Pin de 4 dígitos" required>
                         <span class="iconClass-inside icon-key icon-left"></span>
-                        <?php if(!$Device->isLaptop){?>
-                            <span class="iconClass-inside icon-cancel-circled2 icon-right clear-input"></span>
-                        <?php }?>
                     </div>
                     <button class="btn-success btnLoad"  id="btnAceptar" value="Aceptar" default>Aceptar</button>
                     <input type="button" class="btn-danger logout"  value="Cancelar" >
