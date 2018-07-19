@@ -5211,31 +5211,7 @@ $.widget( "metro.tabcontrol" , {
                 }
             }
         });
-
-        if (o.saveState && element.attr('id') !== undefined && element.attr('id').trim() !== '') {
-
-            var stored_target = window.localStorage.getItem(element.attr('id')+"-stored-tab");
-            if (stored_target && stored_target !== 'undefined') {
-                tab = element.find("a[href='"+stored_target+"']");
-                if (tab) {
-                    target = tab.attr('href');
-                    frame = target && target.isUrl() ? false : $(target);
-                    o._current.tab = tab;
-                    o._current.frame = frame;
-                }
-            }
-        }
-
-        if (!o._current.tab && o.openTarget !== false) {
-
-            tab = element.find("a[href='"+ o.openTarget+"']");
-            if (tab) {
-                target = tab.attr('href');
-                frame = target && target.isUrl() ? false : $(target);
-                o._current.tab = tab;
-                o._current.frame = frame;
-            }
-        }
+        
 
         if (!o._current.tab) {
 
@@ -5262,8 +5238,8 @@ $.widget( "metro.tabcontrol" , {
         this._createEvents();
         this._openTab();
 
-        //this._hideTabs();
-        //
+        this._hideTabs();
+        
         //$(window).on('resize', function(){
         //    that._hideTabs();
         //});

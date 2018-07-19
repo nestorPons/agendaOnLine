@@ -41,16 +41,23 @@ function sincronizar( dias, date , callback ){
 			.val(Fecha.print(fecha))
 			.datepicker("setDate",Fecha.print(fecha));
 
-		$('.tabcontrol').tabcontrol()
+
 	}
  }
 function mostrarCapa(capa, callback){
-
 	var data = { 
-		controller : capa ,  
-		fecha :  Fecha.sql ,
-	 }, 
-	 $capa = $('#'+capa)
+			controller : capa ,  
+			fecha :  Fecha.sql ,
+	 	 }, 
+	 	$capa = $('#'+capa),
+		$menu = $('#mySidenav')
+
+	//Cambia el estado del menu
+	$('.app-bar-pullmenu ').hide('blind');
+	$menu.find('.selected').removeClass('selected')
+	$menu.find('[data-capa="'+capa+'"]').addClass('selected')
+	//***	  
+
 	if($capa.is(':visible')) return false;
 	$('#chckOpUsersDel').prop( "checked", false ) ;
 	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
@@ -70,6 +77,7 @@ function mostrarCapa(capa, callback){
 		capa=='crearCita' && crearCita.load()
 
 	 }
+	 
 	if($('#config').is(':visible')&&config.change) config.guardar();
 	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
 	if($('#crearCita').is(':visible')) crearCita.reset();
@@ -86,7 +94,7 @@ function mostrarCapa(capa, callback){
 	$('html,body').animate({scrollTop:0}, 500)
 	
 	//Titulo de la seccion
-	$('#navbar').find('#tile_seccion').text($capa.data('nombre'))
+	//$('#navbar').find('#tile_seccion').text($capa.data('nombre'))
 
 	typeof callback == "function" && callback()
  }
@@ -159,10 +167,9 @@ main ={
 						body.show("slide", { direction: ent }, 750)
 
 						main.inactivas.comprobar()
-						main.cargado = true
+						main.cargado = true	
 					})
-				} 	
-				$('.tabcontrol').tabcontrol()
+				}
 			}
 
 		if (!section.find('#'+Fecha.id).length)
@@ -289,7 +296,6 @@ main ={
 					.addClass($this.data('color'));
 			})
 	 },
-
 	save: function(data, callback){
 
 		data.controller= 'cita'
@@ -310,14 +316,7 @@ main ={
 		.fail(function(r){console.log(r)})
 
 	 },
-	responsive: function($this){
-		var a = $this.val();
-		$('.cuerpo').fadeOut('fast',function(){
-			$('.dia .celda').not('.num').addClass('hiddenim')
-			$('#main .agenda'+a).removeClass('hiddenim')
-			$('.cuerpo').fadeIn('fast')
-		})
-	 },
+
 	edit : function (idCita, idCelda ) {
 		if (!idCita)  return false
 		main.idCita = idCita
@@ -924,28 +923,31 @@ menu = {
 				case 1: 				
 					$('#mySidenav').width(50)
 						.find('a').width(20).end()
-						.find('.caption').hide()							
-					$('#login')
-						.width((main.login.ancho - 25))
-						.animate({'left':25}, callback)
+						.find('.caption').hide()	
+					if(!Device.isCel()){
+						$('#login')
+							.width((main.login.ancho - 25))
+							.animate({'left':25}, callback)
+					}					
 					localStorage.setItem("menuOpen",1)
 				break
 				case 2: 
+					
 					$('#mySidenav').width(150)
 						.find('a').width(120).end()
 						.find('.caption').show()
-
-					$('#login')
-						.width((main.login.ancho - '90'))
-						.animate({'left':90}, callback)
+					if(!Device.isCel()){
+						$('#login')
+							.width((main.login.ancho - '90'))
+							.animate({'left':90}, callback)
+					 }
 					localStorage.setItem("menuOpen",2)
 			
 				break
 				default:
 					$('#mySidenav').width(0)
-					$('#login')
-						.removeAttr( 'style' )	
-					callback
+					$('#login').removeAttr( 'style' )	
+					
 					localStorage.setItem("menuOpen",0)
 				
 			}
@@ -1286,15 +1288,15 @@ notas = {
 Device = {
 	cel: false, 
 	init : function(){
-		this.cel = ($(window).width()<=375)
-	}, 
+		this.cel = ($(window).width()<=425)
+	 }, 
 	isCel: function(val = false){
 		if($.isEmpty(val)){
 			return this.cel
 		} else  {
 			this.cel = val
 		}
-	}
+	 }
 }
 $(function(){
 	main.login.ancho = $('#login').width()
@@ -1303,6 +1305,7 @@ $(function(){
 
 	//Construyo la "clase" device para saber el dispositivo usado
  	Device.init()
+	if(Device.isCel()) localStorage.setItem('menuOpen',0)
 
 	cargarDatepicker()
 	colorearMenuDiasSemana()
@@ -1378,8 +1381,10 @@ $(function(){
 
 	$('#main')
 		.on('click','.lbl',function(e){
-			main.z_index =(main.z_index<=2)?3:2; 
-			$(this).css({'z-index': main.z_index })	
+			var val = ($(this).css('z-index')==3)?1:3
+			$('.lbl').css({'z-index': 2 })	
+			$(this).css({'z-index': val})	
+			
 			main.lbl.resize($(this))
 		 })
 		.on('click','.fnCogerCita',function(){
@@ -1387,7 +1392,7 @@ $(function(){
 			localStorage.setItem('hora', $(this).parents('tr').data('hour'))
 
 			mostrarCapa('crearCita')
-		})
+		 })
 		.on('click','#mainLstDiasSemana a',function(){
 			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 			var diaB = parseInt($(this).data('value'));
@@ -1419,9 +1424,7 @@ $(function(){
 			e.stopPropagation();
 			main.del($(this).parents('.lbl').attr('idcita'))
 		 })
-		.on('change','#selectTablasEncabezado',function(){
-			main.responsive($(this))
-		 })
+
 		.on('change','.nombreagenda',function(){
 
 			var data = {
@@ -1458,7 +1461,7 @@ $(function(){
 					$('.capasPrincipales:visible').attr('id')
 				)
 			}
-		})
+		 })
 		.on('click','#btnReset',function(){
 			if($('#usuarios').is(':visible')) usuarios.select('A');
 		 })
@@ -1488,10 +1491,6 @@ $(function(){
 				menu.nav.estado(0)
 			}
 
-			$('.app-bar-pullmenu ').hide('blind');
-			$('#mySidenav .selected').removeClass('selected')
-			$(this).find('a').addClass('selected')
-
 			var capa = $(this).find('a').data('capa') ;
 			if (capa == 'main'){
 				mostrarCapa('main' ,  true ) 
@@ -1503,7 +1502,7 @@ $(function(){
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
 
-	$('#tile_seccion').text('Reserva de citas')
+
 	main.lbl.load()
 	menu.status('main')
 })

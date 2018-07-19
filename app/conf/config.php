@@ -1,6 +1,4 @@
 <?php 
-
-
 //Se declara NAME_DB en confing para que no se declare antes de crear una empresa
 define('CODE_EMPRESA' , strtolower(trim($_REQUEST['empresa']??FALSE)) );
 

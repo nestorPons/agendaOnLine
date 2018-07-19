@@ -3,22 +3,22 @@
 const EMAIL_FROM = 'admin@reservatucita.com';
 const EMAIL_NAME = 'ReservaTuCita.com';
 const EMAIL_HOST = 'mail.gandi.net';// 'smtp.sd3.gpaas.net';  //smtp.gmail.com';
-const EMAIL_USER = 'nestorpons@gmail.com';
+const EMAIL_USER = 'admin@reservatucita.com';
 const EMAIL_PASS = 'QQasw2!!';
 const EMAIL_PORT = 25;
 
 //Server settings
-$this->SMTPDebug = 0;           // Enable verbose debug output
+$this->SMTPDebug =1;           // Enable verbose debug output
 $this->isMail();                // Set mailer to use SMTP
-$this->Host = 'mail.gandi.net';       // Specify main and backup SMTP servers
+$this->Host = EMAIL_HOST;       // Specify main and backup SMTP servers
 $this->SMTPAuth = false;        // Enable SMTP authentication
 $this->Username = '';   // SMTP username
 $this->Password = '';   // SMTP password
 $this->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
 $this->Port = 25;
  
-$this->From =  'nestorpons@gmail.com';
-$this->FromName =  'ReservaTuCita.com';
+$this->From =  EMAIL_FROM;
+$this->FromName =  EMAIL_NAME;
 //Recipients        
 $this->AddReplyTo(EMAIL_FROM,EMAIL_NAME);
 //config 

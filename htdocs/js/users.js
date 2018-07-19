@@ -160,11 +160,6 @@ var crearCita ={
 
 			lblTS.text(tiempoServicios)
 			crearCita.horas.pintar(Fecha.id,tiempoServicios)
-
-			if (!$.isEmpty(crearCita.data.hora)){
-				$('#crearCita .dia.activa').find('.horas[value="'+crearCita.data.hora+'"]').prop('checked',true)
-				crearCita.dialog()
-			}
 	
 		 } ,
 		crear: function (id_table, callback){
@@ -450,6 +445,14 @@ $(function(){
 		.on('click',".idDateAction",function(){
 			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
 		 })
+	$('#navbar')
+		 .on('click','#btnConfig',function(){
+			var menu = $('#mnuDatosPersonales')
+			if(menu.is(':visible'))
+				menu.hide('slide',{ direction: 'right' })
+			else
+				menu.show('slide',{ direction: 'right' })
+		})	
 	$('input:password').blur(function(){
 		var pass1 = $('#pass').val()		
 		var pass2 = $('#rpass').val()
@@ -502,7 +505,7 @@ $(function(){
 		})
 	$('#eliminar').click(function(){eliminarUsuario()})
 
-	fnReloj()
+	//fnReloj()
 	cargarDatepicker()
 	crearCita.init()
 	historial.numeracion()

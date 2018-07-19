@@ -6,6 +6,7 @@ $Data =  new \core\BaseClass('data') ;
 $Cita =  new \core\BaseClass('cita') ;
 $Serv =  new \core\BaseClass('servicios');
 $Lbl =   new \models\Lbl();
+$User = new \models\User($_SESSION['id_usuario']);
 
 //Declaro variable action pq en el include satinizo el POST donde se elimina action y controller
 $action = $_POST['action'];

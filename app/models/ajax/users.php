@@ -16,9 +16,6 @@ header('Content-Type: application/json');
 						$r = false ;
 					}
 				} 
-
-				$r['success'] = $User->set($data) ;
-
 				break;
 			case 'del':
 

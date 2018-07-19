@@ -759,8 +759,13 @@ a,i , .a{
 		color:#ffffff !important;
 	}
  }
-.tile(@alto:186.5px ,@espacio: 6px, @font-icon: 64px){
+
+
 	.tile-container{
+		@alto:186.5px; 
+		@espacio: 6px; 
+		@font-icon: 64px; 
+
 		width:100%+@espacio;
 		height:auto;
 		display:block;
@@ -878,24 +883,11 @@ a,i , .a{
 						display: none;
 					}
 				}
-				 .icon{
-					position: absolute;
-					width: @font-icon;
-					height: @font-icon;
-					font-size: @font-icon;
-					top: 50%;
-					margin-top: -40px;
-					left: 50%;
-					margin-left: -32px;
-					text-align: center;
-				}
-				&:first-child {
-					display: block;
-				}
+AAKI:::
 			}
 		}
 	}
- }
+ 
 
 .charm{
 	background-color:@color;
@@ -941,7 +933,6 @@ a,i , .a{
 	}
  }
 
-.tile();
 .tabcontrol {
 	.tabs {
 		border-bottom: 2px @color solid;

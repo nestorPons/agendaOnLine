@@ -23,20 +23,20 @@
 		</table>
 		<?php 
 	}else{
-		// PArte si es un mobil 
+		// Parte si es un mobil 
 		?>
-		<div id="tabcontrol" class="tabcontrol" datar-role="tabcontrol" data-save-state=true data-on-tab-click="menuEsMovil" >	
+		<div id="tabcontrol" class="tabcontrol" datar-role="tabcontrol" data-on-tab-click="menuEsMovil" >	
 			<ul class="tabs">
 				<?php
 				for ($a=0;$a<$Agendas->count();$a++){
 					$id = $agendas[$a][0];
 					$name = $agendas[$a][1];
 					?>
-					<li agenda=<?=$id?> value=<?=$id?>>
+					<li>
 						<a href="" agenda=<?=$id?>><?=$name?></a>
 					</li>
 					<?php
-				}
+				 }
 				?>
 			</ul>
 		</div>

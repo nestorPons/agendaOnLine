@@ -12,9 +12,9 @@ $agenda =  $_POST['agenda'][0]??mnsExit('Sin agenda');
 
 $r['success']=true;
 
-$result_data = $Data->getBy(array('fecha','hora','agenda'),array($fecha, $hora, $agenda)); 
+$data = $Data->getBy(array('fecha','hora','agenda'),array($fecha, $hora, $agenda)); 
 
-if ($result_data <= 1 || 1 ){
+if ($data <= 1 || 1 ){
 	$r['ocupado']=false;
 	if($Data->saveById(-1,[
 			'agenda' => $agenda,
@@ -26,31 +26,37 @@ if ($result_data <= 1 || 1 ){
 			'tiempo_servicios' => $_POST['tiempoServicios']
 		])){
 		
-		$id_servicio = $Data->getId();
-		$sql = '';
+			$id_servicio = $Data->getId();
+			$sql = '';
 
-		foreach ($servicios as $id ) {
-				$Cita->saveById(-1,[
-						'idCita' =>$id_servicio, 
-						'servicio'=> $id
-					]);
+			foreach ($servicios as $id ) {
+					$Cita->saveById(-1,[
+							'idCita' =>$id_servicio, 
+							'servicio'=> $id
+						]);
 
-				$arrSer[] = $Serv->getById($id) ;
-				$arridCitaSer[] = $Data->getId();
-			}
+					$arrSer[] = $Serv->getById($id) ;
+					$arridCitaSer[] = $Data->getId();
+				}
 
-		$r['idUser'] = $userId ;
-		$r['idCita'] = $id_servicio ;
-		$r['services'] = $arrSer ;
-		$r['idCitaSer'] = $arridCitaSer;
+			$r['idUser'] = $userId ;
+			$r['idCita'] = $id_servicio ;
+			$r['services'] = $arrSer ;
+			$r['idCitaSer'] = $arridCitaSer;
+			
+			if($User->isUser() && CONFIG['sendMailUser'])
+				$User->sendMail(
+					'mailConfirmation.php', 
+					'Confirmación reserva', 
+					[$fecha,$hora, $_POST['tiempoServicios']]
+				);
+
 		}
 } else {
 	$r['ocupado']=true;
 	$r['mns']['tile'] = " hora ocupada " ;
 	$r['mns']['body'] = " No se pueden reservar dos citas en la misma hora " ;
 	}
-
-if (CONFIG['sendMailAdmin']) include ("../../libs/enviarEmail.php");
 
 function mnsExit($mns){
 	echo($mns);

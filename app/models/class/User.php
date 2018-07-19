@@ -138,5 +138,16 @@ class User extends \core\BaseClass {
 			}
 		}
 		return($arr);
-	}
+	 }
+	public function sendMail($file_mens, $alt_body, $arr_args_mens){
+		$Mail = new \models\PHPMailer(true);
+
+        $Mail->addAddress($this->email, $this->nombre);   
+        $Mail->url_menssage = URL_SOURCES . $file_mens;
+        $Mail->Body    = \core\Tools::get_content($Mail->url_menssage, $arr_args_mens);
+        $Mail->AltBody = $alt_body;
+        $Mail->Subject =  $alt_body;
+
+       return $Mail->send($this);
+	 }
 }

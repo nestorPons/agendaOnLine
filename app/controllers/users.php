@@ -17,7 +17,7 @@ if (isset($_POST['action'])) {
         
 
     $Servicios = new core\BaseClass('servicios') ;
-     $_SESSION['SERVICIOS'] = $Servicios->getBy('baja',0 ,'*',MYSQLI_NUM) ;
+    $_SESSION['SERVICIOS'] = $Servicios->getBy('baja',0 ,'*',MYSQLI_NUM) ;
 
     $Familias = new core\BaseClass('familias');
     $_SESSION['FAMILIAS'] = $Familias->getBy('mostrar' , 1 , '*' ,  MYSQLI_NUM);
