@@ -50,12 +50,7 @@
 	box-shadow: @x @y @blur @color;
 
  }
-.user-select-none(){
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
- }
+
 input :-webkit-autofill {
 	-webkit-text-fill-color: @text-color !important;
  }
@@ -759,136 +754,35 @@ a,i , .a{
 		color:#ffffff !important;
 	}
  }
-
-
-	.tile-container{
-		@alto:186.5px; 
-		@espacio: 6px; 
-		@font-icon: 64px; 
-
-		width:100%+@espacio;
-		height:auto;
-		display:block;
-		margin:0 @espacio*-1 0 @espacio*-1;
-		padding:0;
-		padding-top:25px;
-		padding-top: @espacio;
-		.icon-edit {
-			color : #fff;
+.tile-container{
+	*{
+		border-radius : @radius;
+	}
+	.tile{
+		border-radius : @radius;
+		background-color: @green;
+		&-secon {
+			background-color: @yellow;
 		}
-		a{
-			color: #fff;
-			&:hover{
-				color: #fff;
-			}
+		&-badge {
+			background-color: @color;
 		}
-		&:after,&:before{
-			display:table;
-			content:"";
+		&-wide{
+			
+			background-color: @blue;
 		}
-		&:after {
-		  clear: both;
+		&-small{
+			background-color: @red;
 		}
-		.tile{
-			display:block;
-			color : #fff;
-			cursor: pointer;
-			width: @alto;
-			height:@alto;
-			float:left;
-			margin:@espacio;
-			position:relative;
-			border-radius : @radius;
-			background-color: @green;
-			&-secon {
-				background-color: @yellow;
+		&-content{
+			.contenido{
+				background-color: @base;
+				color: @grey;
 			}
-			&-label {
-				position: absolute;
-				bottom: 0;
-				left: .625rem;
-				padding: .425rem .25rem;
-				z-index: 100;
-			}
-			&-badge {
-				color : #fff;
-				position: absolute;
-				bottom: 0;
-				right: .625rem;
-				padding: .25rem .625rem;
-				z-index: 99;
-				background-color: @color;
-			}
-			&-wide{
-				color : #fff;
-				width: @alto*2 + @espacio;
-				height: @alto;
-				margin:@espacio;
-				display: block;
-				float: left;
-				cursor: pointer;
-				position: relative;
-				overflow: hidden;
-				.user-select-none();
-				overflow: visible;
-				border-radius : @radius;
-				background-color: @blue;
-			}
-			&-small{
-				color : #fff;
-				width: @alto/1.9;
-				height: @alto/1.9;
-				margin:@espacio;
-				display: block;
-				float: left;
-				cursor: pointer;
-				position: relative;
-				overflow: hidden;
-				.user-select-none();
-				overflow: visible;
-				border-radius : @radius;
-				background-color: @red;
-					.tile-content .icon{
-						position: absolute;
-						width: @font-icon/1.5;
-						height: @font-icon/1.5;
-						font-size: @font-icon/1.5;
-						top: 50%;
-						margin-top: -24px;
-						left: 50%;
-						margin-left: -32px;
-						text-align: center;
-					}
-			}
-			.user-select-none();
-			&-content{
 
-				height: inherit;
-				width: 100%;
-				left: 0;
-				top: 0;
-				overflow: hidden;
-				h1{
-					margin: 0;
-				}
-				.mensaje{
-					display:block;
-				}
-				.contenido{
-					display: none;
-					position:relative;
-					background-color: @base;
-					color: @grey;
-					.subCon2{
-						display: none;
-					}
-				}
-AAKI:::
-			}
 		}
 	}
- 
-
+ }
 .charm{
 	background-color:@color;
 

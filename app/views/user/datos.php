@@ -1,5 +1,5 @@
 <form id="usuarioFrm" >	
-	<h1 class="heading margin0">Editar usuario</h1>
+	<h1 class="heading margin0">Datos personales</h1>
 	<input type="hidden" id="idUsuario" value="<?=$User->id?>">
 	<div class="iconClass-container icon-left">
 		<input type="text" id="nombre"  value="<?=$User->nombre?>" placeholder="Introduzca nombre y apellidos" required>
@@ -25,9 +25,6 @@
 		<input type="password" id="rpass" placeholder="Repita la contraseña" autocomplete="off" >
 		<i class="iconClass-inside icon-eye"></i>
 	</div>
-	<p>
-		<button type="submit" class="btn-success btnLoad" id="btnGuardarCita" data-value="Guardar">Guardar</button>
-		<input type="button" class="btn-danger cancelar" name="cancelar" value="Cancelar"> 
-	</p>
+
 </form>
 

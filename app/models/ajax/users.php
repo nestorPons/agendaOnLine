@@ -1,10 +1,12 @@
 <?php
 header('Content-Type: application/json');
+	$r['success'] = true; 
 	$data = $Forms->sanitize($_POST);
 		$id = $_SESSION["id_usuario"] ;
 
 		switch ($_POST['action']) {
 			case 'save' :
+
 				if (isset($data['npass'])) {
 					
 					if ( $User->validatePass($data['npass']) && $User->validateEmail($data['email'])){
@@ -13,15 +15,18 @@ header('Content-Type: application/json');
 						unset($data['opass']);
 						
 					} else {
-						$r = false ;
+						$r['succcess'] = false ;
 					}
 				} 
+				
+				$r['success'] = $User->set($data);
+				
 				break;
 			case 'del':
 
 				$delCita = new core\BaseClass('del_cita') ;
 				$id = $data['id'] ;
-				$User->saveById();
+				$r['succcess'] = $User->saveById();
 				break;
 		}
 echo json_encode($r);

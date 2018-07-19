@@ -302,11 +302,10 @@ input[type="color"] {
 .caption{
 	font-size: 0.8em;
  }
- .charm{
-	border-radius: 5px;
-	width:340px;
-  }
-
+.charm{
+border-radius: 5px;
+width:340px;
+ }
 .cuerpo{
 	position:absolute;
 	min-height: 500px;
@@ -1996,7 +1995,7 @@ input[type="color"] {
 	}
  }
 #user{
-	nav{
+	#navbar{
 		a * {
 			font-size: 1em; 
 		}
@@ -2006,7 +2005,11 @@ input[type="color"] {
 		}
 		li{
 			min-width: 50px;
-			text-align: center;
+			text-align: center;	
+				
+		}
+		#lblUser{
+			padding-left: 12px;
 		}
 
 	}
@@ -2043,7 +2046,13 @@ input[type="color"] {
 			}
 		}
 	}
-		.tile-container{
+	.user-select-none(){
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	 }
+	.tile-container{
 		@alto:186.5px; 
 		@espacio: 6px; 
 		@font-icon: 64px; 
@@ -2080,11 +2089,7 @@ input[type="color"] {
 			float:left;
 			margin:@espacio;
 			position:relative;
-			border-radius : @radius;
-			background-color: @green;
-			&-secon {
-				background-color: @yellow;
-			}
+
 			&-label {
 				position: absolute;
 				bottom: 0;
@@ -2099,7 +2104,6 @@ input[type="color"] {
 				right: .625rem;
 				padding: .25rem .625rem;
 				z-index: 99;
-				background-color: @color;
 			}
 			&-wide{
 				color : #fff;
@@ -2113,8 +2117,6 @@ input[type="color"] {
 				overflow: hidden;
 				.user-select-none();
 				overflow: visible;
-				border-radius : @radius;
-				background-color: @blue;
 			}
 			&-small{
 				color : #fff;
@@ -2128,21 +2130,19 @@ input[type="color"] {
 				overflow: hidden;
 				.user-select-none();
 				overflow: visible;
-				border-radius : @radius;
-				background-color: @red;
-					.tile-content .icon{
-						position: absolute;
-						width: @font-icon/1.5;
-						height: @font-icon/1.5;
-						font-size: @font-icon/1.5;
-						top: 50%;
-						margin-top: -24px;
-						left: 50%;
-						margin-left: -32px;
-						text-align: center;
-					}
+				.tile-content .icon{
+					position: absolute;
+					width: @font-icon/1.5;
+					height: @font-icon/1.5;
+					font-size: @font-icon/1.5;
+					top: 50%;
+					margin-top: -24px;
+					left: 50%;
+					margin-left: -32px;
+					text-align: center;
+				}
 			}
-			.user-select-none();
+
 			&-content{
 
 				height: inherit;
@@ -2159,8 +2159,6 @@ input[type="color"] {
 				.contenido{
 					display: none;
 					position:relative;
-					background-color: @base;
-					color: @grey;
 					.subCon2{
 						display: none;
 					}
@@ -2182,9 +2180,11 @@ input[type="color"] {
 			}
 		}
 	}
-
+	#mnuDatosPersonales{
+		display: none;
+	}
  }
- section#historial{
+#historial{
 	div.cita{
 		width: fit-content;
 		margin: auto;
@@ -2390,6 +2390,9 @@ input[type="color"] {
 	}
  }
 // Auxiliares
+.noHover{
+	cursor: inherit;
+}
 .inline{
 	display: inline-block; 
  }

@@ -29,7 +29,7 @@
 					<span class="tile-label">Mis datos</span>
 				</div> 	
 				<div class="contenido">
-					<?php// include URL_VIEWS_USER . 'user.php'?>
+					
 				</div>
 			</div>
 		</section>
