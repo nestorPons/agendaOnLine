@@ -41,7 +41,7 @@
 					<h3><span id='mensajeHistorial'></span></h3>
 					<span class="icon icon-calendar"></span>
 					<span id="lblHis" class="tile-badge"></span>
-					<span class="tile-label">Citas</span>
+					<span class="tile-label">Historial</span>
 				</div>
 				<div class="contenido">
 					<h1 class="margin0">Historial</h1>

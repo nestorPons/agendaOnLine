@@ -381,6 +381,7 @@ var usuario = {
 				nombre:$('#nombre').val() ,
 				email:$('#email').val(),
 				tel:$('#tel').val(),
+				sendMail : $('#memoCalendar').is('checked')?1:0, 
 				controller : usuario.controller , 
 				action : SAVE
 	        }
@@ -444,6 +445,19 @@ menu = {
 		} else {
 			menu.cambios = val
 		}
+	}, 
+	toggle: function(mnu, btn){
+		
+			if(mnu.is(':visible')){
+				mnu.hide('slide',{ direction: 'right' })
+				if(menu.hay_cambios()) usuario.guardar()
+				btn.find('span').removeClass('lnr-cross').addClass('lnr-user')
+			}
+			else{
+				mnu.show('slide',{ direction: 'right' })
+				menu.hay_cambios(false)
+				btn.find('span').removeClass('lnr-user').addClass('lnr-cross')
+			}
 	}
 }
 $(function(){	
@@ -456,19 +470,12 @@ $(function(){
 			menu.hay_cambios(true)
 		})
 	$('#navbar')
-		 .on('click','#btnConfig',function(){
-			var m = $('#mnuDatosPersonales')
-			if(m.is(':visible')){
-				m.hide('slide',{ direction: 'right' })
-				if(menu.hay_cambios()) usuario.guardar()
-				$('#btnConfig').find('span').removeClass('lnr-cross').addClass('lnr-user')
-			}
-			else{
-				$('#btnConfig').find('span').removeClass('lnr-user').addClass('lnr-cross')
-				m.show('slide',{ direction: 'right' })
-				menu.hay_cambios(false)
-			}
-		})	
+		.on('click','#btnConfig',function(){
+			menu.toggle($('#mnuConfig'),$(this))
+		 })
+		.on('click','#btnDatos',function(){
+			menu.toggle($('#mnuDatosPersonales'),$(this))
+		 })	
 	$('input:password').blur(function(){
 		var pass1 = $('#pass').val()		
 		var pass2 = $('#rpass').val()

@@ -5,6 +5,16 @@
 		?>
 	</div>
 </div>
+<div id="mnuConfig" data-role="charm" data-position="right">
+		<span>
+			<input id="memoCalendar" type="checkbox">
+			Recibir recordatorio en mi calendario Google. 
+		</span>
+		<span>
+			<input id="memoCalendar" type="checkbox">
+			Recibir recordatorio correo electronico. 
+		</span>
+</div>
 <nav  id= "navbar" class="app-bar" data-role="appbar">
 	<a href= "<?=CONFIG['web']??''?>"  target="_blank">
 		<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
@@ -20,8 +30,11 @@
 	}?>
 	<ul class="app-bar-menu place-right" data-flexdirection="reverse">
 		<li><span class="lnr-home"></span></li>		
-		<li id="btnConfig">
+		<li id="btnDatos">
 			<span class="lnr-user"></span>
+		</li>
+		<li id="btnConfig">
+			<span class="lnr-cog"></span>
 		</li>
 		<li id="mnuUserSalirSession">
 			<a href="/<?=CODE_EMPRESA?>?destroy=true"  class="lnr-power-switch"></a>

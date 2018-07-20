@@ -131,13 +131,19 @@ CREATE TABLE `usuarios` (
   `tel` varchar(20) NULL DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
-  `idioma` tinyint(1) NOT NULL DEFAULT '1',
   `dateReg` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dateBaja` datetime NULL DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
   `attempts` tinyint(4) NOT NULL DEFAULT '0',
   `pin` SMALLINT(4) NULL DEFAULT NULL, 
-  `color` varchar(8) NULL DEFAULT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE `usuarios_config` (
+  `id` int(11) PRIMARY KEY,
+  `idioma` tinyint(1) NOT NULL DEFAULT '1',
+  `color` varchar(8) NULL DEFAULT NULL, 
+  `authMail` tinyint(1) NOT NULL DEFAULT '1',
+  `authCal` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB;
 
 CREATE TABLE `logs` (
@@ -211,5 +217,8 @@ ALTER TABLE `tblreseteopass`
 
 ALTER TABLE `logs`
   ADD CONSTRAINT `LOG_IDU_FK` FOREIGN KEY (`idUser`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
+
+ALTER TABLE `usuarios_config`
+  ADD CONSTRAINT `CON_USU_FK` FOREIGN KEY (`id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 COMMIT;

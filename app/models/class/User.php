@@ -2,9 +2,12 @@
 
 class User extends \core\BaseClass {
 	
-	private $user, $pass ;
+	private $user, $pass, $config, 
+		$sendMail, $sendCal, $color, $lang;
+		
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
-	
+
+
 	public function __construct( $id , $email = false){
 
 		parent::__construct('usuarios');
@@ -25,7 +28,16 @@ class User extends \core\BaseClass {
 			$this->admin = $this->user['admin'];
 			$this->status = $this->user['status'];
 			$this->pin = $this->user['pin'];
+/*
+			parent::__construct('usuarios_config');
+			$this->config = parent::getById($id); 
+			$this->color = $this->config['color'];
+			$this->land = $this->config['idioma'];
+			$this->sendMail = $this->config['sendMail'];
+			$this->sendCal = $this->config['sendCal'];
+*/
 		} 
+		
 	 }
 	public function get($args){
 		return self::getById($this->id, $args);
@@ -140,14 +152,20 @@ class User extends \core\BaseClass {
 		return($arr);
 	 }
 	public function sendMail($file_mens, $alt_body, $arr_args_mens){
-		$Mail = new \models\PHPMailer(true);
+	//	if($this->sendMail){
+			$Mail = new \models\PHPMailer(true);
 
-        $Mail->addAddress($this->email, $this->nombre);   
-        $Mail->url_menssage = URL_SOURCES . $file_mens;
-        $Mail->Body    = \core\Tools::get_content($Mail->url_menssage, $arr_args_mens);
-        $Mail->AltBody = $alt_body;
-        $Mail->Subject =  $alt_body;
+			$Mail->addAddress($this->email, $this->nombre);   
+			$Mail->url_menssage = URL_SOURCES . $file_mens;
+			$Mail->Body    = \core\Tools::get_content($Mail->url_menssage, $arr_args_mens);
+			$Mail->AltBody = $alt_body;
+			$Mail->Subject =  $alt_body;
 
-       return $Mail->send($this);
+			return $Mail->send($this);
+	/*
+		}else{
+			return false;
+		}
+	*/
 	 }
 }
