@@ -630,13 +630,16 @@ main ={
 			var lbl = main.lbl,
 				htmlSer = '', 
 				idCelda =  generateId.encode( data.agenda , data.fecha , data.hora ), 
-				celda = document.getElementById(idCelda)
+				$celda = $('#'+idCelda)
 
 			$.each(data.servicios, function ( id , serv ) {
 				htmlSer += lbl.service(serv)
 			})
 
-			celda.innerHTML = lbl.container(data , htmlSer)
+			$celda
+				.find('.fnCogerCita').remove().end()
+				.append(lbl.container(data , htmlSer))
+
 			lbl.style()
 		 },
 		edit: function (data, last){

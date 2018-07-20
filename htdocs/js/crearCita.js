@@ -75,14 +75,19 @@ var crearCita={
 	dialog: function (){
 		var self = crearCita , sec =  $('#crearCita') , 
 			idSer = new Array() ,
-			strServ ="" 
+			strServ ="" , 
+			_cancel = function(){
+				crearCita.data.hora = null
+				$('.horas:checked').prop('checked',false)
+				dialog.close()
+			}
 
 		sec.find('[name="servicios[]"]:checked').each(function(){
 			strServ += $(this).attr('id') + ", "
 			idSer.push($(this).val())
 		})
 
-		dialog.open('dlgGuardar',self.guardar, dialog.close,function(){
+		dialog.open('dlgGuardar',self.guardar, _cancel,function(){
 
 			strServ = strServ.slice(0,-2)		
 			data = {
@@ -219,7 +224,6 @@ var crearCita={
 			}
 		 },
 		sincronizar: function(callback){
-
 			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },
@@ -278,6 +282,8 @@ var crearCita={
 
 			} else if(index==2&&crearCita.validate.service()){
 				$('#btnSearch').hide()
+
+				!$('#crearCita').find('#'+Fecha.id).length && crearCita.horas.sincronizar()
 				if(crearCita.validate.name())_slider(function(){
 
 				});
@@ -337,7 +343,6 @@ var crearCita={
 			}
 		 }, 
 		service: function(){
-			crearCita.horas.sincronizar();
 			$('#crearCita #lblSer').empty();
 			var $ser = $('#crearCita [name="servicios[]"]:checked');
 			if($ser.length==0){
@@ -379,7 +384,7 @@ $('#crearCita')
 	crearCita.data.agenda = $(this).val()
 })
 .on('change','#crearCitaNota',function(){
-	crearCita.data.nota = $this.val() 
+	crearCita.data.nota = $(this).val() 
 })
 .on("swipeleft",'.tablas')
 .on('click','.cancelar',function(){mostrarCapa('main')})

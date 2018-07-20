@@ -1596,37 +1596,7 @@ width:340px;
 			width: 50px;
 		}
 	}
-	.app-bar-element {
-		display: none;
-		.animate-spin{
-			display: none;
-		}
-		display: inline-flex;
-		line-height: 3.125rem;
-		cursor: pointer;
-		*{
-			margin: 0 2px;
-		}
-		&:after {
-			clear: both;
-		 }
-		.input-control{
-			&.text, &.password{
-				margin-top: .55rem;
-				font-size: .875rem;
-				line-height: 1.8rem;
-				display: block;
-				input{
-					border-color: transparent;
-				}
-			}
-		 }
-		.button{
-			margin-top: -0.15rem;
-		 }
 
-
-	 }
 	.app-bar-menu {
 		display: inline-block;
 		float: left;
@@ -1874,6 +1844,42 @@ width:340px;
 		}
 		@media (max-width: 425px){
 			max-width: 210;
+		}
+	}
+	.app-bar-element {
+		display: none;
+		.animate-spin{
+			display: none;
+		}
+		display: inline-flex;
+		line-height: 3.125rem;
+		cursor: pointer;
+		*{
+			margin: 0 2px;
+		}
+		&:after {
+			clear: both;
+		 }
+		.input-control{
+			&.text, &.password{
+				margin-top: .55rem;
+				font-size: .875rem;
+				line-height: 1.8rem;
+				display: block;
+				input{
+					border-color: transparent;
+				}
+			}
+		 }
+		.button{
+			margin-top: -0.15rem;
+		 }
+
+
+	 }
+	#tools{
+		.app-bar-element{
+			display: none;
 		}
 	}
  }

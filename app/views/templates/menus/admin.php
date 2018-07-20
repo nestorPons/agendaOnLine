@@ -70,6 +70,7 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 			<span  class="icono-nav lnr-magnifier"></span>
 			<span  class="menulbl">Buscar</span>
 		</div>
+<!--
 		<div id="btnOptions" class="app-bar-element no-flexible  ">
 			<a class="dropdown-toggle no-flexible   ">
 				<span class="icono-nav icon-cog"></span>
@@ -87,7 +88,7 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 				</li>
 			</ul>
 		</div>
-
+-->
 		<div id="btnReset" class="app-bar-element no-flexible ">
 			<span  class="icono-nav lnr-undo"></span>
 			<span  class="menulbl">Refrescar</span>
