@@ -133,14 +133,12 @@ class BaseClass{
         return $r;
      }
     public function saveById ( int $id , array $args = null  ) {
-
         $columns = null ; 
         $values = null ;
         
-
         if ( $id == -1) {
             if (!is_null($args)){
-                unset($args['id']);
+//                unset($args['id']);
                 foreach ($args as $column => $value ) {
                         $columns .=  $column . ',' ;
                         $values .= '"' . $value . '",' ; 

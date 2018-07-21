@@ -1,19 +1,26 @@
-<div id="mnuDatosPersonales" data-role="charm" data-position="right">
-	<div class="">
-		<?php
-		include URL_VIEWS_USER . 'datos.php'; 
-		?>
+<div id="charms">
+	<div id="mnuDatosPersonales" class="charm" >
+		<div class="">
+			<?php
+			include URL_VIEWS_USER . 'datos.php'; 
+			?>
+		</div>
 	</div>
-</div>
-<div id="mnuConfig" data-role="charm" data-position="right">
-		<span>
-			<input id="memoCalendar" type="checkbox">
-			Recibir recordatorio en mi calendario Google. 
-		</span>
-		<span>
-			<input id="memoCalendar" type="checkbox">
-			Recibir recordatorio correo electronico. 
-		</span>
+	<div id="mnuConfig" class="charm">
+		<div class="contenedor">
+			<div class="checkbox">
+				<input id="authEmail" type="checkbox" <?= $User->authEmail()?"checked":""?>>
+				<span for="authEmail">	Recibir recordatorio en mi calendario Google. </span>
+			</div>
+
+			<div class="checkbox">
+				<span for="authCal">
+					<input id="authCal" type="checkbox" <?= $User->authCal()?"checked":""?>>
+					Recibir recordatorio correo electronico. 
+				</span>
+			</div>
+		</div>
+	</div>
 </div>
 <nav  id= "navbar" class="app-bar" data-role="appbar">
 	<a href= "<?=CONFIG['web']??''?>"  target="_blank">

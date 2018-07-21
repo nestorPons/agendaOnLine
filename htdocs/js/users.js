@@ -133,7 +133,7 @@ var crearCita ={
 		if(crearCita.data.agenda){
 			$sec = $('#crearCita')
 			$sec.find('#agenda'+crearCita.data.agenda).prop('checked', true)
-		}
+		 }
 	 }, 
 	horas: {
 		iniciar: function(){	
@@ -371,45 +371,60 @@ var cita = {
 	 }
  }
 var usuario = {
-	controller : 'users', 
-	guardar: function($this){
+	data: new Object, 
+	guardar_array: function(){
 
+		this.data = {
+			nombre:$('#nombre').val() ,
+			email:$('#email').val(),
+			tel:$('#tel').val(),
+			authEmail : $('#authEmail').is('checked')?1:0, 
+			authCal : $('#authCal').is('checked')?1:0, 
+			controller : 'users' , 
+			action : SAVE
+        }
+	 }, 
+	hay_cambios: function(){
+
+		return (
+		this.data.nombre != $('#nombre').val() ||
+		this.data.email != $('#email').val() ||
+		this.data.tel != $('#tel').val() ||
+		this.data.authEmail != $('#authEmail').is('checked')?1:0 ||
+		this.data.authCal != $('#authCal').is('checked')?1:0 
+		)
+	}, 
+	guardar: function($this){
+		this.guardar_array()
+		
 		var opass = $('#opass').val(),
 			npass = $('#npass').val(),
-			rpass = $('#rpass').val(),
-			data = {
-				nombre:$('#nombre').val() ,
-				email:$('#email').val(),
-				tel:$('#tel').val(),
-				sendMail : $('#memoCalendar').is('checked')?1:0, 
-				controller : usuario.controller , 
-				action : SAVE
-	        }
+			rpass = $('#rpass').val()
 		
 		if(!$.isEmpty(opass)) {
 			if(usuario.validar.pass(opass, npass, rpass)){
 				notify.error('Al cambiar la contraseña' , 'ERROR CONTRASEÑA')	
 				return false 
 			} else {
-				data.opass = SHA(opass)  
-				data.npass = SHA(npass) 
+				this.data.opass = SHA(opass)  
+				this.data.npass = SHA(npass) 
 			}
-		}
+		 }
 		$.ajax({
 			type: "POST",
-			data: data,
+			data: this.data,
 			url: INDEX,
 			dataType: 'json',
-		})
+		 })
 		.done(function(r){
 			if(r.success){
-				$('#lblUser span').html($('#nombre').val())
+				$('#lblNombre').html($('#nombre').val())
 				notify.success('Sus datos han sido guardados','Guardado')
 			}else{
 				notify.error('No se han podido guardar los datos')
 			}
 			btn.load.hide()
-		})	
+		 })	
 		.fail(function(r){console.log("ERROR=>"+r.success)})
 	 },
 	validar : {
@@ -418,7 +433,7 @@ var usuario = {
 			r = r ? $.isEmpty(rPass) :  false ;
 			r = r ? nPass == rPass :  false ;
 			return r
-		}
+		 }
 	 },
 	comprobarContraseña: function($this){
 		var url = urlPhp +"usuario/validar.php";
@@ -438,37 +453,39 @@ var usuario = {
 	 },
  }, 
 menu = {
-	cambios: false, 
-	hay_cambios: function( val = null){
-		if(val == null){
-			return menu.cambios
-		} else {
-			menu.cambios = val
-		}
-	}, 
 	toggle: function(mnu, btn){
-		
-			if(mnu.is(':visible')){
-				mnu.hide('slide',{ direction: 'right' })
-				if(menu.hay_cambios()) usuario.guardar()
-				btn.find('span').removeClass('lnr-cross').addClass('lnr-user')
-			}
-			else{
-				mnu.show('slide',{ direction: 'right' })
-				menu.hay_cambios(false)
-				btn.find('span').removeClass('lnr-user').addClass('lnr-cross')
-			}
+		var span = btn.find('span')
+		span.data('class') == undefined && span.data('class',span.attr('class'))
+		var c = span.data('class') 
+
+		if(mnu.is(':visible')){
+			mnu.hide('slide',{ direction: 'right' })
+			span.removeClass('lnr-cross').addClass(c)
+
+			if(usuario.hay_cambios()) usuario.guardar()
+		}else{
+			$('.charm').hide('slide',{ direction: 'right' })
+			
+			$('.lnr-cross') 
+				.addClass(function(){
+					return $(this).data('class')
+			})	 
+			.removeClass('lnr-cross')
+			
+
+			mnu.show('slide',{ direction: 'right' })
+			usuario.guardar_array()
+			span.removeClass(c).addClass('lnr-cross')
+		}
 	}
-}
+ }
 $(function(){	
 	$('body')
 		.on('click','.cancelar', cerrarMenu)
 		.on('click',".idDateAction",function(){
 			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
-		})
-		.on('change','#mnuDatosPersonales input',function(){
-			menu.hay_cambios(true)
-		})
+		 })
+		
 	$('#navbar')
 		.on('click','#btnConfig',function(){
 			menu.toggle($('#mnuConfig'),$(this))
@@ -527,7 +544,7 @@ $(function(){
 			$('#rpass').val(SHA($(this).val()))
 		 })
 	$('#eliminar').click(function(){eliminarUsuario()})
-
+	
 	//fnReloj()
 	cargarDatepicker()
 	crearCita.init()

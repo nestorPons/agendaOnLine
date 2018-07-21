@@ -1056,9 +1056,7 @@ $(function(){
 		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
 		.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
 		.on('click','.inicio',function(){window.location.href="index.php"})
-		.on('click','#btnMenuResponsive',function(){
-			toggleMetroCharm('#mnuResponsive')
-		 })
+
 	$('body')
 		.on('click','.clear-input',function(){
 			$(this).siblings('input').val('')

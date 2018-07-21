@@ -33,7 +33,7 @@
 </div>
 <div class="iconClass-container icon-left">
 	<textarea id="crearCitaNota" name='nota' class="txt" rows=1 placeholder='Nota para la cita'  data-autoresize ></textarea>
-	<span class="iconClass-inside icon-note"></span>
+	<span class="iconClass-inside icon-note grande"></span>
 </div>
 
 	<button type="button" class="btn-success siguiente">Siguiente<i class="icon-angle-right"></i></button>

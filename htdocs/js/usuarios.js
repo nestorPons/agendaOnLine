@@ -7,48 +7,36 @@ var usuarios = {
 	eliminar: function (id, nombre,callback) {
 		if ($('#usuarios #id').val()!=-1){
 			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
-				var data = {
-					id: id ,
-					controller: usuarios.controller, 
-					action:DEL
+				data = {
+					dateBaja: Fecha.general, 
+					status: 2
 				}
-				$.ajax({
-					type: "POST",
-					dataType: "json",
-					data: data,
-					url:INDEX ,
-					beforeSend: function (){
-						$("#usuarios #rowUsuarios"+id).fadeTo("slow", 0.30);
-					},
-				})
-				.done(function(){
-					usuarios.rows.del()
-					notify.alert('El usuario ha sido eliminado con éxito.','Usuario eliminado!!')
-				})
-				.fail(function(){
-					$("#usuarios #rowUsuarios"+id).show("fast");
-					notify.error("¡¡No se pudo borrar el registro!!",'Error!');
+				usuarios.guardar(id,nombre,data,function(){
+					$('#rowUsuarios'+id).hide('explode').remove()
 				})
 			}
 		}
 		
 		dialog.close('dlgUsuarios');
 	 },
-	guardar: function (idUsuario,nombreUsuario,callback){
+	guardar: function (idUsuario,nombreUsuario,data=null,callback){
+		if(data == null){
 
-		var frm = $.serializeForm('frmUsuarios'),
-			data = {
-				id:idUsuario||-1, 
-				nombre: nombreUsuario||frm.nombre,
-				email: frm.email||null,
-				tel: frm.tel||null,
-				obs: frm.obs||null,
-				status: $.isEmpty(frm.activa)?0:2,
-				admin : $.isEmpty(frm.admin)?0:1,
-				color: (frm.sinColor)?null:frm.color, 
-				controller: usuarios.controller,
-				action: SAVE}
+			var frm = $.serializeForm('frmUsuarios'),
+				data = {
+					nombre: nombreUsuario||frm.nombre,
+					email: frm.email||null,
+					tel: frm.tel||null,
+					obs: frm.obs||null,
+					status: $.isEmpty(frm.activa)?0:2,
+					admin : $.isEmpty(frm.admin)?0:1,
+					color: (frm.sinColor)?null:frm.color}
+		}
 
+		data.controller = usuarios.controller
+		data.action = SAVE
+		data.id = idUsuario||-1
+		
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -56,58 +44,62 @@ var usuarios = {
 			url: INDEX ,
 		})
 		.done(function(rsp){
-			var $this  =$('#frmUsuarios'),
-				chckEmail =$.isEmpty(frm.email)?'No':'Si',
-				chckObs = $.isEmpty(frm.obs)?'No':'Si',
-				admin = $.isEmpty(frm.admin)?0:1,
-				activa = $.isEmpty(frm.activa)?1:0
 
-				if (data.id == -1 ){ 
-					//NUEVO ...
-					data.id = rsp.id 
-					usuarios.rows.add(data)
-					notify.success('Usuario guardado con éxito!.','Nuevo usuario',false, $('#crearCita #cliente'))
-					 
-				}else{ 
+			if(data.dateBaja == undefined){
+				var $this  =$('#frmUsuarios'),
+					chckEmail =$.isEmpty(frm.email)?'No':'Si',
+					chckObs = $.isEmpty(frm.obs)?'No':'Si',
+					admin = $.isEmpty(frm.admin)?0:1,
+					activa = $.isEmpty(frm.activa)?1:0
 
-					//EDITANDO....
-					$('#rowUsuarios'+data.id)
-						.data('color', data.color)
-						.find(' td:nth-child(3)')
-							.html(data.nombre)
-							.data('value',data.nombre)
-						.end()
-						.find(' td:nth-child(4)').html(frm.tel).end()
-						.find(' td:nth-child(5)')
-							.html(chckEmail)
-							.data('value',frm.email)
-						.end()
-						.find(' td:nth-child(6)')
-							.html(chckObs)
-							.data('value',frm.obs)
-
-					if(frm.activa){
-						if($('#chckOpUsersDel').is(':checked'))
+					if (data.id == -1 ){ 
+						//NUEVO ...
+						data.id = rsp.id 
+						usuarios.rows.add(data)
+						notify.success('Usuario guardado con éxito!.','Nuevo usuario',false, $('#crearCita #cliente'))
+						
+					}else{ 
+	
+						//EDITANDO	....
+						$('#rowUsuarios'+data.id)
+							.data('color', data.color)
+							.find('td[name="nom"]')
+								.html(data.nombre)
+								.data('value',data.nombre)
+							.end()
+							.find('td[name="tel"]').html(frm.tel).end()
+							.find('td[name="email"]')
+								.html(chckEmail)
+								.data('value',frm.email)
+							.end()
+							.find('td[name="obs"]')
+								.html(chckObs)
+								.data('value',frm.obs)
+	/*
+						if(frm.activa){
+							if($('#chckOpUsersDel').is(':checked'))
+								$("#rowUsuarios"+frm.id)
+									.addClass('mostrar_baja')
+									.removeClass('ocultar_baja')
+									.fadeTo("slow", 1);
+							else
+								$("#rowUsuarios"+frm.id)
+									.addClass('ocultar_baja')
+									.removeClass('mostrar_baja')
+									.hide();
+							$('#lstClientes [data-name="'+normalize(frm.nombre)+'"]').remove();
+						}else{
 							$("#rowUsuarios"+frm.id)
-								.addClass('mostrar_baja')
-								.removeClass('ocultar_baja')
-								.fadeTo("slow", 1);
-						else
-							$("#rowUsuarios"+frm.id)
-								.addClass('ocultar_baja')
-								.removeClass('mostrar_baja')
-								.hide();
-						$('#lstClientes [data-name="'+normalize(frm.nombre)+'"]').remove();
-					}else{
-						$("#rowUsuarios"+frm.id)
-							.removeClass('mostrar_baja ocultar_baja')
-							.fadeTo("slow", 1)
-						$('#lstClientes')
-							.append('<option data-name="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
-					}	
-
+								.removeClass('mostrar_baja ocultar_baja')
+								.fadeTo("slow", 1)
+							$('#lstClientes')
+								.append('<option data-name="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
+						}	
+					}
+*/
 					notify.success('Usuario guardado con éxito!.','Usuario editado')						
 				}
+			}
 
 			if (dialog.isOpen == 'dlgUsuarios'){
 				dialog.close('dlgUsuarios')

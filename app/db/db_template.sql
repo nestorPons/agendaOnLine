@@ -136,8 +136,10 @@ CREATE TABLE `usuarios` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
   `attempts` tinyint(4) NOT NULL DEFAULT '0',
   `pin` SMALLINT(4) NULL DEFAULT NULL, 
+  `authMail` tinyint(1) NOT NULL DEFAULT '1',
+  `authCal` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB;
-
+/*
 CREATE TABLE `usuarios_config` (
   `id` int(11) PRIMARY KEY,
   `idioma` tinyint(1) NOT NULL DEFAULT '1',
@@ -145,7 +147,7 @@ CREATE TABLE `usuarios_config` (
   `authMail` tinyint(1) NOT NULL DEFAULT '1',
   `authCal` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB;
-
+*/
 CREATE TABLE `logs` (
 	`id` bigint(255) PRIMARY KEY AUTO_INCREMENT ,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -217,8 +219,8 @@ ALTER TABLE `tblreseteopass`
 
 ALTER TABLE `logs`
   ADD CONSTRAINT `LOG_IDU_FK` FOREIGN KEY (`idUser`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
+/*
 ALTER TABLE `usuarios_config`
   ADD CONSTRAINT `CON_USU_FK` FOREIGN KEY (`id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
+*/
 COMMIT;

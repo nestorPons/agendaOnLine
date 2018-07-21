@@ -797,10 +797,10 @@ main ={
 								.html(main.lbl.clone)
 							main.lbl.draggable()
 							return true
-						}
+						 }
 						}, 
 					revertDuration: 500,
-					handle :$(this).find('.fnMove'), 
+				//	handle :$(this).children(), 
 					stop : function(e, ui){
 						},
 					start : function ( e, ui) {
@@ -862,7 +862,7 @@ main ={
 				if ($this.hasClass('initial')){
 					$this
 						.removeClass('initial') 
-						.find('.nombre').hide({duration:500}).end()
+					//	.find('.nombre').hide({duration:500}).end()
 						.find('.icon-angle-up')
 							.removeClass('icon-angle-up parpadear')
 							.addClass('icon-angle-down')
@@ -875,7 +875,7 @@ main ={
 				} else {
 
 					$this	
-						.find('.nombre').show({duration:500}).end()
+				//		.find('.nombre').show({duration:500}).end()
 						.find('.icon-angle-down')
 							.removeClass('icon-angle-down')
 							.addClass('icon-angle-up parpadear')
@@ -1305,7 +1305,9 @@ $(function(){
 	main.login.ancho = $('#login').width()
 	main.inactivas.change(localStorage.getItem("showRows"))
 	main.inactivas.comprobar()
-
+$('.lbl').on('downmouse',function(){
+	echo('aguantando....')
+})
 	//Construyo la "clase" device para saber el dispositivo usado
  	Device.init()
 	if(Device.isCel()) localStorage.setItem('menuOpen',0)

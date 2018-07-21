@@ -23,12 +23,12 @@
 @b1: mix(@color, #fff, 40%);
 @b2: mix(@color_secon, #fff, 40%);
 
-@auxiliar: desaturate(#F90,lightness(@color));
+@orange: desaturate(#F90,lightness(@color));
 @red: desaturate(#FF0000,lightness(@color));
 @green: desaturate(#00FF00,lightness(@color));
 @blue :desaturate(#0000FF,lightness(@color));
 @yellow :desaturate(#FFFF00,lightness(@color));
-@cian: desaturate(#00FFFF,lightness(@color));
+@cyan: desaturate(#00FFFF,lightness(@color));
 @pink: desaturate(#FF00FF,lightness(@color));
 @purple: desaturate(#8000FF,lightness(@color));
 
@@ -181,7 +181,7 @@ a,i , .a{
  }
 
 .highlighted{
-	color : @auxiliar;
+	color : @orange;
 	text-decoration: underline;
  }
 #navbar{
@@ -195,7 +195,7 @@ a,i , .a{
 	.selected {
 
 		.caption {	
-			//	text-shadow: 0px 0px @auxiliar, 0 0 @auxiliar, 2px -2px @auxiliar, 2px 2px @auxiliar;
+			//	text-shadow: 0px 0px @orange, 0 0 @orange, 2px -2px @orange, 2px 2px @orange;
 			box-shadow: inset 0 -0.175em @color, inset 0 -0.2em @base;
 		}
 		&:hover, &:active, &:focus{
@@ -373,7 +373,7 @@ a,i , .a{
  }
 .lstMenu{
 	a:hover{
-		color: @auxiliar;
+		color: @orange;
 	}
  }
 .load{
@@ -477,7 +477,7 @@ a,i , .a{
 	.border-radius();
 	.iconos{
 		span:hover{
-			color : @auxiliar;
+			color : @orange;
 		}
 	}
 
@@ -563,6 +563,41 @@ a,i , .a{
 		color : @text-color;
 	}
  }
+
+ //notifies
+ .fnNotify(@c){
+
+	background-color: @c;
+	color: @base;
+	.notify-closer {
+		background-color: @c;
+		color: @base;
+		&:hover {
+			background-color: lighten(@c, 20%);
+		}
+		&:active{
+			background-color: darken(@c, 20%);
+		}
+	}
+	
+}
+.notify {
+	border-radius: @radius;
+	&.success {
+		.fnNotify(@green);
+	}
+	&.alert {
+		.fnNotify(@red);
+	}
+	&.warning {
+		.fnNotify(@orange);
+	}
+	&.info {
+		.fnNotify(@cyan);
+	}
+}
+
+
 #mnuContacto{
 	#frmContact{
 		background-color:@base;
@@ -641,21 +676,50 @@ a,i , .a{
 
 #user{
 	background-color: @base;
+	.charm{
+		background-color: darken(@color,30%);
+	}
+	.tile-container{
+	*{
+		border-radius : @radius;
+	}
+	.tile{
+		border-radius : @radius;
+		background-color: @green;
+	}
+	section{
+		.contenido{
+			background-color: @base;
+			color: @grey;
+		}
 
-	#crearCita{
-		.menu{
-			&>ul>a{
-				color: @color;
+		&#crearCita {
+			background-color: @yellow;
+			.menu{
+				&>ul>a{
+					color: @color;
+				}
+			}	
+		}
+		&#historial{
+			background-color: @blue;
+			#lblHis{
+				background-color: @cyan;
 			}
 		}
+		&#eliminar{
+			background-color: @red;
+		}
+
 	}
+ }
  }
 
 .bg{
 	&-color{background-color: @b1 !important}
 	&-c1{background-color:@b1 !important}
 	&-c2{background-color:@b2 !important}
-	&-c3{background-color:@auxiliar !important}
+	&-c3{background-color:@orange !important}
 	&-c4{background-color:@blue !important}
 	&-c5{background-color:@red !important}
 	&-warning{
@@ -725,7 +789,7 @@ a,i , .a{
 		color:@t2 !important;
 	}
 	&3{
-		color:@auxiliar !important;
+		color:@orange !important;
 	}
 	&4{
 		color:@color_sat_2 !important;
@@ -754,51 +818,8 @@ a,i , .a{
 		color:#ffffff !important;
 	}
  }
-.tile-container{
-	*{
-		border-radius : @radius;
-	}
-	.tile{
-		border-radius : @radius;
-		background-color: @green;
-	}
-	section:nth-child(1n) {
-		background-color: @yellow;
-	}
-	section:nth-child(2n) {
-		background-color: @color;
-	}
-	section:nth-child(3n){
-		
-		background-color: @blue;
-	}
-	section#eliminar{
-		background-color: @red;
-	}
-	section:nth-child(5n){
-		.contenido{
-			background-color: @base;
-			color: @grey;
-		}
 
-	}
-	.contenido{
-		background-color: @base;
-		color: @text-color;
-	}
- }
-.charm{
-	background-color:@color;
 
-	&-closer{
-		&.icon-cancel-circled2{
-			color: @base ;
-		}
-		&:hover{
-			color: @color_secon;
-		}
-	}
- }
 .color-menu(@porcentaje){
 	@menu-color: darken(@color,@porcentaje);
 	background-color: @menu-color !important;

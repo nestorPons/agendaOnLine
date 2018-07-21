@@ -568,6 +568,38 @@ a,i , .a{
 		color : @text-color;
 	}
  }
+.fnNotify(@c){
+
+	background-color: @c;
+	color: @base;
+	.notify-closer {
+		background-color: @c;
+		color: @base;
+		&:hover {
+			background-color: lighten(@c, 20%);
+		}
+		&:active{
+			background-color: darken(@c, 20%);
+		}
+	}
+	
+}
+.notify {
+	border-radius: @radio;
+	&.success {
+		.fnNotify(@green);
+	}
+	&.alert {
+		.fnNotify(@red);
+	}
+	&.warning {
+		.fnNotify(@orange);
+	}
+	&.info {
+		.fnNotify(@cyan);
+	}
+}
+
 #mnuContacto{
 	#frmContact{
 		background-color:@base;

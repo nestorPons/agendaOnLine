@@ -2349,12 +2349,6 @@ $.widget( "metro.charm" , {
 
         element.addClass("charm").addClass(o.position+"-side").css({opacity: o.opacity}).hide();
 
-        var closer = $("<span/>").addClass("charm-closer icon-cancel-circled2").appendTo(element);
-        closer.on('click', function(){
-			var $this = $(this).parents('.charm');
-            $this.hide('slide',{ direction: 'right' });
-        });
-
         if (o.outside === true) {
             element.on('mouseleave', function(e){
                 that.close();

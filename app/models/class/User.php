@@ -3,7 +3,7 @@
 class User extends \core\BaseClass {
 	
 	private $user, $pass, $config, 
-		$sendMail, $sendCal, $color, $lang;
+		$authEmail, $authCal, $color, $lang;
 		
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
 
@@ -12,30 +12,42 @@ class User extends \core\BaseClass {
 
 		parent::__construct('usuarios');
 
-		$this->user = ($id)
-			? parent::getById($id)
-		 	: $this->user = parent::getOneBy('email', $email);
+		//Nuevo usuario
+		if($id==-1){
+			if($this->saveById(-1)) 
+				$this->id = $this->getId();
+			else
+				die('No se pudo guardar el usuario');
+		} else {
+			$this->id = $id; 
+		}
 
+		$this->user = ($this->id)
+			? parent::getById($this->id)
+		 	: $this->user = parent::getOneBy('email', $email);
+		
+		//Compruebo que exita la conf de usuario si no inicio un registro
+		/*
+		parent::__construct('usuarios_config');
+		if(!parent::getById($id)) parent::saveById(_NEW, ['id'=>$id]);
+		*/
+		
 		if ( $this->user ){
-			$this->id = $this->user['id'];
 			$this->nombre = $this->user['nombre'];
 			$this->email = $this->user['email'];
 			$this->pass = $this->user['pass'];
 			$this->tel = $this->user['tel'];
 			$this->dateBaja = $this->user['dateBaja'];
 			$this->dateReg = $this->user['dateReg'];
-			$this->idioma = $this->user['idioma'];
 			$this->admin = $this->user['admin'];
 			$this->status = $this->user['status'];
 			$this->pin = $this->user['pin'];
-/*
-			parent::__construct('usuarios_config');
-			$this->config = parent::getById($id); 
-			$this->color = $this->config['color'];
-			$this->land = $this->config['idioma'];
-			$this->sendMail = $this->config['sendMail'];
-			$this->sendCal = $this->config['sendCal'];
-*/
+			//Configuracion de usuario 
+			$this->color = $this->user['color'];
+			$this->idioma = $this->user['idioma'];
+			$this->authEmail = $this->user['authEmail'];
+			$this->authCal = $this->user['authCal'];
+
 		} 
 		
 	 }
@@ -43,6 +55,9 @@ class User extends \core\BaseClass {
 		return self::getById($this->id, $args);
 	 }
 	public function set($args){
+		return self::saveById((int)$this->id, $args);
+	 }
+	public function save($args = null){
 		return self::saveById((int)$this->id, $args);
 	 }
 	public function password($pass){
@@ -152,7 +167,7 @@ class User extends \core\BaseClass {
 		return($arr);
 	 }
 	public function sendMail($file_mens, $alt_body, $arr_args_mens){
-	//	if($this->sendMail){
+		if($this->authEmail){
 			$Mail = new \models\PHPMailer(true);
 
 			$Mail->addAddress($this->email, $this->nombre);   
@@ -162,10 +177,25 @@ class User extends \core\BaseClass {
 			$Mail->Subject =  $alt_body;
 
 			return $Mail->send($this);
-	/*
+	
 		}else{
 			return false;
 		}
-	*/
+	
 	 }
+	 public function authCal($val = null){
+		if($val==null)
+			return $this->authCal; 
+		else 
+			$this->authCal = $val; 
+	 }
+	public function authEmail($val = null){
+		if($val==null)
+			return $this->authEmail; 
+		else 
+			$this->authEmail = $val; 
+	 }	
+	public function getId(){
+		return $this->id; 
+	}
 }
