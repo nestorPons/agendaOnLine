@@ -9,15 +9,13 @@
 	<div id="mnuConfig" class="charm">
 		<div class="contenedor">
 			<div class="checkbox">
-				<input id="authEmail" type="checkbox" <?= $User->authEmail()?"checked":""?>>
+				<input id="authEmail" name="a[]" value="authEmail" type="checkbox" <?= $User->authEmail()?"checked":""?>>
 				<span for="authEmail">	Recibir recordatorio en mi calendario Google. </span>
 			</div>
 
 			<div class="checkbox">
-				<span for="authCal">
-					<input id="authCal" type="checkbox" <?= $User->authCal()?"checked":""?>>
-					Recibir recordatorio correo electronico. 
-				</span>
+				<input id="authCal" name="b[]" value="authCal" type="checkbox" <?= $User->authCal()?"checked":""?>>
+				<span for="authCal"> Recibir recordatorio correo electronico. </span>
 			</div>
 		</div>
 	</div>

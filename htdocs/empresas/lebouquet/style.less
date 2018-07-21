@@ -687,6 +687,11 @@ a,i , .a{
 		border-radius : @radius;
 		background-color: @green;
 	}
+	.colorSeccion(@c){
+		background-color: @c; 
+		margin: 15px;
+
+	}
 	section{
 		.contenido{
 			background-color: @base;
@@ -694,21 +699,16 @@ a,i , .a{
 		}
 
 		&#crearCita {
-			background-color: @yellow;
-			.menu{
-				&>ul>a{
-					color: @color;
-				}
-			}	
+			.colorSeccion(@yellow);
 		}
 		&#historial{
-			background-color: @blue;
+			.colorSeccion(@blue);
 			#lblHis{
 				background-color: @cyan;
 			}
 		}
 		&#eliminar{
-			background-color: @red;
+			.colorSeccion(@red);
 		}
 
 	}

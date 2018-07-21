@@ -371,8 +371,10 @@ var cita = {
 	 }
  }
 var usuario = {
-	data: new Object, 
+	data: new Object,
+	last:  new Object,
 	guardar_array: function(){
+		this.last = this.data
 
 		this.data = {
 			nombre:$('#nombre').val() ,
@@ -394,9 +396,15 @@ var usuario = {
 		this.data.authCal != $('#authCal').is('checked')?1:0 
 		)
 	}, 
+	revertir_cambios: function(){
+		$('#nombre').val(this.last.nombre)
+		$('#email').val(this.last.email)
+		$('#tel').val(this.last.tel )
+		$('#authEmail').is('checked',this.last.authEmail)
+		$('#authCal').is('checked',this.last.authCal) 
+	}, 
 	guardar: function($this){
-		this.guardar_array()
-		
+		usuario.guardar_array()
 		var opass = $('#opass').val(),
 			npass = $('#npass').val(),
 			rpass = $('#rpass').val()
@@ -420,12 +428,17 @@ var usuario = {
 			if(r.success){
 				$('#lblNombre').html($('#nombre').val())
 				notify.success('Sus datos han sido guardados','Guardado')
+
 			}else{
 				notify.error('No se han podido guardar los datos')
+				usuario.revertir_cambios()
 			}
 			btn.load.hide()
 		 })	
-		.fail(function(r){console.log("ERROR=>"+r.success)})
+		.fail(function(r){
+			notify.error('No se han podido guardar los datos')
+			usuario.revertir_cambios()
+		})
 	 },
 	validar : {
 		pass :function (oPass , nPass , rPass){
@@ -463,6 +476,7 @@ menu = {
 			span.removeClass('lnr-cross').addClass(c)
 
 			if(usuario.hay_cambios()) usuario.guardar()
+			
 		}else{
 			$('.charm').hide('slide',{ direction: 'right' })
 			
@@ -470,8 +484,7 @@ menu = {
 				.addClass(function(){
 					return $(this).data('class')
 			})	 
-			.removeClass('lnr-cross')
-			
+			.removeClass('lnr-cross')			
 
 			mnu.show('slide',{ direction: 'right' })
 			usuario.guardar_array()
@@ -497,6 +510,7 @@ $(function(){
 		var pass1 = $('#pass').val()		
 		var pass2 = $('#rpass').val()
 		validarPass(pass1,pass2)
+
 	 })
 
 	$('.tile-content').click(function(e){menuAbrir($(this).parent())})
