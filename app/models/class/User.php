@@ -88,7 +88,7 @@ class User extends \core\BaseClass {
 	 }
 	public function getData(){
 		$Data = new \core\BaseClass('data'); 
-		return $Data->getBy(['idUsuario','fecha <= CURRENT_DATE()'],[$this->id,'TRUE'] );
+		return $Data->getBy(['idUsuario','fecha < CURRENT_DATE()'],[$this->id,'TRUE'] );
 	 }
 	public function getCitas($idCita){
 		

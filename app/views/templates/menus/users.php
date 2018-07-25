@@ -8,13 +8,13 @@
 	</div>
 	<div id="mnuConfig" class="charm">
 		<div class="contenedor">
-			<div class="checkbox">
-				<input id="authEmail" name="a[]" value="authEmail" type="checkbox" <?= $User->authEmail()?"checked":""?>>
+			<div id="authEmail" class="checkbox">
+				<input  value="authEmail" type="checkbox" <?= $User->authEmail()?"checked":""?>>
 				<span for="authEmail">	Recibir recordatorio en mi calendario Google. </span>
 			</div>
 
-			<div class="checkbox">
-				<input id="authCal" name="b[]" value="authCal" type="checkbox" <?= $User->authCal()?"checked":""?>>
+			<div id="authCal" class="checkbox">
+				<input  value="authCal" type="checkbox" <?= $User->authCal()?"checked":""?>>
 				<span for="authCal"> Recibir recordatorio correo electronico. </span>
 			</div>
 		</div>
@@ -35,13 +35,13 @@
 	}?>
 	<ul class="app-bar-menu place-right" data-flexdirection="reverse">
 		<li><span class="lnr-home"></span></li>		
-		<li id="btnDatos">
+		<li id="btnDatos"  data-menu="mnuDatosPersonales">
 			<span class="lnr-user"></span>
 		</li>
-		<li id="btnConfig">
+		<li id="btnConfig" data-menu="mnuConfig">
 			<span class="lnr-cog"></span>
 		</li>
-		<li id="mnuUserSalirSession">
+		<li id="mnuUserSalirSession" >
 			<a href="/<?=CODE_EMPRESA?>?destroy=true"  class="lnr-power-switch"></a>
 		</li>
 	</ul>

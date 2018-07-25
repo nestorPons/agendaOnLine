@@ -3,7 +3,7 @@
 @grey:#8a8a7b;
 @grey-bg:#ddd;
 @text-icon: #aaa;
-@font-color: #222; 
+@font-color: #444; 
 @fontSize: 16px;
 @font-size-menu: 20px; 
 @base: #fff; 
@@ -125,7 +125,7 @@ thead{
 	}
 
  }
-[class*="icon-"], [class*="lnr-"]{
+[class*="icon-"], [class*="lnr-"], .checkbox{
 	cursor: pointer;
  }
 
@@ -404,6 +404,11 @@ input[type="color"] {
 		&>div{
 			margin: 3px auto; 
 			display: block;
+		}
+	}
+	#newCodigo{
+		#lstServ{
+			margin: 10px auto;
 		}
 	}
 	@media (max-width: 320px){
@@ -2298,7 +2303,13 @@ input[type="color"] {
 					display: block;
 				}
 			}
+			#lstSerMain{
+				a{
+					color: @font-color;
+				}
+			}
 		}
+		
 	}
 	#mnuDatosPersonales{
 		display: none;
@@ -2510,6 +2521,7 @@ input[type="color"] {
 	}
  }
 // Auxiliares
+
 .noHover{
 	cursor: inherit;
 }

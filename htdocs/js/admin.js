@@ -368,18 +368,26 @@ main ={
 			typeof callback == "function" && callback();
 		 }
 		var _delRow = function(div){
-			var cod = div.find('.codigo')
-			var idCod = cod.attr('id_codigo')
+			var cod = div.find('.codigo'),
+				idCod = cod.attr('id_codigo'),
+				arrSer = main.data[main.idCita].servicios, 
+				len = arrSer.length
 
-			main.data[main.idCita].tiempoServicios -= cod.attr('tiempo')
+				//Buscamos posicion del elemento a eliminar
+				for(let i = 0; i <= len; i++){
+					if(idCod==arrSer[i].id){						
+						// Si encuentra el indice borra el elemento
+						main.data[main.idCita].servicios.splice(i, 1)
+						main.data[main.idCita].tiempoServicios -= cod.attr('tiempo')
+						div.fadeOut('fast').remove()
+						main.set.tiempoServicios()
 
-			var arrSer = main.data[main.idCita].servicios
-			var index = arrSer.indexOf(idCod)
+						break;
+					}
+				}
 
-			main.data[main.idCita].servicios.splice(index, 1)
-			div.fadeOut('fast').remove()
 
-			main.set.tiempoServicios()
+
 		 }
 		var _addRow = function (id , codigo , descripcion ,tiempo, callback ){
 			var $dlg = $('#dlgEditCita')
@@ -790,6 +798,7 @@ main ={
 					disabled : false, 
 					opacity : 0.50 , 
 					zIndex: 100 ,
+					delay: 500,
 					revert: function(ob){
 						if (ob == false){
 							$('.ui-draggable-dragging').remove()
@@ -1305,9 +1314,7 @@ $(function(){
 	main.login.ancho = $('#login').width()
 	main.inactivas.change(localStorage.getItem("showRows"))
 	main.inactivas.comprobar()
-$('.lbl').on('downmouse',function(){
-	echo('aguantando....')
-})
+
 	//Construyo la "clase" device para saber el dispositivo usado
  	Device.init()
 	if(Device.isCel()) localStorage.setItem('menuOpen',0)

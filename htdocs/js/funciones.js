@@ -374,8 +374,7 @@ var dialog = {
 			_open = function($this){
 				$this.show('fade','fast',function(){
 					$(this).find('.iconClass-container input').first().focus()
-				})
-					
+				})			
 
 				$('.popup-overlay').fadeIn()
 			
@@ -387,7 +386,7 @@ var dialog = {
 			dialog.create(objName,fnOk,fnCancel,function($this){
 
 				_open( $('#dialogs #'+objName))
-				typeof callback == "function" && callback($this)	
+				typeof callback == "function" && callback(true)	
 
 			})
 
@@ -395,7 +394,7 @@ var dialog = {
 	
 			dialog.reset(objName)
 			_open($this)
-			typeof callback == "function" && callback($this)	
+			typeof callback == "function" && callback(false)	
 			
 		}
 	 },

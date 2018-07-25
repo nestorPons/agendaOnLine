@@ -1,4 +1,5 @@
-<?php 
+<div id="lineasHistorial">
+<?php
 foreach($historial as  $h){?>
     <div class="cita">
         <i class="edicion icon-note"></i>
@@ -15,3 +16,4 @@ foreach($historial as  $h){?>
     <br>
     <?php
 }?>
+</div>

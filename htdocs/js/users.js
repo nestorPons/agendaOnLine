@@ -323,7 +323,7 @@ var historial = {
 			section: 'historial'
 		}
 		$.post(INDEX, data,function (html, textStatus, jqXHR) {
-			$('section#historial').find('.contenido').html(html)
+			$('section#historial').find('#lineasHistorial').html(html)
 			historial.numeracion()
 		},'html')
 	 }
@@ -380,29 +380,30 @@ var usuario = {
 			nombre:$('#nombre').val() ,
 			email:$('#email').val(),
 			tel:$('#tel').val(),
-			authEmail : $('#authEmail').is('checked')?1:0, 
-			authCal : $('#authCal').is('checked')?1:0, 
+			authEmail : $('#authEmail').find('input:checkbox').prop('checked')?1:0, 
+			authCal : $('#authCal').find('input:checkbox').prop('checked')?1:0, 
 			controller : 'users' , 
 			action : SAVE
         }
+
 	 }, 
 	hay_cambios: function(){
 
 		return (
-		this.data.nombre != $('#nombre').val() ||
-		this.data.email != $('#email').val() ||
-		this.data.tel != $('#tel').val() ||
-		this.data.authEmail != $('#authEmail').is('checked')?1:0 ||
-		this.data.authCal != $('#authCal').is('checked')?1:0 
+			this.data.nombre != $('#nombre').val() ||
+			this.data.email != $('#email').val() ||
+			this.data.tel != $('#tel').val() ||
+			this.data.authEmail != $('#authEmail').find('input:checkbox').prop('checked')?1:0 ||
+			this.data.authCal != $('#authCal').find('input:checkbox').prop('checked')?1:0 
 		)
-	}, 
+	 }, 
 	revertir_cambios: function(){
 		$('#nombre').val(this.last.nombre)
 		$('#email').val(this.last.email)
 		$('#tel').val(this.last.tel )
 		$('#authEmail').is('checked',this.last.authEmail)
 		$('#authCal').is('checked',this.last.authCal) 
-	}, 
+	 }, 
 	guardar: function($this){
 		usuario.guardar_array()
 		var opass = $('#opass').val(),
@@ -466,11 +467,13 @@ var usuario = {
 	 },
  }, 
 menu = {
-	toggle: function(mnu, btn){
-		var span = btn.find('span')
+	toggle: function(btn){
+		var span = btn.find('span'), 
+			mnu = $('#'+btn.data('menu'))
+
 		span.data('class') == undefined && span.data('class',span.attr('class'))
 		var c = span.data('class') 
-
+		
 		if(mnu.is(':visible')){
 			mnu.hide('slide',{ direction: 'right' })
 			span.removeClass('lnr-cross').addClass(c)
@@ -478,7 +481,7 @@ menu = {
 			if(usuario.hay_cambios()) usuario.guardar()
 			
 		}else{
-			$('.charm').hide('slide',{ direction: 'right' })
+			$('.charm:visible').hide('slide',{ direction: 'right' })
 			
 			$('.lnr-cross') 
 				.addClass(function(){
@@ -490,7 +493,7 @@ menu = {
 			usuario.guardar_array()
 			span.removeClass(c).addClass('lnr-cross')
 		}
-	}
+	 }
  }
 $(function(){	
 	$('body')
@@ -498,14 +501,15 @@ $(function(){
 		.on('click',".idDateAction",function(){
 			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
 		 })
+		.on('click','#authEmail, #authCal',function(){
+			var $input = $(this).find('input:checkbox')
+			$input.prop('checked',!$input.prop('checked'))
+		})
 		
 	$('#navbar')
-		.on('click','#btnConfig',function(){
-			menu.toggle($('#mnuConfig'),$(this))
+		.on('click','#btnConfig, #btnDatos',function(){
+			menu.toggle($(this))
 		 })
-		.on('click','#btnDatos',function(){
-			menu.toggle($('#mnuDatosPersonales'),$(this))
-		 })	
 	$('input:password').blur(function(){
 		var pass1 = $('#pass').val()		
 		var pass2 = $('#rpass').val()
@@ -518,6 +522,7 @@ $(function(){
 		var val = $('.steperCapa:visible').data('value')
 		crearCita.stepper(val+1)
 	 })
+
 	$('#crearCita')
 		.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
 		.on('change','#lstSerSelect',function(){servicios.mostrar($(this).val())})

@@ -303,6 +303,5 @@ $('#dialogs')
 		usuarios.historial(usuarios.id,$(this).val())
 	})
 	.on('click','.fnBuscarCita', function(){
-
 	})
 usuarios.init()
