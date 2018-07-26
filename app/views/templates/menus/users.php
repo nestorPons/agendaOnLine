@@ -9,14 +9,31 @@
 	<div id="mnuConfig" class="charm">
 		<div class="contenedor">
 			<div id="authEmail" class="checkbox">
-				<input  value="authEmail" type="checkbox" <?= $User->authEmail()?"checked":""?>>
-				<span for="authEmail">	Recibir recordatorio en mi calendario Google. </span>
+				<div class="switch">
+					<input type="checkbox" name="switch" class="switch-checkbox" value="authEmail" <?= $User->authEmail()?"checked":""?>>
+					
+					<label class="switch-label" for="myswitch">
+						<span class="switch-inner"></span>
+						<span class="switch-switch"></span>
+					</label>
+				</div>
+				<span for="authEmail">Recibir recordatorio correo electronico.</span>
 			</div>
-
-			<div id="authCal" class="checkbox">
-				<input  value="authCal" type="checkbox" <?= $User->authCal()?"checked":""?>>
-				<span for="authCal"> Recibir recordatorio correo electronico. </span>
+	<!--
+			<div  id="authCal" class="checkbox">
+				<div class="switch">
+				
+				
+				<input type="checkbox" name="switch" class="switch-checkbox" value="authCal" <?= $User->authCal()?"checked":""?>>
+				
+				<label class="switch-label" for="myswitch">
+					<span class="switch-inner"></span>
+					<span class="switch-switch"></span>
+				</label>
+				</div>
+				<span for="authCal">Recibir recordatorio en mi calendario Google.</span>
 			</div>
+	-->
 		</div>
 	</div>
 </div>

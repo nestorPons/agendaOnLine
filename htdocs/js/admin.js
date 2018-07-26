@@ -1423,6 +1423,10 @@ $(function(){
 			e.stopPropagation() 
 			main.edit($(this).parents('.lbl').attr('idcita'))
 		 })
+		.on('dblclick','.lbl', function(e){
+			e.stopPropagation() 
+			main.edit($(this).attr('idcita'))
+		 })
 		.on('click','.cita',function(e){
 			$(this).parent()
 				.find('.note')

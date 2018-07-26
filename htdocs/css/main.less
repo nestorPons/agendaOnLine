@@ -125,7 +125,7 @@ thead{
 	}
 
  }
-[class*="icon-"], [class*="lnr-"], .checkbox{
+[class*="icon-"], [class*="lnr-"]{
 	cursor: pointer;
  }
 
@@ -1429,7 +1429,13 @@ input[type="color"] {
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
 }
-
+.checkbox{
+	cursor: pointer; 
+	margin: 5px auto;
+	*{
+		vertical-align: middle;
+	}
+}
 @-moz-keyframes parpadeo{  
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
@@ -1474,12 +1480,21 @@ input[type="color"] {
 	position:relative;
  }
 #crearCita{
+	*{
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none; 
+	}
 	.tablas{
 		table{
 			margin: 0 auto;
 			td{
 				padding: 0 25px;
 				height: 30px;
+				label, input{
+					cursor: pointer;
+				}
 			}
 		}
 	}
@@ -1491,6 +1506,9 @@ input[type="color"] {
 		text-align: left;
 		tr {
 			display : none;
+			span, label, input{
+				cursor: pointer;
+			}
 		}
 	}
 	.contUsers{
@@ -2828,4 +2846,51 @@ input[type="color"] {
 		}
 		
 	}
+}
+
+/*SWITCH*/
+.switch {
+    position: relative; width: 60px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.switch-checkbox {
+    display: none;
+}
+.switch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 11px;
+}
+.switch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.switch-inner:before, .switch-inner:after {
+    display: block; float: left; width: 50%; height: 18px; padding: 0; line-height: 18px;
+    font-size: 13px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.switch-inner:before {
+    content: "ON";
+    padding-left: 7px;
+    color: #FFFFFF;
+}
+.switch-inner:after {
+    content: "OFF";
+    padding-right: 7px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.switch-switch {
+    display: block; width: 13px; margin: 2.5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 38px;
+    border: 2px solid #999999; border-radius: 11px;
+    transition: all 0.3s ease-in 0s; 
+}
+.switch-checkbox:checked + .switch-label .switch-inner {
+    margin-left: 0;
+}
+.switch-checkbox:checked + .switch-label .switch-switch {
+    right: 0px; 
 }

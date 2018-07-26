@@ -169,12 +169,20 @@ class User extends \core\BaseClass {
 	public function sendMail($file_mens, $alt_body, $arr_args_mens){
 		if($this->authEmail){
 			$Mail = new \models\PHPMailer(true);
+			
+			$Mail->IsHTML(true);
+
+			$Mail->AddEmbeddedImage('/img/btn_google_calendar.gif', 'googleCalendar','btn_google_calendar.gif');
+			$Mail->AddEmbeddedImage(URL_LOGO, 'logo', 'logo.jpg');
+			$Mail->AddEmbeddedImage(URL_BACKGROUND, 'background-image', 'background.jpg');
 
 			$Mail->addAddress($this->email, $this->nombre);   
 			$Mail->url_menssage = URL_SOURCES . $file_mens;
-			$Mail->Body    = \core\Tools::get_content($Mail->url_menssage, $arr_args_mens);
+			$Mail->Body    = \core\Tools::get_content($Mail->url_menssage,$this, $arr_args_mens);
 			$Mail->AltBody = $alt_body;
 			$Mail->Subject =  $alt_body;
+
+
 
 			return $Mail->send($this);
 	
@@ -197,5 +205,20 @@ class User extends \core\BaseClass {
 	 }	
 	public function getId(){
 		return $this->id; 
+	 }
+	public function createUrlEventCalendarGoogle($date, $hour, $time){
+		$interval = new \DateInterval('PT'.$time.'M');
+		$date= \DateTime::createFromFormat('Y-m-d H:i',$date .' '. $hour);
+		$ini = $date->format('Ymd\THis'); 
+		$date->add($interval);
+		$end = $date->format('Ymd\THis'); 
+		$c1 = str_replace(' ', '_',NAME_EMPRESA);
+		$c2 = str_replace(' ', '+',NAME_EMPRESA);
+		return "https://www.google.com/calendar/event?action=TEMPLATE&text=cita_$c1&dates=$ini/$end&details=tiene+una+cita+en+$c2&location=Castellon&trp=false";
+		
+		
+	}
+	public function isGmail(){
+		return strpos($this->email,'gmail')!=false; 
 	}
 }

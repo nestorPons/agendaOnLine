@@ -9,7 +9,7 @@
 </head>
 <body id="user" user="user" iduser = <?=$_SESSION['id_usuario']?>>
 <?php require_once URL_MENUS . 'users.php'?>
-<div id="login" class="login">	
+<div id="login" class="login no-seleccionable">	
 	<div class="tile-container" id="contenedorMenuPrincipal">
 		<section id="crearCita" name="tile" class="tile " data-role="tile">
 			<div class="tile-content iconic">

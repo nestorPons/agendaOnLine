@@ -1,5 +1,5 @@
 <?php include URL_MENUS . "servicios.php"; ?>
-<table class ='contenedorServicios' > 
+<table class ='contenedorServicios ' > 
 	<tbody>
 		<?php
 		foreach ($_SESSION['SERVICIOS'] as $ser){

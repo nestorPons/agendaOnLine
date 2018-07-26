@@ -43,14 +43,18 @@ if ($data <= 1 || 1 ){
 			$r['idCita'] = $id_servicio ;
 			$r['services'] = $arrSer ;
 			$r['idCitaSer'] = $arridCitaSer;
-			
-			if($User->isUser() && CONFIG['sendMailUser'])
+
+ 
+
+			if($User->isUser() && CONFIG['sendMailUser'] ){
+		
 				$User->sendMail(
 					'mailConfirmation.php', 
 					'Confirmación reserva', 
 					[$fecha,$hora, $_POST['tiempoServicios']]
 				);
-
+				
+			}
 		}
 } else {
 	$r['ocupado']=true;
