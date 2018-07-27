@@ -962,32 +962,7 @@ function existeUrl(url) {
    http.send();
    return http.status!=404;
  }
-function slideDias($obj,dir=0,callback){
-	
-	if (dir>0||dir=='right'){
-		var ent = 'right';
-		var sal = 'left';
-	}else{
-		var ent = 'left';
-		var sal = 'right';
-	}
 
-	$obj
-		.hide("slide", { direction: sal }, 1000,function(){
-			// nueva forma de mostrar slider
-			$obj.find('.mostrar').removeClass('mostrar').addClass('ocultar')
-			$obj.find('.'+Fecha.id).addClass('mostrar').removeClass('ocultar')
-			
-			// en desuso
-			$('table.activa').removeClass('activa')
-			$('#'+Fecha.id).addClass('activa')
-			$obj
-			.show("slide", { direction: ent },1000,function(){
-					typeof callback == "function" && callback();
-				});
-		})
-
- }
 function pad (n, length) {
     var  n = n.toString();
     while(n.length < length)
@@ -1007,7 +982,7 @@ function deleteAllCookies() {
 function colorear_filas($this){
 	$this = $this.find('tbody tr').css('background','').filter(':visible')
 	if($this.length) $this.filter(':even').css('background','#eee')
-}
+ }
 $(function(){
 	$('.time').mask('00:00');
 	$('.tel').mask('##000000000');

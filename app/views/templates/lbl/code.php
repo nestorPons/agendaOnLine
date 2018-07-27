@@ -1,5 +1,5 @@
 <div class="servicio">
-    <span class ='icon-angle-right'></span>
+    <i class ='icon-angle-right'></i>
     <span class='codigo' des_codigo='<?=$val['des']?>' id_codigo = '<?=$val['idCodigo']?>' tiempo = '<?=$val['tiempo']?>' title="<?=$val['des']?>">
     <?=$val['codigo']?></span>
 </div>

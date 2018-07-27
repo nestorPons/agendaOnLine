@@ -5,19 +5,19 @@
 			<h4>Formulario de contacto ....</h4>
 			<div class="iconClass-container icon-left">
 				<input type="text" name="nombre" placeholder="nombre" value='<?=CONFIG['nombre_usuario']?>'>
-				<span class="icon-user iconClass-inside"></span>
+				<i class="icon-user iconClass-inside"></i>
 			</div>
 			<div class="iconClass-container icon-left">
 				<input type="text" name="empresa" placeholder="Empresa" value='<?=CONFIG['nombre_empresa']?>'>
-				<span class="icon-shop  iconClass-inside"></span>
+				<i class="icon-shop  iconClass-inside"></i>
 			</div>
 			<div class="iconClass-container icon-left">
 				<input type="email" name="email" placeholder="Email de contacto" value='<?=CONFIG['email']?>'>
-				<span class="icon-mail iconClass-inside"></span>
+				<i class="icon-mail iconClass-inside"></i>
 			</div>
 			<div class="iconClass-container icon-left">
 				<input type="tel" name="telefono" placeholder="Telefono" value='<?=CONFIG['tel']?>'>
-				<span class="icon-phone iconClass-inside"></span>
+				<i class="icon-phone iconClass-inside"></i>
 			</div>
 			<div class="iconClass-container icon-left">
 				<textarea name='mensaje' class="txt" rows=5 placeholder='Dejenos su mensaje'  data-autoresize ></textarea>		
@@ -67,7 +67,7 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 	</div>
 	<ul id="tools" class="app-bar-menu no-flexible" data-flexdirection="reverse">
 		<div id="btnSearch" class="app-bar-element no-flexible   ">
-			<span  class="icono-nav lnr-magnifier"></span>
+			<i  class="icono-nav lnr-magnifier"></i>
 			<span  class="menulbl">Buscar</span>
 		</div>
 <!--
@@ -90,30 +90,29 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 		</div>
 -->
 		<div id="btnReset" class="app-bar-element no-flexible ">
-			<span  class="icono-nav lnr-undo"></span>
+			<i  class="icono-nav lnr-undo"></i>
 			<span  class="menulbl">Refrescar</span>
 		</div>
 		<div id="btnAdd" class="app-bar-element no-flexible  " data-value=0>
-			<span  class="icono-nav lnr-plus-circle" ></span>
+			<i  class="icono-nav lnr-plus-circle" ></i>
 			<span  class="menulbl">Nuevo</span>
 		</div>
 		<div id="btnDel" class="app-bar-element no-flexible   ">
-			<span  class="icono-nav lnr-trash"></span>
+			<i  class="icono-nav lnr-trash"></i>
 			<span  class="menulbl">Eliminar</span>
 		</div>
 			<div id="btnSave" class="app-bar-element no-flexible   ">
-			<span class="icono-nav lnr-thumbs-up " ></span>
-			<span class="icono-nav lnr-sync animate-spin"></span>
+			<i class="icono-nav lnr-thumbs-up " ></i>
+			<i class="icono-nav lnr-sync animate-spin"></i>
 			<span class="menulbl">Guardar</span>
 		</div>
 			<div id="btnEdit" class="app-bar-element no-flexible   ">
-			<span class="icono-nav icon-edit" ></span>
-			<span class="icono-nav icon-load animate-spin"></span>
+			<i class="icono-nav icon-edit" ></i>
 			<span class="menulbl">Editar</span>
 		</div>
 		<div id="btnShow" class="app-bar-element no-flexible " >
-				<span class="icono-nav off lnr-star <?=CONFIG['ShowRow']==1?"hidden":""?>"></span>
-				<span class="icono-nav on lnr-star-empty <?=CONFIG['ShowRow']==1?"":"hidden"?>"></span>
+				<i class="icono-nav off lnr-star <?=CONFIG['ShowRow']==1?"hidden":""?>"></i>
+				<i class="icono-nav on lnr-star-empty <?=CONFIG['ShowRow']==1?"":"hidden"?>"></i>
 				<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>

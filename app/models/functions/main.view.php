@@ -47,7 +47,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 							if ($array_horas) {	
 								// si es movil hay que poner pestañas
-								$class = $Device->isMovile?' hidden_responsive ':'';
+								$class = '';/*$Device->isMovile?' hidden_responsive ':'';*/
 
 								$disabled = 'active' ;
 								if  (!_inArray($str_hora,$array_horas)) {

@@ -2,7 +2,7 @@
 <table class=tablas>
     <thead>
     <tr>
-    <th><span class="tituloOpciones">Opciones</span></th>
+    <th><span class="tituloOpciones">Opc</span></th>
     <th><span class="tituloNumero">Id</span></th>
     <th><span class="tituloFecha">Fecha</span></th>
     <th><span class="tituloHora">Hora</span></th>

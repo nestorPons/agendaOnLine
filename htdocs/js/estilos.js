@@ -38,3 +38,6 @@ var estilos = {
  }
 
 estilos.init()
+function sliderConfigBorder ( value, slider ) {
+	estilos.test( value ) 
+ }

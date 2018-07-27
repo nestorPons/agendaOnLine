@@ -152,22 +152,23 @@ main ={
 		 }
 	 }, 
 	sincronizar: function (dir){
+		var dir= dir||0
 		main.cargado = false
 		var section = main.section , 
 			body = main.body, 
-			_pasarDia = function(dir){
+			_pasarDia = function(){
 				if (Fecha.id != section.find('.dia.activa').attr('id')) {
-					var dir= dir||0,
-						ent = (dir>0||dir=='right')?'right':'left',
-						sal = (ent=='right')?'left':'right'
-			
-					body.hide("slide", { direction: sal }, 750,function(){
+					var ent = dir>0?'right':'left',
+						sal = dir>0?'left':'right'
+
+					body.hide("slide", { direction: sal }, 500,function(){
 						$('.dia.activa').removeClass('activa')
 						section.find('#'+ Fecha.id).addClass('activa')
-						body.show("slide", { direction: ent }, 750)
+						body.show("slide", { direction: ent }, 500)
 
 						main.inactivas.comprobar()
 						main.cargado = true	
+						
 					})
 				}
 			}
@@ -178,7 +179,7 @@ main ={
 				main.check()
 				_pasarDia()
 			}
-
+		
 
 	 },
 	activeDay : function () {
@@ -624,6 +625,9 @@ main ={
 	 },
 	lbl:{
 		widht :  '25' ,
+		widht : function (width){
+			main.lbl.widht = width 
+		 }, 
 		height: new Array,
 		clone : new Object, 
 		idLastcelda : 0 ,
@@ -703,7 +707,7 @@ main ={
 		service : function (data) {
 				var html = "\
 					<div class='servicio'>\
-						<span class ='icon-angle-right'></span>\
+						<i class ='icon-angle-right'></i>\
 						<span class='codigo' des_codigo='"+data.descripcion+"' \
 						id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
 					</div>\
@@ -714,7 +718,7 @@ main ={
 			}, 
 		style : function() {
 				var self = main , lbl = main.lbl 
-					
+				
 				lbl.draggable()
 				
 				$('.lbl')
@@ -776,10 +780,7 @@ main ={
 							//Si hay igual de servicios que lineas escondo el nombre 
 							var tiempo = Math.ceil($(this).attr('tiempo')/15), 
 								servicios=$(this).find('.servicio').length
-							if (tiempo<=servicios){
-								$(this).find('.nombre').hide()
-								$(this).find()
-							} 
+
 							
 						})
 				
@@ -938,8 +939,8 @@ menu = {
 						.find('.caption').hide()	
 					if(!Device.isCel()){
 						$('#login')
-							.width((main.login.ancho - 25))
-							.animate({'left':25}, callback)
+							.width((main.login.ancho - 35))
+							.animate({'left':35}, callback)
 					}					
 					localStorage.setItem("menuOpen",1)
 				break
@@ -963,6 +964,9 @@ menu = {
 					localStorage.setItem("menuOpen",0)
 				
 			}
+			main.lbl.widht = $('.celda:visible').first().width()
+			main.login.ancho = $('#login').width()
+			$('.lbl').width(main.lbl.widht)
 		 }
 	 }, 
 	status: function (capa){
@@ -1017,9 +1021,9 @@ menu = {
 				menu.enabled(save) ;
 				break;
 			case 'notas':
-				menu.enabled(add)
+				menu.enabled(add, calendar)
 				break
-			case 'history':
+			case 'historial':
 				menu.enabled(calendar)
 				df.options = false
 				options.find('#showByTime').removeClass('disabled')
@@ -1122,8 +1126,9 @@ menu = {
 			arguments[i].hide(100)
 	 },
 	enabled: function (){
-		for(let i = 0; i < arguments.length; i++)
+		for(let i = 0; i < arguments.length; i++){
 			arguments[i].show(100)
+		}
 	 },
 	load:function (){
 
@@ -1314,7 +1319,8 @@ $(function(){
 	main.login.ancho = $('#login').width()
 	main.inactivas.change(localStorage.getItem("showRows"))
 	main.inactivas.comprobar()
-
+	main.lbl.widht( $('.celda:visible').first().width())
+	main.lbl.style()
 	//Construyo la "clase" device para saber el dispositivo usado
  	Device.init()
 	if(Device.isCel()) localStorage.setItem('menuOpen',0)
@@ -1322,10 +1328,7 @@ $(function(){
 	cargarDatepicker()
 	colorearMenuDiasSemana()
 
-	menu.nav.estado(localStorage.getItem("menuOpen"), function(){
-		main.lbl.widht = $('.celda:visible').first().width() - 2 
-		main.login.ancho = $('#login').width()
-	})
+	menu.nav.estado(localStorage.getItem("menuOpen"))
 
 	$('body')
 		.on('click',".idDateAction",function(){
@@ -1356,15 +1359,19 @@ $(function(){
 	
 	$('#btnContacto').click(function(){
 		var menu = $('#mnuContacto')
-		if(menu.is(':visible'))
+		if(menu.is(':visible')){
 			menu.hide('slide',{ direction: 'right' })
+			$(this).find('i').removeClass().addClass('lnr-envelope')
+		}
 		else
+		{
 			menu.show('slide',{ direction: 'right' })
+			$(this).find('i').removeClass().addClass('lnr-cross')
+		}
 	 })
 
 	$('#frmContact button')
-		.click(function(event){
-			
+		.click(function(event){			
 			event.preventDefault()
 			var data = $("#frmContact").serializeArray()
 			data.push({name : 'controller' , value : 'contacto'})
@@ -1520,5 +1527,5 @@ $(function(){
 
 
 	main.lbl.load()
-	menu.status('main')
+
 })

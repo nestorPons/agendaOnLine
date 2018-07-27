@@ -137,12 +137,13 @@ class BaseClass{
         $values = null ;
         
         if ( $id == -1) {
+
             if (!is_null($args)){
-//                unset($args['id']);
-                foreach ($args as $column => $value ) {
-                        $columns .=  $column . ',' ;
-                        $values .= '"' . $value . '",' ; 
-                 }    
+               unset($args['id']);
+               foreach ($args as $column => $value ) {
+                    $columns .=  $column . ',' ;
+                    $values .= '"' . $value . '",' ; 
+                }    
             }
             $columns = trim( $columns , ',' ) ;
             $values = trim( "'" . $values , "'," ) ;

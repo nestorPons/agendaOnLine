@@ -4,7 +4,7 @@
     tiempo="<?=$val['tiempoTotal']?>">
     <div id ='<?=$val['idUsuario']?>' class='nombre'>
         <i class ='icon-user-1'></i> 
-        <i class = 'text-value'><?=$val['nombre']?></i>
+        <span class = 'text-value'><?=$val['nombre']?></span>
     </div>
     <div class='iconos'> 
     <?php if($val['idUsuario']==$val['usuarioCogeCita']&&$val['admin']!=1){?>

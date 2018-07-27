@@ -37,7 +37,7 @@ footer, header, hgroup, menu, nav, section {
 	text-decoration:none;
  }
 ol, ul {
-    list-style: none;
+	list-style: none;
  }
 blockquote, q {
     quotes: none;
@@ -184,8 +184,8 @@ input[type="color"] {
 	-webkit-animation: spin 2s infinite linear;
 	animation: spin 2s infinite linear;
 	display: inline-block;
-   }
-   @-moz-keyframes spin {
+ }
+@-moz-keyframes spin {
 	0% {
 	  -moz-transform: rotate(0deg);
 	  -o-transform: rotate(0deg);
@@ -200,52 +200,52 @@ input[type="color"] {
 	  transform: rotate(359deg);
 	}
    }
-  @-webkit-keyframes spin {
+@-webkit-keyframes spin {
 	0% {
-	  -moz-transform: rotate(0deg);
-	  -o-transform: rotate(0deg);
-	  -webkit-transform: rotate(0deg);
-	  transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
 	}
-  
+
 	100% {
-	  -moz-transform: rotate(359deg);
-	  -o-transform: rotate(359deg);
-	  -webkit-transform: rotate(359deg);
-	  transform: rotate(359deg);
+		-moz-transform: rotate(359deg);
+		-o-transform: rotate(359deg);
+		-webkit-transform: rotate(359deg);
+		transform: rotate(359deg);
 	}
-   }
-  @-o-keyframes spin {
+ }
+@-o-keyframes spin {
 	0% {
-	  -moz-transform: rotate(0deg);
-	  -o-transform: rotate(0deg);
-	  -webkit-transform: rotate(0deg);
-	  transform: rotate(0deg);
-	}
-  
+	-moz-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+ }
+
 	100% {
-	  -moz-transform: rotate(359deg);
-	  -o-transform: rotate(359deg);
-	  -webkit-transform: rotate(359deg);
-	  transform: rotate(359deg);
+		-moz-transform: rotate(359deg);
+		-o-transform: rotate(359deg);
+		-webkit-transform: rotate(359deg);
+		transform: rotate(359deg);
 	}
-   }
-  @-ms-keyframes spin {
+ }
+@-ms-keyframes spin {
 	0% {
-	  -moz-transform: rotate(0deg);
-	  -o-transform: rotate(0deg);
-	  -webkit-transform: rotate(0deg);
-	  transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
 	}
-  
+
 	100% {
-	  -moz-transform: rotate(359deg);
-	  -o-transform: rotate(359deg);
-	  -webkit-transform: rotate(359deg);
-	  transform: rotate(359deg);
+		-moz-transform: rotate(359deg);
+		-o-transform: rotate(359deg);
+		-webkit-transform: rotate(359deg);
+		transform: rotate(359deg);
 	}
-   }
-  @keyframes spin {
+ }
+@keyframes spin {
 	0% {
 	  -moz-transform: rotate(0deg);
 	  -o-transform: rotate(0deg);
@@ -337,6 +337,10 @@ input[type="color"] {
 		top: 0;
 		bottom: 0;
 	}
+
+	@media (max-width: 320px){
+		padding: 0;
+	}
  }
 .cuerpo{
 	position:absolute;
@@ -405,21 +409,16 @@ input[type="color"] {
 			margin: 3px auto; 
 			display: block;
 		}
-	}
+	 }
 	#newCodigo{
 		#lstServ{
 			margin: 10px auto;
 		}
-	}
+	 }
 	@media (max-width: 320px){
 		width:auto;
 		.iconClass-container{
 			width:auto;
-			&.icon-left{
-				.iconClass-inside{
-					left: 10px;
-				}			
-			}
 		}
 	 }
  }
@@ -478,6 +477,9 @@ input[type="color"] {
 			position:sticky;
 			text-align:center;
 			width: 310px;
+			@media screen and (max-width: 375px) {
+				width: auto;
+			}
 			*{
 				box-sizing: border-box;
 			}
@@ -607,106 +609,7 @@ input[type="color"] {
 .invalid{
 	border-color: #ff0000 ;
  }
-.lbl{  
-	@whidth_table: 100% - 0.7px; 	
-	position: absolute;
-	z-index : 2 ;
-	width: 90%;	
-	padding : 4px 0 0 0;
-	overflow : hidden;
-	border : 1px solid;
-	opacity: 0.7; 
-	div.nombre{
-		font-size: 1em;
-		margin : 0 0 10px 0;	
-	 }
-	.servicios {
-		div{
-			display : block ;
-			margin-bottom: 9px;
-			.no-seleccionable();
-		}
 
-	 }
-	.nombre { 
-		padding-right: 50px;
-		height: 0.9rem;
-		display: inline-block;
-		overflow: 	hidden;
-		.no-seleccionable();
-	 }
-	.iconos{
-		position : absolute ;
-		top : 3px ;
-		right : 5px ;
-		display: flex;
-		background: inherit;
-
-	 }
-
-	.note { 
-		overflow : hidden;
-		display: none;
-		width: 100%;
-		z-index: 0;
-		.no-seleccionable();
-	 }
-	@media (max-width: 450px){
-		width: 99%;
-	}
-	 
-/** bucle less no funciona en php lo edito con el compilador de enlinea
-	@em : 19px ;
-	@rem : 5px ; 
-
-	.crear-rows(@len; @i: 2) when (@i =< @len) {
-		.row_@{i} {
-			height : @em * @i + @rem * (@i - 1) ;
-		}
-		
-		.crear-rows(@len, @i + 1);
-	}  
-
-	.crear-rows(60);
-**/
-
-	@em : 16px ;
-	&.row_1 {
-		height :  @em ;
-/*		.nombre{
-			display:none;
-		}
-*/
-		&.width_6 .icons_crud{
-			display: none;
-		}
-	 }
-
-	&.width_{
-		&1{
-			width: @whidth_table;
-		 }
-		&2{
-			width: (@whidth_table/2);
-		 }
-		&3{
-			width: @whidth_table/3;
-		 }
-		&4{
-			width: @whidth_table/4;
-		 }
-		&5{
-			width: @whidth_table/5;
-		 }
-		&6{
-			width: @whidth_table/6;	
-		 }
-		&7{
-			width: @whidth_table/7;
-		 }
-
-	}
- }
 .link{
 	color: #0000ff;
 	text-decoration: underline;
@@ -721,6 +624,20 @@ input[type="color"] {
 	position:relative;
 	width: 90%;
 	text-align:center;
+	@media screen and (max-width: 490px) {
+		top: 0;
+		margin: 0 auto;
+		width: 80%;
+		height: 100%;
+		border: none;
+		-webkit-border-radius:0;
+		-moz-border-radius:0;
+		border-radius: 0;
+		
+		input[type="radio"], [type="checkbox"] {
+			transform:scale(1.5,1.5);
+		}
+	}
 	&-form {
 		border:	1px solid #bbbbbb;
 		text-align:center;
@@ -780,20 +697,7 @@ input[type="color"] {
 		}
 	}
 
-	@media screen and (max-width: 490px) {
-		top: 0;
-		margin: 0 auto;
-		width: 80%;
-		height: 100%;
-		border: none;
-		-webkit-border-radius:0;
-		-moz-border-radius:0;
-		border-radius: 0;
-		
-		input[type="radio"], [type="checkbox"] {
-			transform:scale(1.5,1.5);
-		}
-	}
+
  }
 .menu{
 	width: 100%;
@@ -810,7 +714,6 @@ input[type="color"] {
 		color: @grey ;
 		text-align-last:center;
 		text-align: center;
-		font-size:@fontSize;
 		border-style: none;
 		text-indent: 5px;
 		overflow: hidden;
@@ -1441,7 +1344,6 @@ input[type="color"] {
   50% { opacity: 0.0; }
   100% { opacity: 1.0; }
 }
-
 @-webkit-keyframes parpadeo {  
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
@@ -1533,6 +1435,9 @@ input[type="color"] {
 	#tSer{
 		padding: 0 5px;
 	}
+	div#selagendas label {
+    	display: inline-block;
+	}
  }
 #estilos {
 	& > div  {
@@ -1614,6 +1519,12 @@ input[type="color"] {
 		input[type=checkbox]{
 			top: 6px;
 		}
+		@media (max-width: 450px){
+			display: inline-grid;
+			border: 1px solid #999;
+			border-radius: 12PX;
+			padding: 12px;
+		}
 	}
 	table tr td {
 		padding: 2px;
@@ -1648,10 +1559,6 @@ input[type="color"] {
  }
 #mnuContacto{
 	display:none;
-	#frmContact{
-		margin:5px;
-		padding: 10px;
-	}
 	a{
 		display: block;
 		font-size:1.2em;
@@ -1733,6 +1640,7 @@ input[type="color"] {
 		width: 25px;
 		@media (max-width: 768px){
 			width: 50px;
+			height: 50;
 		}
 	}
 
@@ -1767,6 +1675,9 @@ input[type="color"] {
 					display: block;
 				}
 			 }
+		}
+		@media (max-width: 450px){
+			padding: 3px 0;
 		}
 	 }
 	.app-bar-pullmenu .app-bar-menu {
@@ -1859,9 +1770,7 @@ input[type="color"] {
 			clear: both;
 		 }
 	 }
-	.menulbl{
-		@media (max-width: 800px) {display:none;}
-	 }
+	
 	#conTxtBuscar{
 		background-color: transparent;
 		display:none;
@@ -1981,12 +1890,13 @@ input[type="color"] {
 			max-width: 210; 
 			margin: auto ;
 		}
-		@media (max-width: 425px){
-			max-width: 210;
+		@media (max-width: 375px){
+			max-width: 180;
 		}
 	}
 	.app-bar-element {
 		display: none;
+
 		.animate-spin{
 			display: none;
 		}
@@ -2019,6 +1929,10 @@ input[type="color"] {
 	#tools{
 		.app-bar-element{
 			display: none;
+					//inicio main activado mostrar
+			&#btnShow{
+				display: inline-table;
+			}
 		}
 	}
  }
@@ -2041,6 +1955,18 @@ input[type="color"] {
 		display: inline-block;
 	}
 	table{
+		th:first-child{
+			width: 4ch;
+		}
+		th:nth-child(2){
+			width: 3ch;
+		}
+		th:nth-child(3){
+			width: 12ch;
+		}
+		th:nth-child(4){
+			width: 6ch;
+		}
 		th:last-child{	
 			width: 50%; 
 		} 
@@ -2342,6 +2268,11 @@ input[type="color"] {
 	input.cancelar{ 
 		margin: 5px;
 	}
+	table{
+		th.idUsuario{
+			    width: 30%;
+		}
+	}
  }
 .ui-datepicker{
 	width: 275;
@@ -2449,7 +2380,8 @@ input[type="color"] {
 		top: 33px;
 		@media (max-width: 450px){
 			top: 0px;
-			&.esMovil{
+
+		/*	&.esMovil{
 				.tablas{
 					.celda{
 						display: none;
@@ -2459,6 +2391,7 @@ input[type="color"] {
 					}
 				}
 			}
+		*/
 		 }
 	 }
 	.atenuado{
@@ -2472,7 +2405,103 @@ input[type="color"] {
 			text-decoration: none !important;
 		}
 	 }
- }
+	.lbl{  
+		@whidth_table: 100% - 0.7px; 	
+		position: absolute;
+		z-index : 2 ;
+		width: 90%;	
+		padding : 4px 0 0 0;
+		overflow : hidden;
+		border : 1px solid;
+		opacity: 0.7; 
+		@media (max-width: 450px){
+			width: 99%;
+			font-size: 0.8em;
+		}
+		
+		div.nombre{
+			font-size: 1em;
+			margin : 0 0 10px 0;	
+		}
+		.servicios {
+			div{
+				display : block ;
+				margin-bottom: 9px;
+				.no-seleccionable();
+			}
+		}
+		.nombre { 
+			padding-right: 50px;
+			height: 0.9rem;
+			display: inline-flex;
+			overflow: 	hidden;
+			.no-seleccionable();
+		}
+		.iconos{
+			position : absolute ;
+			top : 3px ;
+			right : 5px ;
+			display: flex;
+			background: inherit;
+			@media (max-width: 450px){
+				display: none;
+			}
+
+		}
+
+		.note { 
+			overflow : hidden;
+			display: none;
+			width: 100%;
+			z-index: 0;
+			.no-seleccionable();
+		}
+			/** bucle less no funciona en php lo edito con el compilador de enlinea
+				@em : 19px ;
+				@rem : 5px ; 
+
+				.crear-rows(@len; @i: 2) when (@i =< @len) {
+					.row_@{i} {
+						height : @em * @i + @rem * (@i - 1) ;
+					}
+					
+					.crear-rows(@len, @i + 1);
+				}  
+
+				.crear-rows(60);
+			**/
+
+			@em : 16px ;
+			&.row_1 {
+				height :  @em ;
+			}
+
+			&.width_{
+				&1{
+					width: @whidth_table;
+				}
+				&2{
+					width: (@whidth_table/2);
+				}
+				&3{
+					width: @whidth_table/3;
+				}
+				&4{
+					width: @whidth_table/4;
+				}
+				&5{
+					width: @whidth_table/5;
+				}
+				&6{
+					width: @whidth_table/6;	
+				}
+				&7{
+					width: @whidth_table/7;
+				}
+
+			}
+		}
+}
  #crearCita{
 	.tablas{
 		table{
@@ -2893,4 +2922,12 @@ input[type="color"] {
 }
 .switch-checkbox:checked + .switch-label .switch-switch {
     right: 0px; 
+}
+html{
+	@media (max-width: 450px){
+		font-size: 0.8em;
+		i{
+			font-size: 1.2em;
+		}
+	}
 }
