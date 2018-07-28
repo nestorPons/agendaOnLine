@@ -103,7 +103,6 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 		</div>
 			<div id="btnSave" class="app-bar-element no-flexible   ">
 			<i class="icono-nav lnr-thumbs-up " ></i>
-			<i class="icono-nav lnr-sync animate-spin"></i>
 			<span class="menulbl">Guardar</span>
 		</div>
 			<div id="btnEdit" class="app-bar-element no-flexible   ">

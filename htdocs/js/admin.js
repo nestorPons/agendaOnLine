@@ -967,7 +967,20 @@ menu = {
 			main.lbl.widht = $('.celda:visible').first().width()
 			main.login.ancho = $('#login').width()
 			$('.lbl').width(main.lbl.widht)
-		 }
+		 },
+		contacto:{
+			cerrar: function(){
+				var menu = $('#mnuContacto')
+				menu.hide('slide',{ direction: 'right' })
+				$('#btnContacto').find('i').removeClass().addClass('lnr-envelope')
+			}, 
+			abrir: function(){
+				var menu = $('#mnuContacto')
+				menu.show('slide',{ direction: 'right' })
+				$('#btnContacto').find('i').removeClass().addClass('lnr-cross')
+		
+			}
+		}
 	 }, 
 	status: function (capa){
 		var add = $('#btnAdd'),
@@ -1182,7 +1195,7 @@ notas = {
 				$dlg
 					.find('#fecha').val(Fecha.sql).end()
 					.find('#hora').val('00:00').end()
-					.find('#descripcion').val('Escribe una nota').end()
+					.find('#descripcion').end()
 					.find('h1').html('Nuevo...')
 		
 			}else{ 
@@ -1358,15 +1371,12 @@ $(function(){
 		 })
 	
 	$('#btnContacto').click(function(){
-		var menu = $('#mnuContacto')
-		if(menu.is(':visible')){
-			menu.hide('slide',{ direction: 'right' })
-			$(this).find('i').removeClass().addClass('lnr-envelope')
+		if($('#mnuContacto').is(':visible')){
+			menu.nav.contacto.cerrar()
 		}
 		else
 		{
-			menu.show('slide',{ direction: 'right' })
-			$(this).find('i').removeClass().addClass('lnr-cross')
+			menu.nav.contacto.abrir()
 		}
 	 })
 
@@ -1376,12 +1386,14 @@ $(function(){
 			var data = $("#frmContact").serializeArray()
 			data.push({name : 'controller' , value : 'contacto'})
 
+			data[1].value = normalize(data[1].value)
 			$.post(INDEX,data,function(r){
 				if(r.success)
 					notify.success('Email mandado con éxito') 
 				else 
 					notify.error('No se pudo mandar el email!! <br> Compruebe que estan todos los datos')
 				
+				menu.nav.contacto.cerrar()
 				btn.load.hide()
 			},'json')
 		})

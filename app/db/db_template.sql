@@ -136,8 +136,10 @@ CREATE TABLE `usuarios` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = active, 1 = block bruteForce, 2= block autorization',
   `attempts` tinyint(4) NOT NULL DEFAULT '0',
   `pin` SMALLINT(4) NULL DEFAULT NULL, 
-  `authMail` tinyint(1) NOT NULL DEFAULT '1',
-  `authCal` tinyint(1) NOT NULL DEFAULT '1'
+  `authEmail` tinyint(1) NOT NULL DEFAULT '1',
+  `authCal` tinyint(1) NOT NULL DEFAULT '1', 
+  `idioma`  tinyint(2) NOT NULL DEFAULT '1',
+  `color`  varChar(10) NULL DEFAULT NULL
 ) ENGINE=InnoDB;
 /*
 CREATE TABLE `usuarios_config` (

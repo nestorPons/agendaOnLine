@@ -19,13 +19,13 @@
 					<input type="hidden"  id="ancho" name="ancho">
 					<div class="iconClass-container icon-left">
 						<input type="email" class= "email" id="login" name="login" placeholder="Introduzca su Email" 
-						value="<?php if(isset($email_demo)){echo $email_demo;}?>" require>
-						<span class="iconClass-inside icon-mail-1"></span>
+						value="<?php if(isset($demo_email)){echo $demo_email;}?>" require>
+						<i class="iconClass-inside icon-mail-1"></i>
 					</div>
 					<div class="iconClass-container icon-left">
-						<input type="password" id="fakePass" placeholder="Introduzca su contraseña" require>
+						<input type="password" id="fakePass" placeholder="Introduzca su contraseña" value="<?php if(isset($demo_pass)){echo $demo_pass;}?>" require>
 						<input type="hidden" id="pass" name="pass">
-						<span class="iconClass-inside icon-eye"></span>
+						<i class="iconClass-inside icon-eye"></i>
 					</div>
 					<div id="chkNoCerrarSesion">
 						<input type="checkbox" id="recordar"  name="recordar" value="1" >
@@ -56,7 +56,7 @@
 		</div>
 		<footer class="login about">
 			<p class="about-author">
-				&copy; 2016 <a href="/.." target="_blank">reservaTuCita v5.1</a>
+				&copy; 2016 <a href="/.." target="_blank">reservaTuCita v6.1</a>
 				Creado por Néstor Pons
 				<a href="contacto.html" target="_blank">Contacto</a>
 			</p>			

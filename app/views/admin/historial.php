@@ -35,9 +35,9 @@
                         $date = $r['date'];
                         $user = $r['nombre'];
                         $status = $r['status']?'Ok':'Error';
+                        $colorClass = $r['status']?'green' : 'red';
                         $table = $r['tables'];
                         $action = $r['action'];
-                        $colorClass = $status == 0 ? 'red' : 'green';
                         switch ($action){
                             case 1:
                                 $ico = 'plus'; 

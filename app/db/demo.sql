@@ -34,4 +34,4 @@ INSERT INTO `cita` (`idCita`,`servicio`)
 VALUES (0,0), (1,1);
 
 INSERT INTO `festivos` (`nombre`, `fecha`) 
-VALUES (`Año nuevo`, `1970-01-01`), (`Reyes`, `1970-01-06`), (`Noche vieja`, `1970-12-31`);
+VALUES ('Año nuevo', '1970-01-01'), ('Reyes', '1970-01-06'), ('Noche vieja', '1970-12-31');

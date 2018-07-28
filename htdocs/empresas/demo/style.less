@@ -563,7 +563,9 @@ a,i , .a{
 		color : @text-color;
 	}
  }
-
+.charm{
+	background-color: darken(mix(@color,@color_secon, 50%),30%);
+}
  //notifies
  .fnNotify(@c){
 
@@ -599,14 +601,9 @@ a,i , .a{
 
 
 #mnuContacto{
-	#frmContact{
-		background-color:@base;
-	}
-	h1{
+
+	h1, h4{
 		color: @base;
-	}
-	h4{
-		color: @text-color;
 	}
 	a{
 		color: @blue;
@@ -676,9 +673,7 @@ a,i , .a{
 
 #user{
 	background-color: @base;
-	.charm{
-		background-color: darken(@color,30%);
-	}
+
 	.tile-container{
 	*{
 		border-radius : @radius;
@@ -739,23 +734,23 @@ a,i , .a{
 	}
 	&1{
 	 
-			background-color: @b1 !important;
-			color: @text-color !important;
-			border-color: @grey !important;
+			background-color: @b1;
+			color: @text-color ;
+			border-color: @grey ;
 		
 	}
 	&2{
 
-			background-color: @b2 !important;
-			color: @text-color !important;
-			border-color: @grey !important;
+			background-color: @b2 ;
+			color: @text-color ;
+			border-color: @grey ;
 			
 		
 	}
 	&3{
 		background-color: tint(@blue,90%);
 		color: @text-color ; // darken(@blue,30%);
-		border-color: tint(@blue,90%) !important;
+		border-color: tint(@blue,90%);
 		input[type="text"]{
 			//color: darken(@blue,30%);
 		}
@@ -896,17 +891,26 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	background-color: darken(@color, 20%);
+	background-color: darken(mix(@color,@color_secon, 50%),20%);
 	color: @base;
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
 		color:@base;
-		background-color: darken(@color, 30%);
+		background-color: darken(mix(@color,@color_secon, 50%),20%);
 	}
 
-}
+ }
 #boton-menu{
 	border-radius: @radius; 
-}
+ }
+.switch-inner:before {
+    content: "ON";
+    padding-left: 7px;
+    background-color: @green;
+ }
+.switch-inner:before, .switch-inner:after {
+    font-family: @main-font; font-weight: bold;
+    
+ }

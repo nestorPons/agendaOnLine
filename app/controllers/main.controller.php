@@ -13,6 +13,8 @@ try {
     //Inicializo la base datos DEMO para ejemplos
     if(isset($_REQUEST['empresa']) && $_REQUEST['empresa']==='demo' && $controller=='login'){
         models\Login::example();
+        $demo_email = "demo@demo.es"; 
+        $demo_pass = "Demo1234"; 
     }
     
 // LE BOUQUET 

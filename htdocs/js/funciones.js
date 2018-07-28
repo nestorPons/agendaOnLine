@@ -154,26 +154,20 @@ var btn = {
 	caption : null,
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
-		show : function($this, status){
-			var $btn = $this.find('.icon-load')
-			if (btn.load.status && !$btn.length){
-				btn.caption = $this.html()
-				$this.prepend('<span class="icon-load animate-spin"></span>');
-				btn.active = $this ;
-			} else {
-				$btn.show()
-			}
-			
-			btn.load.status = true;	
-
+		show : function($this){
+			if(!$this.find('i').length) $this.prepend('<i></i>')
+			$this.find('i')
+				.data('icon',$this.attr('class'))
+				.removeClass()
+				.addClass('lnr-sync animate-spin')	
 			},
-		hide : function(){
-				var $this = btn.active||$('.icon-load:visible').parent();
-				var caption = $this.data('value');
-				setTimeout(function() {
-					$('.animate-spin').hide()
-				 }, 1000);
-			},
+		hide : function(){		
+			$('i.animate-spin')
+				.removeClass()
+				.addClass(
+					$('i.lnr-sync.animate-spin').data('icon')
+				)	
+		 },
 		reset :	function (callback){
 			$('.btnLoad').each(function(){
 				$(this).html($(this).data('value'))
@@ -1003,7 +997,7 @@ $(function(){
 				dialog.close('.dialog');
 			}
 		})
-		.on('click',"html .btnLoad",function(){btn.load.show($(this))})
+		.on('click',".btnLoad",function(){btn.load.show($(this))})
 		.on('click','.icon-eye',function(e){
 			var $pass = $(this).siblings('input:password'),
 				$text = $(this).siblings('input:text')

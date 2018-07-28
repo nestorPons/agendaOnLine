@@ -43,8 +43,7 @@ $link = $_SERVER['SERVER_NAME']."/".$nameCompany."/index.php";
 				$(this).siblings('input').attr('type',tipo)
 			})
 			$('.btnLoad').click(function(){
-				if($('form')[0].checkValidity())
-				$(this).html('<span class="icon-load animate-spin"></span>')			
+				if($('form')[0].checkValidity())		
 			})
 		});
 	</script>

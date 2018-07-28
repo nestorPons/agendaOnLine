@@ -564,7 +564,7 @@ a,i , .a{
 	}
  }
 .charm{
-	background-color: darken(@color,30%);
+	background-color: darken(mix(@color,@color_secon, 40%),30%);
 }
  //notifies
  .fnNotify(@c){
@@ -891,14 +891,14 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	background-color: darken(@color, 20%);
+	background-color: darken(mix(@color,@color_secon, 50%),20%);
 	color: @base;
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
 		color:@base;
-		background-color: darken(@color, 30%);
+		background-color: darken(mix(@color,@color_secon, 50%),20%);
 	}
 
  }

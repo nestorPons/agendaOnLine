@@ -1439,6 +1439,12 @@ input[type="color"] {
     	display: inline-block;
 	}
  }
+#dialogs{
+	#dlgHistorial{
+		max-height: 50%;
+		overflow:scroll;
+	}
+ }
 #estilos {
 	& > div  {
 		margin : 10px ;
@@ -1896,10 +1902,6 @@ input[type="color"] {
 	}
 	.app-bar-element {
 		display: none;
-
-		.animate-spin{
-			display: none;
-		}
 		display: inline-flex;
 		line-height: 3.125rem;
 		cursor: pointer;
@@ -1923,7 +1925,11 @@ input[type="color"] {
 		.button{
 			margin-top: -0.15rem;
 		 }
-
+		@media (max-width: 450px){
+			span{
+				display: none;
+			}
+		}
 
 	 }
 	#tools{
@@ -2281,6 +2287,12 @@ input[type="color"] {
 		border-width :0px ;
 		display: inline ;
 	}
+
+	@media (max-width: 590px){
+		td{
+			a{height: 30px;}
+		}	
+	}
  }
 .ui{
 	&-widget-content &-corner-all {
@@ -2501,8 +2513,8 @@ input[type="color"] {
 
 			}
 		}
-}
- #crearCita{
+ }
+#crearCita{
 	.tablas{
 		table{
 			margin: 0 auto;
@@ -2545,7 +2557,7 @@ input[type="color"] {
 	}
 
  }
- #festivos{
+#festivos{
 	.tablas{
 		tr{
 			text-align: center;
@@ -2568,17 +2580,15 @@ input[type="color"] {
 	}
  }
 // Auxiliares
-
 .noHover{
 	cursor: inherit;
-}
-
+ }
 .no-seleccionable(){
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; 
-}
+ }
 .inline{
 	display: inline-block; 
  }
@@ -2790,9 +2800,9 @@ input[type="color"] {
 		width: 130px;
 		font-size: @font-size-menu;
 		transition: all 0.3s;
-		transform: translate(-5px,0);
+		transform: translate(-2px,0);
 		&:hover, &.selected {
-			transform: translate(0);
+			transform: translate(3px);
 			background: rgb(250,250,250,0.2);
 			font-weight: 800;
 		}
