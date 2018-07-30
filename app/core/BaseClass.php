@@ -132,14 +132,14 @@ class BaseClass{
         $this->multi_query = false;
         return $r;
      }
-    public function saveById ( int $id , array $args = null  ) {
+    public function saveById ( int $id ,$args = null  ) {
         $columns = null ; 
         $values = null ;
         
         if ( $id == -1) {
+            unset($args['id']);
 
             if (!is_null($args)){
-               unset($args['id']);
                foreach ($args as $column => $value ) {
                     $columns .=  $column . ',' ;
                     $values .= '"' . $value . '",' ; 
@@ -150,9 +150,10 @@ class BaseClass{
             $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
 
         } else {
+
             $this->sql .= $this->updateSql($args , $id);
         }
-
+ 
       if(!$this->multi_query){
             $this->return = $this->query();
             return $this->return;
@@ -194,6 +195,7 @@ class BaseClass{
         foreach ($args as $column => $value ) {
             $str .=  $column . ' ="' . $value . '",' ;
         }
+
         $str = trim( $str , ',') ; 
         $str .= (!is_null($id))?" WHERE id = $id":'';
         $sql = "UPDATE {$this->table} SET $str ;" ;

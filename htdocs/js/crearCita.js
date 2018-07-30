@@ -66,11 +66,25 @@ var crearCita={
 	 }, 
 	cliente: function (){
 		//guardo cliente mediante formulario crearCita
-		var $cliente = $('#crearCita #cliente'),
-			nombre = $cliente.val()
 
-		usuarios.guardar(-1,nombre)	
-		dialog.close()
+		var $cliente = $('#crearCita #cliente'),
+			nombre = $cliente.val(), 
+			_guardar = function(){
+				var data= {
+					nombre: nombre
+				}
+				usuarios.guardar(-1, data, function(){
+					dialog.close('dlgCliente')
+				})
+
+			}
+		
+		if(usuarios.guardar == undefined ) 
+			loadSync('/js/usuarios.js',_guardar)
+		else 
+			_guardar()
+		
+		
 	 },
 	dialog: function (){
 		var self = crearCita , sec =  $('#crearCita') , 
@@ -127,7 +141,10 @@ var crearCita={
 						self.data.servicios = rsp.services
 						self.data.nota = crearCita.data.nota
 						main.lbl.create(self.data)
-
+						
+						//Para que refresque la siguiente vez que se entre en las horas coger Cita
+						
+						$('#crearCita').find('.dia').remove()
 						mostrarCapa('main' , true )			
 					}
 				} else {
@@ -231,7 +248,6 @@ var crearCita={
 		$('.steperCapa li').hide(function(){
 			$('#step0').show()
 		})
-		btn.load.reset()
 		$('#crearCita')
 			.find('.dialog').hide().end()
 			.find('.steperCapa').hide().end()
@@ -275,18 +291,18 @@ var crearCita={
 				
 			}else if(index==1 &&crearCita.validate.name()){
 				
-				$('#btnSearch').show()
+				menu.status('search')
 				$('.tblHoras').show()
 				crearCita.data.agenda = $('#crearCita').find('input[name="agenda[]"]:checked').val()
 				_slider(crearCita.servicios.init) 
 
 			} else if(index==2&&crearCita.validate.service()){
-				$('#btnSearch').hide()
-
+				
+				menu.status('calendar')
+			
 				!$('#crearCita').find('#'+Fecha.id).length && crearCita.horas.sincronizar()
-				if(crearCita.validate.name())_slider(function(){
-
-				});
+				crearCita.validate.name() && _slider()
+				
 			}
 		 }
 		function _slider(callback){
@@ -331,6 +347,7 @@ var crearCita={
 						.removeClass('input-error')
 						.addClass('input-success');	
 
+					crearCita.data.nombre = cliente
 					return true;
 				}
 
@@ -375,11 +392,6 @@ $('#crearCita')
 .on('change','.lstServicios ',function(){crearCita.servicios.mostrar($(this).val())})
 .on('click','.horas',crearCita.dialog)
 .on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
-.on('blur','#cliente',function(){
-	if(crearCita.validate.name()){
-		crearCita.data.nombre =  $(this).val()
-	}
-})
 .on('click','[name="agenda[]"]',function(){
 	crearCita.data.agenda = $(this).val()
 })

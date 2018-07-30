@@ -149,12 +149,13 @@ var generateId = {
 		return result
 	 }
  }
-var btn = {
+	var btn = {
 	active : null , 
 	caption : null,
 	load : {
 		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
 		show : function($this){
+			this.active = $this
 			if(!$this.find('i').length) $this.prepend('<i></i>')
 			$this.find('i')
 				.data('icon',$this.attr('class'))
@@ -162,10 +163,11 @@ var btn = {
 				.addClass('lnr-sync animate-spin')	
 			},
 		hide : function(){		
-			$('i.animate-spin')
+			var $btn = this.active
+			$btn.find('i')
 				.removeClass()
 				.addClass(
-					$('i.lnr-sync.animate-spin').data('icon')
+					$btn.data('icon')
 				)	
 		 },
 		reset :	function (callback){
@@ -175,7 +177,7 @@ var btn = {
 			btn.active = null ;
 			typeof callback == "function" && callback();
 			}
-		},
+		 }, 
 	save : {
 		show : function (){
 			$('#btnSave')
@@ -393,8 +395,7 @@ var dialog = {
 		}
 	 },
 	close:function (objName,callback){
-
-		var $this = $('#'+objName) || $('.dialog').is(':visible')
+		var $this = $('#'+objName) || $('#'.dialog.isOpen)
 
 		//en el caso que existan passwords formaear el diseño
 		validar.pass.reset($('#'+objName) )
@@ -436,12 +437,17 @@ var dialog = {
 
 							})
 							
-					$this.on('click','.fnClose',function(){
-						dialog.close(objName)
-					})
-					$this.on('click','.btn-danger',function(e){
-						typeof fnCancel == "function"?fnCancel():dialog.close(objName)
-					})
+					$this
+						.on('click','.fnClose',function(){
+							dialog.close(objName)
+						})
+						.on('keydown',function(event){
+							if(event.which==27)	dialog.close(objName)
+						})
+						.on('click','.btn-danger',function(e){
+							typeof fnCancel == "function"?fnCancel():dialog.close(objName)
+						})
+
 					if(typeof fnOk == "function"){
 						$this.on('click','.btn-success',fnOk)
 					}
@@ -454,7 +460,6 @@ var dialog = {
 	reset : function(objName){
 		var $this = $('#'+objName)
 		var $load = $this.find('.btnLoad');
-		btn.load.reset()
 		if ($this.find('form').length){
 			$this.find('form')[0].reset()
 		} else {
@@ -665,12 +670,8 @@ function normalize(string){
 	for (var i=0;i<str.length;i++){
 		let c=str.charAt(i);res+=map[c]||c;
 	}
-	res =
-		res
-		.replace(/\s/g, "")
-		.toLowerCase()
-		.trim();
-	return res;
+	return res.replace(/\s/g, "").toLowerCase().trim()
+	
 
  } 
 function echo(){
@@ -988,16 +989,12 @@ $(function(){
 
 	var resizeTextarea = function(el) {
 		jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
-	};
+	 };
 	jQuery(this).on('keyup input', function() { resizeTextarea(this); }).removeAttr('data-autoresize');
-	});
+	 });
 	$(document)
-		.keyup(function(event){
-			if(event.which==27){
-				dialog.close('.dialog');
-			}
-		})
-		.on('click',".btnLoad",function(){btn.load.show($(this))})
+		.on('mousedown',".btnLoad",function(){
+			btn.load.show($(this))})
 		.on('click','.icon-eye',function(e){
 			var $pass = $(this).siblings('input:password'),
 				$text = $(this).siblings('input:text')
@@ -1016,9 +1013,6 @@ $(function(){
 		.on('change','.email',function(){validar.email.estado=false})
 		.on('blur','.tel',function(){validar.tel.funcion($(this))})
 		.on('change','.tel',function(){validar.tel.estado=false})
-		.on('click','.iconClass-inside.icon-cancel',function(){
-			$(this).parent().find('input').val("");
-		 })
 		.on('blur','.nombre',function(){validar.nombre.funcion($(this))})
 		.on('change','.nombre',function(){validar.nombre.estado=false}).end()
 		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})

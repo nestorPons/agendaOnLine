@@ -89,8 +89,6 @@ function mostrarCapa(capa, callback){
 
 	if(capa=='main') $('#'+Fecha.id).show()
 		
-	btn.load.reset()
-
 	$('html,body').animate({scrollTop:0}, 500)
 	
 	//Titulo de la seccion
@@ -1004,7 +1002,7 @@ menu = {
 				menu.enabled(show,calendar)
 				break;
 			case 'crearCita':
-				menu.enabled(search,calendar)
+				menu.enabled()
 				break;
 			case 'usuarios':
 				menu.enabled(add,search)
@@ -1040,6 +1038,12 @@ menu = {
 				menu.enabled(calendar)
 				df.options = false
 				options.find('#showByTime').removeClass('disabled')
+				break
+			case 'search':
+				menu.enabled(search)
+				break
+			case 'calendar':
+				menu.enabled(calendar)
 				break
 		 }
 		if (df.options) options.find('#rowsHiddens').removeClass('disabled')
@@ -1140,7 +1144,7 @@ menu = {
 	 },
 	enabled: function (){
 		for(let i = 0; i < arguments.length; i++){
-			arguments[i].show(100)
+			arguments[i].css('display','inline-table')
 		}
 	 },
 	load:function (){

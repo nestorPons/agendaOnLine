@@ -11,7 +11,7 @@ if (isset($_POST['action'])) {
     switch ($action){
         case SAVE:  
             if(empty($data['email'])) unset($data['email']); 
-            $r['success'] = $User->save($data ) ; 
+            $r['success'] = $User->save($data) ; 
             $r['id'] = $User->getId(); 
             break;
         case DEL:

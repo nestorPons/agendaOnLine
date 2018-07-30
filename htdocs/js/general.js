@@ -33,12 +33,47 @@ var general = {
 		})
 		
 		return r
+	 }, 
+	 pass: function(pass,rpass,opass){
+	 var
+	  	$dlg =  $('#dlgCambiarPass'),
+		$pass = $dlg.find('#pass'),
+		pass = $pass.val(), 
+		$rpass = $dlg.find('#repeatPass'), 
+		rpass = $rpass.val(), 
+		$oldPass = $dlg.find('#oldPass'), 
+		opass = $oldPass.val()		
+
+		 data ={
+			controller: 'password', 
+			action : EDIT, 
+			pass: SHA(pass), 
+			oldPass: SHA(opass)
+		 }
+		 if(pass!=undefined && pass===rpass){
+			$.post(INDEX, data,
+				function (r, textStatus, jqXHR) {
+					if(r.success){
+						notify.success('Password cambiado con exito')
+						dialog.close()
+					} else {
+						$oldPass.removeClass().addClass('input-error')
+						notify.error('Error en passwords!!')
+					}
+					btn.load.hide()
+				},
+				JSON
+			)
+		 }else {
+			$pass.removeClass().addClass('input-error')
+			$rpass.removeClass().addClass('input-error')
+			btn.load.hide()
+		 }
 	 }
  }
 
 $('#general')
  .on('click','#btnCambiarPass',function(){
-     dialog.open('dlgCambiarPass',config.pass,null,function(){
-         dialog.open('dlgCambiarPass')
-     })
+
+	 	dialog.open('dlgCambiarPass',general.pass)
  })

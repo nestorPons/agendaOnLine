@@ -55,9 +55,11 @@ var crearCita ={
 	cliente: function (){
 		//guardo cliente mediante formulario creafrCita
 		var $cliente = $('#crearCita #cliente'),
-			nombre = $cliente.val()
+			data = {
+				nombre: $cliente.val()
+			}
 
-		usuarios.guardar(-1,nombre)	
+		usuarios.guardar(-1,data)	
 		dialog.close()
 	 },
 	dialog: function (){
@@ -209,7 +211,7 @@ var crearCita ={
 		$('.steperCapa li').hide(function(){
 			$('#step0').show()
 		})
-		btn.load.reset()
+
 		$('#crearCita')
 			.find('.dialog').hide().end()
 			.find('.steperCapa').hide().end()
@@ -642,7 +644,6 @@ function resize(that){
  }
 function cerrarMenu(){
 	var $this = $('.tile-active')
-	btn.load.reset()
 	crearCita.stepper(0)
 	
 	if(typeof(ancho) != "undefined"){

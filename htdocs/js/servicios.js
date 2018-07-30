@@ -77,7 +77,7 @@ var servicios = {
 			if ($('#servicios #rowServicios'+ id ).hasClass('mostrar_baja')) {
 				dlg.find('.aceptar').html('Restaurar')
 			}
-		}
+		 }
 
 		dialog.open('dlgServicios',servicios.guardar,servicios.eliminar,fnLoad)
 	 },
@@ -239,8 +239,8 @@ var servicios = {
 	 }
  }
 
- $('#servicios')
- .on('click','a',function(){servicios.mostrar($(this).attr('id'),$('#servicios'))})
+$('#servicios')
+ .on('click','.menuServicios a',function(){servicios.mostrar($(this).attr('id'),$('#servicios'))})
  .on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
  .on('change','#familia',function(){familias.change = true})
  .on( "click", "[name*='editar']", function(e){servicios.dialog($(this).attr('value'))})

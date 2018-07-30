@@ -1,3 +1,4 @@
+
 var usuarios = {
 	controller : 'usuarios' , 
 	id: 0, 
@@ -9,9 +10,10 @@ var usuarios = {
 			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
 				data = {
 					dateBaja: Fecha.general, 
-					status: 2
+					status: 2,
+					nombre : nombre
 				}
-				usuarios.guardar(id,nombre,data,function(){
+				usuarios.guardar(id,data,function(){
 					$('#rowUsuarios'+id).hide('explode').remove()
 				})
 			}
@@ -19,12 +21,13 @@ var usuarios = {
 		
 		dialog.close('dlgUsuarios');
 	 },
-	guardar: function (idUsuario,nombreUsuario,data=null,callback){
+	guardar: function (idUsuario,data=null,callback){
+	
 		if(data == null){
-
-			var frm = $.serializeForm('frmUsuarios'),
+			var frm = new Object
+			frm = $.serializeForm('frmUsuarios'),
 				data = {
-					nombre: nombreUsuario||frm.nombre,
+					nombre: frm.nombre,
 					email: frm.email||null,
 					tel: frm.tel||null,
 					obs: frm.obs||null,
@@ -32,7 +35,7 @@ var usuarios = {
 					admin : $.isEmpty(frm.admin)?0:1,
 					color: (frm.sinColor)?null:frm.color}
 		}
-
+				
 		data.controller = usuarios.controller
 		data.action = SAVE
 		data.id = idUsuario||-1
@@ -47,10 +50,10 @@ var usuarios = {
 
 			if(data.dateBaja == undefined){
 				var $this  =$('#frmUsuarios'),
-					chckEmail =$.isEmpty(frm.email)?'No':'Si',
-					chckObs = $.isEmpty(frm.obs)?'No':'Si',
-					admin = $.isEmpty(frm.admin)?0:1,
-					activa = $.isEmpty(frm.activa)?1:0
+					chckEmail =$.isEmpty(data.email)?'No':'Si',
+					chckObs = $.isEmpty(data.obs)?'No':'Si',
+					admin = $.isEmpty(data.admin)?0:1,
+					activa = $.isEmpty(data.activa)?1:0
 
 					if (data.id == -1 ){ 
 						//NUEVO ...
@@ -75,43 +78,22 @@ var usuarios = {
 							.find('td[name="obs"]')
 								.html(chckObs)
 								.data('value',frm.obs)
-	/*
-						if(frm.activa){
-							if($('#chckOpUsersDel').is(':checked'))
-								$("#rowUsuarios"+frm.id)
-									.addClass('mostrar_baja')
-									.removeClass('ocultar_baja')
-									.fadeTo("slow", 1);
-							else
-								$("#rowUsuarios"+frm.id)
-									.addClass('ocultar_baja')
-									.removeClass('mostrar_baja')
-									.hide();
-							$('#lstClientes [data-name="'+normalize(frm.nombre)+'"]').remove();
-						}else{
-							$("#rowUsuarios"+frm.id)
-								.removeClass('mostrar_baja ocultar_baja')
-								.fadeTo("slow", 1)
-							$('#lstClientes')
-								.append('<option data-name="'+normalize(frm.nombre)+'" value = ' + frm.nombre+  '>'+frm.id+'</option>')
-						}	
-					}
-*/
 					notify.success('Usuario guardado con éxito!.','Usuario editado')						
+
+					
 				}
 			}
-
 			if (dialog.isOpen == 'dlgUsuarios'){
 				dialog.close('dlgUsuarios')
 				usuarios.select(frm.nombre[0])
 			}
-			
 			typeof callback == "function" && callback()
 			
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ){
 				alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
-			})
+				notify.error('No se pudo guardar el usuario')
+		 })
 	
 	 },
 	rows: {

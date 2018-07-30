@@ -7,7 +7,6 @@ class User extends \core\BaseClass {
 		
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
 
-
 	public function __construct( $id , $email = false){
 
 		parent::__construct('usuarios');
@@ -15,7 +14,7 @@ class User extends \core\BaseClass {
 		//Nuevo usuario
 		if($id==-1){
 			if($this->saveById(-1)) 
-				$this->id = $this->getId();
+				$this->id = $this->conn->id();
 			else
 				die('No se pudo guardar el usuario');
 		} else {
@@ -58,6 +57,7 @@ class User extends \core\BaseClass {
 		return self::saveById((int)$this->id, $args);
 	 }
 	public function save($args = null){
+		unset($args['id']);
 		return self::saveById((int)$this->id, $args);
 	 }
 	public function password($pass){
@@ -217,8 +217,18 @@ class User extends \core\BaseClass {
 		return "https://www.google.com/calendar/event?action=TEMPLATE&text=cita_$c1&dates=$ini/$end&details=tiene+una+cita+en+$c2&location=Castellon&trp=false";
 		
 		
-	}
+	 }
 	public function isGmail(){
 		return strpos($this->email,'gmail')!=false; 
+	 }
+	public function pass(string $param = null){
+		if($param) {
+			$this->pass = password_hash($param, PASSWORD_BCRYPT); 
+			$this->set(['pass'=>$this->pass]); 	
+		} 
+		return $this->pass; 
+	}
+	public function comparePass(string $param = ''){
+		 return password_verify($param, $this->pass); 
 	}
 }
