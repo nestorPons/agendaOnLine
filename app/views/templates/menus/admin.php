@@ -44,13 +44,17 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 ?>
 
 	
-	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse">
+	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse" title="Salir">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
-			<a href="/<?=CODE_EMPRESA?>/logout" id="mnuUserSalirSession" class="lnr-power-switch ">
+			<a href="/<?=CODE_EMPRESA?>/logout" id="mnuUserSalirSession" class="lnr-power-switch " >
 		</a>
 		</li>
-		<li id= "btnContacto" class="app-bar-element no-flexible place-right">
+		<li id= "btnContacto" class="app-bar-element no-flexible place-right" title="Contacto">
 			<i  class=" lnr-envelope"></i>
+		</li>
+		<li id="btnUpgrade" class="app-bar-element no-flexible place-right" title="Mejorar la cuenta">
+			<a href="https://www.paypal.me/reservatucita/2" class="lnr-magic-wand" >
+		</a>
 		</li>
 	</ul>
 <!--menu herramientas-->

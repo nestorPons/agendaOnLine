@@ -281,10 +281,7 @@ input[type="color"] {
 	text-align :  center ;
  }
 .cabecera{
-	position:fixed;
-	top:50px;
-	left: 0;
-	width: 100%;
+
 	background-color:#fff;
 	z-index:1000;
 	@media screen and (max-width: 320px) {
@@ -700,12 +697,9 @@ input[type="color"] {
 
  }
 .menu{
-	width: 100%;
-	padding: 0;
-	margin:5px auto;
 	font-size:@fontSize + 0.1;
 	color: @grey;
-	text-align: center;
+
 	border-width: 1px 0 1px 0;
 	border-style: double;
 	select{
@@ -1949,32 +1943,33 @@ input[type="color"] {
 	 }
  }
 #notas{
-	textarea{
-		display: block;	
-		margin: auto;
-		max-width: inherit;
-		width: 320px;
-		height: auto;
-	}
-	button, input{
-		display: inline-block;
-	}
-	table{
-		th:first-child{
-			width: 4ch;
+	.nota{
+		width: fit-content;
+		min-width: 11ch;
+		padding: 20px;
+		text-align: left;
+		max-width: 320px;
+		margin: 10px;
+		float: left;
+		transform: all 1s; 
+		cursor: pointer;
+		i{
+			margin-right: 5px;
+			
+			&.fnDel{
+				cursor: pointer;
+				font-size: 1.3em;
+				position: relative;
+				top: -31px;
+				float: right;
+				left: 37px;
+				background-color: #fff;
+			}
+
 		}
-		th:nth-child(2){
-			width: 3ch;
+		.contenido{
+			margin-top: 1ch;
 		}
-		th:nth-child(3){
-			width: 12ch;
-		}
-		th:nth-child(4){
-			width: 6ch;
-		}
-		th:last-child{	
-			width: 50%; 
-		} 
 	}
  }
 #preloader{
@@ -2260,16 +2255,48 @@ input[type="color"] {
 		}
 		
 	}
+	#lineasHistorial{ 
+		*{
+			display: block;
+		}
+		
+		&:after{
+			//Limpia el float
+			clear: both;
+			content: "";
+			display: block;
+		 }
+	}
+	.cita{
+		border: 1px solid;
+		padding: 12px;
+		width: fit-content;
+		text-align: left;
+		float: left;
+		margin: 1ch;
+		i.del{
+			cursor: pointer;
+			font-size: 1.3em;
+			position: relative;
+			top: -23px;
+			float: right;
+			left: 23px;
+			background-color: #fff;
+			&:hover{
+				color: @default_color_auxiliar;
+			}
+		}
+		.servicios{
+			padding: 5px;	
+		}
+			
+	}
 	#mnuDatosPersonales{
 		display: none;
 	}
  }
 #historial{
-	div.cita{
-		width: fit-content;
-		margin: auto;
-		text-align: -webkit-right;
-	}
+
 	input.cancelar{ 
 		margin: 5px;
 	}
@@ -2387,24 +2414,7 @@ input[type="color"] {
 			color: #ff0000;
 		}
 	 }
-	.cuerpo{
-		top: 33px;
-		@media (max-width: 450px){
-			top: 0px;
 
-		/*	&.esMovil{
-				.tablas{
-					.celda{
-						display: none;
-						&[agenda='1']{
-							display: table-cell;
-						}
-					}
-				}
-			}
-		*/
-		 }
-	 }
 	.atenuado{
 		background-color: #dddddd;
 		color:#fff;

@@ -45,6 +45,7 @@ jQuery.isEmpty = function(){
 	return isEmpty;
 
  }
+
 jQuery.serializeForm = function(form){
 	var $form = $('#'+form);
 	var inputs = $form.find('input:not(:button)');
@@ -521,6 +522,23 @@ var notify = {
 		})
 	},
  }
+var tools = {
+	template : function(obj, url, callback){
+		if ($.isEmpty(obj.template)){
+			var data = {
+				controller: 'templates',
+				object: url
+			}
+			$.post(INDEX, data,function (html, textStatus, jqXHR) {
+				obj.$template = $('<div />').append( html ).children()
+				typeof callback == "function" && callback(html);
+			},'html'); 
+		} else {
+			typeof callback == "function" && callback(obj);
+		}
+	}
+	
+}
 function formatofecha (fechaTxt,formatOut){ 
 
 	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;

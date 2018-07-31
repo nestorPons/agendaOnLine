@@ -328,46 +328,24 @@ var historial = {
 			$('section#historial').find('#lineasHistorial').html(html)
 			historial.numeracion()
 		},'html')
+	 }, 
+	 del: function(id){
+		$('.cita[idCita="'+id+'"]').hide('explode').remove()
 	 }
  }
 var cita = {
 	del : function (id) {
-		var $this = $('#tr'+id), 
-			fecha =  Fecha.number($this.attr('fecha')), 
-			hora = $this.attr('hora'),
-			idSer = $this.attr('class'),
-			$rows = $("#tableHistory ."+idSer),
-			idCita = $this.attr('idCita')
-			data = {
-				id : idCita,
-				idCitaSer: id,
-				controller : 'cita' , 
-				action : DEL , 
-			}
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			data: data, 	
-			url: INDEX,
-			beforeSend: function (){
-				$rows
-					.fadeTo("slow", 0.30)
-					.find('.icon-cancel').hide().end()
-					.find('.icon-load').css('display','inline-block')
-			},
-		 })	
-		.done(function(r){	
-			if (r){
-				$rows.fadeOut('slow',function(){
-					$(this).remove()
-					crearCita.del(Fecha.number(data.fecha))
-					historial.numeracion()
-				})
-			/*	$('#tf'+fecha+' #'+hora+' label').removeClass('reservado')
-					.find('input').attr("disabled", false)
-			*/
-			}
-		 })
+		var data = {
+			controller: 'cita', 
+			action: DEL, 
+			id: id
+		}
+
+		
+		$.post(INDEX, data,function (r, textStatus, jqXHR) {
+			r.success && historial.del(id)
+		},JSON)
+		
 	 },
 	add : function () {
 	 }
@@ -506,7 +484,10 @@ $(function(){
 		.on('click','#authEmail, #authCal',function(){
 			var $input = $(this).find('input:checkbox')
 			$input.prop('checked',!$input.prop('checked'))
-		})
+		 })
+		.on('click','.del',function(){
+			cita.del($(this).parents('.cita').attr('idCita'))
+		 })
 		
 	$('#navbar')
 		.on('click','#btnConfig, #btnDatos',function(){

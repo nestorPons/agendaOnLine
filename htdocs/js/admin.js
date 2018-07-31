@@ -145,7 +145,7 @@ main ={
 			 })
 		  }, 
 		tiempoServicios : function(){
-			var ts = main.data[main.idCita].tiempoServicios <0 ? 10: main.data[main.idCita].tiempoServicios
+			var ts = main.data[main.idCita].tiempoServicios// < 0 ? 1: main.data[main.idCita].tiempoServicios
 			$('#dlgEditCita').find('#tiempoServicios').val(ts)
 		 }
 	 }, 
@@ -371,21 +371,22 @@ main ={
 				idCod = cod.attr('id_codigo'),
 				arrSer = main.data[main.idCita].servicios, 
 				len = arrSer.length
-
 				//Buscamos posicion del elemento a eliminar
-				for(let i = 0; i <= len; i++){
+				main.data[main.idCita].tiempoServicios =  0 
+				var borrar_index = null
+				for(let i = 0; i < len; i++){
 					if(idCod==arrSer[i].id){						
 						// Si encuentra el indice borra el elemento
-						main.data[main.idCita].servicios.splice(i, 1)
-						main.data[main.idCita].tiempoServicios -= cod.attr('tiempo')
-						div.fadeOut('fast').remove()
-						main.set.tiempoServicios()
-
-						break;
+						borrar_index = i 
+					} else {
+						main.data[main.idCita].tiempoServicios += parseInt(arrSer[i].tiempo)
 					}
 				}
-
-
+				if(borrar_index!=null) {
+					main.data[main.idCita].servicios.splice(borrar_index, 1)
+					div.fadeOut('fast').remove()
+				}
+				main.set.tiempoServicios()
 
 		 }
 		var _addRow = function (id , codigo , descripcion ,tiempo, callback ){
@@ -521,7 +522,7 @@ main ={
 						.val(main.data[main.idCita].cliente.nombre)
 						.end()
 					.find('#obs')
-						.val(main.data[main.idCita].obs||'')
+						.val(main.data[main.idCita].obs||null)
 						.end()
 					.find('#fecha')
 						.val(main.data[main.idCita].fecha)
@@ -633,6 +634,7 @@ main ={
 		load: function(){
 			main.lbl.draggable()
 			main.lbl.droppable()
+			main.lbl.style()
 		 }, 
 		create: function(data){
 	
@@ -678,6 +680,7 @@ main ={
 				? "<span class ='icon-angle-down fnExtend' ></span>"
 				:""
 			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
+			var nota  = $.isEmpty(data.nota)?'':data.nota
 			var html = "\
 				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+main.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
 					<div id ='"+data.idUsuario+"' class='nombre'> \
@@ -695,7 +698,7 @@ main ={
 					<div class='servicios "+main.unidadTiempo(data.tiempoServicios)+"'>"+htmlSer+"</div> \
 					<div class='note "+ claseNotas + "'> \
 						<span class='icon-note'></span> \
-						<span class='text_note'>"+data.nota+"</span> \
+						<span class='text_note'>"+nota+"</span> \
 					</div> \
 				</div> \
 			"
@@ -994,25 +997,28 @@ menu = {
 				options : true
 			}
 		options.find('li').addClass('disabled')
+		
+		//Ocultar controles
+		$('#tools').find('.app-bar-element:visible').hide()
+		$('.contenedor-datepicker').hide()	
 
-		menu.disabled(add,del,reset,search,save,show,edit,options,calendar)
-
+		//Mostrar mcontroles 
 		switch(capa) {
 			case 'main':
 				menu.enabled(show,calendar)
 				break;
 			case 'crearCita':
-				menu.enabled()
+
 				break;
 			case 'usuarios':
 				menu.enabled(add,search)
 				break;
 			case 'servicios':
-				 menu.enabled(add,search)
-				 break;
+				menu.enabled(add,search)
+				break;
 			case 'config':
 				menu.enabled(save)
-				 break;
+				break;
 			case 'familias':
 				menu.enabled(add)
 				break;
@@ -1036,8 +1042,6 @@ menu = {
 				break
 			case 'historial':
 				menu.enabled(calendar)
-				df.options = false
-				options.find('#showByTime').removeClass('disabled')
 				break
 			case 'search':
 				menu.enabled(search)
@@ -1045,7 +1049,7 @@ menu = {
 			case 'calendar':
 				menu.enabled(calendar)
 				break
-		 }
+		}
 		if (df.options) options.find('#rowsHiddens').removeClass('disabled')
 		$('#navbar').resize()
 	 },
@@ -1127,7 +1131,7 @@ menu = {
 			case 'horarios':
 				horario.del();
 				break;
-		}
+		 }
 	 },
 	reset:function(){
 		switch($('.capasPrincipales:visible').attr('id')) {
@@ -1141,6 +1145,7 @@ menu = {
 	disabled:function (){
 		for(let i = 0; i < arguments.length; i++)
 			arguments[i].hide(100)
+
 	 },
 	enabled: function (){
 		for(let i = 0; i < arguments.length; i++){
@@ -1181,6 +1186,7 @@ menu = {
 },
 notas = {
 	nombreDlg : 'dlgNotas',
+	$template: null, 
 	dir : 'right',
 	init : function(){
 		cargarDatepicker();
@@ -1189,8 +1195,8 @@ notas = {
 		$('#tile_seccion').text('Notas')
 	 },
 	dialog:function(id=-1){
-		var fnLoad = function () {
-		var  $dlg = $('#'+notas.nombreDlg)
+		var _load = function () {
+			var  $dlg = $('#'+notas.nombreDlg)
 			$dlg.find("#id").val(id)
 
 			if (id==-1){ 
@@ -1199,21 +1205,22 @@ notas = {
 				$dlg
 					.find('#fecha').val(Fecha.sql).end()
 					.find('#hora').val('00:00').end()
-					.find('#descripcion').end()
+					.find('#descripcion').val('').end()
 					.find('h1').html('Nuevo...')
 		
 			}else{ 
 				//EDITANDO..
 				
-				var $row = $("#notas #trNotas"+id),	
-					fecha = $row.find(".idFecha").text(),
-					hora = $row.find(".idHora").text(),
-					des = $row.find(".idDescripcion").text()
+				var $nota = $("#notas #"+id),	
+					fecha = Fecha.general, 
+					hora = $nota.find(".hora span").text(),
+					des = $nota.find(".contenido span").text()
 
 				$dlg
 					.find('#fecha').val(Fecha.sql(fecha.trim())).end()
 					.find('#hora').val(hora.trim()).end()
 					.find('#descripcion').val(des)				
+					.find('h1').html('Editando...')
 			}		
 		}
 		
@@ -1221,7 +1228,7 @@ notas = {
 			notas.nombreDlg,
 			notas.save,
 			()=>notas.delete($('#dlgNotas #id').attr('value')),
-			fnLoad
+			_load
 		)
 
 	 },
@@ -1242,7 +1249,7 @@ notas = {
 				dialog.close(this.nombreDlg)
 
 				data.id = (data.id>-1) ?data.id:r.id; 
-				notas.crear.linea(data)
+				notas.crear(data)
 
 				notify.success('Su nota ha sido guardada')
 			} else{
@@ -1254,26 +1261,22 @@ notas = {
 		 },JSON)
 		
 	 }, 
-	delete : function(id,callback){
+	delete : function(id){
 
 		let data = {
 			controller : 'notas' , 
 			action : DEL , 
 			id : id
 		}
-		$.post(INDEX, data,
-			function (r, textStatus, jqXHR) {
+		$.post(INDEX, data,function (r) {
 				if (r.success) {
-					$("#notas #trNotas"+data.id).remove()
+					$("#notas #"+id).hide('explode',1000).remove()
 					dialog.close('dlgNotas')
 				} else {
 					notify.error('No se ha podido eliminar la nota')
 					echo (r)
 				} 
-				typeof callback == "function" && callback();
-			},
-			JSON
-		)
+			},JSON)
 	 },
 	sync : function(fecha){
 	    var $obj = $('#notas table tbody')
@@ -1302,21 +1305,17 @@ notas = {
 		$obj.find('.'+Fecha.id).removeClass('ocultar').addClass('mostrar')	
 
 	 },
-	crear : {
-		linea : function (d){
-			let mostrar =  (d.fecha == Fecha.general)?'mostrar':'ocultar';
-			$('#notas table tbody')
-				.find('#trNotas'+d.id).remove().end()
-				.find('tr.template').clone()
-				.removeClass().addClass(Fecha.number(d.fecha) + " " + mostrar)
-				.attr('id','trNotas'+d.id)
-				.find('a').attr('value',d.id)
-				.end().find('.idid').text(d.id)
-				.end().find('.idFecha').text(Fecha.print(d.fecha))
-				.end().find('.idHora').text(d.hora)
-				.end().find('.idDescripcion').text(d.nota)
-				.end().appendTo('#notas tbody')
-		 },
+	crear : function (d){
+		
+		tools.template(notas, 'row.notas.php',function(r){
+
+			notas.$template.clone()
+				.addClass(Fecha.id)
+				.attr('id',d.id)
+				.find('.hora span').text(d.hora).end()
+				.find('.contenido span').text(d.nota).end()
+				.prependTo('#notas')		
+		})
 	 }, 
 }, 
 Device = {
@@ -1337,7 +1336,7 @@ $(function(){
 	main.inactivas.change(localStorage.getItem("showRows"))
 	main.inactivas.comprobar()
 	main.lbl.widht( $('.celda:visible').first().width())
-	main.lbl.style()
+
 	//Construyo la "clase" device para saber el dispositivo usado
  	Device.init()
 	if(Device.isCel()) localStorage.setItem('menuOpen',0)
@@ -1530,17 +1529,18 @@ $(function(){
 				menu.nav.estado(0)
 			}
 
-			var capa = $(this).find('a').data('capa') ;
-			if (capa == 'main'){
-				mostrarCapa('main' ,  true ) 
-			}else{
-				mostrarCapa($(this).find('a').data('capa'));
-			}
+			mostrarCapa($(this).find('a').data('capa'));
+			
 		 })
 		 
 	$('#notas')
-		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('value'))})
-
+		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('id'))})
+		.on( "click", ".fnDel", function(e){
+			e.stopPropagation()
+			notas.delete(
+				$(this).parent().attr('id')
+			)
+		})
 
 	main.lbl.load()
 
