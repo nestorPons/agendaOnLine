@@ -67,7 +67,7 @@ function mostrarCapa(capa, callback){
 
 			$('#'+capa).html(html).promise().done(__INIT__);
 			function __INIT__ (){
-				capa=='notas' && notas.init()
+				//Si hay que iniciar en 
 			}
 			$.getScript("/js/"+capa+".js")
 
@@ -1188,12 +1188,6 @@ notas = {
 	nombreDlg : 'dlgNotas',
 	$template: null, 
 	dir : 'right',
-	init : function(){
-		cargarDatepicker();
-	 },
-	load : function(){
-		$('#tile_seccion').text('Notas')
-	 },
 	dialog:function(id=-1){
 		var _load = function () {
 			var  $dlg = $('#'+notas.nombreDlg)
@@ -1281,6 +1275,7 @@ notas = {
 	sync : function(fecha){
 	    var $obj = $('#notas table tbody')
 		$obj.find('tr').addClass('ocultar').removeClass('mostrar')
+		$('#notas').empty()
 
 		let data = {
 			controller : 'notas' , 
@@ -1293,8 +1288,7 @@ notas = {
 			if(r.success){
 				$('div#mySidenav a#menu5').addClass('hay-nota')
 				for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
-	
-					notas.crear.linea(datos[i])							
+					notas.crear(datos[i])							
 				}		
 			} else {
 				$('#menu5').removeClass('c4')
@@ -1540,6 +1534,9 @@ $(function(){
 			notas.delete(
 				$(this).parent().attr('id')
 			)
+		})
+		.on('click','#nuevaNota',function(){
+			notas.dialog(-1) 
 		})
 
 	main.lbl.load()

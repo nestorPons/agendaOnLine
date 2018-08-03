@@ -12,6 +12,7 @@ define('URL_CONFIG' , APP_FOLDER . 'conf/' );
 define('URL_CORE' , APP_FOLDER . 'core/' );
 define('URL_SQL' , APP_FOLDER . 'db/' );
 define('URL_CSS' , PUBLIC_FOLDER . 'css/' );
+define('URL_IMG' , PUBLIC_FOLDER .'img/' );
 define('URL_EMPRESAS' , PUBLIC_FOLDER .'empresas/' );
 define('URL_JS' , PUBLIC_FOLDER . 'js/' );
 define('URL_FUNCTIONS' , APP_FOLDER .'models/functions/' ); 

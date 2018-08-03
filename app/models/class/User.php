@@ -171,8 +171,10 @@ class User extends \core\BaseClass {
 			$Mail = new \models\PHPMailer(true);
 			
 			$Mail->IsHTML(true);
-
-			$Mail->AddEmbeddedImage('/img/btn_google_calendar.gif', 'googleCalendar','btn_google_calendar.gif');
+			if($this->isGmail())
+				$Mail->AddEmbeddedImage(URL_IMG . 'btn_google_calendar.gif', 'btn', 'btn_google_calendar.gif');
+			if($this->isOutlook())
+				$Mail->AddEmbeddedImage(URL_IMG . 'outlook-logo-p.jpg', 'btn', 'outlook-logo-p.jpg');
 			$Mail->AddEmbeddedImage(URL_LOGO, 'logo', 'logo.jpg');
 			$Mail->AddEmbeddedImage(URL_BACKGROUND, 'background-image', 'background.jpg');
 
@@ -181,8 +183,6 @@ class User extends \core\BaseClass {
 			$Mail->Body    = \core\Tools::get_content($Mail->url_menssage,$this, $arr_args_mens);
 			$Mail->AltBody = $alt_body;
 			$Mail->Subject =  $alt_body;
-
-
 
 			return $Mail->send($this);
 	
@@ -221,14 +221,20 @@ class User extends \core\BaseClass {
 	public function isGmail(){
 		return strpos($this->email,'gmail')!=false; 
 	 }
+	public function isOutlook(){
+		return strpos($this->email,'hotmail')!=false; 
+	 }
 	public function pass(string $param = null){
 		if($param) {
 			$this->pass = password_hash($param, PASSWORD_BCRYPT); 
 			$this->set(['pass'=>$this->pass]); 	
 		} 
 		return $this->pass; 
-	}
+	 }
 	public function comparePass(string $param = ''){
 		 return password_verify($param, $this->pass); 
+	 }
+	public function createICS(){
+
 	}
 }

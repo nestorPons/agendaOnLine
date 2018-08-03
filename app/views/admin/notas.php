@@ -10,4 +10,8 @@ foreach($notas as $nota){
     $id =  $nota['id'];
     include URL_TEMPLATES . 'row.notas.php';
 
-}
+}?>
+<div id="nuevaNota">
+    <i class="icon-plus"></i>
+    <span class="tile">Nueva nota</span>
+</div>

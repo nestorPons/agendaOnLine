@@ -673,42 +673,42 @@ a,i , .a{
 	background-color: @base;
 
 	.tile-container{
-	*{
-		border-radius : @radius;
-	}
-	.tile{
-		border-radius : @radius;
-		background-color: @green;
-	}
-	.cita{
-		background-color: @b1;
-	}
-	.colorSeccion(@c){
-		background-color: @c; 
-		margin: 15px;
-
-	}
-	section{
-		.contenido{
-			background-color: @base;
-			color: @grey;
+		*{
+			border-radius : @radius;
 		}
-
-		&#crearCita {
-			.colorSeccion(@yellow);
+		.tile{
+			border-radius : @radius;
+			background-color: @green;
 		}
-		&#historial{
-			.colorSeccion(@blue);
-			#lblHis{
-				background-color: @cyan;
+		.cita{
+			background-color: @b1;
+		}
+		.colorSeccion(@c){
+			background-color: @c; 
+			margin: 15px;
+
+		}
+		section{
+			.contenido{
+				background-color: @base;
+				color: @grey;
 			}
-		}
-		&#eliminar{
-			.colorSeccion(@red);
-		}
 
-	}
- }
+			&#crearCita {
+				.colorSeccion(@yellow);
+			}
+			&#historial{
+				.colorSeccion(@blue);
+				#lblHis{
+					background-color: @cyan;
+				}
+			}
+			&#eliminar{
+				.colorSeccion(@red);
+			}
+
+		}
+ 	}
  }
 #notas{
 	.nota{
@@ -717,6 +717,17 @@ a,i , .a{
 		border-radius: @radius;
 		i:hover{
 			color: @orange;
+		}
+	}
+	#nuevaNota{
+		border-radius: @radius;
+		&:hover{
+			color: @orange; 
+			border-color: @orange;
+		}
+		&:active{
+			color: @blue; 
+			border-color: @blue;
 		}
 	}
 }

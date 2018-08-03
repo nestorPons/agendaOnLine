@@ -474,9 +474,7 @@ input[type="color"] {
 			position:sticky;
 			text-align:center;
 			width: 310px;
-			@media screen and (max-width: 375px) {
-				width: auto;
-			}
+		
 			*{
 				box-sizing: border-box;
 			}
@@ -1325,30 +1323,29 @@ input[type="color"] {
   -webkit-animation-duration: 1s;
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
-}
+ }
 .checkbox{
 	cursor: pointer; 
 	margin: 5px auto;
 	*{
 		vertical-align: middle;
 	}
-}
+ } 
 @-moz-keyframes parpadeo{  
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
   100% { opacity: 1.0; }
-}
+ }
 @-webkit-keyframes parpadeo {  
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
    100% { opacity: 1.0; }
-}
-
+ }
 @keyframes parpadeo {  
   0% { opacity: 1.0; }
    50% { opacity: 0.0; }
   100% { opacity: 1.0; }
-}
+ }
 #config{
 	.chck-container{
 		display:inline-block;
@@ -1600,9 +1597,6 @@ input[type="color"] {
 		@media (max-width: 425px){
 			left: 5px;
 		}
-	 }
-	#tools{
-		margin-left: 50;
 	 }
 	&:before, &:after {
 		display: table;
@@ -1892,6 +1886,9 @@ input[type="color"] {
 		@media (max-width: 375px){
 			max-width: 180;
 		}
+		@media (max-width: 340px){
+			max-width: 115;
+		}
 	}
 	.app-bar-element {
 		display: inline-flex;
@@ -1925,12 +1922,17 @@ input[type="color"] {
 
 	 }
 	#tools{
+		margin-left: 50;
+
 		.app-bar-element{
 			display: none;
 			padding: 0 10px;
-					//inicio main activado mostrar
+			//inicio main activado mostrar
 			&#btnShow{
 				display: inline-table;
+			}
+			@media (max-width: 350px){
+				padding: 0;
 			}
 		}
 	}
@@ -1945,7 +1947,7 @@ input[type="color"] {
 #notas{
 	.nota{
 		width: fit-content;
-		min-width: 11ch;
+		min-width: 13ch;
 		padding: 20px;
 		text-align: left;
 		max-width: 320px;
@@ -1964,11 +1966,28 @@ input[type="color"] {
 				float: right;
 				left: 37px;
 				background-color: #fff;
+				border-radius: 50px;
 			}
-
 		}
 		.contenido{
 			margin-top: 1ch;
+		}
+	}
+	#nuevaNota{
+		width: 100px; 
+		height: 100px;
+		border: 1px solid #888; 
+		color: #888;
+		text-align: center;
+		vertical-align: middle;
+		float:left;
+		padding: 20px;
+		opacity: 0.6;
+		margin: 10px;
+		cursor: pointer;
+	
+		i{
+			font-size: 70px;
 		}
 	}
  }
@@ -2282,6 +2301,7 @@ input[type="color"] {
 			float: right;
 			left: 23px;
 			background-color: #fff;
+			border-radius: 50px;
 			&:hover{
 				color: @default_color_auxiliar;
 			}

@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <?php
+
     $User = $args[1]; 
     $date = $args[2][0];
     $hour = $args[2][1];
-    $time = $args[2][2];
+    $time = $args[2][2];   
+
+    $interval = new \DateInterval('PT'.$time.'M');
+    $d= \DateTime::createFromFormat('Y-m-d H:i',$date .' '. $hour);
+    $start = $d->format('Ymd\THis'); 
+
+    $d->add($interval);
+    $end = $d->format('Ymd\THis'); 
+
+    $hrefCalendar = $User->isGmail()
+        ?$User->createUrlEventCalendarGoogle($date, $hour, $time )
+        :\core\Tools::strToUrl("https://www.reservatucita.com/sources/ics.php?tile=".CONFIG['nombre_empresa']."&description=Tiene%20una%20cita%20&datestart=$start&dateend=$end&adress=".CONFIG['dir']);
 ?>
 <html lang="es">
     <head>
@@ -23,17 +35,12 @@
                 <p>Su cita ha sido reservada para el el día:</p>
                 <h3> <?= $date ?> a las <?=$hour?> h.</h3>
                 <p>Tiempo total del servicio: <?= $time?> min.</p>
-                <?php
-                    //Se pone un boton guardar cita en google calendar 
-                    if($User->isGmail()){
-                        ?>
-                        <p>
-                            <a href="<?=$User->createUrlEventCalendarGoogle($date, $hour, $time )?>">
-                                <img src="cid:googleCalendar" alt="Guardar cita en google calendar">
-                            </a>
-                        </p>
-                        <?php
-                    }?>
+                <p>
+                    <a href="<?=$hrefCalendar?>">
+                        <img src="cid:btn" alt="Guardar cita en calendario">
+                    </a>
+                </p>
+                   
                 <p>Gracias por usar nuestro servicio de reserva OnLine.</a>            
         </div>
     </center>

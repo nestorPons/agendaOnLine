@@ -12,6 +12,7 @@ RewriteRule ^css/(.*)$ - [L]
 RewriteRule ^img/(.*)$ - [L]
 RewriteRule ^js/(.*)$ - [L]
 RewriteRule ^font/(.*)$ - [L]
+RewriteRule ^sources/(.*)$ - [L]
 RewriteRule ^empresas/^([0-9a-z_-]+)/(.*)$ - [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f

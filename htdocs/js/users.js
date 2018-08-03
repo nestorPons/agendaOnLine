@@ -373,8 +373,7 @@ var usuario = {
 			this.data.nombre != $('#nombre').val() ||
 			this.data.email != $('#email').val() ||
 			this.data.tel != $('#tel').val() ||
-			this.data.authEmail != $('#authEmail').find('input:checkbox').prop('checked')?1:0 ||
-			this.data.authCal != $('#authCal').find('input:checkbox').prop('checked')?1:0 
+			this.data.authEmail != $('#authEmail').find('input:checkbox').prop('checked')?1:0 
 		)
 	 }, 
 	revertir_cambios: function(){
@@ -414,7 +413,6 @@ var usuario = {
 				notify.error('No se han podido guardar los datos')
 				usuario.revertir_cambios()
 			}
-			btn.load.hide()
 		 })	
 		.fail(function(r){
 			notify.error('No se han podido guardar los datos')
