@@ -514,7 +514,7 @@ $(function(){
 			crearCita.data.agenda = $(this).val()
 		 })
 		.on('change','#crearCitaNota',function(){
-			crearCita.data.nota = $this.val() 
+			crearCita.data.nota = $(this).val() 
 		 })
 		.find('#tablas')
 			.on("swipeleft",function(){sincronizar(null,1)})

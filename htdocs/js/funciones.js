@@ -369,9 +369,12 @@ var dialog = {
 		var $this = dialog.section.find('#'+objName), 
 			loads = dialog.loads,
 			_open = function($this){
-				$this.show('fade','fast',function(){
-					$(this).find('.iconClass-container input').first().focus()
-				})			
+
+				$this
+					.show('fade','fast',function(){
+						$(this).find('.iconClass-container input').first().focus()
+					})
+					.find('.btn-success').attr('disabled',false)			
 
 				$('.popup-overlay').fadeIn()
 			
@@ -450,7 +453,11 @@ var dialog = {
 						})
 
 					if(typeof fnOk == "function"){
-						$this.on('click','.btn-success',fnOk)
+						$this.on('click','.btn-success',function(){
+							$(this).attr('disabled',true)
+							fnOk()
+
+						})
 					}
 			
 	
@@ -538,7 +545,7 @@ var tools = {
 		}
 	}
 	
-}
+ }
 function formatofecha (fechaTxt,formatOut){ 
 
 	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
