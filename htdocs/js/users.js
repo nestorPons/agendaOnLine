@@ -361,7 +361,6 @@ var usuario = {
 			email:$('#email').val(),
 			tel:$('#tel').val(),
 			authEmail : $('#authEmail').find('input:checkbox').prop('checked')?1:0, 
-			authCal : $('#authCal').find('input:checkbox').prop('checked')?1:0, 
 			controller : 'users' , 
 			action : SAVE
         }
@@ -381,7 +380,7 @@ var usuario = {
 		$('#email').val(this.last.email)
 		$('#tel').val(this.last.tel )
 		$('#authEmail').is('checked',this.last.authEmail)
-		$('#authCal').is('checked',this.last.authCal) 
+	
 	 }, 
 	guardar: function($this){
 		usuario.guardar_array()
@@ -479,7 +478,7 @@ $(function(){
 		.on('click',".idDateAction",function(){
 			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
 		 })
-		.on('click','#authEmail, #authCal',function(){
+		.on('click','#authEmail',function(){
 			var $input = $(this).find('input:checkbox')
 			$input.prop('checked',!$input.prop('checked'))
 		 })

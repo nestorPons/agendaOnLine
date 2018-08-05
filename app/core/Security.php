@@ -48,7 +48,6 @@ echo BR;
         $httponly  =  true ; 
         // obliga a utilizar sólo las cookies. 
         if  ( ini_set ( 'session.use_only_cookies' ,  1 )  ===  false )  { 
-            $this->error;
             exit() ; 
         } 
         // Obtiene las cookies actuales params. 

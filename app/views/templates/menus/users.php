@@ -19,21 +19,6 @@
 				</div>
 				<span for="authEmail">Recibir recordatorio correo electronico.</span>
 			</div>
-	<!--
-			<div  id="authCal" class="checkbox">
-				<div class="switch">
-				
-				
-				<input type="checkbox" name="switch" class="switch-checkbox" value="authCal" <?= $User->authCal()?"checked":""?>>
-				
-				<label class="switch-label" for="myswitch">
-					<span class="switch-inner"></span>
-					<span class="switch-switch"></span>
-				</label>
-				</div>
-				<span for="authCal">Recibir recordatorio en mi calendario Google.</span>
-			</div>
-	-->
 		</div>
 	</div>
 </div>

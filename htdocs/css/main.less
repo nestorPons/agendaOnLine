@@ -61,7 +61,8 @@ ul li, ol li {
     line-height: 1.25rem;
  }
 body{
-   line-height: 1;
+	font-size: 1em;
+	line-height: 1;
 	box-sizing: border-box;
 	overflow-x: hidden;
 	background-attachment: fixed;
@@ -78,8 +79,8 @@ body{
 
 	@media screen and (max-width: 590px) {
 		margin:0 auto;
+		font-size: 1.5em;
 	}
-
  }
 p{	margin: 10px; }
 img{
@@ -89,9 +90,10 @@ h1{
 	display: block;
 	margin: 10px auto;
 	font-weight: normal;
+	font-size: 1.7em;
 	text-align: center;
 	span{
-		font-size:inherit
+		font-size: 1.5em; 
 	 }
  }
 h2{
@@ -99,7 +101,7 @@ h2{
 	line-height: 40px;
 	color: #555;
 	text-align: center;
-	font-size: @fontSize + 0.2;
+	font-size: 1.2em;
 	@media screen and (max-width: 350px){
 		font-size: 1em;
 	}
@@ -112,8 +114,7 @@ h4{
 	margin: 15px;
  }
 hr{	
-	margin: 5px auto 10px auto;
-
+	margin: 5px auto 10px auto
  }
 thead{
 	th{
@@ -128,7 +129,6 @@ thead{
 [class*="icon-"], [class*="lnr-"]{
 	cursor: pointer;
  }
-
 a, i, .a{
 	cursor: pointer;
 	border-radius: 2px;
@@ -146,12 +146,12 @@ input, button, select, textarea {
 	margin: auto;
 	//padding: 0px  2px 0px 10px;
 	display: block;
-
+	font-size: inherit;
 	&.short{
 		width: 45%;
 	}
  }
- button, input[type="button"]{
+button, input[type="button"]{
 	 margin: 5px auto !important;
  }
 table {
@@ -475,7 +475,7 @@ input[type="color"] {
 			vertical-align: middle;
 			position:sticky;
 			text-align:center;
-			width: 310px;
+			width: 320px;
 		
 			*{
 				box-sizing: border-box;
@@ -487,7 +487,7 @@ input[type="color"] {
 				padding-left: 8px;
 			}
 			input, select, textarea{
-				padding-left: 2rem;
+				padding-left: 3ch;
 				position: relative;
 				background-color: @base;
 			}
@@ -497,10 +497,10 @@ input[type="color"] {
 			}
 			.iconClass-inside{
 				color: @text-icon;
-				right: 10px;
+				right: 1.5ch;
 				&:first-of-type{
-					width: 10px;
-					left: 5px;
+					width: 2ch;
+					left: 1.5ch;
 				}
 				&.icon-note.grande{
 					bottom : 142px;
@@ -606,7 +606,6 @@ input[type="color"] {
 .invalid{
 	border-color: #ff0000 ;
  }
-
 .link{
 	color: #0000ff;
 	text-decoration: underline;
@@ -614,6 +613,14 @@ input[type="color"] {
 .load{
 	margin: 50px auto;
  }
+.capasPrincipales{
+	display:none;
+	top:45px;
+	position: relative;
+	&.activa{
+		display:block;
+	}
+}
 .login{
 	margin: auto;
 	padding: 0;
@@ -623,8 +630,8 @@ input[type="color"] {
 	text-align:center;
 	@media screen and (max-width: 490px) {
 		top: 0;
-		margin: 0 auto;
-		width: 80%;
+		margin: 0;
+		width: 100%;
 		height: 100%;
 		border: none;
 		-webkit-border-radius:0;
@@ -632,43 +639,9 @@ input[type="color"] {
 		border-radius: 0;
 		
 		input[type="radio"], [type="checkbox"] {
-			transform:scale(1.5,1.5);
+			transform:scale(1.3,1.3);
 		}
 	}
-	&-form {
-		border:	1px solid #bbbbbb;
-		text-align:center;
-		width: 350px;
-		margin: auto;
-		margin-top:20px;
-		background-color: #ffffff;
-		section {
-			height: 100%;
-		}
-		.submit{
-			position: absolute;
-			bottom: 0;
-			width: 98%;
-		}
-		@media screen and (max-width: 590px) {
-
-			text-align:center;
-			width: auto;
-			position: inherit;
-			top: auto;
-			margin-top: 0;
-			left: auto;
-			margin-left: 0;
-			margin: auto;
-			border: none;
-		}
-		@media screen and (max-width: 320px) {
-			padding: 20px 0;
-		}
-		p{
-			margin: 10px auto;
-		}
-	 }
 	.form{
 		text-align:left;
 		label {
@@ -677,7 +650,6 @@ input[type="color"] {
 			padding-right: 20px;
 		}
 	 }
-
 	input[type=image]{
 		cursor: pointer ;
 	 }
@@ -695,6 +667,83 @@ input[type="color"] {
 	}
 
 
+ }
+ .login-form{
+	border:	1px solid #bbbbbb;
+	text-align:center;
+	width: 350px;
+	margin: auto;
+	margin-top:20px;
+	background-color: #ffffff;
+	section {
+		height: 100%;
+	}
+	.submit{
+		position: absolute;
+		bottom: 0;
+		width: 98%;
+	}
+	@media screen and (max-width: 590px) {
+
+		text-align:center;
+		width: auto;
+		position: inherit;
+		top: auto;
+		margin-top: 0;
+		left: auto;
+		margin-left: 0;
+		margin: auto;
+		border: none;
+	}
+	@media screen and (max-width: 320px) {
+		padding: 20px 0;
+	}
+	p{
+		margin: 10px auto;
+	}
+	&.about{
+		position: absolute;
+		margin: 10px auto;
+		padding: 8px;
+		background-color: transparent;
+		border: none;
+		margin-left: auto;
+		margin-right: auto;
+		left: 0;
+		right: 0;
+
+
+		&-links {
+			height: 30px;
+			& > a {
+			  float: left;
+			  width: 50%;
+			  line-height: 30px;
+			}
+		}
+		&-author {
+		margin-top: 5px;
+			& > a {
+			  padding: 1px 3px;
+			  margin: 0 -1px;
+			}
+		}
+		@media screen and (max-width: 800px) {
+			font-size: 1em - 0.1;
+		}
+		@media screen and (max-width: 590px) {
+			position:relative;
+		}
+		@media screen and (max-width: 425px) {
+			padding: 15px;
+		}
+	}
+ }
+ .politicLink{
+	text-decoration: underline;
+	font-size:1em - 0.3;
+	&:before{content: '( ';}
+	&:after{content: ' )';}
  }
 .menu{
 	font-size:@fontSize + 0.1;
@@ -1374,64 +1423,7 @@ input[type="color"] {
 	top:50px;
 	position:relative;
  }
-#crearCita{
-	*{
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none; 
-	}
-	.tablas{
-		table{
-			margin: 0 auto;
-			td{
-				padding: 0 25px;
-				height: 30px;
-				label, input{
-					cursor: pointer;
-				}
-			}
-		}
-	}
-	#stepper1, #stepper2{
-		display:none;
-	}
-	.contenedorServicios{
-		margin: 20px auto;
-		text-align: left;
-		tr {
-			display : none;
-			span, label, input{
-				cursor: pointer;
-			}
-		}
-	}
-	.contUsers{
-		margin: 20px auto;
-		input, textarea{
-			width:250px;
-			display:block;
-		}
-	}
-	.editando {
-		display:none;
-	}
-	.ui-datepicker-inline{
-		margin: auto;
-	}
-	#principal{
-		display:none;
-	}
-	#secundaria{
-		margin: auto;
-	}
-	#tSer{
-		padding: 0 5px;
-	}
-	div#selagendas label {
-    	display: inline-block;
-	}
- }
+
 #dialogs{
 	#dlgHistorial{
 		max-height: 50%;
@@ -1869,28 +1861,25 @@ input[type="color"] {
 			color: #888;
 			z-index:10;
 			top:25;
-		}
+		 }
 		.icon-right-open{
 			left: 34%;
-		}
+		 }
 		.icon-left-open{
 			right: 34%;
-		}
+		 }
 		.datepicker{
 			text-align:center;
 			font-size: 1.1em;
 			width: 100%;
-		}
+		 }
 		@media (max-width: 425px){
 			max-width: 210; 
 			margin: auto ;
-		}
+		 }
 		@media (max-width: 375px){
-			max-width: 180;
-		}
-		@media (max-width: 340px){
-			max-width: 115;
-		}
+			max-width: 125;
+		 }
 	}
 	.app-bar-element {
 		display: inline-flex;
@@ -2105,10 +2094,9 @@ input[type="color"] {
 	}
 	.contenedor-datepicker{
 		display: inline-flex;
-		margin: 8 14;
+		margin: 8px 14px;
 		text-align: center;
-		width: 100%;
-		max-width: 358px;
+		width: 320px;
 		opacity: 0.5;
 		i{
 			position: relative;
@@ -2128,9 +2116,9 @@ input[type="color"] {
 			font-size: 1.1em;
 			width: 100%;
 		}
-		@media (max-width: 425px){
-			max-width: 210; 
-			margin: 8 0 ;
+		@media screen and (max-width: 590px){	
+			width: 100%;
+			margin: 8px 0;
 			.icon-right-open {
 				left: 79%;	
 			}
@@ -2144,7 +2132,7 @@ input[type="color"] {
 	 }
 	.tile-container{
 		@alto:186.5px; 
-		@espacio: 6px; 
+		@espacio: 0px; 
 		@font-icon: 64px; 
 
 		width:100%+@espacio;
@@ -2152,8 +2140,6 @@ input[type="color"] {
 		display:block;
 		margin:0 @espacio*-1 0 @espacio*-1;
 		padding:0;
-		padding-top:25px;
-		padding-top: @espacio;
 		.icon-edit {
 			color : #fff;
 		}
@@ -2163,6 +2149,7 @@ input[type="color"] {
 				color: #fff;
 			}
 		}
+		section { margin: 15px;	}
 		&:after,&:before{
 			display:table;
 			content:"";
@@ -2177,8 +2164,8 @@ input[type="color"] {
 			width: @alto;
 			height:@alto;
 			float:left;
-			margin:@espacio;
 			position:relative;
+			transform: all 1s;
 
 			&-label {
 				position: absolute;
@@ -2199,7 +2186,6 @@ input[type="color"] {
 				color : #fff;
 				width: @alto*2 + @espacio;
 				height: @alto;
-				margin:@espacio;
 				display: block;
 				float: left;
 				cursor: pointer;
@@ -2212,7 +2198,6 @@ input[type="color"] {
 				color : #fff;
 				width: @alto/1.9;
 				height: @alto/1.9;
-				margin:@espacio;
 				display: block;
 				float: left;
 				cursor: pointer;
@@ -2274,6 +2259,10 @@ input[type="color"] {
 				}
 			}
 		}
+		.tile-active{
+			transform: all 1s;
+			margin: 0; 
+		}
 		
 	}
 	#lineasHistorial{ 
@@ -2329,7 +2318,7 @@ input[type="color"] {
 	}
  }
 .ui-datepicker{
-	width: 275;
+	width: 320;
 
 	&-inline{
 		border-width :0px ;
@@ -2545,13 +2534,23 @@ input[type="color"] {
 			}
 		}
  }
-#crearCita{
+ #crearCita{
+	*{
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none; 
+	}
 	.tablas{
 		table{
 			margin: 0 auto;
-		}
-		td{
-			padding: 0 25px;
+			td{
+				padding: 0 25px;
+				height: 30px;
+				label, input{
+					cursor: pointer;
+				}
+			}
 		}
 	}
 	#stepper1, #stepper2{
@@ -2562,6 +2561,9 @@ input[type="color"] {
 		text-align: left;
 		tr {
 			display : none;
+			span, label, input{
+				cursor: pointer;
+			}
 		}
 	}
 	.contUsers{
@@ -2586,7 +2588,9 @@ input[type="color"] {
 	#tSer{
 		padding: 0 5px;
 	}
-
+	div#selagendas label {
+    	display: inline-block;
+	}
  }
 #festivos{
 	.tablas{

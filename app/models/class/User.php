@@ -3,7 +3,7 @@
 class User extends \core\BaseClass {
 	
 	private $user, $pass, $config, 
-		$authEmail, $authCal, $color, $lang;
+		$authEmail, $color, $lang;
 		
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
 
@@ -45,7 +45,6 @@ class User extends \core\BaseClass {
 			$this->color = $this->user['color'];
 			$this->idioma = $this->user['idioma'];
 			$this->authEmail = $this->user['authEmail'];
-			$this->authCal = $this->user['authCal'];
 
 		} 
 		
@@ -190,12 +189,6 @@ class User extends \core\BaseClass {
 			return false;
 		}
 	
-	 }
-	 public function authCal($val = null){
-		if($val==null)
-			return $this->authCal; 
-		else 
-			$this->authCal = $val; 
 	 }
 	public function authEmail($val = null){
 		if($val==null)

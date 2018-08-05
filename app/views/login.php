@@ -11,7 +11,7 @@
 				<a href= "<?=CONFIG['web']??''?>"  target="_blank">
 					<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
 				</a>
-				<h1 class="heading">Agenda <?=CODE_EMPRESA?></span></h1>
+				<h1 class="heading">Agenda <?=CONFIG['nombre_empresa']?></span></h1>
 				<hr>
 				<form id="loginUsuario" method="POST" action='<?= $url_validate ?>' defaultbutton="Entrar"
 					data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña."
@@ -68,7 +68,7 @@
         Solicitamos su permiso para obtener datos estadísticos de su navegación en esta web, en cumplimiento del Real 
         Decreto-ley 13/2012. Si continúa navegando consideramos que acepta el uso de cookies.
         <a href="javascript:void(0);" class="ok" onclick="PonerCookie();"><b>OK</b></a> | 
-		<a href="politicCookies.php?empresa=<?=CODE_EMPRESA?>" target="_blank" class="info">Más información</a>
+		<a href="/sources/politicCookies.php?empresa=<?=CODE_EMPRESA?>" target="_blank" class="info">Más información</a>
     </div>
 </div>
 <!--//FIN BLOQUE COOKIES-->
