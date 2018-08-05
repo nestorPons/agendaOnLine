@@ -62,7 +62,7 @@ var general = {
 					}
 					btn.load.hide()
 				},
-				JSON
+				'json'
 			)
 		 }else {
 			$pass.removeClass().addClass('input-error')

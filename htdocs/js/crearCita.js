@@ -152,7 +152,7 @@ var crearCita={
 					notify.error('Error inesperado')
 				}
 				dialog.close('dlgGuardar')
-			},JSON)
+			},'json')
 			.fail(function( jqXHR, textStatus, errorThrown){
 				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;

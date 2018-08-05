@@ -10,7 +10,7 @@ var agendas = {
 				location.reload()
 			else
 				notify.error("No se ha podido crear la agenda.\n\r Consulte con el administrador")
-		},JSON)
+		},'json')
 	 }, 
 	del: function (id) {
 		var data = {
@@ -26,7 +26,7 @@ var agendas = {
 					location.reload()
 				else
 					notify.error("No se ha podido eliminar la agenda.")
-			},JSON)
+			},'json')
 		}
 	 }, 
 	guardar: function (callback){
@@ -87,7 +87,7 @@ var agendas = {
 
 		$.post(INDEX,data,function(r){
 			agendas.set.name(data.id, data.nombre)
-		},JSON)
+		},'json')
 
 	 }, 
 	set: {

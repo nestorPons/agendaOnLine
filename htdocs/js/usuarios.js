@@ -220,7 +220,7 @@ var usuarios = {
 						$clone.appendTo($this.find('table'))
 					})		
 				}
-			},JSON)
+			},'json')
 		})
 	 },
 	select: function (letra) {

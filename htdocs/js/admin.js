@@ -1252,7 +1252,7 @@ notas = {
 			} 
 
 			typeof callback == "function" && callback();
-		 },JSON)
+		 },'json')
 		
 	 }, 
 	delete : function(id){
@@ -1270,7 +1270,7 @@ notas = {
 					notify.error('No se ha podido eliminar la nota')
 					echo (r)
 				} 
-			},JSON)
+			},'json')
 	 },
 	sync : function(fecha){
 	    var $obj = $('#notas table tbody')
@@ -1294,7 +1294,7 @@ notas = {
 				$('#menu5').removeClass('c4')
 			}
 			return r.success
-		},JSON)
+		},'json')
 		
 		$obj.find('.'+Fecha.id).removeClass('ocultar').addClass('mostrar')	
 
@@ -1467,7 +1467,7 @@ $(function(){
 			}
 			 $.post(INDEX,data,function(r){
 				 
-			 },JSON)
+			 },'json')
 
 		 })
 		.find('.cuerpo')

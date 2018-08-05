@@ -89,7 +89,7 @@ recover = {
 				echo(r);
 			 }	
 			btn.load.hide()
-		 },JSON)	
+		 },'json')	
 	 }
  }, 
 user = {
@@ -108,7 +108,7 @@ user = {
 					echo(r);
 				 }	
 				btn.load.hide()
-			},JSON);	
+			},'json');	
 			
 	 },
 	notification: function(){

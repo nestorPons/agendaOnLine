@@ -1,7 +1,7 @@
 "use strict"
 
 var ADD = 'add', SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index' , 
-LEFT = 'left' , RIGHT = 'right', JSON = 'json', GET = 'get' 
+LEFT = 'left' , RIGHT = 'right', GET = 'get' 
 
 var HORARIOS = document.horarios
 var FESTIVOS = document.festivos
