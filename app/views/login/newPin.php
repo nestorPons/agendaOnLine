@@ -1,10 +1,9 @@
 <?php
-    include URL_TEMPLATES . '/header.php' ;
-	$url_validate= '/'. CODE_EMPRESA .'/'. 'newPin.php';
+	$url_validate= '/'. $Empresa->code() .'/'. 'newPin.php';
 ?>
 	<title>Agenda Online zona login</title>
 	</head>
-	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
+	<body data-empresa="<?=$Empresa->code()?>" class="<?=CLASS_BACKGROUND?>" >
 		<div id="login" class="login login-form ">
             <section id="newpinpass">
                 <h1 class="heading">Registro nuevo pin</h1>
@@ -13,7 +12,7 @@
                 <p  class="info">Introduzca un numero pin de 4 digitos que podra usar para iniciar la sesion.</p>
                 <hr>
                 <form id="frmPinpass" method="POST" action='<?= $url_validate ?>' defaultbutton="Entrar" >
-                    <input type="hidden" name="empresa"  value="<?= CODE_EMPRESA  ?>">
+                    <input type="hidden" name="empresa"  value="<?= $Empresa->code()  ?>">
                     <input type="hidden" name="controller"  value="newPin">
                     <input type="hidden" name="action"  value="save">
                     <div class="iconClass-container">

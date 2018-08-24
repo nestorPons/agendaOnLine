@@ -11,10 +11,12 @@ $web = $_POST['web'];
 unset($_POST['email'],$_POST['tel'],$_POST['web']);
 
 if($r['success']  = $Empresa->saveById(CONFIG['idEmpresa'] , ['email'=>$email, 'tel'=>$tel, 'web'=>$web] )){
+	/* n se lo que es 
 	if($idAdmin = $Empresa->getById(CONFIG['idEmpresa'], 'idAdmin')){
 		if (!$r['success'] = $Admin->saveById($idAdmin , $_POST ))
 			$r['err'] = Error::E030;
 	}
+	*/
 }else $r['err'] = 'guardando email';
 
 echo json_encode($r) ;

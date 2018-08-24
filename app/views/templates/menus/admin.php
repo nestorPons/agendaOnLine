@@ -35,19 +35,18 @@
 	</a>
 </div>
 
-<nav  id= "navbar" class="app-bar" data-role="appbar" >
+<header  id= "navbar" class="app-bar" data-role="appbar" >
 	<div id="boton-menu" class="lnr-menu" ></div>
 	
 	<?php
-$cls_festivos = (!empty(FESTIVOS)) && (in_array(Date('md') , FESTIVOS )) ? 'c-red' : '' ;
-$fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
-?>
+	$cls_festivos = (!empty(FESTIVOS)) && (in_array(Date('md') , FESTIVOS )) ? 'c-red' : '' ;
+	$fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
+	?>
 
 	
 	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse" title="Salir">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
-			<a href="/<?=CODE_EMPRESA?>/logout" id="mnuUserSalirSession" class="lnr-power-switch " >
-		</a>
+			<i class="lnr-power-switch " ></i>
 		</li>
 		<li id= "btnContacto" class="app-bar-element no-flexible place-right" title="Contacto">
 			<i  class=" lnr-envelope"></i>
@@ -57,7 +56,7 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 		</a>
 		</li>
 	</ul>
-<!--menu herramientas-->
+	<!--menu herramientas-->
 
 	<div class = "contenedor-datepicker">
 		<i data-action="-1" class="icon-left-open idDateAction" data-disabled=false></i>
@@ -74,7 +73,7 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 			<i  class="icono-nav lnr-magnifier"></i>
 			<span  class="menulbl">Buscar</span>
 		</div>
-<!--
+	<!--
 		<div id="btnOptions" class="app-bar-element no-flexible  ">
 			<a class="dropdown-toggle no-flexible   ">
 				<span class="icono-nav icon-cog"></span>
@@ -92,7 +91,7 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 				</li>
 			</ul>
 		</div>
--->
+	-->
 		<div id="btnReset" class="app-bar-element no-flexible ">
 			<i  class="icono-nav lnr-undo"></i>
 			<span  class="menulbl">Refrescar</span>
@@ -114,12 +113,11 @@ $fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 			<span class="menulbl">Editar</span>
 		</div>
 		<div id="btnShow" class="app-bar-element no-flexible " >
-				<i class="icono-nav off lnr-star <?=CONFIG['ShowRow']==1?"hidden":""?>"></i>
-				<i class="icono-nav on lnr-star-empty <?=CONFIG['ShowRow']==1?"":"hidden"?>"></i>
-				<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
+			<i class="icono-nav <?=CONFIG['ShowRow']==1?"lnr-star_empty":"lnr-star"?>"></i>
+			<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>
 	<div id="conTxtBuscar" class=" "> 
 		<input type="search" name="txtName" id="txtBuscar">
 	</div>
-</nav>
+</header>

@@ -1,16 +1,16 @@
 <div class="cabecera">
 	<div class="cabecera-content">
 		<?php 
-			if (!$Device->isMovile){ require_once URL_TEMPLATES . "diasSemana.php"; }
+			if (!$Device->isMobile()){ require_once URL_TEMPLATES . "diasSemana.php"; }
 		?>
 	</div>
 </div>
-<div class="cuerpo <?php if($Device->isMovile) echo'esMovil'?>" >
+<div class="cuerpo <?php if($Device->isMobile()) echo'esMovil'?>" >
 	<div id="tablasEncabezado">
 		<?php
 		$agendas = $Agendas->get(); 
 
-		if (TRUE/*!$Device->isMovile*/){ ?>
+		if (TRUE/*!$Device->isMobile()*/){ ?>
 			<table class = "tablas" >	
 				<thead>
 					<tr>

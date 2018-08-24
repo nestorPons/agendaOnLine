@@ -1,6 +1,4 @@
 <?php 
-require_once URL_FUNCTIONS .'tools.php';
-
 $User = new models\User($_SESSION['id_usuario']);
 
 if (isset($_POST['action'])) {
@@ -22,7 +20,7 @@ if (isset($_POST['action'])) {
     $Familias = new core\BaseClass('familias');
     $_SESSION['FAMILIAS'] = $Familias->getBy('mostrar' , 1 , '*' ,  MYSQLI_NUM);
 
-    $historial = $User->getData(); 
+    $historial =  $User->getData(); 
 
 
     require_once    URL_VIEWS_USER . 'users.php' ; 

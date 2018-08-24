@@ -16,8 +16,8 @@ config ={
 
 		if(repeatPass==newPass && !$.isEmpty(oldPass)){
 			var data = {
-				oldPass : SHA(oldPass),
-				newPass: SHA(newPass) ,
+				oldPass : Tools.SHA(oldPass),
+				newPass: Tools.SHA(newPass) ,
 				controller: config.controller, 
 				action: SAVE
 				}

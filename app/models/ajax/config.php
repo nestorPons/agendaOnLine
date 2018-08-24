@@ -62,17 +62,24 @@ if (!empty($_FILES["fileLogo"]["tmp_name"])){
 				break;
 		}
 
-		$lienzo = imagecreatetruecolor( $miniatura_ancho, $miniatura_alto );
-		imagesavealpha($lienzo,true);
-		
-		//create a fully transparent background (127 means fully transparent)
-		$trans_background = imagecolorallocatealpha($lienzo, 0, 0, 0, 127);
-		//fill the image with a transparent background
-		imagefill($lienzo, 0, 0, $trans_background);
-		
-		imagecopyresampled($lienzo, $imagen, 0, 0, 0, 0, $miniatura_ancho, $miniatura_alto, $imagen_ancho, $imagen_alto);
-		
-		$js['redimen'] =  imagepng($lienzo,URL_EMPRESA.'logo.png', 5);
+		foreach([256,144,128,64,48,32,24,16] as  $val ){
+
+			$lienzo = imagecreatetruecolor( $val, $val );
+			imagesavealpha($lienzo,true);
+			
+			//create a fully transparent background (127 means fully transparent)
+			$trans_background = imagecolorallocatealpha($lienzo, 0, 0, 0, 127);
+			//fill the image with a transparent background
+			imagefill($lienzo, 0, 0, $trans_background);
+			imagecopyresampled($lienzo, $imagen, 0, 0, 0, 0, $val, $val, $imagen_ancho, $imagen_alto);
+
+			// borramos antes
+			$url_image = URL_EMPRESA."logo_$val.png"; 
+			if (file_exists($url_image)) unlink($url_image);
+			$js['redimen'] =  imagepng($lienzo,$url_image, 5);
+			chmod($url_image, 0755);
+
+		}
 
 		unlink($target_file);
 		imagedestroy($imagen);

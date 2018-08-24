@@ -1,5 +1,7 @@
 'strict'
-var crearCita={
+var 
+crearCita={
+	isLoad : true, 
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
@@ -8,9 +10,6 @@ var crearCita={
 			var clase_id = clase.replace(/\D/g,'');
 			crearCita.servicios.mostrar(clase_id) ;
 		}
-
-
-		cargarDatepicker()	
 		crearCita.load()
 	 },
 	set : {
@@ -87,6 +86,7 @@ var crearCita={
 		
 	 },
 	dialog: function (){
+
 		var self = crearCita , sec =  $('#crearCita') , 
 			idSer = new Array() ,
 			strServ ="" , 
@@ -108,19 +108,17 @@ var crearCita={
 				fecha : Fecha.general , 
 				hora : crearCita.data.hora, 
 				agenda : crearCita.data.agenda,
-				nameCli :crearCita.data.nombre, 
 				servicios : idSer ,
 				nota : crearCita.data.nota,
 				tiempoServicios : parseInt(sec.find('#tSer').text()) 
-			}
+			 }
 			$.extend(crearCita.data, data)
 
 			$('#dlgGuardar')
-				.find('#lblHora').html(data.hora).end()
-				.find('#lblFecha').html(Fecha.print()).end()
-				.find('#lblCliente').html(data.nameCli).end()
-				.find('#lblSer').html(strServ)
-				
+				.find('#lblhora').html(data.hora).end()
+				.find('#lblfecha').html(Fecha.print()).end()
+				.find('#lblcliente').html(crearCita.data.nombre).end()
+				.find('#lblSer').html(strServ)	
 		})
 	 },
 	guardar: function(){
@@ -164,7 +162,7 @@ var crearCita={
 
 	 },
 	load: function(){
-		crearCita.reset()
+		this.reset()
 		$('#btnSearch').hide()
 		if(localStorage.getItem('hora')){
 			crearCita.data.hora = localStorage.getItem('hora')
@@ -179,7 +177,7 @@ var crearCita={
 
 			if (!$('#crearCita #tablas table').length) cargarDatepicker();
 
-			for(let i = 0 ; i <= document.margenDias ; i++){
+			for(let i = 0 ; i <= config.margenDias ; i++){
 	
 				var date = Fecha.calcular(i ,  Fecha.id )
 				crearCita.horas.crear(Fecha.number(date))
@@ -245,9 +243,9 @@ var crearCita={
 		 },
 	 },
 	reset: function(){
-		$('.steperCapa li').hide(function(){
-			$('#step0').show()
-		})
+		
+		$('#step0').show()
+
 		$('#crearCita')
 			.find('.dialog').hide().end()
 			.find('.steperCapa').hide().end()
@@ -279,6 +277,7 @@ var crearCita={
 
 		crearCita.data.hora = null
 		crearCita.data.agenda = null 
+		crearCita.data.nota = null
 		dialog.close('dlgGuardar')
 	 },
 	stepper: function(index){
@@ -338,10 +337,10 @@ var crearCita={
 
 				if (selCli.length==0){
 					$this.addClass('input-error');
-					dialog.open('dlgCliente',crearCita.cliente)
+					dialog.open('dlgCliente',crearCita.idUser)
 
 				}else{
-					crearCita.data.cliente = selCli.data('id') 
+					crearCita.data.idUser = selCli.data('id') 
 					$('#crearCita #lblCliente').html($this.val())
 					$this
 						.removeClass('input-error')

@@ -1,6 +1,4 @@
 <?php 
-
-require_once URL_FUNCTIONS .'tools.php';
 $Festivos = new core\BaseClass('festivos');
 
 if (isset($_POST['action'])) {

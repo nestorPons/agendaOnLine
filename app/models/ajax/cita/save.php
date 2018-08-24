@@ -1,16 +1,13 @@
 <?php
+
 $Forms::sanitize($_POST);
 
 $r['success']=true;
-$userId = $_POST['cliente'];
-
+$userId = $_POST['idUser'];
 $fecha =$_POST['fecha']??mnsExit('Sin fecha');
 $hora = date('H:i',strtotime($_POST['hora']))??mnsExit('Sin hora');
-
 $servicios = $_POST['servicios']??mnsExit('No se han pasado servicios');
 $agenda =  $_POST['agenda'][0]??mnsExit('Sin agenda');
-
-$r['success']=true;
 
 $data = $Data->getBy(array('fecha','hora','agenda'),array($fecha, $hora, $agenda)); 
 
@@ -30,37 +27,36 @@ if ($data <= 1 || 1 ){
 			$sql = '';
 
 			foreach ($servicios as $id ) {
-					$Cita->saveById(-1,[
-							'idCita' =>$id_servicio, 
-							'servicio'=> $id
-						]);
+				$Cita->saveById(-1,[
+						'idCita' =>$id_servicio, 
+						'servicio'=> $id
+					]);
 
-					$arrSer[] = $Serv->getById($id) ;
-					$arridCitaSer[] = $Data->getId();
-				}
+				$arrSer[] = $Serv->getById($id) ;
+				$arridCitaSer[] = $Data->getId();
+			 }
 
 			$r['idUser'] = $userId ;
 			$r['idCita'] = $id_servicio ;
 			$r['services'] = $arrSer ;
 			$r['idCitaSer'] = $arridCitaSer;
 
- 
-
 			if($User->isUser() && CONFIG['sendMailUser'] ){
-		
+
 				$User->sendMail(
 					'mailConfirmation.php', 
 					'Confirmación reserva', 
-					[$fecha,$hora, $_POST['tiempoServicios']]
+					[$fecha,$hora, $_POST['tiempoServicios'], $Empresa]
 				);
-				
-			}
+
+			 }
 		}
 } else {
 	$r['ocupado']=true;
+	$r['success']=false;
 	$r['mns']['tile'] = " hora ocupada " ;
 	$r['mns']['body'] = " No se pueden reservar dos citas en la misma hora " ;
-	}
+ }
 
 function mnsExit($mns){
 	echo($mns);

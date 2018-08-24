@@ -145,7 +145,7 @@ CREATE TABLE `usuarios_config` (
   `id` int(11) PRIMARY KEY,
   `idioma` tinyint(1) NOT NULL DEFAULT '1',
   `color` varchar(8) NULL DEFAULT NULL, 
-  `authMail` tinyint(1) NOT NULL DEFAULT '1'
+  `authMail` tinyint(1) NOT NULL DEFAULT '1',
 ) ENGINE=InnoDB;
 */
 CREATE TABLE `logs` (

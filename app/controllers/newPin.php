@@ -1,7 +1,5 @@
 <?php
 
-require_once URL_FUNCTIONS .'tools.php';
-
 if(isset($_POST['action'])){
     $User = new \models\User($_SESSION['id_usuario']); 
     if($User->set(['pin'=>$_POST['newpinpass']])){

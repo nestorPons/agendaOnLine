@@ -36,7 +36,7 @@ var general = {
 			}
 
 			$.post(URL,data,function(html){
-				$('#login').prepend(html)
+				$('.login').prepend(html)
 				$(html)	.attr('class','')
 				_toggle($(html))
 
@@ -56,23 +56,14 @@ var error = function (mns){
 				$(this).addClass('input-error');
 			})
  }
-var error = { 
-	mns : '' ,
-	get : function (param){
-		var param = param||5
-		/* Obtener la url completa */
-		var url = document.URL
-		/* Buscar a partir del signo de / */
-		var spl = url.split('/')
-
-		if (!$.isEmpty(spl[param])){
-			var mns = spl[param]
-			error.mns = decode(mns)
-
-			return true
-		} else return false
+let 
+Login = {
+	html : '', 
+	setCookie : ()=>{
+		localStorage.setItem("AOLAvisoCookie", 1);
+		document.getElementById("barraaceptacion").style.display="none";
 	}
- } ,
+ }, 
 recover = {
 	send : function (callback){
 		var data = {
@@ -80,10 +71,11 @@ recover = {
 			controller : 'login',
 			action : 'recover'
 	  	 }
+
 		$.post(URL, data,function (r) {
 			if (r.success) {
 				notify.success('Siga las instrucciones del email', 'Email enviado')
-				typeof callback == "function" && callback()
+				
 			} else {
 				notify.error(r.err, 'Error: '+ r.code)
 				echo(r);
@@ -94,21 +86,21 @@ recover = {
  }, 
 user = {
 	save : function () {
-		$('#frmNewUSer #pass').val(SHA($('#frmNewUSer #fakePass').val()))
+		$('#frmNewUSer #pass').val(Tools.SHA$(('#frmNewUSer #fakePass').val()))
 		var	data = $("#frmNewUSer").serializeArray()			
 			data.push({name : 'controller' , value:'login'})
 			data.push({name : 'action' , value : SAVE})
-		$.post(URL, data,
-			function (r) {
-				if (r.success) {
-					notify.success('Su usuario ha sido guardado', 'Registro aceptado')
-					user.notification()
-				} else {
-					notify.error(r.err, 'Error: '+ r.code)
-					echo(r);
-				 }	
-				btn.load.hide()
-			},'json');	
+		$.post(URL, data,function (r) {
+			if (r.success) {
+				notify.success('Su usuario ha sido guardado', 'Registro aceptado')
+				user.notification()
+			} else {
+				
+				notify.error(r.err, 'Error: '+ r.code)
+				echo(r);
+				}	
+			btn.load.hide()
+		},'json');	
 			
 	 },
 	notification: function(){
@@ -117,7 +109,7 @@ user = {
  },
 validate = {
 	login :function() {
-			var $pass = $('#fakePass'), 
+			var $pass = $('#pass'), 
 				$email = $('#login')
 				
 		if ($.isEmpty($pass.val())|| $pass.val() < 6){
@@ -140,15 +132,45 @@ validate = {
 		return true
 	 }
  }
+
 $(function(){
+
 	$('body')
+		// Logueamos usuarios y cargamos vista correspondiente 
+		.on('click','#btnbarraaceptacion',Login.setCookie)
+		.find('form button').prop('disabled',false).end()	
+		.on('submit','#loginUsuario',function(e){
+			e.preventDefault()
+			let data ={
+				controller : 'validar', 
+				ancho : screen.width , 
+				login : $(this).find('#login').val(), 
+				pass : Tools.SHA($(this).find('#pass').val()), 
+				recordar : $(this).find('#recordar').is(':checked'), 
+				empresa : normalize(config.nombre_empresa)
+			}
+					
+			$.post(INDEX, data, function(r){
+
+				if (r.error == undefined){
+					// Devuelve zona admin o users  logueo correcto
+					Login.html = $('#login').detach()
+					$('body')
+						.append(r)
+						.removeClass()
+				} else { 
+					let res = r.error.split("<br>")
+					notify.error(res[1], res[0], true);
+				}
+			})
+		 })
 		.on('click','#btnLogin , #fb-facebookLogin',function(e){
 			if (localStorage.getItem('AOLAvisoCookie')!=1) {
 				e.preventDefault()
 				e.stopPropagation()
 				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
 			}
-		})
+		 })
 		.on('click','.cancel',function(e){
 			general.toggle($('#secLogin'))
 		 })
@@ -178,9 +200,8 @@ $(function(){
 		.on('keyup','#pinpass',function(){
 			pin = $(this).val()
 			if(pin.length == 4) $('#frmPinpass').submit()
-		})
+		 })
 
-	$('#ancho').val(screen.width)
 	if(!$.isEmpty($_GET['args'])){
 		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''
 		if(!$.isEmpty($_GET['err']))
@@ -188,6 +209,14 @@ $(function(){
 	 } 
 	if(!$.isEmpty($_GET['success']))
 			notify.success($_GET['success'])
+
+	// Si hay error de autentificacion esta en el div#errors 
+	let textError = $('div#notify').text();
+	if(!$.isEmpty(textError)){
+		notify.error(textError)
+		//$('div#errors').text('')
+	}
+
 	$('#frmLogin')
 		.keyup(function(e){
 			if(e.keyCode == 13)$('#btnLogin').click()
@@ -207,9 +236,6 @@ $(function(){
 	if(localStorage.getItem('AOLAvisoCookie')!=1){
 		document.getElementById("barraaceptacion").style.display="block";
 	}
+	
 
  })
-function PonerCookie(){
-	localStorage.setItem("AOLAvisoCookie", 1);
-	document.getElementById("barraaceptacion").style.display="none";
- }

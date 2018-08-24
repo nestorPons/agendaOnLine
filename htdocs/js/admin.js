@@ -32,7 +32,7 @@ function sincronizar( dias, date , callback ){
 		//Sincronizamos historial
 		if(typeof historial.sinc=='function') historial.sinc()
 
-		var diaFestivo = $.inArray(Fecha.md(Fecha.general),FESTIVOS)!=-1;
+		var diaFestivo = $.inArray(Fecha.md(Fecha.general),config.festivos)!=-1;
 
 
 		(diaFestivo)?$datepicker.addClass('c-red'):$datepicker.removeClass('c-red')
@@ -45,6 +45,7 @@ function sincronizar( dias, date , callback ){
 	}
  }
 function mostrarCapa(capa, callback){
+	
 	var data = { 
 			controller : capa ,  
 			fecha :  Fecha.sql ,
@@ -57,8 +58,10 @@ function mostrarCapa(capa, callback){
 	$menu.find('.selected').removeClass('selected')
 	$menu.find('[data-capa="'+capa+'"]').addClass('selected')
 	//***	  
+	
+	// Cerramos funcion si es la misma capa
+	if($capa.hasClass('activa')) return false;
 
-	if($capa.is(':visible')) return false;
 	$('#chckOpUsersDel').prop( "checked", false ) ;
 	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
 
@@ -76,14 +79,13 @@ function mostrarCapa(capa, callback){
 		
 		capa=='crearCita' && crearCita.load()
 
+		if($('#config').is(':visible')&& config.change) config.guardar();
+		if($('#agendas').is(':visible')&& agendas.change) agendas.guardar();
+		$('#crearCita').is(':visible') &&  crearCita.reset();
 	 }
 	 
-	if($('#config').is(':visible')&&config.change) config.guardar();
-	if($('#agendas').is(':visible')&&agendas.change) agendas.guardar();
-	if($('#crearCita').is(':visible')) crearCita.reset();
-
-	$('.capasPrincipales').hide()
-	$capa.fadeIn()
+	$('.capasPrincipales.activa').hide().removeClass('activa')
+	$capa.fadeIn().addClass('activa')
 
 	menu.status(capa)
 
@@ -109,9 +111,7 @@ main ={
 	last : new Object(),
 	idsControl : new Object(),
 	idCita : -1,
-	login: {
-		ancho : 0 
-	 }, 
+	ancho : 0,
 	cargado : true, 
 	set: {
 		nameAgenda : function(id, name){
@@ -248,7 +248,7 @@ main ={
 	crearDias: function(callback){
 
 		var self = this , section = this.section , body = this.body 
-		var mD = parseInt(document.margenDias)/2;
+		var mD = parseInt(config.margenDias)/2;
 		var fechaIni = Fecha.calcular(-1*mD,Fecha.general);
 		var fecha = fecha||Fecha.general;
 		var dias = body.find('.dia')
@@ -592,23 +592,29 @@ main ={
 	 }, 
 	inactivas:{ 
 		click :	function(){
-			var status = localStorage.getItem("showRows")==1||$('.dia.activa').find('.fuera_horario').is(':visible')?0:1
-			main.inactivas.change(status)
+
+			var status = 
+			localStorage.getItem("showRows")==1||
+			$('.dia.activa').find('.fuera_horario').is(':visible')?0:1;
+
+			main.inactivas.change(status);
 	
 		},
 		change :function (std, save = true){
+			let effect = 'puff',
+				duration = 1500; 
 			if( std == 1 ){			
+				$('#main .disabled').removeClass('disabled');
 				$('#btnShow')
 					.find('.menulbl').html('Ocultar').end()
-					.find('.on').show().end()
-					.find('.off').hide().end()
-				$('#main .disabled').removeClass('disabled');
+					.find('i').removeClass().addClass('lnr-star');
+
 			}else{			
+				$('#main .fuera_horario').parent().addClass('disabled')
 				$('#btnShow')
 					.find('.menulbl').html('Mostrar').end()
-					.find('.off').show().end()
-					.find('.on').hide().end()
-				$('#main .fuera_horario').parent().addClass('disabled')
+					.find('i').removeClass().addClass('lnr-star-empty');
+
 
 			}	
 			if(save) localStorage.setItem("showRows", std)		
@@ -677,27 +683,27 @@ main ={
 			},
 		container : function (data, htmlSer) {
 			var html_icono_desplegar = (data.servicios.length <= data.tiempoServicios) 
-				? "<span class ='icon-angle-down fnExtend' ></span>"
+				? "<i class ='icon-angle-down fnExtend' ></i>"
 				:""
 			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
 			var nota  = $.isEmpty(data.nota)?'':data.nota
 			var html = "\
 				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+main.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
 					<div id ='"+data.idUsuario+"' class='nombre'> \
-						<span class ='icon-user-1'></span> \
+						<i class ='icon-user-1'></i> \
 						<span>"+data.nombre+"</span> \
 					</div> \
 					<div class='iconos'>"+ 
 					html_icono_desplegar
 					+"<div class='icons_crud'>\
-							<span class ='fnEdit icon-pencil-1'></span>  \
-							<span class ='fnDel icon-trash'></span>  \
+							<i class ='fnEdit icon-pencil-1'></i>  \
+							<i class ='fnDel icon-trash'></i>  \
 						</div>\
-						<span class ='fnMove icon-move '></span>  \
+						<i class ='fnMove icon-move '></i>  \
 					</div> \
 					<div class='servicios "+main.unidadTiempo(data.tiempoServicios)+"'>"+htmlSer+"</div> \
 					<div class='note "+ claseNotas + "'> \
-						<span class='icon-note'></span> \
+						<i class='icon-note'></i> \
 						<span class='text_note'>"+nota+"</span> \
 					</div> \
 				</div> \
@@ -920,7 +926,8 @@ menu = {
 			}
 			
 		 },
-		estado: (estado, callback)=>{
+		estado: (estado, callback)=>{ 
+			let w = 0 
 			//Inicia el 
 			if($.isEmpty(estado) && estado != 0){
 				estado = 1
@@ -929,44 +936,46 @@ menu = {
 
 			// si es un movil solo tiene dos estados 
 			if(Device.isCel() && estado > 1 ) {
-					localStorage.setItem("menuOpen",0)
+				localStorage.setItem("menuOpen",0)
 				estado = 0			
 			}
-		
+
 			switch (parseInt(estado)){
-				case 1: 				
-					$('#mySidenav').width(50)
+				case 1: 
+					w = 50 	 	
+					$('#mySidenav').width(w)
 						.find('a').width(20).end()
-						.find('.caption').hide()	
+						.find('.caption').hide(); 	
 					if(!Device.isCel()){
-						$('#login')
-							.width((main.login.ancho - 35))
-							.animate({'left':35}, callback)
+						$('main')
+							.width((main.ancho - w))
+							.animate({'left':w}, callback); 
 					}					
 					localStorage.setItem("menuOpen",1)
 				break
 				case 2: 
-					
-					$('#mySidenav').width(150)
-						.find('a').width(120).end()
+					w = 150;
+					$('#mySidenav').width(w)
+						.find('a').width('120px').end()
 						.find('.caption').show()
 					if(!Device.isCel()){
-						$('#login')
-							.width((main.login.ancho - '90'))
-							.animate({'left':90}, callback)
+						$('main')
+							.width((main.ancho - w))
+							.animate({'left':w}, callback)
 					 }
 					localStorage.setItem("menuOpen",2)
 			
 				break
 				default:
-					$('#mySidenav').width(0)
-					$('#login').removeAttr( 'style' )	
+					w = 0
+					$('#mySidenav').width(w)
+					$('main').removeAttr( 'style' )	
 					
-					localStorage.setItem("menuOpen",0)
+					localStorage.setItem("menuOpen",w)
 				
-			}
+			 }
 			main.lbl.widht = $('.celda:visible').first().width()
-			main.login.ancho = $('#login').width()
+			main.ancho = $('main').width()
 			$('.lbl').width(main.lbl.widht)
 		 },
 		contacto:{
@@ -982,7 +991,8 @@ menu = {
 		
 			}
 		}
-	 }, 
+	 },
+	 
 	status: function (capa){
 		var add = $('#btnAdd'),
 			reset 	= $('#btnReset'),
@@ -1008,7 +1018,6 @@ menu = {
 				menu.enabled(show,calendar)
 				break;
 			case 'crearCita':
-
 				break;
 			case 'usuarios':
 				menu.enabled(add,search)
@@ -1064,7 +1073,7 @@ menu = {
 				.find('.animate').hide().end()
 				.siblings("[class*='lnr-']").show()
 		 }
-		switch($('.capasPrincipales:visible').attr('id')) {
+		switch($('.capasPrincipales.activa').attr('id')) {
 			case 'config':
 				config.guardar(_loadHide)
 				break;
@@ -1089,20 +1098,21 @@ menu = {
 		 }
 	 },
 	show: function (){
-		switch($('.capasPrincipales:visible').attr('id')) {
+
+		switch($('.capasPrincipales.activa').attr('id')) {
 			case 'main':
 				main.inactivas.click()
 			break;
 		}
 	 },
 	edit: function (){
-		switch($('.capasPrincipales:visible').attr('id')) {
+		switch($('.capasPrincipales.activa').attr('id')) {
 			case '':
 			break;
 		 }
  	 },
 	add: function (){
-		switch($('.capasPrincipales:visible').attr('id')) {
+		switch($('.capasPrincipales.activa').attr('id')) {
 			case 'agendas':
 				agendas.add();
 				break;
@@ -1110,11 +1120,11 @@ menu = {
 				usuarios.dialog(-1);
 				break;
 			case 'servicios':
-				 servicios.dialog(-1);
+				servicios.dialog(-1);
 				break;
 			case 'familias':
 				familias.dialog(-1);
-				 break;
+				break;
 			case 'horarios':
 				horario.nuevo()
 				break
@@ -1127,14 +1137,14 @@ menu = {
 		 }
 	 },
 	del: function (){
-		switch($('.capasPrincipales:visible').attr('id')) {
+		switch($('.capasPrincipales.activa').attr('id')) {
 			case 'horarios':
 				horario.del();
 				break;
 		 }
 	 },
 	reset:function(){
-		switch($('.capasPrincipales:visible').attr('id')) {
+		switch($('.capasPrincipales.activa').attr('id')) {
 			case 'main':
 				main.refresh('main' , function () {
 					$('#btnReset .animate').hide()
@@ -1153,13 +1163,14 @@ menu = {
 		}
 	 },
 	load:function (){
-
 		menu.exit()
-
 	 },
 	exit: function (){
 		$('#txtBuscar').val("")
-			.parent().hide('slide',{direction:'right'})
+			.parent().hide('slide',{direction:'right'});
+		$('#btnSearch')
+			.find('i').removeClass().addClass('lnr-magnifier').end()
+			.find('span').text('Buscar');	
 
 	 },
 	options : function($this){
@@ -1170,11 +1181,12 @@ menu = {
 
 		servicios.init();	
 	 },
-	buscar :function(txt, sec, col){
+	buscar :function(txt, sec){
+
 		$sec = $("#"+sec)
 		$encontrados =txt.match(/^@$/)
-			?$sec.find('td.email:contains('+txt+')')
-			:$sec.find('td.busqueda:contains('+txt+')')
+			?$sec.find('.email:contains('+txt+')')
+			:$sec.find('.busqueda:contains('+txt+')')
 		if($encontrados.length){
 			$sec.find("tbody tr").hide().end()
 			$encontrados.parents('tr').show()
@@ -1282,11 +1294,11 @@ notas = {
 			action : GET , 
 			fecha : fecha
 		}
-		$('div#mySidenav a#menu5.hay-nota').removeClass('hay-nota')
+		$('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
 		$.post(INDEX, data, function (r, textStatus, jqXHR) {
 			
 			if(r.success){
-				$('div#mySidenav a#menu5').addClass('hay-nota')
+				$('#mySidenav #menu5').addClass('hay-nota')
 				for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
 					notas.crear(datos[i])							
 				}		
@@ -1325,220 +1337,225 @@ Device = {
 		}
 	 }
 }
-$(function(){
-	main.login.ancho = $('#login').width()
-	main.inactivas.change(localStorage.getItem("showRows"))
-	main.inactivas.comprobar()
-	main.lbl.widht( $('.celda:visible').first().width())
+// Init 
+main.ancho = $('main').width()
+main.inactivas.change(localStorage.getItem("showRows"))
+main.inactivas.comprobar()
+main.lbl.widht( $('.celda:visible').first().width())
 
-	//Construyo la "clase" device para saber el dispositivo usado
- 	Device.init()
-	if(Device.isCel()) localStorage.setItem('menuOpen',0)
+//Construyo la "clase" device para saber el dispositivo usado
+Device.init()
+if(Device.isCel()) localStorage.setItem('menuOpen',0)
 
-	cargarDatepicker()
-	colorearMenuDiasSemana()
+cargarDatepicker()
+colorearMenuDiasSemana()
 
-	menu.nav.estado(localStorage.getItem("menuOpen"))
+menu.nav.estado(localStorage.getItem("menuOpen"))
 
-	$('body')
-		.on('click',".idDateAction",function(){
-		
-		if(!$(this).data('disabled')) {
-			sincronizar($(this).data('action'));
+$('body')
+	.on('click',".idDateAction",function(){
+	
+	if(!$(this).data('disabled')) {
+		sincronizar($(this).data('action'));
+	}
+		})
+	.on('click','#boton-menu', function(){
+		var estado = parseInt(localStorage.getItem("menuOpen"))+1
+
+		menu.nav.open(estado)
+		menu.nav.estado(estado)
+
+	})
+$('.tabcontrol').tabcontrol()	
+
+$('html')
+	.on('click','.close',function(e){dialog.close()})
+	.on('change','input',function(){$(this).removeClass('input-error')})
+	.on('change','#lstSerSelect',function(){
+		var id = $(this).val();
+		// servicios.mostrar(id);
+		$('#lstSerSelect').each(function(){
+			$(this).find('option[value='+id+']').attr('selected','selected');
+		})
+		})
+
+$('#btnContacto').click(function(){
+	if($('#mnuContacto').is(':visible')){
+		menu.nav.contacto.cerrar()
+	}
+	else
+	{
+		menu.nav.contacto.abrir()
+	}
+	})
+
+$('#frmContact button')
+	.click(function(event){			
+		event.preventDefault()
+		var data = $("#frmContact").serializeArray()
+		data.push({name : 'controller' , value : 'contacto'})
+
+		data[1].value = normalize(data[1].value)
+		$.post(INDEX,data,function(r){
+			if(r.success)
+				notify.success('Email mandado con éxito') 
+			else 
+				notify.error('No se pudo mandar el email!! <br> Compruebe que estan todos los datos')
+			
+			menu.nav.contacto.cerrar()
+			btn.load.hide()
+		},'json')
+	})
+
+$(".login")
+	.on('focusout','[data-max-leght]',function(){
+		var $this = $("[data-max-leght]");
+		if($this.val().length>$this.data("max-leght")){
+			$this.removeClass("valid");
+			$this.addClass("invalid");
+		}else{
+			$this.removeClass("invalid");
+			$this.addClass("valid");
 		}
-		  })
-		.on('click','#boton-menu', function(){
-			var estado = parseInt(localStorage.getItem("menuOpen"))+1
+	});
 
-			menu.nav.open(estado)
-			menu.nav.estado(estado)
+$('#main')
+	.on('click','.lbl',function(e){
+		var val = ($(this).css('z-index')==3)?1:3
+		$('.lbl').css({'z-index': 2 })	
+		$(this).css({'z-index': val})	
+		
+		main.lbl.resize($(this))
+		})
+	.on('click','.fnCogerCita',function(){
+		localStorage.setItem('agenda', $(this).parent().attr('agenda'))
+		localStorage.setItem('hora', $(this).parents('tr').data('hour'))
+
+		mostrarCapa('crearCita')
+		})
+	.on('click','#mainLstDiasSemana a',function(){
+		var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
+		var diaB = parseInt($(this).data('value'));
+		sincronizar(diaB-diaA);
+		})
+	.on('change','#lstDiasSemana',function(){
+		var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
+		var diaB = parseInt($(this).val());
+		sincronizar(diaB-diaA);
+		})
+	.on('click','.icon-attention',function(e){
+		main.citasSup($(this));
+		e.stopPropagation()
+		})
+	.on('click','.fnEdit', function(e){
+		e.stopPropagation() 
+		main.edit($(this).parents('.lbl').attr('idcita'))
+		})
+	.on('dblclick','.lbl', function(e){
+		e.stopPropagation() 
+		main.edit($(this).attr('idcita'))
+		})
+	.on('click','.cita',function(e){
+		$(this).parent()
+			.find('.note')
+				.addClass('show')
+				.find('input')
+					.focus();
 
 		})
-	$('.tabcontrol').tabcontrol()	
+	.on('click','.lbl .fnDel',function(e){
+		$( ".selector" ).draggable( "option", "disabled", true );
+		e.stopPropagation();
+		main.del($(this).parents('.lbl').attr('idcita'))
+		})
 
-	$('html')
-		.on('click','.close',function(e){dialog.close()})
-		.on('change','input',function(){$(this).removeClass('input-error')})
-		.on('change','#lstSerSelect',function(){
-			var id = $(this).val();
-			// servicios.mostrar(id);
-			$('#lstSerSelect').each(function(){
-				$(this).find('option[value='+id+']').attr('selected','selected');
-			})
-		 })
-	
-	$('#btnContacto').click(function(){
-		if($('#mnuContacto').is(':visible')){
-			menu.nav.contacto.cerrar()
+	.on('change','.nombreagenda',function(){
+
+		var data = {
+			id : $(this).data('agenda'), 
+			nombre : $(this).val(),
+			controller: 'agendas',
+			action:'saveName'
 		}
-		else
-		{
-			menu.nav.contacto.abrir()
+			$.post(INDEX,data,function(r){
+				
+			},'json')
+
+		})
+	.find('.cuerpo')
+		.on("swipeleft",function(){sincronizar(1)})
+		.on("swiperight",function(){sincronizar(-1)})
+
+$('#navbar')
+	.on('click','#btnShow',menu.show)
+	.on('click','#btnEdit',menu.edit)
+	.on('click','#btnSearch',function(){
+		if ($('#txtBuscar').is(':hidden')){
+			$('#txtBuscar')
+				.parent().show('slide',{direction:'right'}).end()
+				.focus();
+			$('#btnSearch')
+				.find('i').removeClass().addClass('lnr-cross').end()
+				.find('span').text('Cerrar');
+				
+		}else{
+
+			menu.load();
+
 		}
 	 })
-
-	$('#frmContact button')
-		.click(function(event){			
-			event.preventDefault()
-			var data = $("#frmContact").serializeArray()
-			data.push({name : 'controller' , value : 'contacto'})
-
-			data[1].value = normalize(data[1].value)
-			$.post(INDEX,data,function(r){
-				if(r.success)
-					notify.success('Email mandado con éxito') 
-				else 
-					notify.error('No se pudo mandar el email!! <br> Compruebe que estan todos los datos')
-				
-				menu.nav.contacto.cerrar()
-				btn.load.hide()
-			},'json')
-		})
-
-	$(".login")
-		.on('focusout','[data-max-leght]',function(){
-			var $this = $("[data-max-leght]");
-			if($this.val().length>$this.data("max-leght")){
-				$this.removeClass("valid");
-				$this.addClass("invalid");
-			}else{
-				$this.removeClass("invalid");
-				$this.addClass("valid");
-			}
-		});
-
-	$('#main')
-		.on('click','.lbl',function(e){
-			var val = ($(this).css('z-index')==3)?1:3
-			$('.lbl').css({'z-index': 2 })	
-			$(this).css({'z-index': val})	
-			
-			main.lbl.resize($(this))
-		 })
-		.on('click','.fnCogerCita',function(){
-			localStorage.setItem('agenda', $(this).parent().attr('agenda'))
-			localStorage.setItem('hora', $(this).parents('tr').data('hour'))
-
-			mostrarCapa('crearCita')
-		 })
-		.on('click','#mainLstDiasSemana a',function(){
-			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
-			var diaB = parseInt($(this).data('value'));
-			sincronizar(diaB-diaA);
-		 })
-		.on('change','#lstDiasSemana',function(){
-			var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
-			var diaB = parseInt($(this).val());
-			sincronizar(diaB-diaA);
-		 })
-		.on('click','.icon-attention',function(e){
-			main.citasSup($(this));
-			e.stopPropagation()
-	    	})
-		.on('click','.fnEdit', function(e){
-			e.stopPropagation() 
-			main.edit($(this).parents('.lbl').attr('idcita'))
-		 })
-		.on('dblclick','.lbl', function(e){
-			e.stopPropagation() 
-			main.edit($(this).attr('idcita'))
-		 })
-		.on('click','.cita',function(e){
-			$(this).parent()
-				.find('.note')
-					.addClass('show')
-					.find('input')
-						.focus();
-
-		 })
-		.on('click','.lbl .fnDel',function(e){
-			$( ".selector" ).draggable( "option", "disabled", true );
-			e.stopPropagation();
-			main.del($(this).parents('.lbl').attr('idcita'))
-		 })
-
-		.on('change','.nombreagenda',function(){
-
-			var data = {
-				id : $(this).data('agenda'), 
-				nombre : $(this).val(),
-				controller: 'agendas',
-			 	action:'saveName'
-			}
-			 $.post(INDEX,data,function(r){
-				 
-			 },'json')
-
-		 })
-		.find('.cuerpo')
-			.on("swipeleft",function(){sincronizar(1)})
-			.on("swiperight",function(){sincronizar(-1)})
-
-	$('#navbar')
-		.on('click','#btnShow',menu.show)
-		.on('click','#btnEdit',menu.edit)
-		.on('click','#btnSearch',function(){
-			if ($('#txtBuscar').is(':hidden')){
-				$('#txtBuscar')
-					.parent().show('slide',{direction:'right'}).end()
-					.focus()
-			}else{
-				menu.load();
-			}
-		 })
-		.on('change','#txtBuscar',function(){
-			if($('#txtBuscar').val()!=""){
-				menu.buscar(
-					$('#txtBuscar').val(),
-					$('.capasPrincipales:visible').attr('id')
-				)
-			}
-		 })
-		.on('click','#btnReset',function(){
-			if($('#usuarios').is(':visible')) usuarios.select('A');
-		 })
-		.on('click','#btnSave',menu.save)
-		.on('keyup','#txtBuscar',function(event){
-			if(event.which==13)menu.load()
-			if(event.which==27){
-				event.stopPropagation
-				menu.exit();
-			}
-		 })
-		.on('click','#btnAdd',menu.add)
-		.on('click','#btnDel',menu.del)
-		.on('click','#btnReset',menu.reset)
-		.on('click','#btnOptions #chckOpUsersDel',menu.options)
-		.find('#showByTime')
-			.on('click','input', function(){
-					$(this).prop('checked',true)
-					historial.get($(this).val())
-				}
-			).end()
-
-	$('#mySidenav')
-		.find('[name="menu[]"]').parent().click(function(){
-			if(Device.isCel()) {
-				menu.nav.open(0)	
-				menu.nav.estado(0)
-			}
-
-			mostrarCapa($(this).find('a').data('capa'));
-			
-		 })
-		 
-	$('#notas')
-		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('id'))})
-		.on( "click", ".fnDel", function(e){
-			e.stopPropagation()
-			notas.delete(
-				$(this).parent().attr('id')
+	.on('change','#txtBuscar',function(){
+		if($('#txtBuscar').val()!=""){
+			menu.buscar(
+				$('#txtBuscar').val(),
+				$('.capasPrincipales.activa').attr('id')
 			)
+		}
 		})
-		.on('click','#nuevaNota',function(){
-			notas.dialog(-1) 
+	.on('click','#btnReset',function(){
+		if($('#usuarios').is(':visible')) usuarios.select('A');
 		})
+	.on('click','#btnSave',menu.save)
+	.on('keyup','#txtBuscar',function(event){
+		if(event.which==13) menu.load();
+		if(event.which==27) 
+			menu.exit();
+			event.stopPropagation(); 
+	 })
+	.on('click','#btnAdd',menu.add)
+	.on('click','#btnDel',menu.del)
+	.on('click','#btnReset',menu.reset)
+	.on('click','#btnOptions #chckOpUsersDel',menu.options)
+	.find('#showByTime')
+		.on('click','input', function(){
+				$(this).prop('checked',true)
+				historial.get($(this).val())
+			}
+		).end()
 
-	main.lbl.load()
+$('#mySidenav')
+	.find('[name="menu[]"]').parent().click(function(){
+		if(Device.isCel()) {
+			menu.nav.open(0)	
+			menu.nav.estado(0)
+		}
 
-})
+		mostrarCapa($(this).find('a').data('capa'));
+		
+		})
+		
+$('#notas')
+	.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('id'))})
+	.on( "click", ".fnDel", function(e){
+		e.stopPropagation()
+		notas.delete(
+			$(this).parent().attr('id')
+		)
+	})
+	.on('click','#nuevaNota',function(){
+		notas.dialog(-1) 
+	})
+
+main.lbl.load()
+// Añadimos etiqueta al head
+$('<title/>').text('AgendaOnline zona admin').appendTo('head')

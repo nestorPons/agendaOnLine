@@ -1,38 +1,31 @@
 <?php  
-$action = 'login' ;
-
-$Login = new \models\Login;
-
-
 $_POST = $Forms->sanitize($_POST);
 
+$Login = new \models\Login;
+// Si hay un post token vengo de validar email de registro
+// si existe post pinpass hay que validar entrada por pin
+// si no que valide el formulario normal de entrada
+// Post token no es igual que session token 
 $script  =  
-(isset($_POST['token']))
-	?'newpass.php'
-	:(isset($_POST['pinpass'])
-		?'pinpass.php'
-		:'loginpass.php' );
-		
+	(isset($_POST['token']))
+		// Viene de recordar contraseña
+		?'newpass.php'
+		:(isset($_POST['pinpass'])
+			// Viene de loguearse con pin
+			?'pinpass.php'
+			// Viene de login principal
+			:'loginpass.php' ); 
+
+
 $return = include URL_SCRIPTS . 'validates/' . $script;
 
-if (isset($return['action'])){
-	$args = isset($return['args']) ? '?' . $return['args'] :  '' ; 
-	//COMPROBAR EL PIN
-	if(isset($_POST['recordar'])){
-		if(empty($Login->pin)){
-			$return['action'] = 'newPin'; 
-		}
-	}
-	$action = $return['action']. $args ;
-} else $action = 'login';
+if( !isset($return['action']) || $return['action'] == 'login'){
 
-//var_dump ($return);
-header('Location: ' . $action);
-
-function err(string $err, int $num = 0, string $action = 'login'){
-	return array(
-		'args' => 'err=' . $err , 
-		'num' => $num , 
-		'action' => $action
-	);
+	// En newpass no se crea el action hay que  enviarlo al login
+	// si el logeo es erroneo se devuelve jsjon con el error
+	header('Content-Type: application/json');
+	echo json_encode($return);
+}else{
+	// Si es correcto se devuelve la vista
+	include (URL_CONTROLLERS . $return['action'] . '.php');
 }

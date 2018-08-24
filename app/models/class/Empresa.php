@@ -1,23 +1,34 @@
 <?php namespace models;
 
 class Empresa extends \core\BaseClass {
-   private $data, $code, $conf_css, $conf, $plan;
+   private $data, $code, $conf_css, $conf, $plan, $dbName;
 
     function __construct($codeEmpresa){
         parent::__construct('empresas', 'aa_db', 2);
-
+ 
 //AKI :: implementar metodo para crear una session con los datos 
 //y no tener que hacer tantas peticiones 
 //ademas debera actualizar cadavez que se cambien los datos INSERT o UPDATE
 
+        $this->code = $codeEmpresa; 
+        $this->dbName = PREFIX_DB . $codeEmpresa;
+        
         $this->data = $this->getBySQL("replace(`nombre_empresa`,' ','') = '$codeEmpresa' LIMIT 1",  MYSQLI_ASSOC)[0]??false;   
-        $this->code = \core\Tools::normalize($this->data['nombre_empresa']); 
+        
         $planes = new \core\BaseClass('planes','aa_db',2); 
 
-        $this->plan = $planes->getById($this->data['plan']); 
+        $this->plan = $planes->getById((int)$this->data['plan']); 
+
+        parent::__construct('config', $this->dbName , 2);
         
-        parent::__construct('config', PREFIX_DB. $this->code, 2);
-        
+    }
+    public function dbName(string $dbName=null){
+        if($dbName!=null) $this->dbName = $dbName; 
+        return $this->dbName;
+    }
+    public function code(string $code=null){
+        if($code!=null) $this->code = $code; 
+        return $this->code;
     }
     public function name(){
         return $this->data['nombre_empresa']; 

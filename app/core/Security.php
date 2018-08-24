@@ -27,7 +27,7 @@ echo BR;
                 &&isset($_SESSION['SKey'])
                 &&$_SESSION['SKey']==$_COOKIE['token']
                 &&$_SESSION['agent']==$_SERVER['HTTP_USER_AGENT']
-                //&&$_SESSION['ip'] == $_SERVER['REMOTE_ADDR']   
+               // &&$_SESSION['ip'] == $_SERVER['REMOTE_ADDR']   
                 &&$_SESSION['device'] == self::getDevice()
             :true;
             
@@ -48,6 +48,7 @@ echo BR;
         $httponly  =  true ; 
         // obliga a utilizar sólo las cookies. 
         if  ( ini_set ( 'session.use_only_cookies' ,  1 )  ===  false )  { 
+            echo('error: session.use_only_cookies');
             exit() ; 
         } 
         // Obtiene las cookies actuales params. 
@@ -67,13 +68,10 @@ echo BR;
        //session_regenerate_id(true);      // regenerado la sesión, elimine el antiguo. (Da problemas al actualizar los dias de crearcita.horas)
 
      }
-    public function loadSession($idUser,$company, $admin=0 ){
-        $_SESSION['ancho'] = $_POST['ancho']; 
-        $_SESSION['id_usuario'] = $idUser;
-        $_SESSION['bd'] =$company ; 
+    public function loadSession($idUser,$company, $admin=0 ){  
+        $_SESSION['id_usuario'] = $idUser; 
         $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'];
         $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-        $_SESSION['admin_sesion']= $admin;
         $_SESSION['SKey'] = bin2hex(random_bytes(20));
         
 

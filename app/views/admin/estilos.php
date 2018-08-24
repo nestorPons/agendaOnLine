@@ -3,11 +3,10 @@
         <div class="aling-left">
             <h4  id='lblColorCompany'>Seleccione los colores de la empresa : </h4>
             <input type="color" id="btnColor1" value="<?= CONFIG['color_main']?>">
-            <span class='caption'> Color Principal </span>
+            <span class='caption'>Color Principal</span>
             <br>
             <input type="color" id="btnColor2" value="<?= CONFIG['color_secon']?>"> 
-            <span class='caption'>Color Secundario 
-            </span>
+            <span class='caption'>Color Secundario</span>
             <br>
         <hr>
 

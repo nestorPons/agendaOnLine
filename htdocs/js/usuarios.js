@@ -49,39 +49,20 @@ var usuarios = {
 		.done(function(rsp){
 
 			if(data.dateBaja == undefined){
-				var $this  =$('#frmUsuarios'),
-					chckEmail =$.isEmpty(data.email)?'No':'Si',
-					chckObs = $.isEmpty(data.obs)?'No':'Si',
-					admin = $.isEmpty(data.admin)?0:1,
-					activa = $.isEmpty(data.activa)?1:0
 
-					if (data.id == -1 ){ 
-						//NUEVO ...
-						data.id = rsp.id 
-						usuarios.rows.add(data)
-						notify.success('Usuario guardado con éxito!.','Nuevo usuario',false, $('#crearCita #cliente'))
-						
-					}else{ 
-	
-						//EDITANDO	....
-						$('#rowUsuarios'+data.id)
-							.data('color', data.color)
-							.find('td[name="nom"]')
-								.html(data.nombre)
-								.data('value',data.nombre)
-							.end()
-							.find('td[name="tel"]').html(frm.tel).end()
-							.find('td[name="email"]')
-								.html(chckEmail)
-								.data('value',frm.email)
-							.end()
-							.find('td[name="obs"]')
-								.html(chckObs)
-								.data('value',frm.obs)
+				if (data.id == -1 ){ 
+					//NUEVO ...
+					data.id = rsp.id 
+					usuarios.rows.add(data)
+					notify.success('Usuario guardado con éxito!.','Nuevo usuario',false, $('#crearCita #cliente'))
+
+				}else{ 
+					//EDITANDO	....
+					usuarios.rows.edit(data)
 					notify.success('Usuario guardado con éxito!.','Usuario editado')						
-
-					
+	
 				}
+
 			}
 			if (dialog.isOpen == 'dlgUsuarios'){
 				dialog.close('dlgUsuarios')
@@ -97,14 +78,14 @@ var usuarios = {
 	
 	 },
 	rows: {
-		add : function(data, callback){
-			var $template = $('#usuarios').find('.template')
+		add : function(data){
+			let $template = $('#usuarios').find('.template')
  			
-				$template.clone()
-						.removeClass('template')
-						.attr('id', 'rowUsuarios'+data.id)
-						.data('value',data.id)
-						.data('color',data.color)
+			$template.clone()
+					.removeClass('template')
+					.attr('id', 'rowUsuarios'+data.id)
+					.data('value',data.id)
+					.data('color',data.color)
 					.find('[name=id]').html(data.id).end()
 					.find('[name=nom]')
 						.html(data.nombre)
@@ -124,9 +105,48 @@ var usuarios = {
 						.data('value',data.admin)
 						.end()
 					.insertAfter($template)
-						
+									// Guardar en datalist 
 			$('#lstClientes').append(
-				'<option data-id='+data.id+' data-name="'+normalize(data.nombre)+'" value = "' + data.nombre + '">'+data.id+'</option>')	
+				'<option data-id="'+data.id+'" data-name="'+normalize(data.nombre)+'" value="'+data.nombre+'" data-color="#'+data.color+'"></option>'
+			)			
+		
+		},
+		edit : function(data){
+			var $this  =$('#frmUsuarios'),
+				chckObs = $.isEmpty(data.obs)?'No':'Si',
+				admin = $.isEmpty(data.admin)?0:1,
+				activa = $.isEmpty(data.activa)?1:0
+
+			$('#rowUsuarios'+data.id)
+				.data('color', data.color)
+				.find('td[name="nom"]')
+					.html(data.nombre)
+					.data('value',data.nombre)
+				.end()
+				.find('td[name="tel"]').html(data.tel).end()
+				.find('td[name="email"]')
+					.html(data.email)
+					.data('value',data.email)
+				.end()
+				.find('td[name="obs"]')
+					.html(chckObs)
+					.data('value',data.obs)
+			
+			// Editar el datalist 
+			$('#lstClientes')
+				.find('option[data-id="'+data.id+'"]')
+					.attr('data-name',normalize(data.nombre))
+					.attr('data-color',data.color)
+					.val(data.nombre)
+			//Editar los lbl
+			$('.lbl').each(function(){
+				let $name = $(this).find('div.nombre'),
+					idUserLbl = $name.attr('id');
+
+				if(idUserLbl == data.id ) {
+					$name.find('span').text(data.nombre)
+				}
+			})
 		},
 		del : function(){
 			$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1)

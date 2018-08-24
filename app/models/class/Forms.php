@@ -86,6 +86,21 @@ class Forms{
 
         if(isset($post['controller'])) unset($post['controller']);
         if(isset($post['action'])) unset($post['action']);
+
+        // combierto post a tipo de dato devuelto 
+        foreach($post as $k => $v){
+            if(!is_array($v) && !empty($v)){ 
+                if(!empty($v)){
+                    if(strtolower($v)==='true'){
+                        $post[$k] = true; 
+                    } elseif(strtolower($v)==='false'){
+                        $post[$k] = false; 
+                    } elseif ( is_numeric ( $v )){
+                        $post[$k] = (int)$v;
+                    }
+                }
+            }
+        }
         return $post;
      }
     private function  switchRules($key, $value){

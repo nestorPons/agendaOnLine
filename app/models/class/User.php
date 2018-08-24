@@ -7,46 +7,59 @@ class User extends \core\BaseClass {
 		
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
 
-	public function __construct( $id , $email = false){
+	public function __construct( $id ){
 
-		parent::__construct('usuarios');
+		try{
 
-		//Nuevo usuario
-		if($id==-1){
-			if($this->saveById(-1)) 
-				$this->id = $this->conn->id();
-			else
-				die('No se pudo guardar el usuario');
-		} else {
-			$this->id = $id; 
+			parent::__construct('usuarios');
+
+			if(filter_var($id, FILTER_VALIDATE_INT)){
+
+				if($id==-1){
+					if($this->saveById(-1)) 
+						$this->id = $this->conn->id();
+					else
+						die('No se pudo guardar el usuario');
+				} else {
+			
+					$this->user =  parent::getById($id); 
+					
+				}
+			} else {
+
+				$this->user = (filter_var($id, FILTER_VALIDATE_EMAIL))
+					? parent::getOneBy('email', $id)
+					: parent::getOneBy('nombre', $id);
+				
+			}
+			//Nuevo usuario
+
+			//Compruebo que exita la conf de usuario si no inicio un registro
+			/*
+			parent::__construct('usuarios_config');
+			if(!parent::getById($id)) parent::saveById(_NEW, ['id'=>$id]);
+			*/
+			
+			if ( $this->user ){
+				$this->id = $this->user['id'];
+				$this->nombre = $this->user['nombre'];
+				$this->email = $this->user['email'];
+				$this->pass = $this->user['pass'];
+				$this->tel = $this->user['tel'];
+				$this->dateBaja = $this->user['dateBaja'];
+				$this->dateReg = $this->user['dateReg'];
+				$this->admin = $this->user['admin'];
+				$this->status = $this->user['status'];
+				$this->pin = $this->user['pin'];
+				//Configuracion de usuario 
+				$this->color = $this->user['color'];
+				$this->idioma = $this->user['idioma'];
+				$this->authEmail = $this->user['authEmail'];
+
+			} 
+		} catch (Exeption $e){
+			throw new Exception('No existe el usuatio'); 
 		}
-
-		$this->user = ($this->id)
-			? parent::getById($this->id)
-		 	: $this->user = parent::getOneBy('email', $email);
-		
-		//Compruebo que exita la conf de usuario si no inicio un registro
-		/*
-		parent::__construct('usuarios_config');
-		if(!parent::getById($id)) parent::saveById(_NEW, ['id'=>$id]);
-		*/
-		
-		if ( $this->user ){
-			$this->nombre = $this->user['nombre'];
-			$this->email = $this->user['email'];
-			$this->pass = $this->user['pass'];
-			$this->tel = $this->user['tel'];
-			$this->dateBaja = $this->user['dateBaja'];
-			$this->dateReg = $this->user['dateReg'];
-			$this->admin = $this->user['admin'];
-			$this->status = $this->user['status'];
-			$this->pin = $this->user['pin'];
-			//Configuracion de usuario 
-			$this->color = $this->user['color'];
-			$this->idioma = $this->user['idioma'];
-			$this->authEmail = $this->user['authEmail'];
-
-		} 
 		
 	 }
 	public function get($args){
@@ -87,7 +100,15 @@ class User extends \core\BaseClass {
 	 }
 	public function getData(){
 		$Data = new \core\BaseClass('data'); 
-		return $Data->getBy(['idUsuario','fecha < CURRENT_DATE()'],[$this->id,'TRUE'] );
+		// Solicitamos las citas que el campo fecha sean superiores o iguales a la fecha actual 
+		$result =  $Data->getBy(['idUsuario','fecha < CURRENT_DATE()'],[$this->id,'TRUE'], '*', MYSQLI_ASSOC, 'ORDER BY fecha, hora ASC' );
+		
+		// Si el dia es el mismo quitamos del resultado las horas que ya hayan pasado
+		foreach($result as $k => $v){
+			if($v['fecha']==date('Y-m-d') && $v['hora'] < date('H:i:s')  ) unset($result[$k]);
+		}
+		
+		return $result;
 	 }
 	public function getCitas($idCita){
 		
@@ -178,17 +199,16 @@ class User extends \core\BaseClass {
 			$Mail->AddEmbeddedImage(URL_BACKGROUND, 'background-image', 'background.jpg');
 
 			$Mail->addAddress($this->email, $this->nombre);   
-			$Mail->url_menssage = URL_SOURCES . $file_mens;
+			$Mail->url_menssage = URL_EMAILS . $file_mens;
 			$Mail->Body    = \core\Tools::get_content($Mail->url_menssage,$this, $arr_args_mens);
 			$Mail->AltBody = $alt_body;
 			$Mail->Subject =  $alt_body;
 
-			return $Mail->send($this);
+			return $Mail->send($this) ;
 	
 		}else{
 			return false;
 		}
-	
 	 }
 	public function authEmail($val = null){
 		if($val==null)

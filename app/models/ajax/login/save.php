@@ -20,7 +20,7 @@ if ($Users->getOneBy('email',$_POST['email'],'id','num') != false) {
 
     $Mail->Subject = "Activar nueva cuenta";
     $Mail->addAddress($User->email, $User->nombre);   
-    $Mail->url_menssage = URL_SOURCES . 'mailactivate.php';
+    $Mail->url_menssage = URL_EMAILS . 'mailactivate.php';
     $Mail->Body    = \core\Tools::get_content($Mail->url_menssage, $User->getToken());
     $Mail->AltBody = 'Activar usuario: ' .  $User->token;
     $Mail->Subject =  "Activar cuenta";

@@ -1,5 +1,4 @@
 <?php 
-require_once URL_FUNCTIONS  . 'tools.php';
 require_once URL_CLASS      . 'Lbl.php';
 require_once URL_FUNCTIONS  . 'main.view.php';
 

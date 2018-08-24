@@ -26,6 +26,6 @@
     </div> 
      <div class='note <?=$val['obs']?'show':''?>'>
         <i class ='icon-note'></i>   
-        <i class ='text_note'><?=$val['obs']??null?></i>
+        <span class ='text_note'><?=$val['obs']??null?></span>
      </div> 	
 </div>

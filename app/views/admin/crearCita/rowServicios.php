@@ -22,7 +22,7 @@ $baja  = $ser[6] == 1 ? 'ocultar_baja' : ''  ;
             data-familia="<?=$familia?>"
         >
         <label for="<?=$codigo?>">
-            <span class="descripcion"><?=$descripcion?></span>
+            <span class="descripcion busqueda"><?=$descripcion?></span>
             <span class="tiempo"> (<?=$tiempo?>min.)</span>  
         </label>
     </td>

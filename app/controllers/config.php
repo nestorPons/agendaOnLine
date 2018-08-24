@@ -1,5 +1,4 @@
 <?php
-require_once URL_FUNCTIONS .'tools.php';
 
 if (!empty($_POST['oldPass']) && !empty($_POST['newPass'])){
     header('Content-Type: application/json');

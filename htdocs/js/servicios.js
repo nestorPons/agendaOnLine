@@ -31,7 +31,7 @@ var servicios = {
 		colorear_filas($('#servicios table'))
 		
 	 },
-	dialog:function(id){
+	dialog : function(id){
 		var fnLoad = function (isNew) {
 			var dlg = $('#dlgServicios')
 
@@ -137,7 +137,6 @@ var servicios = {
 		}
 	 },
 	actualizar: function(datos){
-
 		$('#servicios #rowServicios'+datos.id)
 			.css('class','fam'+datos.idFamilia)
 			.removeClass('mostrar_baja , ocultar_baja') 
@@ -170,12 +169,26 @@ var servicios = {
 				'data-familia' : datos.idFamilia ,
 			})
 
+			// Actualizar en los lbls
+			$('.lbl .servicio').each(function(){
+				let $span = $(this).find('span'), 
+					cod = $span.attr('id_codigo')
+
+				if(cod == datos.id){
+					$span
+						.attr('des_codigo',datos.descripcion)
+						.attr('tiempo',datos.tiempo)
+						.attr('title',datos.descripcion)
+						.text(datos.codigo)
+				}
+			})
 		
 		},
 	crear: function(data){
-					//NUEVO
+		//NUEVO
 		var mostrar = (data.mostrar==1)?'checked':'';
 
+		// secrea fila
 		$('#servicios').find('table tbody').append('\
 			<tr id="rowServicios'+data.id+'">\
 				<td class="ico"><a name="editar[]" class="icon-edit x6"></a></td>\
@@ -186,6 +199,7 @@ var servicios = {
 			</tr>\
 		')
 
+		// se crea en crearcita
 		$('#crearCita').find('.contenedorServicios tbody').append('\
 			<tr id="rowServicios'+data.id+'">\
 				<td>\

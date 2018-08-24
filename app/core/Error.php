@@ -24,11 +24,12 @@ class Error {
     //login 
     const E021 = "";
     const E022 = "Email ocupado."; 
-    const E023 = "Estado usuario desactivado.";
+    const E023 = "Usuario desactivado <br> Consulte con el administrador. ";
     const E024 = "Cuenta bloqueada. Consulte su administrador.";
     const E025 = "No se ha encontrado el usuario";
     const E026 = "Usuario o contraseña incorrectos.";
     const E027 = "Pin incorrecto";
+    const E028 = "Usuario desactivado <br> Acceda a recordar contraseña para activar la cuenta. ";
 
     //Sessiones y times
     const E050 = "Se ha excedido el tiempo de sessión";
@@ -55,7 +56,7 @@ class Error {
        $Login = new \models\Login; 
        $Login->logout(); 
        /*
-       echo "error<SCRIPT>window.location='/".CODE_EMPRESA."?logout=true&err=".self::E010."';</SCRIPT>"; 
+       echo "error<SCRIPT>window.location='/".$Empresa->code()."?logout=true&err=".self::E010."';</SCRIPT>"; 
        return false;
        */
     }

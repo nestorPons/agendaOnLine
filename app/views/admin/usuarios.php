@@ -9,7 +9,7 @@
 				<th class="tileOpc">Opcion</th>
 				<th class="tileId">Id</th>
 				<th class="tileName">Nombre</th>
-				<?php if(!$Device->isMovile){?>
+				<?php if(!$Device->isMobile()){?>
 					<th class="tileTel">Teléfono</th>
 					<th class="tileEmail">Email</th>
 					<th class="tileObs">Obs</th>

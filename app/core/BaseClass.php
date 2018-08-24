@@ -5,10 +5,10 @@ class BaseClass{
         $names,
         $type = MYSQLI_ASSOC,
         $multi_query = false,
-        $conn, 
         $sql = ''; 
 
     protected
+        $conn, 
         $table;  
 
     private 
@@ -16,14 +16,19 @@ class BaseClass{
         $log = false, 
         $return = false,  
         $logs = ['data','usuarios'];
-    
+    /**
+     * Constructor
+     *
+     * @param string $table la tabla que se quiere consultar
+     * @param string $db por defecto coge el nombre de  la base datos de un archivo de configuracion global
+     * @param int $user usuario para realizar las consultas 3 niveles de usuario con distintos privilegios
+     */
+    public function __construct(string $table , string $db = NAME_DB, int $user = 0 ) {
 
-    public function __construct($table , $bd = null, $user = 0 ) {
-        $db = $bd??NAME_DB;
-
-        $this->table = (string)$table ;        
+        $this->table = $table ;        
         $this->conn = new Conexion($db, $user);
      }
+
     public function getConnect () {
         return $this->conn ;
      }

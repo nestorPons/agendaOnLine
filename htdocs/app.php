@@ -8,5 +8,5 @@ date_default_timezone_set('Europe/Madrid');
 $url_base = str_replace('htdocs', '' , $_SERVER['DOCUMENT_ROOT'] ) ;
 //configuracion general 
 require_once $url_base . 'app/conf/constants.php' ;
-
+    
 require URL_CONTROLLERS . 'main.controller.php';

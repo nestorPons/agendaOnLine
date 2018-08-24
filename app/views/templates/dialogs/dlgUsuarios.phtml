@@ -1,5 +1,5 @@
 <div id="dlgUsuarios" class="dialog">
-	<span class="icon-cancel fnClose"></span>
+	<i class="fnClose" title="Salir"></i>
 	<h1 class="heading">Editar usuarios</h1>
 	<hr>
 	<form id="frmUsuarios">	
@@ -21,20 +21,20 @@
 			<span class="iconClass-inside icon-pencil-1"></span>
 		</div>
 		<div class="iconClass-container checkbox">
-				<span class="caption">Color cliente</span>
-				<input type="color" name="favcolor" id="color" value="null">
+			<input type="color" name="favcolor" id="color" value="null">
+			<span class="caption">Color cliente</span>
 		</div>
 		<div class="iconClass-container checkbox">
-				<span for= "sinColor" class="caption">Sin color</span>
-				<input type="checkbox" name="sinColor" id="sinColor" class="right" checked>
+			<input type="checkbox" name="sinColor" id="sinColor" class="right" checked>
+			<span for= "sinColor" class="caption">Sin color</span>
 		</div>
 		<div class="iconClass-container checkbox">
-			<span for = "activa" class="caption">Usuario desactivado.</span>
 			<input type="checkbox" name ="activa" id ="activa" class="right">
+			<span for = "activa" class="caption">Usuario desactivado.</span>
 		</div>
 		<div class="iconClass-container checkbox">
-			<span for = "admin" class="caption">Administrador.</span>
 			<input type="checkbox" name = "admin" id = "admin" class="right">
+			<span for = "admin" class="caption">Administrador.</span>
 		</div>
 		<button type="button" class="btn-success btnLoad aceptar" id="btnGuardarUsuario" data-value="Guardar">Guardar</button>
 		<button type="button" class="btn-danger btnLoad cancelar" id="btnEliminarUsuario" data-value="Eliminar">Eliminar</button>

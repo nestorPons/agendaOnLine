@@ -37,7 +37,7 @@ class Lbl {
     
     function __CONSTRUCT(){
         $this->conn = new \core\Conexion(NAME_DB);
-        $this->device = new \models\Device($_SESSION['ancho']); 
+        $this->device = new \models\Mobile_Detect; 
     }
     public function getById ($value) {
         $sql = "SELECT D.id AS idCita, U.id AS idUsuario, D.usuarioCogeCita, U.admin,  A.id AS idCodigo, A.codigo, D.agenda, U.nombre, D.obs, D.hora , D.fecha, D.lastMod ,A.tiempo, A.descripcion, D.tiempo_servicios
@@ -133,7 +133,7 @@ class Lbl {
             $servicies = $this->printArt($val['servicios']) ; 
             $number_services = $this->number_services;
             $note = $this->printNote($val['obs']) ;
-            $noMovile = !$this->device->isMovile; 
+            $noMovile = !$this->device->isMobile(); 
             $color = $c[$a]; 
 
             ob_start();

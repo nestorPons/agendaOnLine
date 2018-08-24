@@ -1,10 +1,6 @@
-<?php namespace models;
-
+<?php 
 $idUser = substr($_GET['args'],-4);
-$User = new User($idUser);
+$User = new models\User($idUser);
 
-if ($User->statusActive($_GET)) {
-    header('location:'. URL_LOGIN .'?success=Usuario activado con exito');
-} else {
-    header('location:'. URL_LOGIN .'?error=' .\core\Error::$last);
-}
+$args =  ($User->statusActive($_GET)) ? '?success=Usuario activado con exito' : '?error=' .\core\Error::$last; 
+header('location:'. '/'.$Empresa->code(). $args);

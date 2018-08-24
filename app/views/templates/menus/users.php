@@ -24,10 +24,10 @@
 </div>
 <nav  id= "navbar" class="app-bar" data-role="appbar">
 	<a href= "<?=CONFIG['web']??''?>"  target="_blank">
-		<img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
+		<img id="logo" src="/<?=URL_LOGO_48?>" alt="logo image"/>
 	</a>
 	<span class="app-bar-divider"></span>
-	<?php if(!$Device->isMovile){ ?>
+	<?php if(!$Device->isMobile()){ ?>
 		<ul class="app-bar-menu ">
 			<li class="noHover" id='lblUser'>
 				<span>Bienvenid@ </span>
@@ -36,15 +36,15 @@
 		<?php 
 	}?>
 	<ul class="app-bar-menu place-right" data-flexdirection="reverse">
-		<li><span class="lnr-home"></span></li>		
-		<li id="btnDatos"  data-menu="mnuDatosPersonales">
+		<li id="goHome" title="Inicio"><span class="lnr-home"></span></li>		
+		<li id="btnDatos"  data-menu="mnuDatosPersonales" title="Datos">
 			<span class="lnr-user"></span>
 		</li>
-		<li id="btnConfig" data-menu="mnuConfig">
+		<li id="btnConfig"  data-menu="mnuConfig" title="Configuración">
 			<span class="lnr-cog"></span>
 		</li>
-		<li id="mnuUserSalirSession" >
-			<a href="/<?=CODE_EMPRESA?>?destroy=true"  class="lnr-power-switch"></a>
+		<li id="btnExit" title="Salir" >
+			<i class="lnr-power-switch"></i>
 		</li>
 	</ul>
 </nav>

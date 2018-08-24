@@ -47,7 +47,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 							if ($array_horas) {	
 								// si es movil hay que poner pestañas
-								$class = '';/*$Device->isMovile?' hidden_responsive ':'';*/
+								$class = '';/*$Device->isMobile()?' hidden_responsive ':'';*/
 
 								$disabled = 'active' ;
 								if  (!_inArray($str_hora,$array_horas)) {
@@ -72,7 +72,7 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 										$estadoCelda = (isset($array_horas[$a]) && in_array($str_hora,$array_horas[$a]))? 'dentro_horario':'fueras_horario';
 										?>
-										<td id = "<?= generateId($fecha , $str_hora, $a) ?>" 
+										<td id = "<?= \core\Tools::generateId($fecha , $str_hora, $a) ?>" 
 											class="celda <?php  if( $label ); echo $class . " " . $estadoCelda ?> 
 											" agenda="<?= $a?>" >
 											<span class="hora alFondo <?= $clasehora ?> "><?= $str_hora?></span>

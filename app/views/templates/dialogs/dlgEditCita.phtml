@@ -1,36 +1,42 @@
 <div  class="dialog" id="dlgEditCita">
-	<span class="icon-cancel fnClose"></span>
+	<i class="fnClose" title="Salir"></i>
 		<h1>Editando...</h1>
 		<hr>
 		<div class="template" >
-			<span class="icon-cancel-circled fnDelSer"></span>
+			<i class="icon-cancel-circled fnDelSer"></i>
 			<span class='codigo'></span>
 			<span class='descripcion'></span>
 		</div>
 		<div class="iconClass-container icon-left">
+			<span class='caption'>Id usuario</span>
 			<input type="text" class="txt" id="id" readonly>
-			<span class="iconClass-inside  icon-angle-right"></span>
+			<i class="iconClass-inside  icon-angle-right"></i>
 		</div>
 		<div class="iconClass-container icon-left">
+			<span class='caption'>Nombre cliente</span>
 			<input type="search" class="txt" id='cliente' list='lstClientes' >
-			<span class="iconClass-inside icon-user"></span>
+			<i class="iconClass-inside icon-user"></i>
 		</div>
 		<div class="iconClass-container icon-left">
+			<span class='caption'>Fecha</span>
 			<input type="date" class="txt" id="fecha"  >
-			<span class="iconClass-inside  icon-calendar"></span>
+			<i class="iconClass-inside  icon-calendar"></i>
 		</div>
 		<div class="iconClass-container icon-left">
+			<span class='caption'>Hora</span>
 			<input type="time" class="txt" id="hora" step="900" >
-			<span class="iconClass-inside  icon-clock"></span>
+			<i class="iconClass-inside  icon-clock"></i>
 		</div>
 		<div class="iconClass-container icon-left">
 			<div class="iconClass-container icon-left">
+				<span class='caption'>Observaciones</span>
 				<input type="text" class="txt" id="obs" placeholder="Escribe una nota" >
-				<span class="iconClass-inside  icon-note"></span>
+				<i class="iconClass-inside  icon-note"></i>
 			</div>
 		</div>
 		<div id= "codigos"  class="iconClass-container icon-left lst"></div>
 		<div id= "newCodigo"  class="iconClass-container icon-left">
+			<span class='caption'>Servicios</span>
 			<select name="" id="lstServ">
 				<option value='' disabled selected hidden>Añadir servicios</option>
 				<?php 
@@ -42,12 +48,13 @@
 				}
 				?>
 			</select>
+		</div>
 		<div class="iconClass-container icon-left">
 			<div class="iconClass-container icon-left">
+				<span class='caption'>Tiempo total servicios</span>
 				<input type="number" class="txt" id="tiempoServicios" >
-				<span class="iconClass-inside  icon-clock"></span>
+				<i class="iconClass-inside  icon-clock"></i>
 			</div>
-		</div>
 		</div>
 		<button type="button" class="btn-success btnLoad" data-value="Guardar">Guardar</button>
 		<button type="button" class="btn-danger btnLoad" data-value="Eliminar">Eliminar</button>

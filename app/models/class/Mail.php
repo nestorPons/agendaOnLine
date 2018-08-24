@@ -32,5 +32,4 @@ class Mail extends PHPMailer {
 
         return $begin;
      }
-    
 }

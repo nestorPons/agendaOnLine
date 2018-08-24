@@ -1,11 +1,12 @@
 <?php namespace models;
 
 class Login extends \core\BaseClass {
-	private $num, $selector, $validator,  $pass, $Logs;
-	public $email, $id, $dateBaja, $admin, $user, $pin;	
-    const  URL_LOGIN = '/'.CODE_EMPRESA; 
+	private $num, $selector, $validator, $pass, $Logs, $company;
+	public $email, $id, $dateBaja, $admin, $user, $pin;
 
 	public function __construct(){
+        // Guardamos la empresa sera la misma en la nueva session
+        $this->company = $_SESSION['empresa'];
 		parent::__construct('usuarios');	
         $this->Logs = new \models\Logs; 	
 	 }
@@ -85,7 +86,7 @@ class Login extends \core\BaseClass {
         $this->attempts(0);
         
         $Mail = new Mail(new User($this->id));
-        $Mail->url_menssage = URL_SOURCES . 'mailActive.php';
+        $Mail->url_menssage = URL_EMAILS . 'mailActive.php';
         $Mail->send();
         $this->logout();
      }
@@ -94,9 +95,8 @@ class Login extends \core\BaseClass {
         $this->num = rand(1,4);
         $this->selector = $this->generateRandomString($this->num);
         $this->validator = $this->generateRandomString(rand(20,30));
-        $this->num *= 2;
-
-        return $this->validator.$this->selector.$this->num;
+        $this->num *= 2;   
+        return $this->id . '.' . $this->validator.$this->selector.$this->num;
      }
     public function decodeToken($token){
 
@@ -107,11 +107,16 @@ class Login extends \core\BaseClass {
         return array($this->num,$this->selector,$this->validator);
         
      }
-    private function generateRandomString(int $length = 10) { 
+    private function generateRandomString(int $length = 5) { 
         return bin2hex(random_bytes($length)); 
      } 
-    public function authByCookie(){
-
+    public function authByPin(){
+        /**
+         * Comprueba un token con el almacenado en la base de datos 
+         *
+         * @param string $tokenByPost el toquen auth cookie => auth
+         * @return devuelve el id usuario o falso
+         */
         $token = $this->codeToken();
         setcookie("auth", $token , time()+(60*60*24*60),'/');
 
@@ -126,7 +131,8 @@ class Login extends \core\BaseClass {
             } else return false;
 
      }
-    public function authToken($tokenByPost){
+
+    public function authToken(string $tokenByPost){
         $Auth = new \core\BaseClass('auth_tokens');
         $this->decodeToken($tokenByPost);
         $auth = $Auth->getOneBy('selector',$this->selector );
@@ -144,43 +150,56 @@ class Login extends \core\BaseClass {
 	    );
 
         $this->attempts(0);
-        
-        if ($remember) $this->authByCookie();
+       
+        if ($remember) $this->authByPin();
         
         $this->Logs->set($this->id, 'login'); 
 
         return ($this->admin>0)?'admin':'users' ;
      }
-    public function logout($deleteCookies = false) {
- 
-        if(isset($_SESSION['id_usuario']))
-            $this->Logs->set($_SESSION['id_usuario'], 'logout');
-            
-       if($deleteCookies){
-        foreach($_COOKIE as $key => $val)
-            setcookie($key, '', time() - 3600, '/');    
-         }
+    public function logout(bool $deleteCookies = false, bool $redirect = true) {
+
+        if($deleteCookies)
+            foreach($_COOKIE as $key => $val) setcookie($key, '', time() - 3600, '/');    
+         
 
         // Borra todas las variables de sesión  
+          
         $_COOKIE = array();
         $_SESSION = array();
-
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000,
                 $params["path"], $params["domain"],
                 $params["secure"], $params["httponly"]
-            );
+             );
          }
+
+        if(isset($_SESSION['id_usuario']))
+            $this->Logs->set($_SESSION['id_usuario'], 'logout');
+            
+        $url = $_SERVER["REQUEST_URI"]; 
         // Finalmente, destruye la sesión 
         session_destroy(); 
 
-        $idUser = $_SESSION['id_usuario']??false;
-        $Login = new \models\Login; 
-        header('location:'.URL_LOGIN.'?err='.\core\Error::getLast());
-        exit(1);
+
+        if (!empty(\core\Error::getLast())) $err = '?err=' . \core\Error::getLast();
+        if ($redirect){
+            header('location:'.$url. $err??'');
+            exit(1);
+        } else  {
+            return true;
+        }
 
      }
+    public function session_start(){
+        // Se crea una nueva session
+        session_start([
+            'cookie_lifetime' => 86400,
+        ]);
+        $_SESSION['empresa'] = $this->company;
+        return session_id()??false;
+    }
     public static function example(){
         $demo = PREFIX_DB . 'demo'; 
         $connDemo = new \core\Conexion(null,3);
@@ -196,6 +215,20 @@ class Login extends \core\BaseClass {
         $file  = file_get_contents(APP_FOLDER . 'db/demo.sql');
         $connDemo->multi_query($file);
         unset($connDemo);
-    }
-
+     }
+    public static function err(string $err, int $num = 0, string $action = 'login'){
+           /**
+         * Crea nuna descripcion del error de autentificacion
+         * 
+         * @param string $err mensaje de error
+         * @param int $num un codigo de error 
+         * @param string $action accion a realiar si se obtiene un error 
+         * @return void array con parametros de error
+         */
+        return array(
+            'error' => $err , 
+            'num' => $num , 
+            'action' => $action
+        );
+     }
 }

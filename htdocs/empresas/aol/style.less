@@ -501,23 +501,23 @@ a,i , .a{
  }
 .stepper{
 	border: 1px solid @base;
-	&>ul{
-		li{
-			background-color:@base !important;
-			border: 1px solid @color ;
-			&:before{
-				color: @color !important;
-			}
+	li{
+		border-radius: @radius * 2 ; 
+		background-color:@base !important;
+		border: 1px solid @color ;
+		&:before{
+			color: @color !important;
+		}
 
-			&:hover{
-				border: 1px solid @base ;
-				background-color:@color !important;
-				&:before{
-					color: @base !important;
-				}
+		&:hover{
+			border: 1px solid @base ;
+			background-color:@color !important;
+			&:before{
+				color: @base !important;
 			}
 		}
 	}
+	
 	.current{
 		background-color:@base !important;
 		border: 1px solid @color_secon ;
@@ -558,6 +558,8 @@ a,i , .a{
  }
 
 .cuerpo {
+	background-color : #fff; 
+
 	.caption {
 		font-family : @main-font;
 		color : @text-color;

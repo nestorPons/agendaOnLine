@@ -13,7 +13,7 @@ $action = $_POST['action'];
 include URL_AJAX . $_POST['controller'] . '/' . $action . '.php' ;
 
 // crear historia
-if ($action!='check'){ 
+if ($action!='check' && $r['success']){ 
     $id = $Data->getId()??$_POST['idCita'];
     //int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null 
     $Logs->set($_SESSION['id_usuario'], $action, $id, $r['success'], 'data');  

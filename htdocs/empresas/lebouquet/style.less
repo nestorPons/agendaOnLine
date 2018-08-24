@@ -6,7 +6,6 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
-@radio_popover: 10px;
 @base: #fff ;
 @t1:mix(@color,@text-color, 50%); 
 @t2:spin(@color, 20);
@@ -35,6 +34,7 @@
 @grey:#8a8a7b;
 @grey-bg:mix(@grey,#fff,50%);
 
+@fontSize: 1rem;
 @tabla_celda_borde: mix(@grey,#fff,10%);
 @border_color : mix(@text-color, #fff, 20%); 
 
@@ -70,6 +70,7 @@ p{
  }
 h1{
 	font-family:@title-font;
+	font-size:@fontSize + 0.5;
 	.border-radius;
  }
 h2{
@@ -77,10 +78,12 @@ h2{
  }
 h3{
 	font-family: @title-font;
+	font-size: @fontSize + 0.1;
 	color: @base;
  }
 h4{ 
 	font-family: @title-font;
+	font-size: @fontSize;
 	color: @main-font;
  }
 hr{	
@@ -104,6 +107,7 @@ a,i , .a{
  }
 .buttons( //mixin
 	@padding:0 ;
+	@fontSize: 1em;
 	@background:transparent
 	){
 	font-family: @main-font;
@@ -183,7 +187,7 @@ a,i , .a{
 	font-family: @main-font;
 	
 	#conTxtBuscar{
-		background-color: @color;
+		.color-menu(0);
 	}
 	.color-menu(5%);
 
@@ -239,20 +243,34 @@ a,i , .a{
 
  }
 .dialog{
+	i:first-child:hover{ color: @red; }
 	font-family: @main-font;
-	.border-radius (@radio_popover,@radio_popover,@radio_popover,@radio_popover);
     background-color: @base;
 	color: @text-color;
-	.icon-cancel{
-		&:hover{
-			color: @red;
-		}
-	}
 	.icon-plus-circled{
 		color : @green ;
 	}
+	#tblGuardarCita{
+		td:first-child {font-size:@fontSize - 0.1}
+	}
  }
+.display-inline-flex{
+	margin: 0 auto;
+	width: 60%;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	-webkit-flex-direction: column;
+	flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	flex-direction: row-reverse;
 
+	select{
+
+	}
+ }
 .error{
 	input[type=password],  input[type=text]{
 		border-color: @red !important;
@@ -266,9 +284,26 @@ a,i , .a{
 	}
  }
 .info{
+  font-size: 0.8em;
   color: @grey;
  }
 .input{
+	&-control{
+		display: inline-block;
+		min-height: 2.125rem;
+		height: 2.125rem;
+		position: relative;
+		vertical-align: middle;
+		margin: .325rem;
+		line-height: 1;
+		height: inherit;
+		.prepend-icon{
+			top: 50% !important;
+		}
+		input{
+			width:95%;
+		}
+	}
 	&-error{
 		&[type=text], &[type=password], &[type=email], &[type=number], &[type=search], &[type=tel],&[type=list],&[type=time] , &[type=date], &select, &textarea{
 			border-color: @red !important;
@@ -279,22 +314,64 @@ a,i , .a{
 			border-color: @green !important;
 		}
 	}
-
+	&-control{
+		height: inherit;
+	}
 	&-button{
-	input, select{
-		&:focus{
-			border-color: @blue;
+		//left: 10%;
+		position:relative;
+		//display:flex;
+		width:380px;
+		padding:5px;
+		margin:10px auto;
+		position: relative;
+		@media (max-width: 325px){
+			right: 4.5rem;
+
+		}
+		input, select{
+			z-index:0;
+			margin: 0;
+			padding: 0 0 0 5px ;
+			width: 100%;
+			&:focus{
+				outline: 0;
+				border-color: @blue;
+			}
+		}
+		.buttons{
+			display: flex;
+			z-index:2;
+			float: right;
+			 &-square{
+				overflow: visible;
+				float: right;
+				margin: 0;
+				padding: 0;
+				cursor: pointer;
+				height: 32px;
+				width: 32px;
+				text-transform: uppercase;
+				.border-radius(0,0,0,0);
+
+				&::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
+					border: 0;
+					padding: 0;
+				}
+			}
 		}
 	}
-	.buttons{
-			.border-radius(0,0,0,0);
-		}
-	}
-}
+ }
+.invalid{
+	border-color: #ff0000 ;
+ }
 .lstMenu{
 	a:hover{
 		color: @orange;
 	}
+ }
+.load{
+	margin: 50px auto;
  }
 .login{
 	font-family: @main-font;
@@ -311,19 +388,83 @@ a,i , .a{
 		}
 	}
 
-
+	.capasPrincipales{
+		display:none;
+		top:45px;
+		position: relative;
+		&.activa{
+			display:block;
+		}
+	}
 	&.about{
-	
+		position: absolute;
+		//bottom: 0;
+		margin: 10px auto;
+		padding: 8px;
+		font-size: @fontSize - 0.1;
+		background-color: transparent;
+		border: none;
+		margin-left: auto;
+		margin-right: auto;
+		left: 0;
+		right: 0;
+		p, a{
+			font-size: 0.8rem ;
+		}
 		.border-radius();
 		.box-shadow();
 		  a {
 			  color: @blue;
 			}
-	
+		&-links {
+			height: 30px;
+			& > a {
+			  float: left;
+			  width: 50%;
+			  line-height: 30px;
+			  font-size: @fontSize - 0.2;
+			}
+		}
+		&-author {
+		margin-top: 5px;
+			& > a {
+			  padding: 1px 3px;
+			  margin: 0 -1px;
+			}
+		}
+		@media screen and (max-width: 800px) {
+			font-size: @fontSize -0.1;
+		}
+		@media screen and (max-width: 590px) {
+			position:relative;
+		}
+		@media screen and (max-width: 425px) {
+			padding: 15px;
+		}
 	}
  }
-.politicLink{ color: @blue; }
-.popover{ .border-radius(); }
+.navigation{
+  width: 15em;
+  right: -15em;
+  position: absolute;
+  overflow: hidden;
+  display: block;
+  height: 10000%;
+  background-color: #000;
+  li{
+	display:block;
+  }
+ }
+.politicLink{
+	text-decoration: underline;
+	color: @blue;
+	font-size:@fontSize - 0.3;
+	&:before{content: '( ';}
+	&:after{content: ' )';}
+ }
+.popover{
+	border-radius : @radius;
+ }
 .lbl{
 	border : 2px solid @text1 ;
 	background : fade(@b1,80%);
@@ -333,6 +474,7 @@ a,i , .a{
 			color : @orange;
 		}
 	}
+
  }
 .tablas{
 	&.encabezado, .enca	bezado {
@@ -355,6 +497,7 @@ a,i , .a{
 	border: 1px solid @base;
 	&>ul{
 		li{
+			border-radius : @radius * 2;	
 			background-color:@base !important;
 			border: 1px solid @color ;
 			&:before{
@@ -444,12 +587,15 @@ a,i , .a{
 		.fnNotify(@red);
 	}
 	&.warning {
-		.fnNotify(@orange);
+		.fnNotify(@yellow);
 	}
 	&.info {
-		.fnNotify(@cyan);
+		.fnNotify(@blue);
 	}
  }
+.hay-nota{
+	background-color: darken(mix(@color_secon,@color, 70%),20%);
+}
 #mnuContacto{
 
 	h1, h4{
@@ -472,6 +618,7 @@ a,i , .a{
 	 }
 	.tile{
 		font-family: @main-font;
+		font-size: @fontSize;
 		color: @grey;
 		background-color: @base;
 	 }
@@ -490,9 +637,11 @@ a,i , .a{
 				.icon{
 					&-ok{
 						color: @green;
+					    font-size: @fontSize ;
 					}
 					&-load{
 						color: @blue;
+					    font-size: @fontSize ;
 					}
 				}
 			}
@@ -519,8 +668,6 @@ a,i , .a{
  }
 
 #user{
-	background-color: @base;
-
 	.tile-container{
 		*{
 			border-radius : @radius;
@@ -532,7 +679,9 @@ a,i , .a{
 		.cita{
 			background-color: @b1;
 		}
-		.colorSeccion(@c){	background-color: @c; }
+		.colorSeccion(@c){
+			background-color: @c;
+		}
 		section{
 			.contenido{
 				background-color: @base;
@@ -553,7 +702,10 @@ a,i , .a{
 			}
 
 		}
- 	}
+	 }
+	#navbar #logo{ 
+		border-color: darken(@color,30);
+	}
  }
 #notas{
 	.nota{
@@ -585,9 +737,10 @@ a,i , .a{
 	&-c5{background-color:@red !important}
 	&-warning{
 		background-color:#fff !important;
-	}
-	&-grey{background-color:@grey-bg !important}
-	&-white{background-color:#fff;}
+	 }
+	&-grey{ background-color:@grey-bg !important}
+	&-white{ background-color:#fff;}
+	
  }
 .color{
 	&0{

@@ -17,8 +17,8 @@ var festivo = {
 		$.post(INDEX,data,function(){
 			$('#festivos #'+id).hide("explode")
 
-			var index = $.inArray(Fecha.md(f),FESTIVOS)
-			if (index>-1) FESTIVOS.splice(index,1)
+			var index = $.inArray(Fecha.md(f),config.festivos)
+			if (index>-1) config.festivos.splice(index,1)
 		},'json');
 	 },
 	guardar:	function (callback){
@@ -56,8 +56,8 @@ var festivo = {
 					').end()
 					
 					hideShow('#nuevo .icon-plus','#nuevo .icon-load')
-					
-					FESTIVOS.push(Fecha.md(r.fecha)) ;
+					let f = config.festivos
+					f.push(Fecha.md(r.fecha)) ;
 
 					dialog.close() 
 

@@ -17,6 +17,6 @@ $('form').submit(function(e){
     var pass = $(this).find('#password').val()
     $(this).find('#password').val('')
     $(this).find('#rpassword').val('')
-    $(this).find('#pass').val(SHA(pass))
+    $(this).find('#pass').val(Tools.SHA(pass))
 
 })

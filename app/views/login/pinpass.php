@@ -1,10 +1,9 @@
 <?php
-    include URL_TEMPLATES . '/header.php' ;
-	$url_validate= '/'. CODE_EMPRESA .'/'. 'validar';
+	$url_validate= '/'. $Empresa->code() .'/'. 'validar';
 ?>
 	<title>Agenda Online zona login</title>
 	</head>
-	<body data-empresa="<?=CODE_EMPRESA?>" class="<?=CLASS_BACKGROUND?>" >
+	<body data-empresa="<?=$Empresa->code()?>" class="<?=CLASS_BACKGROUND?>" >
 		<div id="login" class="login login-form ">
             <section id="pinpass">
                 <a href= "<?=CONFIG['web']??''?>"  target="_blank">

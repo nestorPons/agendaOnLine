@@ -1,25 +1,14 @@
 "use strict"
 
-var ADD = 'add', SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'index' , 
-LEFT = 'left' , RIGHT = 'right', GET = 'get' 
-
-var HORARIOS = document.horarios
-var FESTIVOS = document.festivos
-
-var ruta = window.location.pathname;
-var arraynombre = new Array
-arraynombre = ruta.split("/")
-var nombreEmpresa = $('body').data('empresa')
-
-var horarios = new Array()
-var festivos = new Array()
+const ADD = 'add', SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'app.php' , 
+LEFT = 'left' , RIGHT = 'right', GET = 'get';
 
 //Contains para que sea insensible a mayusculas y minusculas
 jQuery.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
  return function( elem ) {
   return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
  }
-})
+ })
 $.fn.removeClassPrefix = function(prefix) {
     this.each(function(i, el) {
         var classes = el.className.split(" ").filter(function(c) {
@@ -28,7 +17,7 @@ $.fn.removeClassPrefix = function(prefix) {
         el.className = $.trim(classes.join(" "));
     });
     return this;
-};
+ };
 jQuery.isEmpty = function(){
 	var isEmpty = false 
 	for (var i = 0; i < arguments.length; i++) {
@@ -43,7 +32,6 @@ jQuery.isEmpty = function(){
 		if (isEmpty) break
 	}
 	return isEmpty;
-
  }
 
 jQuery.serializeForm = function(form){
@@ -58,7 +46,7 @@ jQuery.serializeForm = function(form){
 	})
 
 	return arr_return;
-}
+ }
 var $_GET = {};
 function decode(s) {
 	return decodeURIComponent(s.split("+").join(" "));
@@ -66,7 +54,8 @@ function decode(s) {
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 $_GET[decode(arguments[1])] = decode(arguments[2]);
 });
-var Fecha = {
+let 
+Fecha = {
 	actual: fechaActual(),
 	general: formatofecha(fechaActual(),'sql'),
 	anterior: '1990-01-01', 
@@ -127,585 +116,10 @@ var Fecha = {
 		var mdy = fecha.split('-')
 		return new Date(mdy[0], mdy[1]-1, mdy[2])
 	 }
- }
-var generateId = {
-	encode : function (a , f , h) {
-		a = ("0" + a).slice(-2)
-		f = formatofecha(f,'number')
-		h = h.split(':')
-
-		return a + f + h[0] + h[1]
-	 },
-	decode : function (value) {
-
-		var result = new Object()
-		result.agenda = value.substr( 0, 2 )
-
-		var date =  value.substr( 2, 8)
-		result.date = Fecha.sql(date)
-
-		var hora = value.substr( 10 )
-		result.hour = hora.substr(0,2) + ':' + hora.substr(2,2)
-
-		return result
-	 }
- }
-	var btn = {
-	active : null , 
-	caption : null,
-	load : {
-		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
-		show : function($this){
-			this.active = $this
-			if(!$this.find('i').length) $this.prepend('<i></i>')
-			$this.find('i')
-				.data('icon',$this.attr('class'))
-				.removeClass()
-				.addClass('lnr-sync animate-spin')	
-			},
-		hide : function(){		
-			var $btn = this.active
-			$btn.find('i')
-				.removeClass()
-				.addClass(
-					$btn.data('icon')
-				)	
-		 },
-		reset :	function (callback){
-			$('.btnLoad').each(function(){
-				$(this).html($(this).data('value'))
-			});
-			btn.active = null ;
-			typeof callback == "function" && callback();
-			}
-		 }, 
-	save : {
-		show : function (){
-			$('#btnSave')
-				.find('.icon-floppy').show().end()
-				.find('.icon-load').hide()
-		}
-		},
- }
-var validar = {
-	nombre: {
-		funcion:function($this){
-			if(!$.isEmpty($this.val())){
-				if($this.val().length>6){
-					$this
-						.addClass("input-success")
-					
-					validar.nombre.estado = true;
-				}else{
-					var $popover = $('#'+$this.attr('id')+'PopoverTxt')
-					if ($popover.lengh){
-						$('#'+$this.attr('id')+'PopoverTxt')
-								.html('El nombre tiene que tener más de 6 caracteres.')
-						$this
-							.addClass("input-error")
-							.popover('show');
-					}else{
-						$.Notify({
-							id: 'lbl'+$(this).attr('id'),
-							type: 'alert',
-							caption: 'nombre de usuario',
-							content: 'El nombre tiene que tener un mínimo de 7 caracteres. ',
-							icon: "icon-user-times"
-						})
-					}
-					validar.nombre.estado = false;
-				}
-			}else{
-				$this.val('');
-				validar.nombre.estado =  false;
-			}
-		},
-		estado: false
-	},
-	email:{
-		funcion:function($this){
-			if(validar.email.estado) return false;
-			var email = $this.val();
-			var $lblPopover = $('#'+$this.attr('id')+'PopoverTxt');
-			if(!$.isEmpty(email)){			
-				if(email.indexOf('@') == -1 || email.indexOf('.')==-1){
-					
-					if(!$this.hasClass('input-error')){
-						$.Notify({
-							id: 'lblEmail',
-							type: 'alert',
-							caption: 'Email',
-							content: 'Escriba un email válido. ',
-							icon:'icon-mail-1'
-						})
-				
-						if(validar.email.colorear){
-							$this
-								.addClass('input-error')
-								.removeClass('input-success')						
-						}
-						validar.email.estado = false;
-					}
-				}else{
-					if(typeof validar.email.callback == "function"){
-						validar.email.callback();
-					}else{
-						if(validar.email.colorear)
-							$this.addClass('input-success').removeClass('input-error')
-					}
-						
-					validar.email.estado = true;
-				}
-			}else{
-				$this.val('');
-				validar.email.estado = false;
-			}
-		},
-		estado: false,
-		callback: false,
-		colorear: true,
-	},
-	tel:{
-		funcion:function ($this){ 
-			var tel = $this.val();
-			if(!$.isEmpty(tel)){
-				if(tel.length>=8){
-					$this.addClass('input-success')
-					validar.tel.estado =  true;
-					var r = true
-				}else{
-					$this.addClass('input-error')
-					validar.tel.estado =  false;
-					var r = false
-				}
-			}
-			return r
-		},
-		estado: true,
-	},
-	pass: {
-
-		estado: false,
-		funcion:function($this){
-			var pass = SHA($this.val())
-
-		   	$this.siblings('#pass').val(pass)
-	
-			if (!$.isEmpty($this.val())){				
-				if($this.val().length>6){
-					
-					$this.addClass('input-success');
-
-					var $pass = $(':password');
-					
-					//esto solo es para cuando se quiere cambiar la contraseña desde config 
-					var n = ($this.parents('#dlgCambiarPass').length>0)?1:0;
-
-					if ($pass.length>1){
-						if ($this.attr('id') === $pass.eq(n+1).attr('id'))
-						if ($pass.eq(n+1).val()!=$pass.eq(n).val()&&$pass.eq(n+1).val()!=""){
-							$this.addClass('input-error').removeClass('input-success');
-							validar.pass.estado =  false;
-						}else{
-							$this.addClass('input-success').removeClass('input-error');
-							validar.pass.estado =  true;
-						}
-					}
-				}else{
-					if(!$this.hasClass('input-error') && !$('.email').hasClass('input-error')){
-						$this.removeClass('input-success').addClass('input-error');
-						$.Notify({
-							id:'lblPass',
-							type: 'warning',
-							caption: 'Contraseña',
-							content: 'Tiene que tener más de 6 carácteres.',
-							icon:'icon-lock'
-						})
-					}
-					validar.pass.estado =  false;
-				}
-			} else {
-				$this.removeClass('input-error input-success')
-				return false;
-			}
-		},
-		reset: function($this){
-			$this.find(':password').each(function(){
-				$(this).removeClass('input-error input-success').val('') ;
-			})
-		}
-	},	
-	form : function(idFrm){
-	//AKI :: personalizando mensaje de error 
-	//AKI :: cambiar forma de validar el formulario
-		var frm = $('#'+idFrm);
-
-		if (frm[0].checkValidity() != false){
-			return true; 
-		}else{
-			notify.error(frm[0].validationMessage,'Error formulario')
-			return false ;
-		}		
-
-	},
- }
-var input = {
-	success : function ($input) {
-		if($.isEmpty()) return false
-		$input.removeClass('input-error').addClass('input-success')
-	}, 
-	error : function ($input) {
-		if($.isEmpty()) return false
-		$input.removeClass('input-success').addClass('input-error')
-	}
- }
-var dialog = {
-	loads: new Array,
-	section : $('#dialogs') , 
-	isOpen : null,  
-	open:function(objName,fnOk,fnCancel,callback){
-		dialog.isOpen = objName
-
-		var $this = dialog.section.find('#'+objName), 
-			loads = dialog.loads,
-			_open = function($this){
-
-				$this
-					.show('fade','fast',function(){
-						$(this).find('.iconClass-container input').first().focus()
-					})
-					.find('.btn-success').attr('disabled',false)			
-
-				$('.popup-overlay').fadeIn()
-			
-			}
-
-		if(loads.indexOf(objName)==-1){
-			
-			loads.push(objName)	
-			dialog.create(objName,fnOk,fnCancel,function($this){
-
-				_open( $('#dialogs #'+objName))
-				typeof callback == "function" && callback(true)	
-
-			})
-
-		}else{
-	
-			dialog.reset(objName)
-			_open($this)
-			typeof callback == "function" && callback(false)	
-			
-		}
-	 },
-	close:function (objName,callback){
-		var $this = $('#'+objName) || $('#'.dialog.isOpen)
-
-		//en el caso que existan passwords formaear el diseño
-		validar.pass.reset($('#'+objName) )
-
-		$this.fadeOut()
-		$('#dialogs').fadeOut()
-		dialog.isOpen = null
-
-		typeof callback == "function" && callback(true);
-	 },
-	create: function (objName,fnOk,fnCancel,callback){
-			
-			var data = {
-				controller : 'dialogs' , 
-				view : objName 
-			}
-
-			 $.post(INDEX,data,function(html){
-
-				$('#dialogs')
-					.append(html)
-					.promise()
-					.done(function(){
-					
-					var $this = $('#dialogs').find('#'+objName)
-
-						$this.draggable({		
-							disabled : false, 
-							opacity : 0.70 , 
-							zIndex: 100 ,
-							start : function(){}
-						})
-							.keypress(function(e){
-									var code = e.keyCode ;
-					
-									//BOTON PREDETERMINADO EN LOS DIALOGS
-									if(event.which==13) 
-										$this.find('.aceptar').click()
-
-							})
-							
-					$this
-						.on('click','.fnClose',function(){
-							dialog.close(objName)
-						})
-						.on('keydown',function(event){
-							if(event.which==27)	dialog.close(objName)
-						})
-						.on('click','.btn-danger',function(e){
-							typeof fnCancel == "function"?fnCancel():dialog.close(objName)
-						})
-
-					if(typeof fnOk == "function"){
-						$this.on('click','.btn-success',function(){
-							$(this).attr('disabled',true)
-							fnOk()
-
-						})
-					}
-			
-	
-					typeof callback == "function" && callback($this)
-				})
-			 },'html')
-	 },
-	reset : function(objName){
-		var $this = $('#'+objName)
-		var $load = $this.find('.btnLoad');
-		if ($this.find('form').length){
-			$this.find('form')[0].reset()
-		} else {
-			$this.find('input').each(function(){
-				$(this).val('')					
-			})
-			$this.find('.lst').each(function(){
-				$(this).empty()
-			})
-		}
-
-		if($load.length){
-			$load.each(function(){
-				var caption = $(this).data('value');
-				$(this).html(caption)
-			})
-		}
-
-	 }
- }
-var notify = {
-	success: function(mns,cptn, keep, $input){
-		var keepOpen = keep||false;
-		var cptn = cptn||'Guardado';
-		var mns = mns||'El registro ha sido guardado';
-		$.Notify({
-			type: 'success',
-			caption: cptn,
-			content: mns,
-			icon: 'icon-floppy', 
-			keepOpen: keep,
-		})
-
-		if (!$.isEmpty($input)) input.success($input)
-	},
-	error: function(mns,cptn,keep, $input){
-		var keepOpen = keep||false;
-		var cptn = cptn||'Error';
-		var mns = mns||'Ha ocurrido un error';
-		$.Notify({
-			type: 'alert',
-			caption: cptn,
-			content: mns,
-			icon: 'icon-cross',
-			keepOpen: keep,
-		})
-		if (!$.isEmpty($input)) input.error($input)
-	},
-	alert: function(mns,cptn,keep){
-		var keepOpen = keep||false;
-		var cptn = cptn||'Warning';
-		var mns = mns||'Alerta algo requiere su atencion';
-		$.Notify({
-			type: 'warning',
-			caption: cptn,
-			content: mns,
-			icon: 'icon-attention',
-			keepOpen: keep,
-		})
-	},
- }
-var tools = {
-	template : function(obj, url, callback){
-		if ($.isEmpty(obj.template)){
-			var data = {
-				controller: 'templates',
-				object: url
-			}
-			$.post(INDEX, data,function (html, textStatus, jqXHR) {
-				obj.$template = $('<div />').append( html ).children()
-				typeof callback == "function" && callback(html);
-			},'html'); 
-		} else {
-			typeof callback == "function" && callback(obj);
-		}
-	}
-	
- }
-function formatofecha (fechaTxt,formatOut){ 
-
-	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
-
-	if (fecha.indexOf("/")>0){
-		var mdy = fecha.split('/');
-		var d = ("0" + mdy[0]).slice (-2);
-		var m = ("0" + mdy[1]).slice (-2);
-		var a = mdy[2];
-	}else if(fecha.indexOf("-")>0){
-		var mdy = fecha.split('-');
-		var d = ("0" + mdy[2]).slice (-2);
-		var m = ("0" + mdy[1]).slice (-2);
-		var a = mdy[0];
-	}else if(fecha.length==4){
-		var d = fecha.substr(2);
-		var m = fecha.substr(0,2);
-		var a =  fechaActual('y');
-	}else if(fecha.length==8){
-		var d = fecha.substr(6,2);
-		var m = fecha.substr(4,2);
-		var a =  fecha.substr(0,4);
-	}
-	switch(formatOut) {
-		case 'sql':
-			var fch= a+'-'+m+'-'+d;
-			break;
-		case 'print':
-			var fch= d+'/'+m+'/'+a;
-			break;
-		case 'md':
-			var fch = m+d;
-			break;
-		case 'number':
-			var fch = a+m+d;
-			break;
-		case 'day':
-			var fch = d;
-			break;
-		case 'month':
-			var fch = m;
-			break;
-		case 'year':
-			var fch = a;
-			break;
-		default:
-		   var fch = new Date(a, m-1,d);
-	}
-
-	return (fch); 
- }
-function fechaActual(arg){ 
-	var arg = arg||null, 
-		fecha_actual = new Date(), 
-		mes = fecha_actual.getMonth()+1, 
-		dia = fecha_actual.getDate()
-	
-	if(dia<=9)dia="0"+dia
-	if(mes<=9)mes="0"+mes
-	return  arg=="y"?fecha_actual.getFullYear()
-				:arg=="m"?mes
-				:arg=="d"?fecha_actual.getDate()
-				:fecha_actual.getFullYear() +"-"+ mes +"-"+ dia
- }
-function cargarDatepicker(callback){
-	var $dp = $('.datepicker');
-	var format = $dp.data('format')||"dd/mm/yy";
-	var fesOn = $dp.data('festivos-show');
-	var minDate = $dp.data('min-date');
-
-	$.datepicker.regional['es'] = {
-		closeText: 'Cerrar',
-		prevText: '',
-		nextText: '',
-		currentText: 'Hoy',
-		monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-		monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
-		dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-		dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
-		dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-		weekHeader: 'Sm',
-		dateFormat: 'dd/mm/yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: '',
-	};
-	$.datepicker.setDefaults($.datepicker.regional["es"]);
-	$dp.datepicker({
-		minDate: minDate,
-		firstDay: 1,
-		dateFormat: format,
- 
-		beforeShowDay: function (date){
-			var current = $.datepicker.formatDate('mmdd', date);
-			var day = date.getDay()
-			return day == 0 ||$.inArray(current,  FESTIVOS) > -1?[fesOn, "festivo"]:[true, ""];
-		},
-		onSelect: function (fecha) {
-			
-			sincronizar(null, fecha)
-
-		},
-		onClose: function(){
-			this.blur();
-		},
-		defaultDate: Fecha.print()|| new Date(),
-		showAnim: 'blind',
-	});
-	$dp.each(function(){$(this).val(Fecha.print())})
-	
-	typeof callback == "function" && callback();
- }
-function colorearMenuDiasSemana(arg){
-	var fecha = arg||Fecha.general;
-	$('.highlighted').removeClass('highlighted');
-	var f = new Date();
-	f = formatofecha(fecha);
-	var d = f.getDay() !=0?f.getDay():7;
-	$("#mainLstDiasSemana #mainMenu"+d).addClass("highlighted");
-
-	$("#lstDiasSemana").val(d);
-
-	//coloreo rojo festivos en datepicker
-	var fes = formatofecha(fecha,'md');
-	if(d==7||$.inArray(fes,festivos.year)!=-1)
-		$('.datepicker').css('color','#e04747')
-	else
-		$('.datepicker').css('color','initial')
-	
-
- }
-function hideShow(param){
-	for (var i = 0; i < arguments.length; ++i) {
-			let $obj = $(arguments[i])
-			$obj.toggle();
-	}
- }
-function normalize(string){
-
-	var str = string.trim().split(" ").join("");
-	if ($.isEmpty(str))return false;
-	var map={
-		'À':'A','Á':'A','Â':'A','Ã':'A','Ä':'A','Å':'A','Æ':'AE','Ç':'C','È':'E','É':'E','Ê':'E','Ë':'E','Ì':'I','Í':'I','Î':'I','Ï':'I','Ð':'D','Ñ':'N','Ò':'O','Ó':'O','Ô':'O','Õ':'O','Ö':'O','Ø':'O','Ù':'U','Ú':'U','Û':'U','Ü':'U','Ý':'Y','ß':'s','à':'a','á':'a','â':'a','ã':'a','ä':'a','å':'a','æ':'ae','ç':'c','è':'e','é':'e','ê':'e','ë':'e','ì':'i','í':'i','î':'i','ï':'i','ñ':'n','ò':'o','ó':'o','ô':'o','õ':'o','ö':'o','ø':'o','ù':'u','ú':'u','û':'u','ü':'u','ý':'y','ÿ':'y','Ā':'A','ā':'a','Ă':'A','ă':'a','Ą':'A','ą':'a','Ć':'C','ć':'c','Ĉ':'C','ĉ':'c','Ċ':'C','ċ':'c','Č':'C','č':'c','Ď':'D','ď':'d','Đ':'D','đ':'d','Ē':'E','ē':'e','Ĕ':'E','ĕ':'e','Ė':'E','ė':'e','Ę':'E','ę':'e','Ě':'E','ě':'e','Ĝ':'G','ĝ':'g','Ğ':'G','ğ':'g','Ġ':'G','ġ':'g','Ģ':'G','ģ':'g','Ĥ':'H','ĥ':'h','Ħ':'H','ħ':'h','Ĩ':'I','ĩ':'i','Ī':'I','ī':'i','Ĭ':'I','ĭ':'i','Į':'I','į':'i','İ':'I','ı':'i','Ĳ':'IJ','ĳ':'ij','Ĵ':'J','ĵ':'j','Ķ':'K','ķ':'k','Ĺ':'L','ĺ':'l','Ļ':'L','ļ':'l','Ľ':'L','ľ':'l','Ŀ':'L','ŀ':'l','Ł':'L','ł':'l','Ń':'N','ń':'n','Ņ':'N','ņ':'n','Ň':'N','ň':'n','ŉ':'n','Ō':'O','ō':'o','Ŏ':'O','ŏ':'o','Ő':'O','ő':'o','Œ':'OE','œ':'oe','Ŕ':'R','ŕ':'r','Ŗ':'R','ŗ':'r','Ř':'R','ř':'r','Ś':'S','ś':'s','Ŝ':'S','ŝ':'s','Ş':'S','ş':'s','Š':'S','š':'s','Ţ':'T','ţ':'t','Ť':'T','ť':'t','Ŧ':'T','ŧ':'t','Ũ':'U','ũ':'u','Ū':'U','ū':'u','Ŭ':'U','ŭ':'u','Ů':'U','ů':'u','Ű':'U','ű':'u','Ų':'U','ų':'u','Ŵ':'W','ŵ':'w','Ŷ':'Y','ŷ':'y','Ÿ':'Y','Ź':'Z','ź':'z','Ż':'Z','ż':'z','Ž':'Z','ž':'z','ſ':'s','ƒ':'f','Ơ':'O','ơ':'o','Ư':'U','ư':'u','Ǎ':'A','ǎ':'a','Ǐ':'I','ǐ':'i','Ǒ':'O','ǒ':'o','Ǔ':'U','ǔ':'u','Ǖ':'U','ǖ':'u','Ǘ':'U','ǘ':'u','Ǚ':'U','ǚ':'u','Ǜ':'U','ǜ':'u','Ǻ':'A','ǻ':'a','Ǽ':'AE','ǽ':'ae','Ǿ':'O','ǿ':'o'
-	};
-	var res=''; //Está variable almacenará el valor de str, pero sin acentos y tildes
-	for (var i=0;i<str.length;i++){
-		let c=str.charAt(i);res+=map[c]||c;
-	}
-	return res.replace(/\s/g, "").toLowerCase().trim()
-	
-
- } 
-function echo(){
-	for(let i = 0 ; i < arguments.length; i++){
-		console.log(arguments[i]);
-	}
- }
-function SHA(str) {
- /*
+ }, 
+Tools = {
+	SHA : function (str) {
+ 	/*
 	*  Secure Hash Algorithm (SHA512)
 	*  http://www.happycode.info/
 	*/ 	
@@ -975,7 +389,580 @@ function SHA(str) {
   }
   
   return binb2hex(binarray);
+ },
+ }, 
+generateId = {
+	encode : function (a , f , h) {
+		a = ("0" + a).slice(-2)
+		f = formatofecha(f,'number')
+		h = h.split(':')
+
+		return a + f + h[0] + h[1]
+	 },
+	decode : function (value) {
+
+		var result = new Object()
+		result.agenda = value.substr( 0, 2 )
+
+		var date =  value.substr( 2, 8)
+		result.date = Fecha.sql(date)
+
+		var hora = value.substr( 10 )
+		result.hour = hora.substr(0,2) + ':' + hora.substr(2,2)
+
+		return result
+	 }
+ },
+btn = {
+	active : null , 
+	caption : null,
+	load : {
+		status: true, //variable para impedir que aparezca el load en los botones si esta en falso.
+		show : function($this){
+			this.active = $this
+			if(!$this.find('i').length) $this.prepend('<i></i>')
+			$this.find('i')
+				.data('icon',$this.attr('class'))
+				.removeClass()
+				.addClass('lnr-sync animate-spin')
+				.prop('disabled',true)
+			},
+		hide : function(){		
+			var $btn = this.active
+			$btn
+				.find('i')
+				.removeClass()
+				.addClass($btn.data('icon'))
+				.prop('disabled',false)
+		 },
+		reset :	function (callback){
+			$('.btnLoad').each(function(){
+				$(this).html($(this).data('value'))
+			});
+			btn.active = null ;
+			typeof callback == "function" && callback();
+			}
+		 }, 
+	save : {
+		show : function (){
+			$('#btnSave')
+				.find('.icon-floppy').show().end()
+				.find('.icon-load').hide()
+		}
+		},
+ }, 
+validar = {
+	nombre: {
+		funcion:function($this){
+			if(!$.isEmpty($this.val())){
+				if($this.val().length>6){
+					$this
+						.addClass("input-success")
+					
+					validar.nombre.estado = true;
+				}else{
+					var $popover = $('#'+$this.attr('id')+'PopoverTxt')
+					if ($popover.lengh){
+						$('#'+$this.attr('id')+'PopoverTxt')
+								.html('El nombre tiene que tener más de 6 caracteres.')
+						$this
+							.addClass("input-error")
+							.popover('show');
+					}else{
+						$.Notify({
+							id: 'lbl'+$(this).attr('id'),
+							type: 'alert',
+							caption: 'nombre de usuario',
+							content: 'El nombre tiene que tener un mínimo de 7 caracteres. ',
+							icon: "icon-user-times"
+						})
+					}
+					validar.nombre.estado = false;
+				}
+			}else{
+				$this.val('');
+				validar.nombre.estado =  false;
+			}
+		},
+		estado: false
+	},
+	email:{
+		funcion:function($this){
+			if(validar.email.estado) return false;
+			var email = $this.val();
+			var $lblPopover = $('#'+$this.attr('id')+'PopoverTxt');
+			if(!$.isEmpty(email)){			
+				if(email.indexOf('@') == -1 || email.indexOf('.')==-1){
+					
+					if(!$this.hasClass('input-error')){
+						$.Notify({
+							id: 'lblEmail',
+							type: 'alert',
+							caption: 'Email',
+							content: 'Escriba un email válido. ',
+							icon:'icon-mail-1'
+						})
+				
+						if(validar.email.colorear){
+							$this
+								.addClass('input-error')
+								.removeClass('input-success')						
+						}
+						validar.email.estado = false;
+					}
+				}else{
+					if(typeof validar.email.callback == "function"){
+						validar.email.callback();
+					}else{
+						if(validar.email.colorear)
+							$this.addClass('input-success').removeClass('input-error')
+					}
+						
+					validar.email.estado = true;
+				}
+			}else{
+				$this.val('');
+				validar.email.estado = false;
+			}
+		},
+		estado: false,
+		callback: false,
+		colorear: true,
+	},
+	tel:{
+		funcion:function ($this){ 
+			var tel = $this.val();
+			if(!$.isEmpty(tel)){
+				if(tel.length>=8){
+					$this.addClass('input-success')
+					validar.tel.estado =  true;
+					var r = true
+				}else{
+					$this.addClass('input-error')
+					validar.tel.estado =  false;
+					var r = false
+				}
+			}
+			return r
+		},
+		estado: true,
+	},
+	pass: {
+
+		estado: false,
+		funcion:function($this){
+			var pass = Tools.SHA($this.val())
+
+		   	$this.siblings('#pass').val(pass)
+	
+			if (!$.isEmpty($this.val())){				
+				if($this.val().length>6){
+					
+					$this.addClass('input-success');
+
+					var $pass = $(':password');
+					
+					//esto solo es para cuando se quiere cambiar la contraseña desde config 
+					var n = ($this.parents('#dlgCambiarPass').length>0)?1:0;
+
+					if ($pass.length>1){
+						if ($this.attr('id') === $pass.eq(n+1).attr('id'))
+						if ($pass.eq(n+1).val()!=$pass.eq(n).val()&&$pass.eq(n+1).val()!=""){
+							$this.addClass('input-error').removeClass('input-success');
+							validar.pass.estado =  false;
+						}else{
+							$this.addClass('input-success').removeClass('input-error');
+							validar.pass.estado =  true;
+						}
+					}
+				}else{
+					if(!$this.hasClass('input-error') && !$('.email').hasClass('input-error')){
+						$this.removeClass('input-success').addClass('input-error');
+						$.Notify({
+							id:'lblPass',
+							type: 'warning',
+							caption: 'Contraseña',
+							content: 'Tiene que tener más de 6 carácteres.',
+							icon:'icon-lock'
+						})
+					}
+					validar.pass.estado =  false;
+				}
+			} else {
+				$this.removeClass('input-error input-success')
+				return false;
+			}
+		},
+		reset: function($this){
+			$this.find(':password').each(function(){
+				$(this).removeClass('input-error input-success').val('') ;
+			})
+		}
+	},	
+	form : function(idFrm){
+	//AKI :: personalizando mensaje de error 
+	//AKI :: cambiar forma de validar el formulario
+		var frm = $('#'+idFrm);
+
+		if (frm[0].checkValidity() != false){
+			return true; 
+		}else{
+			notify.error(frm[0].validationMessage,'Error formulario')
+			return false ;
+		}		
+
+	},
+ }, 
+input = {
+	success : function ($input) {
+		if($.isEmpty()) return false
+		$input.removeClass('input-error').addClass('input-success')
+	}, 
+	error : function ($input) {
+		if($.isEmpty()) return false
+		$input.removeClass('input-success').addClass('input-error')
+	}
+ }, 
+dialog = {
+	loads: new Array,
+	section : $('#dialogs') , 
+	isOpen : null,  
+	open:function(objName,fnOk,fnCancel,callback){
+		dialog.isOpen = objName
+
+		let loads = dialog.loads,
+			_open = function($this){
+				$this
+					.show('fade','fast')
+					.find('.iconClass-container input').first().focus().end()
+					.find('.btn-success').attr('disabled',false)			
+
+				$('.popup-overlay').fadeIn()		
+			};
+
+		if(loads.indexOf(objName)==-1){
+			
+			loads.push(objName)	
+			dialog.create(objName,fnOk,fnCancel,function($this){
+
+				_open( $('#dialogs #'+objName))
+				typeof callback == "function" && callback(true)	
+
+			})
+
+		}else{
+
+			dialog.reset(objName)
+
+			_open($('#dialogs #'+objName))
+			typeof callback == "function" && callback(false)	
+			
+		}
+	 },
+	close:function (objName,callback){
+		var $this = $('#'+objName) || $('#'.dialog.isOpen)
+
+		//en el caso que existan passwords formaear el diseño
+		validar.pass.reset($('#'+objName) )
+
+		$this.fadeOut()
+		$('#dialogs').fadeOut()
+		dialog.isOpen = null
+
+		typeof callback == "function" && callback(true);
+	 },
+	create: function (objName,fnOk,fnCancel,callback){
+		let $this, 
+			data = {
+				controller : 'dialogs' , 
+				view : objName 
+			}
+
+		$.post(INDEX,data,function(html){
+
+			$('#dialogs')
+				.append(html)
+				.promise()
+				.done(function(){
+					$this = $('#dialogs').find('#'+objName)
+
+					$this.draggable({		
+						disabled : false, 
+						opacity : 0.70 , 
+						zIndex: 100 ,
+						start : function(){}
+					 })
+					.keypress(function(e){
+							var code = e.keyCode ;
+			
+							//BOTON PREDETERMINADO EN LOS DIALOGS
+							if(event.which==13) 
+								$this.find('.aceptar').click()
+
+				     })
+				 			
+					$this
+						.on('click','.fnClose',function(){
+
+							dialog.close(objName)
+						})
+						.on('keydown',function(event){
+							if(event.which==27)	dialog.close(objName)
+						})
+						.on('click','.btn-danger',function(e){
+							typeof fnCancel == "function"?fnCancel():dialog.close(objName)
+						})
+
+					if(typeof fnOk == "function"){
+						$this.on('click','.btn-success',fnOk)
+					 }	
+				})
+				.done(()=>callback($this))
+		},'html')
+	 },
+	reset : function(objName){
+		var $this = $('#'+objName)
+		var $load = $this.find('.btnLoad');
+		if ($this.find('form').length){
+			$this.find('form')[0].reset()
+		} else {
+			$this.find('input').each(function(){
+				$(this).val('')					
+			})
+			$this.find('.lst').each(function(){
+				$(this).empty()
+			})
+		}
+
+		if($load.length){
+			$load.each(function(){
+				var caption = $(this).data('value');
+				$(this).html(caption)
+			})
+		}
+
+	 }
+ }, 
+notify = {
+	success: function(mns,cptn, keep, $input){
+		var cptn = cptn||'Guardado',
+			mns = mns||'El registro ha sido guardado';
+		$.Notify({
+			type: 'success',
+			caption: cptn,
+			content: mns,
+			icon: 'icon-floppy', 
+			keepOpen: keep || false,
+		})
+
+		if (!$.isEmpty($input)) input.success($input)
+	},
+	error: function(mns,cptn ,timewait , $input){
+		let	keep = typeof(timewait) == "boolean" ? timewait : false , 
+			time = typeof(timewait) == "number" ? timewait : 3000 ;
+
+		$.Notify({
+			type: 'alert',
+			caption: cptn || 'Error',
+			content: mns ||'Ha ocurrido un error',
+			icon: 'lnr-warning',
+			keepOpen: keep,
+			timeout: time
+		})
+		!$.isEmpty($input) && input.error($input)
+	},
+	alert: function(mns, cptn, timewait , callback){
+		let	keep = typeof(timewait) == "boolean" ? timewait : false , 
+			time = typeof(timewait) == "number" ? timewait : 3000 ;
+	
+		$.Notify({
+			type: 'warning',
+			caption: cptn ||'Warning',
+			content: mns ||'Alerta algo requiere su atencion',
+			icon: 'icon-attention-alt',
+			keepOpen: keep||false,
+			timeout: time
+		})
+		typeof callback == "function" && setTimeout(callback,timewait);
+
+	},
+	info: function(mns, cptn, timewait , callback){
+		let keep = typeof(timewait) == "boolean" ? timewait : false , 
+			time = typeof(timewait) == "number" ? timewait : 3000 ;
+	
+		$.Notify({
+			type: 'info',
+			caption: cptn ||'Información',
+			content: mns || 'Le informamos ...',
+			icon: 'icon-info',
+			keepOpen: keep,
+			timeout: time 
+		})
+		typeof callback == "function" && setTimeout(callback,timewait);
+
+	},
  }
+
+function formatofecha (fechaTxt,formatOut){ 
+
+	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
+
+	if (fecha.indexOf("/")>0){
+		var mdy = fecha.split('/');
+		var d = ("0" + mdy[0]).slice (-2);
+		var m = ("0" + mdy[1]).slice (-2);
+		var a = mdy[2];
+	}else if(fecha.indexOf("-")>0){
+		var mdy = fecha.split('-');
+		var d = ("0" + mdy[2]).slice (-2);
+		var m = ("0" + mdy[1]).slice (-2);
+		var a = mdy[0];
+	}else if(fecha.length==4){
+		var d = fecha.substr(2);
+		var m = fecha.substr(0,2);
+		var a =  fechaActual('y');
+	}else if(fecha.length==8){
+		var d = fecha.substr(6,2);
+		var m = fecha.substr(4,2);
+		var a =  fecha.substr(0,4);
+	}
+	switch(formatOut) {
+		case 'sql':
+			var fch= a+'-'+m+'-'+d;
+			break;
+		case 'print':
+			var fch= d+'/'+m+'/'+a;
+			break;
+		case 'md':
+			var fch = m+d;
+			break;
+		case 'number':
+			var fch = a+m+d;
+			break;
+		case 'day':
+			var fch = d;
+			break;
+		case 'month':
+			var fch = m;
+			break;
+		case 'year':
+			var fch = a;
+			break;
+		default:
+		   var fch = new Date(a, m-1,d);
+	}
+
+	return (fch); 
+ }
+function fechaActual(arg){ 
+	var arg = arg||null, 
+		fecha_actual = new Date(), 
+		mes = fecha_actual.getMonth()+1, 
+		dia = fecha_actual.getDate()
+	
+	if(dia<=9)dia="0"+dia
+	if(mes<=9)mes="0"+mes
+	return  arg=="y"?fecha_actual.getFullYear()
+				:arg=="m"?mes
+				:arg=="d"?fecha_actual.getDate()
+				:fecha_actual.getFullYear() +"-"+ mes +"-"+ dia
+ }
+function cargarDatepicker(callback){
+	var $dp = $('.datepicker');
+	var format = $dp.data('format')||"dd/mm/yy";
+	var fesOn = $dp.data('festivos-show');
+	var minDate = $dp.data('min-date');
+
+	$.datepicker.regional['es'] = {
+		closeText: 'Cerrar',
+		prevText: '',
+		nextText: '',
+		currentText: 'Hoy',
+		monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+		dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+		dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+		dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: '',
+	};
+	$.datepicker.setDefaults($.datepicker.regional["es"]);
+	$dp.datepicker({
+		minDate: minDate,
+		firstDay: 1,
+		dateFormat: format,
+ 
+		beforeShowDay: function (date){
+			var current = $.datepicker.formatDate('mmdd', date);
+			var day = date.getDay()
+			return day == 0 ||$.inArray(current,  config.festivos) > -1?[fesOn, "festivo"]:[true, ""];
+		},
+		onSelect: function (fecha) {
+			
+			sincronizar(null, fecha)
+
+		},
+		onClose: function(){
+			this.blur();
+		},
+		defaultDate: Fecha.print()|| new Date(),
+		showAnim: 'blind',
+	});
+	$dp.each(function(){$(this).val(Fecha.print())})
+	
+	typeof callback == "function" && callback();
+ }
+function colorearMenuDiasSemana(arg){
+	var fecha = arg||Fecha.general;
+	$('.highlighted').removeClass('highlighted');
+	var f = new Date();
+	f = formatofecha(fecha);
+	var d = f.getDay() !=0?f.getDay():7;
+	$("#mainLstDiasSemana #mainMenu"+d).addClass("highlighted");
+
+	$("#lstDiasSemana").val(d);
+
+	//coloreo rojo festivos en datepicker
+	var fes = formatofecha(fecha,'md');
+	if(d==7||$.inArray(fes,config.festivos.year)!=-1)
+		$('.datepicker').css('color','#e04747')
+	else
+		$('.datepicker').css('color','initial')
+	
+
+ }
+function hideShow(param){
+	for (var i = 0; i < arguments.length; ++i) {
+			let $obj = $(arguments[i])
+			$obj.toggle();
+	}
+ }
+function normalize(string){
+
+	var str = string.trim().split(" ").join("");
+	if ($.isEmpty(str))return false;
+	var map={
+		'À':'A','Á':'A','Â':'A','Ã':'A','Ä':'A','Å':'A','Æ':'AE','Ç':'C','È':'E','É':'E','Ê':'E','Ë':'E','Ì':'I','Í':'I','Î':'I','Ï':'I','Ð':'D','Ñ':'N','Ò':'O','Ó':'O','Ô':'O','Õ':'O','Ö':'O','Ø':'O','Ù':'U','Ú':'U','Û':'U','Ü':'U','Ý':'Y','ß':'s','à':'a','á':'a','â':'a','ã':'a','ä':'a','å':'a','æ':'ae','ç':'c','è':'e','é':'e','ê':'e','ë':'e','ì':'i','í':'i','î':'i','ï':'i','ñ':'n','ò':'o','ó':'o','ô':'o','õ':'o','ö':'o','ø':'o','ù':'u','ú':'u','û':'u','ü':'u','ý':'y','ÿ':'y','Ā':'A','ā':'a','Ă':'A','ă':'a','Ą':'A','ą':'a','Ć':'C','ć':'c','Ĉ':'C','ĉ':'c','Ċ':'C','ċ':'c','Č':'C','č':'c','Ď':'D','ď':'d','Đ':'D','đ':'d','Ē':'E','ē':'e','Ĕ':'E','ĕ':'e','Ė':'E','ė':'e','Ę':'E','ę':'e','Ě':'E','ě':'e','Ĝ':'G','ĝ':'g','Ğ':'G','ğ':'g','Ġ':'G','ġ':'g','Ģ':'G','ģ':'g','Ĥ':'H','ĥ':'h','Ħ':'H','ħ':'h','Ĩ':'I','ĩ':'i','Ī':'I','ī':'i','Ĭ':'I','ĭ':'i','Į':'I','į':'i','İ':'I','ı':'i','Ĳ':'IJ','ĳ':'ij','Ĵ':'J','ĵ':'j','Ķ':'K','ķ':'k','Ĺ':'L','ĺ':'l','Ļ':'L','ļ':'l','Ľ':'L','ľ':'l','Ŀ':'L','ŀ':'l','Ł':'L','ł':'l','Ń':'N','ń':'n','Ņ':'N','ņ':'n','Ň':'N','ň':'n','ŉ':'n','Ō':'O','ō':'o','Ŏ':'O','ŏ':'o','Ő':'O','ő':'o','Œ':'OE','œ':'oe','Ŕ':'R','ŕ':'r','Ŗ':'R','ŗ':'r','Ř':'R','ř':'r','Ś':'S','ś':'s','Ŝ':'S','ŝ':'s','Ş':'S','ş':'s','Š':'S','š':'s','Ţ':'T','ţ':'t','Ť':'T','ť':'t','Ŧ':'T','ŧ':'t','Ũ':'U','ũ':'u','Ū':'U','ū':'u','Ŭ':'U','ŭ':'u','Ů':'U','ů':'u','Ű':'U','ű':'u','Ų':'U','ų':'u','Ŵ':'W','ŵ':'w','Ŷ':'Y','ŷ':'y','Ÿ':'Y','Ź':'Z','ź':'z','Ż':'Z','ż':'z','Ž':'Z','ž':'z','ſ':'s','ƒ':'f','Ơ':'O','ơ':'o','Ư':'U','ư':'u','Ǎ':'A','ǎ':'a','Ǐ':'I','ǐ':'i','Ǒ':'O','ǒ':'o','Ǔ':'U','ǔ':'u','Ǖ':'U','ǖ':'u','Ǘ':'U','ǘ':'u','Ǚ':'U','ǚ':'u','Ǜ':'U','ǜ':'u','Ǻ':'A','ǻ':'a','Ǽ':'AE','ǽ':'ae','Ǿ':'O','ǿ':'o'
+	};
+	var res=''; //Está variable almacenará el valor de str, pero sin acentos y tildes
+	for (var i=0;i<str.length;i++){
+		let c=str.charAt(i);res+=map[c]||c;
+	}
+
+	return res.replace(/\s/g, "").toLowerCase().trim()
+	
+
+ } 
+function echo(){
+	for(let i = 0 ; i < arguments.length; i++){
+		console.log(arguments[i]);
+	}
+ }
+
 function existeUrl(url) {
    var http = new XMLHttpRequest();
    http.open('HEAD', url, false);
@@ -984,9 +971,8 @@ function existeUrl(url) {
  }
 
 function pad (n, length) {
-    var  n = n.toString();
-    while(n.length < length)
-         n = "0" + n;
+    let  n = n.toString();
+    while(n.length < length) n = "0" + n;
     return n;
  }
 function deleteAllCookies() {
@@ -1018,8 +1004,36 @@ $(function(){
 	jQuery(this).on('keyup input', function() { resizeTextarea(this); }).removeAttr('data-autoresize');
 	 });
 	$(document)
-		.on('mousedown',".btnLoad",function(){
-			btn.load.show($(this))})
+	 	.on('click','#btnExit',function(){
+			 $.post(INDEX, {controller : 'logout'}, function(){
+				let goLogin = function() {
+					let effect = 'puff'
+					$('body')
+						.hide(effect,function(){
+							$(this)
+								.addClass('background-personalized')
+								.empty()	
+								.append(Login.html)
+								.show(effect);
+
+						})
+				}
+
+				if($.isEmpty(Login.html)){
+					$.post(INDEX,{controller: 'login'},r=>{
+						Login.html =  r;
+						goLogin();
+					},'html')
+				}else{
+					goLogin();
+				}
+				
+
+			 })
+		 })
+		.on('mouseup',".btnLoad",function(){
+			btn.load.show($(this))
+		 })
 		.on('click','.icon-eye',function(e){
 			var $pass = $(this).siblings('input:password'),
 				$text = $(this).siblings('input:text')
@@ -1043,13 +1057,10 @@ $(function(){
 		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
 		.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
 		.on('click','.inicio',function(){window.location.href="index.php"})
+})
 
-	$('body')
-		.on('click','.clear-input',function(){
-			$(this).siblings('input').val('')
-		})
-	if(!$.isEmpty($_GET['err'])){
-		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''
-		notify.error($_GET['err'], 'ERROR:' + code)
+$.ajaxSetup({url : INDEX , complete : function(){
+		btn.load.hide();
+		typeof callback == "function" && callback();
 	}
 })

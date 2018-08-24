@@ -5,7 +5,7 @@
     </td>
     <td name="id" class="id">	<?=$id. " " ;?></td>
     <td name="nom" class="name busqueda" id="<?=strtolower(str_replace(' ', '', $nombre))?>"><?=$nombre;?></td>
-    <?php if(!$Device->isMovile){?>
+    <?php if(!$Device->isMobile()){?>
         <td name="tel" class=""><?=$tel;?></td>
         <td name="email" class="email" data-value="<?=$email?>"><?=$email?></td>
         <td name="obs" class="obs" data-value ="<?=$obs?>"><?=$obs_status?></td>

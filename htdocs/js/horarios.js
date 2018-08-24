@@ -26,9 +26,11 @@ var horario = {
 	editar: function (){
 		var numeroHorario = $('#hor	arios  #nombre option:selected').val();
 		$('#horarios .celda-horario').each(function(){
-			var n = $(this).attr('name'); //dia y hora
-			var est = $(this).hasClass('color1')?1:0;
-			HORARIOS[numeroHorario]['h'+n] = est;
+			let n = $(this).attr('name'), 
+				est = $(this).hasClass('color1')?1:0, 
+				h = config.horarios;
+
+			h[numeroHorario]['h'+n] = est;
 		})
 
 		var cargarHoras = (function(callback){
@@ -40,14 +42,16 @@ var horario = {
 			main.section.find(".editando")
 				.removeClass('color1 color2 color-red')
 				.each(function(){
-					var dia = $(this).data('diasemana');
-					var fecha = $(this).attr('id');
+					let dia = $(this).data('diasemana'), 
+						h = config.horarios, 
+						fecha = $(this).attr('id');
+
 					fecha = fecha.substr(4);
-					for(let i=0;i<=HORARIOS.length-1;i++){//busco horarios por fecha
-						if (HORARIOS[i].FechaIni<=fecha&&HORARIOS[i].FechaFin>=fecha){//compruebo en que horario estoy
+					for(let i=0;i<=h.length-1;i++){//busco horarios por fecha
+						if (h[i].FechaIni<=fecha&&h[i].FechaFin>=fecha){//compruebo en que horario estoy
 							for (let h =1; h<=73; h++){
 								let hora =  "h"+dia+h;
-								HORARIOS[i][hora]==0?$(this).find('.h'+h).addClass('inactiva'):$(this).find('.h'+h).removeClass('inactiva');
+								h[i][hora]==0?$(this).find('.h'+h).addClass('inactiva'):$(this).find('.h'+h).removeClass('inactiva');
 							}
 							break;
 						}

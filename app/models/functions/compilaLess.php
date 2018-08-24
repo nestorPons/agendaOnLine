@@ -11,7 +11,7 @@ if ($controller == 'login') compilaLess(URL_CSS."login.css",URL_CSS."login.less"
 
 function compilaLess($style_css,$style_less){
 	global $Empresa ; 
-
+	
 	include_once URL_CLASS . "lessc.inc.php";
 	$less = new lessc;
 	

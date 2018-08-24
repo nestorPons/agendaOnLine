@@ -10,11 +10,11 @@
             <thead>
                 <tr>
                     <th class="id">Id</th>
-                    <th class="icono">Icono</th>
+                    <th class="icono">Ico</th>
                     <th class="fecha">Fecha</th>
                     <th class="accion">Acción</th>
                     <th class="idUsuario">Usuario</th>
-                    <th class="estado">Estado</th>
+                    <th class="estado">Est</th>
                 </tr>	
             </thead>
             <tbody>

@@ -47,8 +47,8 @@ var general = {
 		 data ={
 			controller: 'password', 
 			action : EDIT, 
-			pass: SHA(pass), 
-			oldPass: SHA(opass)
+			pass: Tools.SHA(pass), 
+			oldPass: Tools.SHA(opass)
 		 }
 		 if(pass!=undefined && pass===rpass){
 			$.post(INDEX, data,
