@@ -247,7 +247,4 @@ class User extends \core\BaseClass {
 	public function comparePass(string $param = ''){
 		 return password_verify($param, $this->pass); 
 	 }
-	public function createICS(){
-
-	}
 }

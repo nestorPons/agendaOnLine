@@ -14,6 +14,7 @@ define('FESTIVOS' , $Empresa->festivos() );
 
 $Agendas = new models\Agendas();
 $myAgenda['totalAgendas'] = $Agendas->count();
+
 define('CONFIG', array_merge($Empresa->getConf(),$myAgenda));
 
 //Guardo los anchos de pantalla para posteriores configuraciones

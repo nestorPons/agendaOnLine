@@ -1,16 +1,42 @@
-'strict'
+
 var 
 crearCita={
 	isLoad : true, 
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
+		
+		$('#crearCita')
+			.on('click','a',function(){crearCita.servicios.mostrar($(this).attr('id'))})
+			.on('click','.idServicios',function(){
+				let id = $(this).data('familia')
+				$('#crearCita .menuServicios').each(function(){
+					$(this)
+						.find('.c3').removeClass('c3').end()
+						.find('#'+id).addClass('c3')
+				})
+			})
+			.on('click', '.horas', function(){
+				crearCita.data.hora = $(this).val()
+			})
+			.on('change','.lstServicios ',function(){crearCita.servicios.mostrar($(this).val())})
+			.on('click','.horas',crearCita.dialog)
+			.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
+			.on('click','[name="agenda[]"]',function(){
+				crearCita.data.agenda = $(this).val()
+			})
+			.on('change','#crearCitaNota',function(){
+				crearCita.data.nota = $(this).val() 
+			})
+			.on("swipeleft",'.tablas')
+			.on('click','.cancelar',function(){mostrarCapa('main')})
 
 		if (!$.isEmpty(clase)){
 			var clase_id = clase.replace(/\D/g,'');
 			crearCita.servicios.mostrar(clase_id) ;
 		}
 		crearCita.load()
+		
 	 },
 	set : {
 		nameAgenda :function(id,name){
@@ -58,36 +84,19 @@ crearCita={
 			
 			},
 	 },
-	idUser : function () {
-		var cli = $('#crearCita #cliente').val();
-		var  nombre = normalize(cli);
-		return parseInt($('#lstClientes [value="'+cli+'"]').text())||0;
-	 }, 
-	cliente: function (){
-		//guardo cliente mediante formulario crearCita
-
-		var $cliente = $('#crearCita #cliente'),
-			nombre = $cliente.val(), 
-			_guardar = function(){
-				var data= {
-					nombre: nombre
-				}
-				usuarios.guardar(-1, data, function(){
-					dialog.close('dlgCliente')
-				})
-
-			}
+	user : {
+		save : function(){
+			//guardo cliente mediante formulario crearCita	
+			if(typeof usuarios.guardar == 'undefined' ) 
+				$.getScript("/js/usuarios.js",function(){usuarios.guardar()})
+			else 
+				usuarios.guardar()
 		
-		if(usuarios.guardar == undefined ) 
-			loadSync('/js/usuarios.js',_guardar)
-		else 
-			_guardar()
-		
-		
-	 },
+		}
+	},  
 	dialog: function (){
 
-		var self = crearCita , sec =  $('#crearCita') , 
+		var $sec =  $('#crearCita') , 
 			idSer = new Array() ,
 			strServ ="" , 
 			_cancel = function(){
@@ -96,12 +105,12 @@ crearCita={
 				dialog.close()
 			}
 
-		sec.find('[name="servicios[]"]:checked').each(function(){
+		$sec.find('[name="servicios[]"]:checked').each(function(){
 			strServ += $(this).attr('id') + ", "
 			idSer.push($(this).val())
 		})
 
-		dialog.open('dlgGuardar',self.guardar, _cancel,function(){
+		dialog.open('dlgGuardar',crearCita.guardar, _cancel,function(){
 
 			strServ = strServ.slice(0,-2)		
 			data = {
@@ -110,7 +119,7 @@ crearCita={
 				agenda : crearCita.data.agenda,
 				servicios : idSer ,
 				nota : crearCita.data.nota,
-				tiempoServicios : parseInt(sec.find('#tSer').text()) 
+				tiempoServicios : parseInt($sec.find('#tSer').text()) 
 			 }
 			$.extend(crearCita.data, data)
 
@@ -138,7 +147,7 @@ crearCita={
 						self.data.idUsuario = rsp.idUser
 						self.data.servicios = rsp.services
 						self.data.nota = crearCita.data.nota
-						main.lbl.create(self.data)
+						admin.lbl.create(self.data)
 						
 						//Para que refresque la siguiente vez que se entre en las horas coger Cita
 						
@@ -328,16 +337,23 @@ crearCita={
 				&&crearCita.data.hora!='undefined';
 		 },
 		name : function () {
-			var $this =  $('#crearCita #cliente');	
-			var cliente = $this.val().trim();
+			let $this =  $('#crearCita #cliente'), 
+				cliente = $this.val().trim();
 
 			if(cliente!=""){
-				str = normalize(cliente)
+				let str = normalize(cliente)
 				var selCli = $('#lstClientes [data-name="'+str+'"]')
 
 				if (selCli.length==0){
 					$this.addClass('input-error');
-					dialog.open('dlgCliente',crearCita.idUser)
+				
+						dialog.open('dlgUsuarios',crearCita.user.save, null, function(){
+
+							$('#dlgUsuarios')
+								.find('#id').val(-1).end()
+								.find('#nombre').val($('#crearCita #cliente').val()).end()
+								.find('h1').text('Nuevo usuario')
+						})
 
 				}else{
 					crearCita.data.idUser = selCli.data('id') 
@@ -374,30 +390,3 @@ crearCita={
 		 }
 	 },
  }
-
-$('#crearCita')
-.on('click','a',function(){crearCita.servicios.mostrar($(this).attr('id'))})
-.on('click','.idServicios',function(){
-	let id = $(this).data('familia')
-	$('#crearCita .menuServicios').each(function(){
-		$(this)
-			.find('.c3').removeClass('c3').end()
-			.find('#'+id).addClass('c3')
-	})
-	})
-	.on('click', '.horas', function(){
-	crearCita.data.hora = $(this).val()
-	})
-.on('change','.lstServicios ',function(){crearCita.servicios.mostrar($(this).val())})
-.on('click','.horas',crearCita.dialog)
-.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1);})
-.on('click','[name="agenda[]"]',function(){
-	crearCita.data.agenda = $(this).val()
-})
-.on('change','#crearCitaNota',function(){
-	crearCita.data.nota = $(this).val() 
-})
-.on("swipeleft",'.tablas')
-.on('click','.cancelar',function(){mostrarCapa('main')})
-
-crearCita.init()

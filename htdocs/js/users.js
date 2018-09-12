@@ -404,7 +404,7 @@ var historial = {
 			section: 'historial'
 		 }
 		$.post(INDEX, data,function (html, textStatus, jqXHR) {
-			$('section#historial').find('#lineasHistorial').html(html).promise().done(historial.actualizar)
+			$('#historial').find('#lineasHistorial').html(html).promise().done(historial.actualizar)
 		},'html')
 	 }, 
 	del: function(id){
@@ -633,7 +633,6 @@ function logo(){
 		$('#logo').prop('src',logo)
 	}
  }
-
 function resize(that){
 	var ancho = $('main').width()/1.1;
 	var alto = $(that).find('.contenido').height();
@@ -647,8 +646,6 @@ function resize(that){
 			})
 	})
  }
-
-
 
 //INIT
 $('tytle').text('Menu agenda On line zona usuarios')

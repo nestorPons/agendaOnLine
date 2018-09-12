@@ -1,6 +1,6 @@
 <?php 
 
-    include URL_TEMPLATES .    'header.php';
+    include URL_VIEWS . 'header.php';
     $idUser = substr($_GET['args'],-4);
     $token = $_GET['args'];
 	?>

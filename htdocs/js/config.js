@@ -1,8 +1,15 @@
 
 'strict'
 config ={
+	isLoad :true,
 	change : false,
 	controller : 'config' ,
+	init : function(){
+		$('#config')
+		.on('change','input',function(){
+			config.change = true;
+		})
+	}, 
 	set: {
 		nameAgenda : function(id, name){
 			$('#nameAgendaConfig' + id).val(name);
@@ -57,7 +64,7 @@ config ={
 			if (r.success){
 				notify.success('Guardado con éxito.')
 				var n = ($('#showInactivas').is(":checked"))?1:0
-				main.inactivas.change(n)
+				admin.inactivas.change(n)
 				
 				$("#config #respuestaLogo").html("<img src="+r+"/logo.png></img>") 
 			} else {	
@@ -74,7 +81,3 @@ config ={
 		},
 
   }
-$('#config')
-.on('change','input',function(){
-    config.change = true;
-})

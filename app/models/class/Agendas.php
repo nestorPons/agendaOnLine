@@ -14,11 +14,17 @@ class Agendas extends \core\BaseClass {
     function get(){
         return $this->get;
     }
-    function add($max_permitted){
+    function add($max_permitted, string $arg = null){
+        
+        $name = $arg??"Agenda". ($this->count()+1); 
 
         return ($this->count <= $max_permitted)
-             ? $this->saveById(-1, ["nombre"=>"Agenda". ($this->count()+1)])
+             ? $this->saveById(-1, ["nombre"=> $name])
              : false; 
+    }
+    function del($id){
+        $horarios = new Horarios; 
+        return ($horarios->delByAgenda($id))? $this->deleteById($id) : false;
     }
     function count(){
         return $this->count;

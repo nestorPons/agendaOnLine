@@ -1,5 +1,9 @@
 'strict'
 var historial = {
+	isLoad : true, 
+	init : function(){
+
+	}, 
 	sinc: function(){	
 		if($('#historial table').length==0) return false
 		historial.get()

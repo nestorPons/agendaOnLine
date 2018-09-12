@@ -1,4 +1,5 @@
 var servicios = {
+	isLoad : true, 
 	controller : 'servicios',
 	init : function () {
 		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
@@ -7,6 +8,12 @@ var servicios = {
 			servicios.mostrar(clase_id)
 			
 		 }
+		 $('#servicios')
+		 .on('click','.menuServicios a',function(){servicios.mostrar($(this).attr('id'),$('#servicios'))})
+		 .on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
+		 .on('change','#familia',function(){familias.change = true})
+		 .on( "click", "[name*='editar']", function(e){servicios.dialog($(this).attr('value'))})
+		 .find('option:first-child').attr('selected','selected')
 		 
 	 },
 	mostrar: function(id_familia, no_validate) {
@@ -183,7 +190,7 @@ var servicios = {
 				}
 			})
 		
-		},
+	 },
 	crear: function(data){
 		//NUEVO
 		var mostrar = (data.mostrar==1)?'checked':'';
@@ -212,13 +219,13 @@ var servicios = {
 
 		servicios.actualizar(data)
 	
-		},
+	 },
 	sendAjax: function(action , callback){
 		var dlg = $('#dlgServicios') , id = dlg.find('#id').val() ,row = dlg.find("#rowServicios"+id)
 		var	data = $("#frmEditarServicios").serializeArray()			
 			data.push({name : 'baja' , value : 0})
 			data.push({name : 'controller' , value : servicios.controller})
-			data.push({name : 'action' , value : true})
+			data.push({name : 'action' , value : action})
 		if (action == DEL)
 			data.push({name : 'baja' , value : 1})
 
@@ -238,7 +245,7 @@ var servicios = {
 		.fail(function( jqXHR, textStatus, errorThrown ) { 
 			echo (jqXHR, textStatus,  errorThrown) 
 		 })
-		},
+	 },
 	validate : {
 		form : function () {  
 			var nombre = $('#dlgServicios #codigo').val(); 
@@ -252,12 +259,3 @@ var servicios = {
 		 }
 	 }
  }
-
-$('#servicios')
- .on('click','.menuServicios a',function(){servicios.mostrar($(this).attr('id'),$('#servicios'))})
- .on('change','.lstServicios ',function(){servicios.mostrar($(this).val())})
- .on('change','#familia',function(){familias.change = true})
- .on( "click", "[name*='editar']", function(e){servicios.dialog($(this).attr('value'))})
- .find('option:first-child').attr('selected','selected')
- 
- servicios.init()

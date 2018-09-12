@@ -8,8 +8,12 @@ if (isset($_POST['action'])) {
         require_once  URL_VIEWS_USER . $_POST['section'] . '.php' ;
 
     } else {
-        
+
+        header('Content-Type: application/json');
         require_once URL_AJAX . $_POST['controller'] . '.php' ;
+        
+        $Logs->set($_SESSION['id_usuario'], SAVE, $_SESSION['id_usuario'], $_POST['controller']); 
+        echo json_encode($r);
     }
 } else {
         

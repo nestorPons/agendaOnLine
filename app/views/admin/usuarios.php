@@ -1,6 +1,6 @@
 
 <div class="cabecera" >
-	<?php include URL_TEMPLATES . 'menus/abc.php'  ?>
+	<?php include URL_MENUS . 'abc.php'  ?>
 </div>	
 <div class="cuerpo">
 	<table class="tablas colorear-filas">					

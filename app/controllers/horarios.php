@@ -4,23 +4,23 @@ require_once (URL_CLASS.'Horarios.php');
 $Horarios = new models\Horarios();
 
 if (isset($_POST['action'])) {
-    $accion = $_POST['action'] ;
-    header('Content-Type: application/json');
-    $post = $Forms->sanitize($_POST);
     $r['success']= true; 
-    switch($accion){
+    switch($_POST['action']){
         case 'save': 
             foreach($_POST['datos'] as $datos){
-                if(!$Horarios->saveById($datos['id'], $datos)) $r['success']= false;              
-            }        
-        break;
+                if(!$Horarios->saveById($datos['id'], $datos)) $r['success']= false;      
+                $Logs->set( $_SESSION['id_usuario'], $_POST['action'], (int)$datos['id'], $_POST['controller']);             
+            } 
+            break;
         case 'del':
-        foreach($_POST['ids'] as $id){
-            $Horarios->deleteById($id);
+            foreach($_POST['ids'] as $id){
+                $Horarios->deleteById($id);
+                $Logs->set( $_SESSION['id_usuario'], $_POST['action'], (int)$id, $_POST['controller']);     
+            }
+            break;  
         }
-        break;  
-    }
-
+        
+    header('Content-Type: application/json');
     echo json_encode($r);
 
 } else {

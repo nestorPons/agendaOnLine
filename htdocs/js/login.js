@@ -1,4 +1,3 @@
-
 const 
 	EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
@@ -58,6 +57,7 @@ var error = function (mns){
  }
 let 
 Login = {
+	isLoad : true, 
 	html : '', 
 	setCookie : ()=>{
 		localStorage.setItem("AOLAvisoCookie", 1);
@@ -141,6 +141,11 @@ $(function(){
 		.find('form button').prop('disabled',false).end()	
 		.on('submit','#loginUsuario',function(e){
 			e.preventDefault()
+			if (localStorage.getItem('AOLAvisoCookie')!=1) {
+				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
+				btn.load.hide()
+				return false
+			}
 			let data ={
 				controller : 'validar', 
 				ancho : screen.width , 
@@ -158,18 +163,13 @@ $(function(){
 					$('body')
 						.append(r)
 						.removeClass()
+					let section = $(r).filter('main').attr('id');
+					$.getScript('js/'+section+'.js');
 				} else { 
 					let res = r.error.split("<br>")
-					notify.error(res[1], res[0], true);
+					notify.error(res[1], res[0], 5000);
 				}
 			})
-		 })
-		.on('click','#btnLogin , #fb-facebookLogin',function(e){
-			if (localStorage.getItem('AOLAvisoCookie')!=1) {
-				e.preventDefault()
-				e.stopPropagation()
-				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
-			}
 		 })
 		.on('click','.cancel',function(e){
 			general.toggle($('#secLogin'))

@@ -154,7 +154,6 @@ CREATE TABLE `logs` (
 	`idUser` int(11) NOT NULL, 
 	`action` int(2) NOT NULL, 
 	`idFK` bigint(255), 
-	`status` tinyint(1) NOT NULL, 
 	`tables` varchar(30) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

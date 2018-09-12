@@ -34,26 +34,28 @@
 		<?=ADMIN_EMAIL?>
 	</a>
 </div>
-
-<header  id= "navbar" class="app-bar" data-role="appbar" >
+<div id="mnuGeneral" data-role="charm" data-position="right">
+	<?php include URL_VIEWS_ADMIN . 'general.php'?>
+</div>
+<div  id= "navbar" class="app-bar" data-role="appbar" >
 	<div id="boton-menu" class="lnr-menu" ></div>
 	
 	<?php
 	$cls_festivos = (!empty(FESTIVOS)) && (in_array(Date('md') , FESTIVOS )) ? 'c-red' : '' ;
 	$fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 	?>
-
-	
 	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse" title="Salir">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
 			<i class="lnr-power-switch " ></i>
 		</li>
-		<li id= "btnContacto" class="app-bar-element no-flexible place-right" title="Contacto">
+		<li id="btnData" class="fnToggleCharm app-bar-element no-flexible place-right "  data-frm="mnuGeneral" title="Datos de usuario">
+			<i class="lnr-user"></i>
+		</li>
+		<li id= "btnContacto" class="fnToggleCharm app-bar-element no-flexible place-right "  data-frm="mnuContacto" title="Contacto">
 			<i  class=" lnr-envelope"></i>
 		</li>
 		<li id="btnUpgrade" class="app-bar-element no-flexible place-right" title="Mejorar la cuenta">
-			<a href="https://www.paypal.me/reservatucita/2" class="lnr-magic-wand" >
-		</a>
+			<a class="lnr-magic-wand" href="https://www.paypal.me/reservatucita/2"  ></a>
 		</li>
 	</ul>
 	<!--menu herramientas-->
@@ -73,51 +75,32 @@
 			<i  class="icono-nav lnr-magnifier"></i>
 			<span  class="menulbl">Buscar</span>
 		</div>
-	<!--
-		<div id="btnOptions" class="app-bar-element no-flexible  ">
-			<a class="dropdown-toggle no-flexible   ">
-				<span class="icono-nav icon-cog"></span>
-				<span  class="menulbl">Opciones</span>
-			</a>
-			<ul class="d-menu" data-role="dropdown">
-				<li id=rowsHiddens class=>
-					<input type="checkbox" id="chckOpUsersDel">
-					<label for = "chckOpUsersDel" >	Mostrar eliminados.</label>
-				</li>
-				<li id=showByTime class=>
-					<label><input type="radio" value=1 checked>Último dia</label><br>
-					<label><input type="radio" value=7 >Última semana</label><br>
-					<label><input type="radio" value=30 >Último mes</label><br>
-				</li>
-			</ul>
-		</div>
-	-->
 		<div id="btnReset" class="app-bar-element no-flexible ">
-			<i  class="icono-nav lnr-undo"></i>
+			<i  class="lnr-undo"></i>
 			<span  class="menulbl">Refrescar</span>
 		</div>
 		<div id="btnAdd" class="app-bar-element no-flexible  " data-value=0>
-			<i  class="icono-nav lnr-plus-circle" ></i>
+			<i  class="lnr-plus-circle" ></i>
 			<span  class="menulbl">Nuevo</span>
 		</div>
 		<div id="btnDel" class="app-bar-element no-flexible   ">
-			<i  class="icono-nav lnr-trash"></i>
+			<i  class="lnr-trash"></i>
 			<span  class="menulbl">Eliminar</span>
 		</div>
 			<div id="btnSave" class="app-bar-element no-flexible   ">
-			<i class="icono-nav lnr-thumbs-up " ></i>
+			<i class="icon-floppy " ></i>
 			<span class="menulbl">Guardar</span>
 		</div>
 			<div id="btnEdit" class="app-bar-element no-flexible   ">
-			<i class="icono-nav icon-edit" ></i>
+			<i class="icon-edit" ></i>
 			<span class="menulbl">Editar</span>
 		</div>
 		<div id="btnShow" class="app-bar-element no-flexible " >
-			<i class="icono-nav <?=CONFIG['ShowRow']==1?"lnr-star_empty":"lnr-star"?>"></i>
+			<i class="<?=CONFIG['ShowRow']==1?"lnr-star_empty":"lnr-star"?>"></i>
 			<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>
 	<div id="conTxtBuscar" class=" "> 
 		<input type="search" name="txtName" id="txtBuscar">
 	</div>
-</header>
+</div>

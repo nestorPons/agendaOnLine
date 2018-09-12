@@ -1,4 +1,7 @@
-<form id='generalFrm'>	
+
+<h1>Datos de usuario</h1>
+<br>
+	<form id='frmGeneral'>	
 	<div class="iconClass-container icon-left">
 		<input type='text' name='nombre_usuario' value='<?= CONFIG['nombre_usuario']?>' placeholder='nombre usuario' require>
 		<span class="iconClass-inside icon-user"></span>
@@ -41,5 +44,5 @@
 	</div>
 </form>
 <p class="submit">
-	<button type="button" class="btn-primary" id="btnCambiarPass" data-value="Contraseña">Contraseña</button>
+	<button type="button" id="btnCambiarPass" data-value="Contraseña">Contraseña</button>
 </p>

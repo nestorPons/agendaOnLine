@@ -14,7 +14,7 @@
             <div 
                 id = "sldBorderRadius" 
                 class="slider"
-                data-on-change="sliderConfigBorder"
+                data-on-change="estilos.sliderConfigBorder"
                 data-role="slider"
                 data-max-value="25"
                 data-min-value="0"

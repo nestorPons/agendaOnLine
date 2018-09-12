@@ -4,5 +4,4 @@
     <td class="fecha"><?=$date?></td>
     <td class="accion"><?=$accion?></td>
     <td class="idUsuario"><?=$user?></td>
-    <td class="estado"><?=$status?></td>
 </tr>

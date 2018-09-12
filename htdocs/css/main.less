@@ -51,6 +51,9 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
  }
+datalist { 
+    display: none;
+}
 ::-webkit-scrollbar{
 	display: none
  }
@@ -132,7 +135,7 @@ a, i, .a{
 	-moz-transition: background 0.1s;
 	-o-transition: background 0.1s;
 	transition: background 0.1s;
-	&:-webkit-any-link { color:@base}
+	&:-webkit-any-link { color: inherit; }
  }
 input :-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset; 
@@ -158,9 +161,13 @@ input, button, select, textarea {
 		border: 0;
 	}
  }
- button, input[type="button"]{
+button, input[type="button"]{
 	margin: 5px auto !important;
 	cursor: pointer; 
+	&:disabled{
+		border-color: #888 !important;
+		color: #888 !important;
+	}
  }
 table {
 	.mostrar_baja{
@@ -314,6 +321,10 @@ input[type="color"] {
 .caption{
 	font-size: 0.8em;
  }
+ div[data-role=charm]{
+	 display: none;
+ }
+
 .charm{
 	display: none;
 	position: fixed;
@@ -324,7 +335,7 @@ input[type="color"] {
 	width:320px;
 	border-radius: 5px;
 	color: @base;
-	padding: .625rem;
+	padding: 1rem;
 	.no-seleccionable();
 	.contenedor{
 		margin: 5px;
@@ -339,7 +350,6 @@ input[type="color"] {
 
 	&.right-side {
 		right: 0;
-		top: 0;
 		left: auto;
 		bottom: 0;
 		text-align: center;
@@ -348,7 +358,6 @@ input[type="color"] {
 	&.left-side {
 		width: auto;
 		left: 0;
-		top: 0;
 		bottom: 0;
 	}
 
@@ -380,6 +389,10 @@ input[type="color"] {
 		font-weight: bold;
 		&:before {
 			content: "\e870";
+		}
+		@media (max-width: 320px){
+			top : 5px; 
+			right: 5px;
 		}
 	}
 	&>button:first-child{
@@ -501,6 +514,7 @@ input[type="color"] {
 			position:sticky;
 			text-align:center;
 			width: 310px;
+			min-height: 50px;
 		
 			*{
 				box-sizing: border-box;
@@ -525,6 +539,7 @@ input[type="color"] {
 				&:first-of-type{
 					width: 10px;
 					left: 5px;
+					height: 0;
 				}
 				&.icon-note.grande{
 					bottom : 142px;
@@ -535,6 +550,7 @@ input[type="color"] {
 				float: left;
 				margin-left: 5px;
 				text-align: left;
+				min-height: auto;
 			}
 		 }
 		&-inside{
@@ -726,7 +742,17 @@ input[type="color"] {
  }
 .ocultar{
 	 display: none; 
+	 transition: display 0.8s linear 1s;
  } 
+ .show{
+	display: initial !important; 
+	transition: display 1s linear 1s; 
+ }; 
+ .hide{
+	display: none !important; 
+	transition: display 1s linear 1s;
+ };
+
 .navigation{
   width: 15em;
   right: -15em;
@@ -783,7 +809,6 @@ input[type="color"] {
 		position: absolute;
 		font-size: 1rem;
 		font-weight: normal;
-		padding: 1ch;
 		z-index: 3;
 		outline: none;
 		cursor: pointer;
@@ -973,7 +998,6 @@ input[type="color"] {
 .resaltado{
 	font-weight: bold;
  }
-
 .responsiveDesing{
 	&_hidden{
 		@media (max-width: 590px){display:none;}
@@ -984,7 +1008,6 @@ input[type="color"] {
 		@media (max-width: 590px){display:inline-block;}
 	}
  }
-
 .tabcontrol {
 	.tabs {
 		li{
@@ -1442,7 +1465,6 @@ input[type="color"] {
  }
 #admin{ 
 	background-color: #fff;
-
 	#sections{
 		padding: 5px;
 		position: relative; 
@@ -1549,15 +1571,11 @@ input[type="color"] {
 				padding : 4px 0 0 0;
 				overflow : hidden;
 				border : 1px solid;
-				opacity: 0.7; 
+				opacity: 0.8; 
 				font-size: .9rem;
 				@media (max-width: 450px){
 					width: 99%;
 					font-size: 0.8em;
-				}
-				
-				.nombre{
-					margin : 0 0 10px 0;	
 				}
 				.servicios {
 					div{
@@ -1567,11 +1585,15 @@ input[type="color"] {
 					}
 				}
 				.nombre { 
+					margin : 0 0 10px 0;
 					padding-right: 50px;
-					height: 0.9rem;
+					height: 1rem;
 					display: inline-flex;
 					overflow: 	hidden;
 					.no-seleccionable();
+					@media (max-width: 450px){
+						padding-right: 0;
+					}
 				}
 				.iconos{
 					position : absolute ;
@@ -1580,11 +1602,10 @@ input[type="color"] {
 					display: flex;
 					background: inherit;
 					@media (max-width: 450px){
-						display: none;
+						 *{ display: none; }
+						 .fnMove{ display: initial} 					
 					}
-		
 				}
-		
 				.note { 
 					overflow : hidden;
 					display: none;
@@ -1636,7 +1657,14 @@ input[type="color"] {
 						}
 		
 					}
+			 }
+			 #nota{
+				margin: 1% 5% auto;
+				width:90%;
+				textarea{
+				   margin: 0 10%;
 				}
+			}
 		 }
 
 		#festivos{
@@ -1795,6 +1823,9 @@ input[type="color"] {
 				i{
 					font-size: 70px;
 				}
+				&:active{
+					border-width: 2px;
+				}
 			}
 		 }
 		#usuarios{
@@ -1882,12 +1913,38 @@ input[type="color"] {
 				}
 			}
 		 }
+		#agendas{
+			.contenedor-agenda{
+				margin: 5px; 
+				padding: 5px;
+				height: 40px;
+				*{
+					display: inline;
+				}
+				input{ 
+					padding-left: 1ch;
+					opacity: .9;
+					&[type=checkbox] {
+						transform: scale(1.5);
+					 }
+				}
+			}
+		 }
 	 }
+	 .btn-nuevo{
+		border: 1px solid #888; 
+		color: #888 !important;
+		background-color: #fdfdfd !important;
+		*{ padding: 10px } 
+		&:active, &:hover{
+			border-width: 2px !important;
+			*{
+				cursor: pointer;
+			}
+		}
+	}
  }
-#contenedorMenuPrincipal{
-	top:50px;
-	position:relative;
- }
+
 #dialogs{
 	#dlgHistorial{
 		max-height: 50%;
@@ -1905,7 +1962,6 @@ input[type="color"] {
 		margin : 10px ;
 	}
  } 
-
 #frmNotas{
 	text-align: center;
  }
@@ -1947,8 +2003,6 @@ input[type="color"] {
 		}
 	}
  }
-
-
 #mnuContacto{
 	display:none;
 	a{
@@ -1983,7 +2037,6 @@ input[type="color"] {
 		top: 8px;
 		left: 10px;
 		font-size: 22px;
-		color: white;
 		padding: 5px; 
 
 		&:hover{
@@ -2005,9 +2058,6 @@ input[type="color"] {
 	 }
 	ul{
 		border: none;
-		li {
-			padding-top:  15;
-		}
 	}
 	a{
 		text-decoration: none;
@@ -2020,6 +2070,14 @@ input[type="color"] {
 		display: inline-flex;
 		width: 200;
 	}
+	li{
+		width: 50px;
+		text-align: center;	
+		*, *:hover, *:active{
+			background-color: transparent;
+		}
+			
+	}
 	.menuLbl{
 		display: inline-table;
 	}
@@ -2031,7 +2089,6 @@ input[type="color"] {
 			height: 50;
 		}
 	}
-
 	.app-bar-menu {
 		display: inline-block;
 		float: left;
@@ -2158,7 +2215,6 @@ input[type="color"] {
 			clear: both;
 		 }
 	 }
-	
 	#conTxtBuscar{
 		background-image: url("/img/fondo_barra.png");
 		display:none;
@@ -2339,38 +2395,18 @@ input[type="color"] {
 			}
 		}
 	}
+	#logo{
+		float: left;
+		border: 1px solid; 
+	}
+	#lblUser{
+		padding-left: 12px;
+	}
  }
 
-#nota{
-	 margin: 1% 5% auto;
-	 width:90%;
-	 textarea{
-		margin: 0 10%;
-	 }
- }
-
-
-#user{
+#users{
 	background-color: #fff;
 	height: 100vh;
-	#navbar{
-		a * {
-			font-size: 1em; 
-		}
-		#logo{
-			float: left;
-			border: 1px solid; 
-		}
-		li{
-			min-width: 50px;
-			text-align: center;	
-				
-		}
-		#lblUser{
-			padding-left: 12px;
-		}
-
-	}
 	.contenedor-datepicker{
 		display: inline-flex;
 		margin: 8 14;
@@ -2573,7 +2609,7 @@ input[type="color"] {
 		text-align: left;
 		float: left;
 		margin: 1ch;
-		i.del{
+		.del{
 			cursor: pointer;
 			font-size: 1.3em;
 			position: relative;
@@ -2594,6 +2630,10 @@ input[type="color"] {
 	#mnuDatosPersonales{
 		display: none;
 	}
+	#contenedorMenuPrincipal{
+		top:50px;
+		position:relative;
+	 }
  }
 #historial{
 
@@ -2635,7 +2675,6 @@ input[type="color"] {
 		}
 	}
  }
-
 // Auxiliares
 .noHover{
 	cursor: inherit;
@@ -2668,7 +2707,6 @@ input[type="color"] {
 	font-weight: 100;
 	transition: 0.5s;
 	li{
-		border-bottom: 1px solid rgb(200,200,200,0.5);
 		padding: 5px 0;
 		&:last-child{
 			border-bottom:  0px;
@@ -2685,7 +2723,6 @@ input[type="color"] {
 		transform: translate(-2px,0);
 		&:hover, &.selected {
 			transform: translate(3px);
-			background: rgb(250,250,250,0.2);
 			font-weight: 800;
 		}
 		.caption{

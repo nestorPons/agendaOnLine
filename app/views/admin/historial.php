@@ -14,7 +14,6 @@
                     <th class="fecha">Fecha</th>
                     <th class="accion">Acción</th>
                     <th class="idUsuario">Usuario</th>
-                    <th class="estado">Est</th>
                 </tr>	
             </thead>
             <tbody>
@@ -23,8 +22,7 @@
                     <td class="icono"><a class= "" ></a></td>
                     <td class="fecha"></td>
                     <td class="accion"></td>
-                    <td class="idUsuario"></td>
-                    <td class="estado"></td>    
+                    <td class="idUsuario"></td>  
                 </tr>
 
                 <?php
@@ -34,8 +32,6 @@
                         $id = $r['id'];
                         $date = $r['date'];
                         $user = $r['nombre'];
-                        $status = $r['status']?'Ok':'Error';
-                        $colorClass = $r['status']?'green' : 'red';
                         $table = $r['tables'];
                         $action = $r['action'];
                         switch ($action){

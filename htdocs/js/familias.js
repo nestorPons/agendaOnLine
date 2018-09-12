@@ -1,7 +1,21 @@
 var familias = {
+	isLoad : true, 
 	change : false , 
 	controller : 'familias', 
-	data : new Object , 
+	data : new Object ,
+	init : function(){
+		$('#familias')
+		.on('click','table .icon-edit',function(){
+			familias.dialog($(this).attr('value'));
+		 })
+		.find('input[name*="mostrar"]')
+			.change(function(){
+				var mostrar = ($(this).is(':checked'))?1:0;
+				var id = $(this).attr('id');
+				familias.chckGuardar(id, mostrar);
+			})
+		colorear_filas($('#familias').find('.colorear-filas'))
+	}, 
 	eliminar : function () {
 		var id = $('#dlgFamilias #id').val(), del = false
 			nombre = $('#dlgFamilias #nombre').val(),
@@ -85,7 +99,7 @@ var familias = {
 			if ($.isEmpty(dlg.find('#nombre').val()))
 				notify.error('El campo del nombre no puede estar vacio.','ERROR CAMPO VACIO!')
 			else	
-				familias.sendAjax(SAVE , _fnOk)
+				familias.sendAjax(EDIT , _fnOk)
 		 }
 		
 	 },
@@ -93,7 +107,7 @@ var familias = {
 			var  dlg = $('#dlgFamilias') , id = dlg.find('#id').val()
 			var	data = $("#frmEditarFamilia").serializeArray()			
 				data.push({name : 'controller' , value : familias.controller})
-				data.push({name : 'action' , value : SAVE})
+				data.push({name : 'action' , value : action})
 
 			if (dlg.find('.aceptar').text() == 'Restaurar' && action == SAVE)
 				data.push({name : 'baja' , value : 0})
@@ -196,14 +210,3 @@ var familias = {
 
 	 },
  }
-$('#familias')
-	.on('click','table .icon-edit',function(){
-		familias.dialog($(this).attr('value'));
-	 })
-	.find('input[name*="mostrar"]')
-		.change(function(){
-			var mostrar = ($(this).is(':checked'))?1:0;
-			var id = $(this).attr('id');
-			familias.chckGuardar(id, mostrar);
-		})
-colorear_filas($('#familias').find('.colorear-filas'))

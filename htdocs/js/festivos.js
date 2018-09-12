@@ -1,5 +1,10 @@
 'strict'
 var festivo = {
+	isLoad : true, 
+	init : function(){
+		$("#festivos")
+		.on('click',"[name='eliminar[]']",function(){festivo.eliminar($(this))})
+	}, 
 	dialog : function () {
 		dialog.open('dlgFestivos',festivo.guardar, festivo.eliminar)
 	 },
@@ -66,6 +71,3 @@ var festivo = {
 		 }
 	 },
  }
-
-$("#festivos")
-     .on('click',"[name='eliminar[]']",function(){festivo.eliminar($(this))})

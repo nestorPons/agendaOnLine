@@ -76,7 +76,11 @@ class Horarios extends \core\BaseClass {
 			$sql .= 'DELETE FROM horarios WHERE id = '. $id . ';';
 		}
 		return $this->conn->multi_query($sql);
-	 }	
+	 }
+	public function delByAgenda(int $id_agenda){
+		$sql = 'DELETE FROM horarios WHERE agenda = '. $id_agenda . ';';
+		return $this->conn->query($sql);
+	}
 	public function cls_status($hour, $arr_hours){
 
 		//return to class
@@ -105,7 +109,7 @@ class Horarios extends \core\BaseClass {
 			}
 		}		
 		return $arr; 
-	}
+	 }
 	public function out_time($hour, $date, $minTime){
 		$date = $date . ' ' . $hour;
 		$date = date('Ymd H:i',strtotime($date));

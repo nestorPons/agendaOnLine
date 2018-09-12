@@ -1041,7 +1041,8 @@ class lessc {
 	protected function lib_contrast($args) {
 	    $darkColor  = array('color', 0, 0, 0);
 	    $lightColor = array('color', 255, 255, 255);
-	    $threshold  = 0.43;
+		$threshold  = 0.43;
+
 	    if ( $args[0] == 'list' ) {
 	        $inputColor = ( isset($args[2][0]) ) ? $this->assertColor($args[2][0])  : $lightColor;
 	        $darkColor  = ( isset($args[2][1]) ) ? $this->assertColor($args[2][1])  : $darkColor;
@@ -1068,7 +1069,7 @@ class lessc {
 	}
 	protected function lib_luma($color) {
 	    $color = $this->coerceColor($color);
-	    return (0.2126 * $color[0] / 255) + (0.7152 * $color[1] / 255) + (0.0722 * $color[2] / 255);
+	    return (0.2126 * $color[1] / 255) + (0.7152 * $color[2] / 255) + (0.0722 * $color[3] / 255);
 	}
 	public function assertColor($value, $error = "expected color value") {
 		$color = $this->coerceColor($value);

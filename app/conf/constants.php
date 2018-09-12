@@ -22,7 +22,7 @@ define('URL_VIEWS' , APP_FOLDER . 'views/' );
     define('URL_TEMPLATES' , URL_VIEWS . 'templates/' );
     define('URL_VIEWS_ADMIN' , URL_VIEWS . 'admin/' );
     define('URL_VIEWS_USER' , URL_VIEWS . 'user/' );
-    define('URL_MENUS' , URL_TEMPLATES . 'menus/' );
+    define('URL_MENUS' , URL_VIEWS . 'menus/' );
     define('URL_EMAILS' , URL_TEMPLATES . 'emails/' );
 
 define('URL_PROTOCOL', 'https://');
@@ -35,6 +35,7 @@ const NUM_MAX_ATTEMPT = 5; //attempts for crack brute force pass
 
 // Constantes de desarrollo
 const SAVE = 'save';
+const ADD = 'add';
 const DEL = 'del';
 const EDIT = 'edit';
 const GET = 'get';

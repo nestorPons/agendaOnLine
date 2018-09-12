@@ -7,8 +7,10 @@ if(!empty($_POST["login"]) && !empty($_POST['pass'])){
 				if($Login->validatePass($_POST["pass"])){
 					/**
 					 * Todo correcto se crea y registra una sesion 
+					 * Convertimos en booleano recordar
 					 */
-					$return['action'] =  $Login->createSession((bool)$_POST["recordar"]);
+					$_POST['recordar'] = filter_var($_POST["recordar"], FILTER_VALIDATE_BOOLEAN);
+					$return['action'] =  $Login->createSession($_POST["recordar"]);
 					/**
 					 * Comprobamos si se ha seleccionado login con pin 
 					 */

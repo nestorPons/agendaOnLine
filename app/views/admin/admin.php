@@ -1,7 +1,7 @@
-<div id="admin" data-empresa="<?=$Empresa->code()?>">
-	<?php include URL_TEMPLATES . "menus/admin.php"?>
-
-	<main id='sections'>
+<header><?php include URL_MENUS . "admin.php"?></header>
+<nav><?php include URL_MENUS . "navbar.php"?></nav>
+<main id="admin" data-empresa="<?=$Empresa->code()?>">
+	<div id='sections'>
 		<section id='main' data-nombre="Principal" class="capasPrincipales activa" ><?php include URL_CONTROLLERS . "main.php"?></section>
 		<section id='notas' data-nombre="Notas" class="capasPrincipales" ><?php include URL_CONTROLLERS . "notas.php"?></section>
 		<section id='usuarios' data-nombre="Clientes" class="capasPrincipales" ></section>
@@ -15,9 +15,6 @@
 		<section id='festivos' data-nombre="Festivos" class="capasPrincipales" ></section>
 		<section id='agendas' data-nombre="Edición agendas" class="capasPrincipales" ></section>
 		<section id='historial' data-nombre="Historial" class="capasPrincipales" ></section>
-	</main>
-	<div id="dialogs" class="popup-overlay"></div>
-	<?php include URL_TEMPLATES . "menus/navbar.php"?>
-	
-	<script  src="/js/admin.js" async></script>
-</div>
+	</div>
+	<div id="dialogs" class="popup-overlay"></div>	
+</main>

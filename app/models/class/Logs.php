@@ -4,15 +4,15 @@
     public function __construct(){
         parent::__construct('logs');		 
 	 }
-    public function set(int $idUser, string $action, int $idFK = 0, bool $status = true, string $tables = null ){
+    public function set(int $idUser, string $action, int $idFK = 0, string $tables = null ){
+
        return self::saveById(-1,[
                 'idFK'=>$idFK, 
                 'date'=>\core\Tools::current_date(), 
                 'idUser'=> $idUser, 
                 'tables'=> $tables, 
-                'action'=> self::formatAction($action), 
-                'status' => $status 
-            ]);
+                'action'=> self::formatAction($action)
+        ]);
     }
     public function get($day){
         /*
@@ -27,19 +27,28 @@
         return $this->conn->all($sql, MYSQLI_ASSOC);
       
     }
-    private static function formatAction($arg){
+    public function getByTime($timestamp){
+        $sql = "SELECT * FROM `logs` WHERE `tables` IS NOT NULL AND date >= '$timestamp' ; " ;
+        return $this->conn->all($sql, MYSQLI_ASSOC);
+    }
+    private static function formatAction(string $arg){
 
         switch ($arg) {
-            case SAVE:
-                return 1; 
-            case DEL:
-                return 2; 
-            case EDIT:
-                return 3; 
-            case 'login':
-                return 4; 
             case 'logout':
-                return 5;            
+                return 5;
+                break; 
+            case 'login':
+                return 4;
+                break; 
+            case  DEL :
+                return 3; 
+                break;           
+            case  EDIT :
+                return 2; 
+                break;
+            case SAVE || ADD  :
+                return 1; 
+                break;
         }
     }
 }

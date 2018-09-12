@@ -1,35 +1,35 @@
 <form id="frmAg">
-	<div class="table">
-		<div class="tr">
-			<label class="col1">Eliminar</label>
-			<label class="col2">Nombre</label>
-			<label class="col3">Mostrar</label>
-		</div>
+	<div class="contenedor-agenda template">
+		<i id="" class="icon-trash fnDel"></i>
+		<input type="text" class="nombre" id =""  placeholder="Nombre nueva agenda" value="">
+		<input id="" type="checkbox" class="mostrar"  value="">
+		<label for="">Mostrar a los clientes</label>
+	</div>
 		<?php 
 		$count = 0 ; 
 		foreach($Agendas->get() as $agenda){
-			if ($count>CONFIG['num_ag']) break;
+			if ($count>CONFIG['num_ag']) return \core\Error::array('E041');
 			$count ++ ;
 
 			$i = $agenda[0];
 
 			$checked = $agenda[2]==0?"":"checked";
 			$nom = $agenda[1];
+			
 			?>
-			<div class ="tr datos">
-				<div class="col1">
-					<span id=<?=$i?> class="icon-trash fnDel"></span>
-				</div>
-				<div class="col2">
-					<input id ="<?='nameAgendaConfig'.$i?>" type="text" name="nombre[]" placeholder="Nombre" value="<?=$nom?>">
-				</div>
-				<div class="col3">
-					<input id="a<?=$i?>" type="checkbox" name="chck[]" value='<?=$i?>' <?=$checked?>>
-				</div>
+			<div class="contenedor-agenda">
+				<i id=<?=$i?> class="icon-trash fnDel"></i>
+				<input type="text" class="nombre" id ="<?='nameAgendaConfig'.$i?>"  placeholder="Nombre" value="<?=$nom?>">
+				<input id="a<?=$i?>" type="checkbox" class="mostrar"  value='<?=$i?>' <?=$checked?>>
+				<label for="a<?=$i?>">Mostrar a los clientes</label>
 			</div>
+
 			<?php
 		}?>
-	</div>
 </form>
+	<div id="nuevaAgenda" class="contenedor-agenda btn-nuevo">
+		<i id="" class="icon-plus fnAddAgenda"></i>
+		<label>Añadir nueva agenda</label>
+	</div>
 <br>
 <a href="mailto:<?= ADMIN_EMAIL?>">Solicita otra agenda al administrador</a>

@@ -1,24 +1,19 @@
 <?php
 use MatthiasMullie\Minify;
 
-if (isset($_POST['action'])){
+if (isset($_POST['action'])){ 
+    require_once URL_AJAX . 'login/' . $_POST['action'] . '.php' ;
+    
     header('Content-Type: application/json');
-    $action = $_POST['action'];
-    $_POST = $Forms->sanitize($_POST);
-    
-    require_once URL_AJAX . 'login/' . $action . '.php' ;     
-    
     echo json_encode($r);
-    
+
 }else if (isset($_POST['view'])){
     require_once URL_VIEWS . 'login/' . $_POST['view'] . '.php';
-
 } else {
     if(isset($_COOKIE["auth"])){
     
         $Login = new \models\Login;
         if ($action = $Login->authToken($_COOKIE["auth"])){
-        
             require_once URL_VIEWS . '/login/pinpass.php';
         }else{ 
             $Login->logout();

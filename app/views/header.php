@@ -25,6 +25,7 @@
         <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
         <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
+        <link rel="stylesheet" href="<?=$url_font_main?>" >
 
         <link rel="stylesheet"  type="text/css" href="/css/jquery-ui.min.css">
         <link rel="stylesheet"  type="text/css" href="/css/metro.css">
@@ -34,8 +35,7 @@
         <link rel="stylesheet"  type="text/css" href="/css/login.css">
         <link rel="stylesheet"  type="text/css" href="/empresas/<?=$Empresa->code()?>/style.css">
         <script  src="/js/main.js" ></script>
-
-        <link rel="stylesheet" href="<?=$url_font_main?>" >
+      
         <!-- AKI:: hay que quitar esto del login-->
         <script>
             let config = new Object;
@@ -59,3 +59,5 @@
 <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
 
 <meta http-equiv="Pragma" content="no-cache">
+
+

@@ -50,12 +50,6 @@
 				</a>
 				<ul class="d-menu" data-role="dropdown">
 					<li>
-						<a name='menu[]' data-capa="general"  title="Datos del administrador">
-							<span class="lnr-history"></span>
-							<span class="caption">Datos</span>
-						</a>
-					</li>
-					<li>
 						<a name='menu[]' data-capa="config"	 title="Configuración aplicacion">
 							<span class="lnr-cog"></span>
 							<span class="caption">Configuración</span>

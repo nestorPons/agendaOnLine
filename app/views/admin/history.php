@@ -65,4 +65,3 @@
         </tbody>
     </table>
 </div>
-<script>$.getScript("/js/historial.js")</script>

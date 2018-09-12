@@ -6,7 +6,6 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
-@radio_popover: 10px;
 @base: #fff ;
 @t1:mix(@color,@text-color, 50%); 
 @t2:spin(@color, 20);
@@ -188,7 +187,7 @@ a,i , .a{
 	font-family: @main-font;
 	
 	#conTxtBuscar{
-		background-color: @color;
+		.color-menu(0);
 	}
 	.color-menu(5%);
 
@@ -244,15 +243,10 @@ a,i , .a{
 
  }
 .dialog{
+	i:first-child:hover{ color: @red; }
 	font-family: @main-font;
-	.border-radius (@radio_popover,@radio_popover,@radio_popover,@radio_popover);
     background-color: @base;
 	color: @text-color;
-	.icon-cancel{
-		&:hover{
-			color: @red;
-		}
-	}
 	.icon-plus-circled{
 		color : @green ;
 	}
@@ -469,7 +463,7 @@ a,i , .a{
 	&:after{content: ' )';}
  }
 .popover{
-	.border-radius();
+	border-radius : @radius;
  }
 .lbl{
 	border : 2px solid @text1 ;
@@ -503,6 +497,7 @@ a,i , .a{
 	border: 1px solid @base;
 	&>ul{
 		li{
+			border-radius : @radius * 2;	
 			background-color:@base !important;
 			border: 1px solid @color ;
 			&:before{
@@ -592,12 +587,13 @@ a,i , .a{
 		.fnNotify(@red);
 	}
 	&.warning {
-		.fnNotify(@orange);
+		.fnNotify(@yellow);
 	}
 	&.info {
-		.fnNotify(@cyan);
+		.fnNotify(@blue);
 	}
  }
+
 #mnuContacto{
 
 	h1, h4{
@@ -669,46 +665,45 @@ a,i , .a{
 	}
  }
 
-#user{
-	background-color: @base;
-
+#users{
 	.tile-container{
-	*{
-		border-radius : @radius;
-	}
-	.tile{
-		border-radius : @radius;
-		background-color: @green;
-	}
-	.cita{
-		background-color: @b1;
-	}
-	.colorSeccion(@c){
-		background-color: @c; 
-		margin: 15px;
-
-	}
-	section{
-		.contenido{
-			background-color: @base;
-			color: @grey;
+		*{
+			border-radius : @radius;
 		}
-
-		&#crearCita {
-			.colorSeccion(@yellow);
+		.tile{
+			border-radius : @radius;
+			background-color: @green;
 		}
-		&#historial{
-			.colorSeccion(@blue);
-			#lblHis{
-				background-color: @cyan;
+		.cita{
+			background-color: @b1;
+		}
+		.colorSeccion(@c){
+			background-color: @c;
+		}
+		section{
+			.contenido{
+				background-color: @base;
+				color: @grey;
 			}
-		}
-		&#eliminar{
-			.colorSeccion(@red);
-		}
 
+			&#crearCita {
+				.colorSeccion(@yellow);
+			}
+			&#historial{
+				.colorSeccion(@blue);
+				#lblHis{
+					background-color: @cyan;
+				}
+			}
+			&#eliminar{
+				.colorSeccion(@red);
+			}
+
+		}
+	 }
+	#navbar #logo{ 
+		border-color: darken(@color,30);
 	}
- }
  }
 #notas{
 	.nota{
@@ -717,6 +712,17 @@ a,i , .a{
 		border-radius: @radius;
 		i:hover{
 			color: @orange;
+		}
+	}
+	#nuevaNota{
+		border-radius: @radius;
+		&:hover{
+			color: @orange; 
+			border-color: @orange;
+		}
+		&:active{
+			color: @blue; 
+			border-color: @blue;
 		}
 	}
 }
@@ -729,9 +735,10 @@ a,i , .a{
 	&-c5{background-color:@red !important}
 	&-warning{
 		background-color:#fff !important;
-	}
-	&-grey{background-color:@grey-bg !important}
-	&-white{background-color:#fff;}
+	 }
+	&-grey{ background-color:@grey-bg !important}
+	&-white{ background-color:#fff;}
+	
  }
 .color{
 	&0{
@@ -910,7 +917,9 @@ a,i , .a{
 		color:@base;
 		background-color: darken(mix(@color,@color_secon, 70%),20%);
 	}
-
+	.hay-nota{
+		background-color: darken(mix(@color_secon,@color, 70%),20%);
+	}
  }
 #boton-menu{
 	border-radius: @radius; 

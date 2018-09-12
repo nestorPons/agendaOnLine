@@ -1,29 +1,27 @@
 <?php
 if (isset($_POST['action'])) {
-    header('Content-Type: application/json');
-    $data = $_POST ;
-    $action = $data['action'];
 
-    $data = $Forms->sanitize($_POST);
-
-    $User = new models\User($data['id']) ;
-
-    switch ($action){
+    $User = new models\User($_POST['id']) ;
+    
+    switch ($_POST['action']){
         case SAVE:  
-            if(empty($data['email'])) unset($data['email']); 
-            $r['success'] = $User->save($data) ; 
-            $r['id'] = $User->getId(); 
-            break;
-        case DEL:
-            $r['success'] = $User->save( ['dateBaja'=>date('Y-m-d H:i:s')]) ; 
-            break;
+        if(empty($_POST['email'])) unset($_POST['email']); 
+        $r['success'] = $User->save($_POST) ; 
+        $r['id'] = $User->getId(); 
+        // crear historia
+        $Logs->set($_SESSION['id_usuario'], $_POST['action'],  $r['id'], 'usuarios');
+        
+        break;
+        
         case 'historial':
-            $ini = new \DateTime('2000-07-01');
-            $end = new \DateTime(); 
-            $r['data'] = $User->history($ini, $end, $_POST['limit']); 
-            $r['success'] =  $r['data']!=null; 
-            break;
+        $ini = new \DateTime('2000-07-01');
+        $end = new \DateTime(); 
+        $r['data'] = $User->history($ini, $end, $_POST['limit']); 
+        $r['success'] =  $r['data']!=null; 
+        break;
     }
+    
+    header('Content-Type: application/json');
     echo json_encode($r);
 } else {
     

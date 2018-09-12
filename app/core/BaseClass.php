@@ -140,11 +140,13 @@ class BaseClass{
     public function saveById ( int $id ,$args = null  ) {
         $columns = null ; 
         $values = null ;
-        
+    
+        $args = $this->sanitize($args); 
         if ( $id == -1) {
             unset($args['id']);
-
+            
             if (!is_null($args)){
+
                foreach ($args as $column => $value ) {
                     $columns .=  $column . ',' ;
                     $values .= '"' . $value . '",' ; 
@@ -158,7 +160,7 @@ class BaseClass{
 
             $this->sql .= $this->updateSql($args , $id);
         }
- 
+
       if(!$this->multi_query){
             $this->return = $this->query();
             return $this->return;
@@ -169,6 +171,8 @@ class BaseClass{
         $values ="";
         $fName = key($filter);
         $fValue = $filter[$fName];
+        
+        $args = $this->sanitize($args); 
 
         foreach ($args as $column => $value ) {
             $columns .=  $column . ',' ;
@@ -272,5 +276,43 @@ class BaseClass{
             }
         }
         return $result;
+     }
+    private function sanitize($post){
+
+        if (empty($post)) return false; 
+
+        if(isset($post['controller'])) unset($post['controller']);
+        if(isset($post['action'])) unset($post['action']);
+
+        // combierto post a tipo de dato devuelto 
+        foreach($post as $k => $v){
+            if(!is_array($v)){
+                if(!empty($v)){ 
+                    if(!empty($v)){
+                        if(strtolower($v)==='true'){
+                            $post[$k] = true; 
+                        } elseif(strtolower($v)==='false'){
+                            $post[$k] = false; 
+                        } elseif ( is_numeric ( $v )){
+                            $post[$k] = (int)$v;
+                        }
+                    }
+                }
+            }else{
+                /**
+                 * Si el valor es una array
+                */
+                foreach($v as $key => $val){
+                    if(strtolower($val)==='true'){
+                        $post[$k][$key] = true; 
+                    } elseif(strtolower($val)==='false'){
+                        $post[$k][$key] = false; 
+                    } elseif ( is_numeric ( $val )){
+                        $post[$k][$key] = (int)$val;
+                    }
+                }
+            }
+        }
+        return $post;
      }
 }

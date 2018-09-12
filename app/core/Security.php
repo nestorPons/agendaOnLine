@@ -7,7 +7,8 @@ class Security {
     //private check exceptions
    
     function __construct(){
-        
+//AKI :: se puede acceder a cualquier script sin iniciar session
+// Implementar seguridad aqui
         $this->session_start();
 
      }

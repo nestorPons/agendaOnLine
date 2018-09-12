@@ -1,6 +1,6 @@
 
-<main id="user" user="user" iduser = <?=$_SESSION['id_usuario']?>>
-	<?php require_once URL_MENUS . 'users.php'?>
+<header><?php require_once URL_MENUS . 'users.php'?></header>
+<main id="users" user="user" iduser = <?=$_SESSION['id_usuario']?>>
 	<div class="login no-seleccionable">	
 		<div class="tile-container" id="contenedorMenuPrincipal">
 			<section id="crearCita" name="tile" class="tile " data-role="tile">
@@ -51,12 +51,10 @@
 			</section>
 		</div>
 	</div>
-	<section class="about">
-		<div id="fb-root"></div>
-		<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" 
-			data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
-	</section>
 	<div id="dialogs" class="popup-overlay"></div>
-	
-	<script  src="/js/users.js" async></script>
 </main>
+<footer class="about">
+	<div id="fb-root"></div>
+	<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" 
+		data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
+</footer>

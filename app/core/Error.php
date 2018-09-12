@@ -43,11 +43,16 @@ class Error {
     const E030 = "Error guardando datos";
     const E031 = "Tamaño de datos incorrecto";
 
+    // Errores relacionados plan contratado
+    const E041 = "Su plan no admite más agendas <br> Pongase en contacto con el administrador. "; 
+
     //Base datos
     const E051 = "No se encontro la base de datos";
 
     //Mail 
     const E071 = "No se ha podido mandar el email";
+
+
 
 	function __construct() {
         

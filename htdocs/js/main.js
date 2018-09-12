@@ -29,11 +29,7 @@ if(typeof $!='function') {
 	var url = function (){
 		var pathArray = window.location.pathname.split( '/' );
 
-		if(pathArray.indexOf("users")!=-1){
-			return '/js/users.js';
-		}else if (pathArray.indexOf("admin")!=-1){
-			return '/js/admin.js';
-		}else if(pathArray.indexOf("nuevo.php")!=-1){
+		if(pathArray.indexOf("nuevo.php")!=-1){
 			return '/js/nuevo.js';
 		}else if(pathArray.indexOf("formulario.html")!=-1){
 			return '/js/formulario.js';
@@ -55,9 +51,10 @@ if(typeof $!='function') {
 			loadAsync('/js/lib/metro.js',function(){
 				loadSync('/js/lib/jquery.mask.min.js')
 				loadSync('/js/funciones.js',function(){
-					loadSync('/js/tools.js',function(){
-						loadAsync(url())
-					})
+
+						loadAsync(url(),function(){
+				
+						})
 				})
 			})
 		})

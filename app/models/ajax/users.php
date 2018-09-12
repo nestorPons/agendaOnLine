@@ -1,32 +1,23 @@
 <?php
+$r['success'] = true;
+
+switch ($_POST['action']) {
+	case 'save' :
+		if (isset($_POST['npass'])) {
+			if ( $User->validatePass($_POST['npass']) && $User->validateEmail($_POST['email'])){
+				$_POST['pass'] = $_POST['npass'];
+				unset($_POST['npass']);
+				unset($_POST['opass']);	
+			} else {
+				$r['succcess'] = false ;
+			}
+		} 
+		$r['success'] = $User->set($_POST);
+		break;
+	case 'del':
+		$delCita = new core\BaseClass('del_cita') ;
+		$r['succcess'] = $User->saveById();
+		break;
+}
 header('Content-Type: application/json');
-	$r['success'] = true; 
-	$data = $Forms->sanitize($_POST);
-		$id = $_SESSION["id_usuario"] ;
-
-		switch ($_POST['action']) {
-			case 'save' :
-
-				if (isset($data['npass'])) {
-					
-					if ( $User->validatePass($data['npass']) && $User->validateEmail($data['email'])){
-						$data['pass'] = $data['npass'];
-						unset($data['npass']);
-						unset($data['opass']);
-						
-					} else {
-						$r['succcess'] = false ;
-					}
-				} 
-				
-				$r['success'] = $User->set($data);
-				
-				break;
-			case 'del':
-
-				$delCita = new core\BaseClass('del_cita') ;
-				$id = $data['id'] ;
-				$r['succcess'] = $User->saveById();
-				break;
-		}
 echo json_encode($r);

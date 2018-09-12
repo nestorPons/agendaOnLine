@@ -1,9 +1,32 @@
 
 var usuarios = {
+	isLoad : true, 
 	controller : 'usuarios' , 
 	id: 0, 
 	init : function () {
-		usuarios.select('A')
+		let $this = this	
+		$this.select('A')
+		$("#usuarios")
+			.on('click','[name*="editar"]',function(){
+
+				var id = $(this).parents('tr:first').data('value')
+				$this.dialog(id)
+			})
+			.on('click',"[name='historia']",function(e){
+				$this.id = $(this).parents('tr').data('value')
+				$this.historial($this.id)
+			})
+			.on('click','#mainLstABC a',function(){
+				$this.select($(this).html());
+			})
+			.on('change','#lstABC',function(){$this.select($(this).val())})
+			
+		$('#dialogs')
+			.on('change','#ultimosServicios',function(){
+				$this.historial($this.id,$(this).val())
+			})
+			.on('click','.fnBuscarCita', function(){
+			})
 	 },
 	eliminar: function (id, nombre,callback) {
 		if ($('#usuarios #id').val()!=-1){
@@ -21,8 +44,7 @@ var usuarios = {
 		
 		dialog.close('dlgUsuarios');
 	 },
-	guardar: function (idUsuario,data=null,callback){
-	
+	guardar: function (idUsuario =-1 ,data=null,callback){
 		if(data == null){
 			var frm = new Object
 			frm = $.serializeForm('frmUsuarios'),
@@ -38,7 +60,7 @@ var usuarios = {
 				
 		data.controller = usuarios.controller
 		data.action = SAVE
-		data.id = idUsuario||-1
+		data.id = idUsuario
 		
 		$.ajax({
 			type: "POST",
@@ -285,25 +307,3 @@ var usuarios = {
 		 }	
 	 }
  }
-$("#usuarios")
-	.on('click','[name*="editar"]',function(){
-
-		var id = $(this).parents('tr:first').data('value')
-		usuarios.dialog(id)
-	})
-	.on('click',"[name='historia']",function(e){
-		usuarios.id = $(this).parents('tr').data('value')
-		usuarios.historial(usuarios.id)
-	})
-	.on('click','#mainLstABC a',function(){
-		usuarios.select($(this).html());
-	})
-	.on('change','#lstABC',function(){usuarios.select($(this).val())})
-	
-$('#dialogs')
-	.on('change','#ultimosServicios',function(){
-		usuarios.historial(usuarios.id,$(this).val())
-	})
-	.on('click','.fnBuscarCita', function(){
-	})
-usuarios.init()

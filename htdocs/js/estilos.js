@@ -1,5 +1,6 @@
 'strict'
 var estilos = {
+	isLoad : true, 
 	border : false , 
 	init : function () {
 		this.border = $('#sldBorderRadius').data('position') ;
@@ -34,10 +35,8 @@ var estilos = {
 			}
 		theColor = "rgb(" + myRed + "," + myGreen + ",0)"; 
 		return( theColor ); 
-	}
- }
-
-estilos.init()
-function sliderConfigBorder ( value, slider ) {
-	estilos.test( value ) 
+	}, 
+	sliderConfigBorder ( value ) {
+		estilos.test( value ) 
+	 }, 
  }

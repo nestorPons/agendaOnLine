@@ -1,7 +1,12 @@
-var horario = {
+var horarios = {
+	isLoad : true, 
 	controller : 'horarios' , 
 	section : $('#horarios') ,  
 	activo:null,
+	init : function(){
+		$('#horarios').on('click', '#agenda_horario',horarios.mostrar)
+		horarios.mostrar()
+	}, 
 	nuevo: function(){
 		var $sec = $('#horarios'), 
 			$lineaHorario = $sec.find('.lineaHorarios').first(),
@@ -34,12 +39,12 @@ var horario = {
 		})
 
 		var cargarHoras = (function(callback){
-			main.section.find('div.template')
+			admin.section.find('div.template')
 				.clone()
 				.removeClass('template')
 				.addClass('editando');
 
-			main.section.find(".editando")
+			admin.section.find(".editando")
 				.removeClass('color1 color2 color-red')
 				.each(function(){
 					let dia = $(this).data('diasemana'), 
@@ -61,7 +66,7 @@ var horario = {
 			typeof callback == "function" && callback();
 		})()
 	 },
-	guardar: function (callback){
+	guardar: function (){
 
 		var	$horarios =$('#horarios '),
 			$lineaHorario = $horarios.find('.lineaHorarios'), 
@@ -86,7 +91,7 @@ var horario = {
 			$.post(INDEX,data,function(r){
 				if(r.success){
 					notify.success('Horario guardado')
-					location.reload(true);
+					admin.reload()
 				} else {
 					notify.error('No se pudo guardare el horario')
 				}
@@ -109,7 +114,7 @@ var horario = {
 		
 		$.post(INDEX,data,function(r){
 			if(r.success){
-				location.reload();
+				admin.reload();
 			}else{
 				notify.error('No se ha podido guardar!!')
 			}
@@ -137,6 +142,3 @@ var horario = {
 		return return_function;
 	 },
  }
- $('#horarios').on('click', '#agenda_horario',horario.mostrar)
-
- horario.mostrar()

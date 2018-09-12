@@ -1,6 +1,4 @@
 <?php  
-$_POST = $Forms->sanitize($_POST);
-
 $Login = new \models\Login;
 // Si hay un post token vengo de validar email de registro
 // si existe post pinpass hay que validar entrada por pin
@@ -17,7 +15,7 @@ $script  =
 			:'loginpass.php' ); 
 
 
-$return = include URL_SCRIPTS . 'validates/' . $script;
+$return = include URL_AJAX . 'login/' . $script;
 
 if( !isset($return['action']) || $return['action'] == 'login'){
 

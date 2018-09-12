@@ -1,7 +1,6 @@
 <?php
-$_POST = $Forms->sanitize($_POST);
+$r['id'] = $idCita = $_POST['idCita']; 
 
-$idCita = $_POST['idCita']; 
 $arr_cita['fecha'] = $_POST['fecha']; 
 $arr_cita['hora'] = $_POST['hora']; 
 $arr_cita['agenda'] = (int)$_POST['agenda'];  

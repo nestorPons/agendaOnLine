@@ -1,5 +1,13 @@
 'strict'
 var general = {
+	isLoad : true, 
+	init : function(){
+		$('#general')
+			.on('click','#btnCambiarPass',function(){
+
+					dialog.open('dlgCambiarPass',general.pass)
+			})
+	}, 
 	guardar: function (callback){
 
 		if (general.validar()){
@@ -27,7 +35,7 @@ var general = {
 	validar: function () {
 		//AKI :: implementar validacion de formularios !!important
 		var r = true
-		$('#generalFrm input').each(function(){
+		$('#frmGeneral input').each(function(){
 			let val = $(this).val() 
 			if (val=='') r = false
 		})
@@ -72,8 +80,3 @@ var general = {
 	 }
  }
 
-$('#general')
- .on('click','#btnCambiarPass',function(){
-
-	 	dialog.open('dlgCambiarPass',general.pass)
- })

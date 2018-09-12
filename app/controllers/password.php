@@ -1,16 +1,14 @@
 <?php
 if (isset($_POST['action'])) {
-    header('Content-Type: application/json');
-        $r['success'] = false;
-        $action = $_POST['action']; 
-        $post = $Forms->sanitize($_POST);
-
+    $r['success'] = false;
+    
     $User = new models\User($_SESSION['id_usuario']);
-
-        if($User->comparePass($post['oldPass'])){
-            
-            $r['success'] = $User->pass($post['pass']);
-
-        }
+    
+    if($User->comparePass($_POST['oldPass'])){
+        
+        $r['success'] = $User->pass($_POST['pass']);
+        
+    }
+    header('Content-Type: application/json');
     echo json_encode($r);
 } 

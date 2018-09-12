@@ -1,5 +1,5 @@
 <?php 
-	include URL_TEMPLATES . '/header.php' ;
+	include URL_VIEWS . '/header.php' ;
 ?>
 	<title>Agenda Online zona login</title>
 	</head>

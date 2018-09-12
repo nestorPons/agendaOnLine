@@ -142,7 +142,7 @@ class Login extends \core\BaseClass {
      }
     public function createSession(bool $remember = false){
         global $Security;
-        
+
         $Security->loadSession(
             $this->id,
             $_REQUEST['empresa'],
