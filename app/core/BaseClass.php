@@ -45,14 +45,12 @@ class BaseClass{
         $filter = empty($order)?'':'ORDER BY '.$order;
         $query = $this->conn->query("SELECT $return FROM {$this->table} " . $filter ) ;
         return $query->fetch_all( $type );
-        
      }
     public function getById ( int $id , string $return = '*') {
 
-        $sql = "SELECT $return FROM {$this->table} WHERE id = $id LIMIT 1" ;
+        $sql = "SELECT $return FROM `{$this->table}` WHERE id = $id LIMIT 1" ;
         $query = $this->conn->query($sql) ;
         $result = ($row = $query->fetch_assoc()) ? $row : false ;
-
         return  $this->format($result);
     
      }  

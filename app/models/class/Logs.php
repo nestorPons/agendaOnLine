@@ -28,11 +28,10 @@
       
     }
     public function getByTime($timestamp){
-        $sql = "SELECT * FROM `logs` WHERE `tables` IS NOT NULL AND date >= '$timestamp' ; " ;
+        $sql = "SELECT * FROM `logs` WHERE idFK != 0 AND date >= '$timestamp' ; " ;
         return $this->conn->all($sql, MYSQLI_ASSOC);
     }
     private static function formatAction(string $arg){
-
         switch ($arg) {
             case 'logout':
                 return 5;

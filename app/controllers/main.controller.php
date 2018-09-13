@@ -1,7 +1,7 @@
 <?php 
 try {
     require_once $url_base . 'app/conf/autoload.php' ;
-    
+
     $Security = new \core\Security;
     $Forms = new models\Forms($_POST, ['fileLogo','tel','chck']);
 
@@ -24,7 +24,6 @@ try {
     */
         // Comprobando el GET sabreos si estamos en login
         if(isset($_GET['empresa'])) $_SESSION['empresa'] = $_GET['empresa'];
-
         // Todos los demas casos que haya pasado por login
         if (isset($_SESSION['empresa'])){
 

@@ -8,35 +8,38 @@
  * si en una hora no se ha actualizado nada paramos el bucle y esperamos una nueva peticion probocada por el usuario
  */
 // Quitamos el limite de tiempo que tenemos en php.ini
+
 set_time_limit(0);
 $timestamp = date('Y-m-d H:i:s', time()); 
 // Clase  que hara la busqueda del los registros actualizados  
 $Logs = new models\Logs(); 
-
-//while (true) {
+$n = 0; 
+/**
+ * Bucle que espera la obtencion de datos actualizados 
+ * Debera de ser reiniciado cada hora
+ */ 
+while ($n < (1000 * 60 * 60 )) {
     
     $result = $Logs->getByTime($timestamp);
-    var_dump($result);
     /**
      * Si obtenemos datos 
      * Buscamos los reguistros que han sido guardados 
      * si no esperamos un minuto y volvemos a realizar la consulta 
-     * count($result)
+     * 
      */
-    if(true){
-        $data[] = 'hola' ; 
+    if(count($result)){
         foreach($result as $key => $val){ 
-            $Query =    new \core\BaseClass($val['tables']);
+            $Query =  new \core\BaseClass($val['tables']);
             $data[] = $Query->getById($val['idFK']); 
-        }
- 
-       // $json = json_encode($result);
-        header('Content-Type: application/json');
-        echo json_encode(['MI'=>'123456']);
-       // break;
+        } 
+        break;
     } else {
         sleep( 1 );
-//        continue;
-echo("FIN");
+        $n++; 
+        continue;
     }
-//}
+}
+
+$data = $data??'finish';  
+header('Content-Type: application/json');
+echo json_encode($data);

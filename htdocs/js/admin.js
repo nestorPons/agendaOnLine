@@ -7,7 +7,8 @@ function menuEsMovil(tab){
 	return true
  }
 function sincronizar( dias, date ){
-	main.sync()
+	main.worker.sync()
+
 	var fecha = date||Fecha.general ,
 		$datepicker= $('.datepicker')
 
@@ -116,13 +117,12 @@ main = {
 		sync : function(){
 			this.w = new Worker('/js/worker.js');
 			this.w.onmessage = e =>{
-				console.log(e);
+				console.log(e.data);
 			}
 			this.w.postMessage(0);
 		}
 
 	}
-
 } , 
 admin ={ 
 	section : $("#main"), 
