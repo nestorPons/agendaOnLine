@@ -1,5 +1,4 @@
-var servicios = {
-	isLoad : true, 
+var servicios = { 
 	controller : 'servicios',
 	init : function () {
 		var clase = $('.menuServicios a').not('.ocultar_baja').attr('id')  ; 
@@ -86,13 +85,13 @@ var servicios = {
 			}
 		 }
 
-		dialog.open('dlgServicios',servicios.guardar,servicios.eliminar,fnLoad)
+		dialog.open('dlgServicios',servicios.guardar,servicios.delete,fnLoad)
 	 },
 	guardar: function (){
 		var _fnOk = function (rsp , isNew){
 				if (rsp.success) {
 	
-					isNew ?  servicios.crear(rsp)  : servicios.actualizar(rsp) 
+					isNew ?  servicios.create(rsp)  : servicios.edit(rsp) 
 	
 					servicios.mostrar(rsp.idFamilia)
 					
@@ -113,7 +112,7 @@ var servicios = {
 			btn.load.hide()
 		  }		
 	 },
-	eliminar: function() {
+	delete: function() {
 
 		var id= $('#dlgServicios #id').val().trim(), 
 			_fnOk = function (r) {
@@ -143,7 +142,7 @@ var servicios = {
 			dialog.close('dlgServicios');
 		}
 	 },
-	actualizar: function(datos){
+	edit: function(datos){
 		$('#servicios #rowServicios'+datos.id)
 			.css('class','fam'+datos.idFamilia)
 			.removeClass('mostrar_baja , ocultar_baja') 
@@ -191,7 +190,7 @@ var servicios = {
 			})
 		
 	 },
-	crear: function(data){
+	create: function(data){
 		//NUEVO
 		var mostrar = (data.mostrar==1)?'checked':'';
 

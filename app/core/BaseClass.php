@@ -135,10 +135,9 @@ class BaseClass{
         $this->multi_query = false;
         return $r;
      }
-    public function saveById ( int $id ,$args = null  ) {
+    public function saveById ( int $id ,$args = null, string $execption_sanitize = null ) {
         $columns = null ; 
         $values = null ;
-    
         $args = $this->sanitize($args); 
         if ( $id == -1) {
             unset($args['id']);
@@ -150,6 +149,7 @@ class BaseClass{
                     $values .= '"' . $value . '",' ; 
                 }    
             }
+
             $columns = trim( $columns , ',' ) ;
             $values = trim( "'" . $values , "'," ) ;
             $this->sql .= "INSERT INTO {$this->table} ( $columns ) VALUES ( $values );" ;
@@ -280,7 +280,7 @@ class BaseClass{
         if (empty($post)) return false; 
 
         if(isset($post['controller'])) unset($post['controller']);
-        if(isset($post['action'])) unset($post['action']);
+        if(isset($post['action']) && !is_numeric($post['action'])) unset($post['action']);
 
         // combierto post a tipo de dato devuelto 
         foreach($post as $k => $v){

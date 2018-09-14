@@ -110,14 +110,49 @@ function mostrarCapa(capa, callback){
 var 
 main = { 
 	scripts  : [], 
+	isActive: true, 
 	worker : {
 		w : null , 
 		send : function(){
 		}, 
 		sync : function(){
+			
+  			// Variable para saber si el usuario esta activo
+			this.isActive = false; 
+
 			this.w = new Worker('/js/worker.js');
 			this.w.onmessage = e =>{
-				console.log(e.data);
+				let data = JSON.parse(e.data)
+				if(data){
+					$.each(data, function (table) {
+						$.each(table, function (i, v) { 
+							let action = v.action, obj = null
+							switch(table){
+								case 'data': 
+									obj = admin.lbl
+									break; 
+								case 'notas':
+									obj = notas
+									break; 
+								case 'usuarios': 
+									obj = usuarios.rows
+									break; 
+								case 'servicios': 
+									obj = servicios
+									break; 
+								case 'familias': 
+									obj = familias
+									break; 
+							}
+							if (action = 1) obj.create(v)
+							if (action = 2) obj.edit(v)
+							if (action = 3) obj.delete(v)
+						});
+						 
+					});
+				} else {
+					console.log('No ha cambios ... ')
+				}
 			}
 			this.w.postMessage(0);
 		}
@@ -1348,7 +1383,7 @@ notas = {
 				dialog.close(this.nombreDlg)
 
 				data.id = (data.id>-1) ?data.id:r.id; 
-				notas.crear(data)
+				notas.create(data)
 
 				notify.success('Su nota ha sido guardada')
 			} else{
@@ -1393,7 +1428,7 @@ notas = {
 				notas.show()
 				if(r.success){
 					for (let i = 0, datos= r.data,  len = datos.length; i < len; i++) {
-						notas.crear(datos[i])						
+						notas.create(datos[i])						
 					}		
 				} else {
 					$('#menu5').removeClass('c4')
@@ -1404,7 +1439,7 @@ notas = {
 		}
 
 	 },
-	crear : function (d){
+	create : function (d){
 		
 		Tools.template(notas, 'row.notas.php',function(r){
 			// se resalta en barra navegador que hay una nota
@@ -1420,7 +1455,7 @@ notas = {
 				.show('fade')
 		})
 	 },
-	 show : function(){
+	show : function(){
 		let $sec = $('#notas') , 
 			$noteDay = $sec.find('.'+Fecha.id)
 
@@ -1431,7 +1466,12 @@ notas = {
 
 		$('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
 		if($noteDay.length) $('#mySidenav #menu5').addClass('hay-nota')
+	}, 
+	edit : function(d){
+		this.delete(d.id)
+		this.create(d)
 	}
+
 }, 
 Device = {
 	cel: false, 

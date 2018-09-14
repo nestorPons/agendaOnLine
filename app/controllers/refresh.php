@@ -13,12 +13,12 @@ set_time_limit(0);
 $timestamp = date('Y-m-d H:i:s', time()); 
 // Clase  que hara la busqueda del los registros actualizados  
 $Logs = new models\Logs(); 
-$n = 0; 
+$n = 0;  
 /**
  * Bucle que espera la obtencion de datos actualizados 
  * Debera de ser reiniciado cada hora
  */ 
-while ($n < (1000 * 60 * 60 )) {
+while ($n < 10) {
     
     $result = $Logs->getByTime($timestamp);
     /**
@@ -29,17 +29,19 @@ while ($n < (1000 * 60 * 60 )) {
      */
     if(count($result)){
         foreach($result as $key => $val){ 
-            $Query =  new \core\BaseClass($val['tables']);
-            $data[] = $Query->getById($val['idFK']); 
+            $Query =  new \core\BaseClass($val['tables']); 
+            $data[$val['tables']][] =array_merge(
+                $Query->getById($val['idFK']), 
+                ['action'=>$val['action']]
+            );
         } 
         break;
     } else {
-        sleep( 1 );
+        sleep(1);
         $n++; 
         continue;
     }
 }
 
-$data = $data??'finish';  
 header('Content-Type: application/json');
-echo json_encode($data);
+echo json_encode($data??false);

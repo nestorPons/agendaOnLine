@@ -18,8 +18,12 @@ var familias = {
 	}, 
 	eliminar : function () {
 		var id = $('#dlgFamilias #id').val(), del = false
-			nombre = $('#dlgFamilias #nombre').val(),
-			_fnOk = function ( r ){
+			nombre = $('#dlgFamilias #nombre').val()
+
+		btn.load.show($('#dlgFamilias .cancelar'),false)
+
+		if (confirm ('Desea eliminar la familia?')) 
+			familias.sendAjax(DEL , r =>{
 				if (r.success == true){
 					if (del){		
 						familias.menu.eliminar( id ) 
@@ -37,15 +41,11 @@ var familias = {
 					notify.error( r.success ) 
 						
 				}
-				$("#rowFamilias"+id).fadeTo("fast", 1)
+				familias.obj.delete({id:id})
+				
 
 				dialog.close('dlgFamilias')
-
-			}
-		btn.load.show($('#dlgFamilias .cancelar'),false)
-
-		if (confirm ('Desea eliminar la familia?')) 
-			familias.sendAjax(DEL , _fnOk)
+			})
 		 else
 			btn.load.hide() 
 		
@@ -130,7 +130,7 @@ var familias = {
 				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
 				return false;
 			})
-		},
+	 },
 	menu : {
 		a : function(id , name) {
 			return  $('<a>').attr('id', id).html( name ) ;
@@ -209,4 +209,16 @@ var familias = {
 		 }
 
 	 },
+	obj : {
+		create : function(data){
+
+		}, 
+		edit : function(data){
+
+		}, 
+		delete : function(data){
+			$("#rowFamilias"+data.id).fadeTo("fast", 1)
+		}
+
+	}
  }

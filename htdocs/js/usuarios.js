@@ -28,22 +28,6 @@ var usuarios = {
 			.on('click','.fnBuscarCita', function(){
 			})
 	 },
-	eliminar: function (id, nombre,callback) {
-		if ($('#usuarios #id').val()!=-1){
-			if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
-				data = {
-					dateBaja: Fecha.general, 
-					status: 2,
-					nombre : nombre
-				}
-				usuarios.guardar(id,data,function(){
-					$('#rowUsuarios'+id).hide('explode').remove()
-				})
-			}
-		}
-		
-		dialog.close('dlgUsuarios');
-	 },
 	guardar: function (idUsuario =-1 ,data=null,callback){
 		if(data == null){
 			var frm = new Object
@@ -56,7 +40,7 @@ var usuarios = {
 					status: $.isEmpty(frm.activa)?0:2,
 					admin : $.isEmpty(frm.admin)?0:1,
 					color: (frm.sinColor)?null:frm.color}
-		}
+		 }
 				
 		data.controller = usuarios.controller
 		data.action = SAVE
@@ -75,7 +59,7 @@ var usuarios = {
 				if (data.id == -1 ){ 
 					//NUEVO ...
 					data.id = rsp.id 
-					usuarios.rows.add(data)
+					usuarios.rows.create(data)
 					notify.success('Usuario guardado con éxito!.','Nuevo usuario',false, $('#crearCita #cliente'))
 
 				}else{ 
@@ -100,7 +84,7 @@ var usuarios = {
 	
 	 },
 	rows: {
-		add : function(data){
+		create : function(data){
 			let $template = $('#usuarios').find('.template')
  			
 			$template.clone()
@@ -170,10 +154,25 @@ var usuarios = {
 				}
 			})
 		},
-		del : function(){
-			$("#usuarios #rowUsuarios"+id).addClass('ocultar_baja').fadeTo('fast',1)
-			$('#lstClientes [data-id="'+normalize(nombre)+'"]').remove()
-		}
+		delete: function (data) {
+			let id = data.id , 
+				nombre = data.nombre 
+				
+			if ($('#usuarios #id').val()!=-1){
+				if (confirm ("Deseas eliminar el cliente "+ id +"," + nombre + "?")) {
+					data = {
+						dateBaja: Fecha.general, 
+						status: 2,
+						nombre : nombre
+					}
+					usuarios.guardar(id,data,function(){
+						$('#rowUsuarios'+id).hide('explode').remove()
+					})
+				}
+			}
+			
+			dialog.close('dlgUsuarios');
+		 },
 	 },
 	dialog: function (id){
 		usuarios.id = id 
@@ -211,13 +210,17 @@ var usuarios = {
 				}
 		 } , 
 		_fnDel = function (r) { 
-			usuarios.eliminar($('#dlgUsuarios #id').val(),$('#dlgUsuarios #nombre').val())
+			let data = {
+				id : $('#dlgUsuarios #id').val(),
+				nombre : $('#dlgUsuarios #nombre').val()
+			}
+			usuarios.rows.delete(data)
 		 }
 
 		dialog.open('dlgUsuarios',function(){usuarios.guardar(usuarios.id)},_fnDel,_fnLoad)
 
 	 },
-	historial: function (id, limit=10){
+	historial: function (id,limit=10){
 		var data = {
 			controller : 'usuarios',
 			action : 'historial', 

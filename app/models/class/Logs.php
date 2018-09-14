@@ -5,14 +5,15 @@
         parent::__construct('logs');		 
 	 }
     public function set(int $idUser, string $action, int $idFK = 0, string $tables = null ){
+        $arr = [
+            'idFK'=>$idFK, 
+            'date'=>\core\Tools::current_date(), 
+            'idUser'=> $idUser, 
+            'tables'=> $tables, 
+            'action'=> (int)self::formatAction($action)
+        ];
 
-       return self::saveById(-1,[
-                'idFK'=>$idFK, 
-                'date'=>\core\Tools::current_date(), 
-                'idUser'=> $idUser, 
-                'tables'=> $tables, 
-                'action'=> self::formatAction($action)
-        ]);
+       return self::saveById(-1,$arr);
     }
     public function get($day){
         /*
@@ -35,19 +36,16 @@
         switch ($arg) {
             case 'logout':
                 return 5;
-                break; 
             case 'login':
                 return 4;
-                break; 
-            case  DEL :
-                return 3; 
-                break;           
+            case  DEL:
+                return 3;          
             case  EDIT :
                 return 2; 
-                break;
             case SAVE || ADD  :
                 return 1; 
-                break;
+            default: 
+                return 0; 
         }
     }
 }

@@ -415,6 +415,9 @@ Tools = {
 		outputArray[i] = rawData.charCodeAt(i);
 		}
 		return outputArray;
+	}, 
+	exist(nameScript){
+		return (main.scripts.includes(nameScript) && $('#' +nameScript + '> *').length)
 	}
  }, 
 generateId = {
@@ -1091,5 +1094,8 @@ $.ajaxSetup({
 		btn.load.hide();
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
 		typeof callback == "function" && callback()
+	}, 
+	error : function(e){
+		console.log(e)
 	}
 })
