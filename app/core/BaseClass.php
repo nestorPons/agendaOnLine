@@ -24,7 +24,6 @@ class BaseClass{
      * @param int $user usuario para realizar las consultas 3 niveles de usuario con distintos privilegios
      */
     public function __construct(string $table , string $db = NAME_DB, int $user = 0 ) {
-
         $this->table = $table ;        
         $this->conn = new Conexion($db, $user);
      }

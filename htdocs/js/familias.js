@@ -41,8 +41,7 @@ var familias = {
 					notify.error( r.success ) 
 						
 				}
-				familias.obj.delete({id:id})
-				
+				$("#familias rowFamilias"+id).fadeTo("fast", 1)				
 
 				dialog.close('dlgFamilias')
 			})
@@ -58,29 +57,10 @@ var familias = {
 			if (r.success){
 				if (id == -1){
 					//NUEVO
-					var mostrar = (r.mostrar==1)?'checked':'';
-					$("#familias table").append("\
-						<tr id='rowFamilias"+r.id+"'>\
-						<td><a name='editar[]' class= 'icon-edit x6' value="+r.id+"></a></td>\
-						<td id='familia_"+ r.id + "' class='nombre'>"+r.nombre+"</td>\
-						<td class='ico'>\
-						<input type='checkbox' name = 'mostrar[]' id='chck"+r.id+" class='mostrar'\
-						value="+r.id+" "+ mostrar + "></td></tr>")
-					$('#servicios #frmEditar #familia').append("<option value="+r.id+">"+r.nombre+"</option>");
-					familias.menu.crear( r.id , r.nombre ) ;
+					
 				}else{
 					//EDICION
-					$('#familias #familia_' + r.id).html(r.nombre);
-					$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-					$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-					$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
-
-					var estado = (r.mostrar==1)?true:false;
-					var $chck = $('#familias #chck'+id);
-					$chck.prop("checked",estado);
-					$('#servicios #frmEditar #familia option[value='+id+']').html(r.nombre);
-
-					familias.menu.editar( r.id , r.nombre ) ;
+					familias.obj.edit(r);
 
 				}
 				
@@ -139,9 +119,7 @@ var familias = {
 			$('.menuServicios').each(function(){
 				$(this).find('#lstSerMain').find('#'+id).remove();
 				$(this).find('#lstSerSelect').find('#'+id).remove();
-
 			})
-
 			familias.menu.crear( id , nombre ) ; 
 
 		},
@@ -211,13 +189,42 @@ var familias = {
 	 },
 	obj : {
 		create : function(data){
+			let mostrar = (data.mostrar==1)?'checked':'', 
+				id = data.id, 
+				nombre = data.nombre 
 
+			$("#familias table").append("\
+				<tr id='rowFamilias"+id+"'>\
+				<td><a name='editar[]' class= 'icon-edit x6' value="+id+"></a></td>\
+				<td id='familia_"+ id + "' class='nombre'>"+nombre+"</td>\
+				<td class='ico'>\
+				<input type='checkbox' name = 'mostrar[]' id='chck"+id+" class='mostrar'\
+				value="+id+" "+ mostrar + "></td></tr>")
+			$('#servicios #frmEditar #familia').append("<option value="+id+">"+nombre+"</option>");
+			familias.menu.crear( id , nombre ) ;
 		}, 
 		edit : function(data){
+			let estado = (data.mostrar==1)?true:false , 
+				$chck = $('#familias #chck'+data.id), 
+				id = data.id, 
+				nombre = data.nombre
+			
+			$('#familias #familia_' + id).html(nombre);
+			$('#familias #rowFamilias' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+			$('#sevicios .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+			$('#crearCita .fam' + id ).removeClass('mostrar_baja , ocultar_baja') ;
+
+			$chck.prop("checked",estado);
+			$('#servicios #frmEditar #familia option[value='+id+']').html(nombre);
+
+			familias.menu.editar( id , nombre ) ;
 
 		}, 
 		delete : function(data){
-			$("#rowFamilias"+data.id).fadeTo("fast", 1)
+			familias.menu.ocultar( data.id ) 
+			let baja = ($('#chckOpUsersDel').is(':checked'))?'mostrar_baja' : 'ocultar_baja'
+			if (data.id>=0) $("#rowFamilias"+data.id).addClass(baja)
+			$("#familias rowFamilias"+data.id).fadeTo("fast", 1)
 		}
 
 	}

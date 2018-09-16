@@ -9,8 +9,10 @@
  */
 // Quitamos el limite de tiempo que tenemos en php.ini
 
+
+session_write_close(); //Cerramos la session para que ejecute otras peticiones 
 set_time_limit(0);
-$timestamp = date('Y-m-d H:i:s', time()); 
+$timestamp = date('Y-m-d H:i:s'); 
 // Clase  que hara la busqueda del los registros actualizados  
 $Logs = new models\Logs(); 
 $n = 0;  
@@ -18,7 +20,7 @@ $n = 0;
  * Bucle que espera la obtencion de datos actualizados 
  * Debera de ser reiniciado cada hora
  */ 
-while ($n < 10) {
+while ($n < 60) {
     
     $result = $Logs->getByTime($timestamp);
     /**
@@ -30,14 +32,41 @@ while ($n < 10) {
     if(count($result)){
         foreach($result as $key => $val){ 
             $Query =  new \core\BaseClass($val['tables']); 
-            $data[$val['tables']][] =array_merge(
-                $Query->getById($val['idFK']), 
-                ['action'=>$val['action']]
-            );
+            // Si es la cita esta formada por dos tablas data y cita
+            if ($val['tables'] == 'data') {
+                // Extraigo datos de cita
+                // SOLO PARA DATA 
+                $Cita =  new models\Cita($val['idFK']); 
+                if ($Cita->exist()){
+                    $data[$val['tables']][] = array_merge(
+                        $Cita->data(), 
+                        [
+                            'action'=>$val['action'], 
+                            'table'=>$val['tables']
+                        ]);
+                } else {
+                     $data[$val['tables']][] =    
+                        [   
+                            'idCita'=>$val['idFK'], 
+                            'action'=>$val['action'], 
+                            'table'=>$val['tables']
+                        ];
+                }
+
+            } else { 
+                // Flujo normal de la actualizaciones 
+                $data[$val['tables']][] =array_merge(
+                    $Query->getById($val['idFK']), 
+                    [
+                        'action'=>$val['action'], 
+                        'table'=>$val['tables']
+                    ]
+                );
+            }
         } 
         break;
     } else {
-        sleep(1);
+        sleep(5);
         $n++; 
         continue;
     }
@@ -45,3 +74,4 @@ while ($n < 10) {
 
 header('Content-Type: application/json');
 echo json_encode($data??false);
+ 

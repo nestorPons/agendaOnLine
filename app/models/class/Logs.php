@@ -7,7 +7,7 @@
     public function set(int $idUser, string $action, int $idFK = 0, string $tables = null ){
         $arr = [
             'idFK'=>$idFK, 
-            'date'=>\core\Tools::current_date(), 
+            'date'=>date('Y-m-d H:i:s'), 
             'idUser'=> $idUser, 
             'tables'=> $tables, 
             'action'=> (int)self::formatAction($action)

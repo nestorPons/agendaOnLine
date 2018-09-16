@@ -1085,7 +1085,7 @@ $(function(){
 		.on('keydown','.input-error',function(){$(this).removeClass('input-error')})
 		.on('keydown','.input-success',function(){$(this).removeClass('input-success')})
 		.on('click','.inicio',function(){window.location.href="index.php"})
-})
+ })
 // Confiuguracion de ajax por defecto
 $.ajaxSetup({
 	url : INDEX , 
@@ -1094,8 +1094,22 @@ $.ajaxSetup({
 		btn.load.hide();
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
 		typeof callback == "function" && callback()
-	}, 
-	error : function(e){
-		console.log(e)
+	},
+	error : function(jqXHR, textStatus, errorThrowne){
+		if (jqXHR.status === 0) {
+			alert('Not connect: Verify Network.');
+		} else if (jqXHR.status == 404) {
+			alert('Requested page not found [404]');
+		} else if (jqXHR.status == 500) {
+			alert('Internal Server Error [500].');
+		} else if (textStatus === 'parsererror') {
+			alert('Requested JSON parse failed.');
+		} else if (textStatus === 'timeout') {
+			alert('Time out error.');
+		} else if (textStatus === 'abort') {
+			alert('Ajax request aborted.');
+		} else {
+			alert('Uncaught Error: ' + jqXHR.responseText);
+		}
 	}
-})
+});

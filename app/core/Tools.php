@@ -2,7 +2,7 @@
 
 class Tools{
     function __construct(){}
-    public static function current_date($format = 'Y-m-d H:m:s'){
+    public static function current_date($format = 'Y-m-d H:i:s'){
         return date($format);
      }
     public static function getUserLanguage() {  

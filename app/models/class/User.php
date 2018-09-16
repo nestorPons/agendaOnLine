@@ -2,7 +2,7 @@
 
 class User extends \core\BaseClass {
 	
-	private $user, $pass, $config, 
+	private $user, $pass, $config, $data, 
 		$authEmail, $color, $lang;
 		
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
@@ -41,6 +41,7 @@ class User extends \core\BaseClass {
 			*/
 			
 			if ( $this->user ){
+
 				$this->id = $this->user['id'];
 				$this->nombre = $this->user['nombre'];
 				$this->email = $this->user['email'];
@@ -68,6 +69,10 @@ class User extends \core\BaseClass {
 	public function set($args){
 		return self::saveById((int)$this->id, $args);
 	 }
+	public function data(array $arg = null){
+		if($arg) $this->user = $arg;
+		return $this->user;  
+	}
 	public function save($args = null){
 		unset($args['id']);
 		return self::saveById((int)$this->id, $args);

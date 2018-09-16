@@ -22,6 +22,7 @@ try {
     /*    include URL_SCRIPTS . 'exportacion.php';
     exit(0); 
     */
+
         // Comprobando el GET sabreos si estamos en login
         if(isset($_GET['empresa'])) $_SESSION['empresa'] = $_GET['empresa'];
         // Todos los demas casos que haya pasado por login

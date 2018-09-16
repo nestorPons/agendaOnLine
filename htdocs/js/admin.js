@@ -89,7 +89,7 @@ function mostrarCapa(capa, callback){
 
 		if($('#config').is(':visible')&& config.change) config.guardar();
 		if($('#agendas').is(':visible')&& agendas.change) agendas.guardar();
-		$('#crearCita').is(':visible') &&  crearCita.reset();
+		Tools.exist('crearCita') &&  crearCita.reset();
 	 }
 	 
 	$('.capasPrincipales.activa').hide().removeClass('activa')
@@ -105,60 +105,9 @@ function mostrarCapa(capa, callback){
 	//$('#navbar').find('#tile_seccion').text($capa.data('nombre'))
 
 	typeof callback == "function" && callback()
-}
+ }
 
-var 
-main = { 
-	scripts  : [], 
-	isActive: true, 
-	worker : {
-		w : null , 
-		send : function(){
-		}, 
-		sync : function(){
-			
-  			// Variable para saber si el usuario esta activo
-			this.isActive = false; 
-
-			this.w = new Worker('/js/worker.js');
-			this.w.onmessage = e =>{
-				let data = JSON.parse(e.data)
-				if(data){
-					$.each(data, function (table) {
-						$.each(table, function (i, v) { 
-							let action = v.action, obj = null
-							switch(table){
-								case 'data': 
-									obj = admin.lbl
-									break; 
-								case 'notas':
-									obj = notas
-									break; 
-								case 'usuarios': 
-									obj = usuarios.rows
-									break; 
-								case 'servicios': 
-									obj = servicios
-									break; 
-								case 'familias': 
-									obj = familias
-									break; 
-							}
-							if (action = 1) obj.create(v)
-							if (action = 2) obj.edit(v)
-							if (action = 3) obj.delete(v)
-						});
-						 
-					});
-				} else {
-					console.log('No ha cambios ... ')
-				}
-			}
-			this.w.postMessage(0);
-		}
-
-	}
-} , 
+var  
 admin ={ 
 	section : $("#main"), 
 	body : $('#main .cuerpo') ,
@@ -170,14 +119,12 @@ admin ={
 	idCita : -1,
 	ancho : 0, 
 	init : function(){
-	
+		this.lbl.width = $('#main th').first().width() - 2;
 		this.ancho = $('#sections').width()
 		this.inactivas.change(localStorage.getItem("showRows"))
 		this.inactivas.comprobar()
-		this.lbl.widht = $('.celda:visible').first().width();
 		this.lbl.load()
 		notas.init()
-
 		main.worker.sync()
 
 	 },
@@ -258,7 +205,7 @@ admin ={
 		if (!section.find('#'+Fecha.id).length)
 				admin.crearDias(_pasarDia)
 			else{
-				admin.check()
+				//admin.check()
 				_pasarDia()
 			}
 		
@@ -269,65 +216,65 @@ admin ={
 		$('#' + Fecha.id).addClass('activa')
 	 }, 
 	check : function () {
-
-		var _citas = function(){
-				var citas = new Array();
-				$('#'+Fecha.id).find('.lbl').each(function(){
-					//if (!$.isEmpty($(this).attr('lastmod') ))
-						citas.push({
-							'id':$(this).attr('idcita'),
-							'lastMod':$(this).attr('lastmod')
-						 })
-				})
-				
-				return citas
-			 },
-			data = {
-				controller : 'cita' ,
-				action : 'check',
-				citas : _citas(),
-		 		fecha : Fecha.general
-			  },
-			_getData = function(arr, isDel ,isAdd ){
-				$.each(arr,function(i,dataEdit){
-					var data = dataEdit[0] , tt = 0 
-					//Se declaran dos variables para adecuarlo al antiguo formato
-					data.idCita = data.id
-					data.nota = data.obs
-
-					data.servicios = dataEdit[1]
-					$.each(data.servicios, function( index, $this ){
-						tt += parseInt($this.tiempo)
+		/*
+			var _citas = function(){
+					var citas = new Array();
+					$('#'+Fecha.id).find('.lbl').each(function(){
+						//if (!$.isEmpty($(this).attr('lastmod') ))
+							citas.push({
+								'id':$(this).attr('idcita'),
+								'lastMod':$(this).attr('lastmod')
+							})
 					})
+					
+					return citas
+				},
+				data = {
+					controller : 'cita' ,
+					action : 'check',
+					citas : _citas(),
+					fecha : Fecha.general
+				},
+				_getData = function(arr, isDel ,isAdd ){
+					$.each(arr,function(i,dataEdit){
+						var data = dataEdit[0] , tt = 0 
+						//Se declaran dos variables para adecuarlo al antiguo formato
+						data.idCita = data.id
+						data.nota = data.obs
 
-					if (isDel) admin.lbl.delete(data.idCita ,true)
-					if (isAdd) admin.lbl.create(data)
-				})
-			}
+						data.servicios = dataEdit[1]
+						$.each(data.servicios, function( index, $this ){
+							tt += parseInt($this.tiempo)
+						})
 
-		$.ajax({
-			type:"POST",
-			url: INDEX ,
-			dataType: 'json',
-			data: data,
-			cache: false
-		})
-		.done(function(r){
-			
-			if (!$.isEmpty(r.del)){
-				$.each(r.del,function(i,value){
-					admin.lbl.delete(value ,true)
-				})
-			 }
-			if (!$.isEmpty(r.add)){ 
-				_getData(r.add, false, true)
-			 }
-			if (!$.isEmpty(r.edit)){
-				_getData(r._edit, true, true)
-			 }
-			
-		},'json')
-		
+						if (isDel) admin.lbl.delete(data.idCita ,true)
+						if (isAdd) admin.lbl.create(data)
+					})
+				}
+
+			$.ajax({
+				type:"POST",
+				url: INDEX ,
+				dataType: 'json',
+				data: data,
+				cache: false
+			})
+			.done(function(r){
+				
+				if (!$.isEmpty(r.del)){
+					$.each(r.del,function(i,value){
+						admin.lbl.delete(value ,true)
+					})
+				}
+				if (!$.isEmpty(r.add)){ 
+					_getData(r.add, false, true)
+				}
+				if (!$.isEmpty(r.edit)){
+					_getData(r._edit, true, true)
+				}
+				
+			},'json')
+		*/
 	 },
 	crearDias: function(callback){
 
@@ -635,7 +582,7 @@ admin ={
 			fecha : Fecha.sql(Fecha.general)
 		 }	
 
-		if (admin.lbl.delete(data.id)){
+		if (admin.lbl.delete(data.id, false)){
 			$.post(INDEX,data,function(r){
 
 				if 	(r.success) {
@@ -710,37 +657,45 @@ admin ={
 		}	
 	 },
 	lbl:{
-		widht :  '25' ,
+		width :  '25' ,
 		height: new Array,
 		clone : new Object, 
 		idLastcelda : 0 ,
-		obj : new Object, 
+		obj : null, 
 		load: function(){
-			admin.lbl.draggable()
-			admin.lbl.droppable()
-			admin.lbl.style()
+			$('.lbl').each(function(){
+				admin.lbl.draggable($(this))
+			})
+			this.droppable()
+			menu.nav.estado(localStorage.getItem("menuOpen"))
+			this.color()
 		 }, 
 		create: function(data){
-	
+			data.idCita = $.isEmpty(data.idCita)?data.id:data.idCita; 
+		
+			if ($('#idCita_'+data.idCita+'.lbl').length) return false; 
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
 			var lbl = admin.lbl,
 				htmlSer = '', 
 				idCelda =  generateId.encode( data.agenda , data.fecha , data.hora ), 
 				$celda = $('#'+idCelda)
+			if($celda.length){
+				$.each(data.servicios, function ( id , serv ) {
+					htmlSer += lbl.service(serv)
+				})
 
-			$.each(data.servicios, function ( id , serv ) {
-				htmlSer += lbl.service(serv)
-			})
-
-			$celda
-				.find('.fnCogerCita').remove().end()
-				.append(lbl.container(data , htmlSer))
-
-			lbl.style()
+				$celda
+					.find('.fnCogerCita').remove().end()
+					.append(lbl.container(data , htmlSer))
+				this.obj = $('#idCita_'+data.idCita+'.lbl')
+				
+				lbl.style()
+				admin.lbl.draggable(this.obj)
+			}
 		 },
 		edit: function (data, last){
 			var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
-			admin.lbl.obj.attr('tiempo',  data.tiempoServicios )
+			$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempoServicios )
 
 			if (data.cliente.id != last.cliente.id){
 				object.find('.nombre')
@@ -757,7 +712,7 @@ admin ={
 					admin.lbl.style()
 				}
 			if (data.obs != last.obs) object.find('#obs').val(data.obs)
-				
+			
 		 },
 		container : function (data, htmlSer) {
 			var html_icono_desplegar = (data.servicios.length <= data.tiempoServicios) 
@@ -767,10 +722,6 @@ admin ={
 			var nota  = $.isEmpty(data.nota)?'':data.nota
 			var html = "\
 				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
-					<div id ='"+data.idUsuario+"' class='nombre'> \
-						<i class ='icon-user-1'></i> \
-						<span>"+data.nombre+"</span> \
-					</div> \
 					<div class='iconos'>"+ 
 					html_icono_desplegar
 					+"<div class='icons_crud'>\
@@ -779,6 +730,10 @@ admin ={
 						</div>\
 						<i class ='fnMove icon-move '></i>  \
 					</div> \
+					<div id ='"+data.idUsuario+"' class='nombre'> \
+						<i class ='icon-user-1'></i> \
+						<span>"+data.nombre+"</span> \
+					</div> \
 					<div class='servicios "+admin.unidadTiempo(data.tiempoServicios)+"'>"+htmlSer+"</div> \
 					<div class='note "+ claseNotas + "'> \
 						<i class='icon-note'></i> \
@@ -786,7 +741,7 @@ admin ={
 					</div> \
 				</div> \
 			"
-
+			
 			return html 					
 		 }, 
 		service : function (data) {
@@ -796,10 +751,8 @@ admin ={
 						<span class='codigo' des_codigo='"+data.descripcion+"' \
 						id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
 					</div>\
-				"
-
-				return html
-				
+				";
+				return html		
 		 }, 
 		color: function(callback){	
 			var $sec = $("#main") , 
@@ -854,27 +807,26 @@ admin ={
 		 },
 		style : function() {
 
-			admin.lbl.draggable()
 			$('.lbl')
 				.css('z-index',2)
-				.width(admin.lbl.widht)
+				.width($('#main th').first().width() - 3)	
 
 			this.color()	
 		 }, 
-		delete: function(idCita, noMens){
-
-				var $this = $('#idCita_'+idCita)
-				if (noMens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?')){
+		delete: function(data, nomens = false ){
+			let idCita = (typeof data === 'object') ? data.idCita : data ,
+				$this = $('#idCita_'+idCita), 
+				_del = function(){
 					$this.hide('explode',function(){$this.remove()})
-					this.color()
-					return true 
-				} else 	return false 
+					admin.lbl.color()
+					return true;
+				}
+			return (nomens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?'))? _del() : false ;
 
 		 },
-		draggable : function(){
-			$('.lbl').each(function(){								
-				$(this).draggable( {
-					handle : $(this).find('.iconos, .nombre'), 
+		draggable : function($this){							
+				$this.draggable({
+					handle : $this.find('.iconos, .nombre'), 
 					disabled : false, 
 					opacity : 0.50 , 
 					zIndex: 100 ,
@@ -886,17 +838,16 @@ admin ={
 							$('.ui-draggable-dragging').remove()
 							$('#'+admin.lbl.idLastCelda)
 								.html(admin.lbl.clone)
-							admin.lbl.draggable()
+							admin.lbl.draggable(admin.lbl.clone)
 							return true
 						 }
 					 }, 
 					start : function ( e, ui) {
-						admin.lbl.clone = $(this).clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
-						admin.lbl.idLastCelda = $(this).parents('.celda').attr('id')
-						$(this).removeClassPrefix('row_').addClass('row_1')
+						admin.lbl.clone = $this.clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
+						admin.lbl.idLastCelda = $this.parents('.celda').attr('id')
+						$this.removeClassPrefix('row_').addClass('row_1')
 					 },
 				}) 
-			})
 		 },
 		droppable : function () {
 			$( ".celda" ).droppable({
@@ -910,29 +861,31 @@ admin ={
 						var idCita = drag.attr('idcita')
 						var idCelda = $(this).attr('id')
 
+						let $last = $('#'+admin.lbl.idLastCelda), 
+							lbl = admin.lbl
+
 						if (idCelda != admin.lbl.idLastCelda && confirm('Desea modificar la cita ')) {
 							drag.animate({ 'top': posi.top + css_margin + 'px', 'left': posi.left + css_margin + 'px'}, 200, function(){
 								//end of animation.. if you want to add some code here
-							})
+							 })
 							$(this)
-							.find('.fnCogerCita').remove().end()
-							.append(admin.lbl.clone)
+								.find('.fnCogerCita').remove().end()
+								.append(lbl.clone)
 							
-							admin.lbl.style()
+							lbl.style()
 							
-							$('#' + admin.lbl.idLastCelda)
-							.append('<i class="icon-plus fnCogerCita"></i>')
-							.find('.lbl').remove()
+							$last
+								.append('<i class="icon-plus fnCogerCita"></i>')
+								.find('.lbl').remove()
 															
 							admin.edit(idCita , idCelda)
-							
+							lbl.draggable($(this).find('.lbl')); 
+
 						} else {
-							
+							lbl.draggable($last.find('.lbl')); 
 							drag.draggable("option", "revert", true)	
 							$('.ui-draggable-dragging').remove()
-							$('#'+admin.lbl.idLastCelda)
-								.append(admin.lbl.clone)
-							admin.lbl.draggable()
+							$last.append(admin.lbl.clone)
 							
 						}	
 						admin.lbl.clone = null
@@ -998,14 +951,8 @@ menu = {
 			
 		 },
 		estado: (estado)=>{ 
-			let 
-				w = 0 , 
-				border  = 5 ; 
-			//Inicia el 
-			if($.isEmpty(estado) && estado != 0){
-				estado = 1
-				menu.nav.open(1)
-			}
+			let w = 0 , 
+				border  = 6 ; 
 
 			// si es un movil solo tiene dos estados 
 			if(Device.isCel() && estado > 1 ) {
@@ -1025,7 +972,7 @@ menu = {
 							.animate({'left':w}); 
 					}					
 					localStorage.setItem("menuOpen",1)
-				break
+				    break; 
 				case 2: 
 					w = 145 
 					$('#mySidenav')
@@ -1038,7 +985,7 @@ menu = {
 							.animate({'left':w})
 					 }
 					localStorage.setItem("menuOpen",2)
-				break
+					break; 
 				default:
 					w = 0
 					$('#mySidenav').width(w)
@@ -1047,12 +994,7 @@ menu = {
 					localStorage.setItem("menuOpen",w)
 			 }
 
-			// Calcula el tamaño de los lbl
-
-				let n = $('.dia tr:first .celda').length, 
-					r = w / n,  
-					width = Math.floor(admin.lbl.widht - r) 
-				$('.lbl').width( width )
+			 admin.lbl.style()
 		 },
 		 /**
 		  * Objeto que abre y cierra el menu charm del barra superior
@@ -1486,15 +1428,13 @@ Device = {
 		}
 	 }
 }
-admin.init()
+admin.init()	
 //Construyo la "clase" device para saber el dispositivo usado
 Device.init()
 if(Device.isCel()) localStorage.setItem('menuOpen',0)
 
 cargarDatepicker()
 colorearMenuDiasSemana()
-
-menu.nav.estado(localStorage.getItem("menuOpen"))
 
 $('body')
 	.on('click',".idDateAction",function(){
@@ -1524,7 +1464,7 @@ $('html')
 
 $('.fnToggleCharm').click(function(){
 	menu.nav.charm.toggle($(this))
-})
+ })
 
 $('#frmContact button')
 	.click(function(event){			
@@ -1563,7 +1503,7 @@ $('#main')
 		$(this).css({'z-index': val})	
 		
 		admin.lbl.resize($(this))
-		})
+	 })
 	.on('click','.fnCogerCita',function(){
 		localStorage.setItem('agenda', $(this).parent().attr('agenda'))
 		localStorage.setItem('hora', $(this).parents('tr').data('hour'))
