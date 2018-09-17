@@ -4,7 +4,7 @@
   $url_icons = "empresas/$norm_empresa";
 ?>
 {
-  "version": "1",
+  "version": "1.1",
   "short_name": "<?= $empresa?>",
   "name": "<?= $empresa?> agenda onLine",
   "description": "Agenda para reserva de citas por internet en tu centro  <?= $empresa?>.",

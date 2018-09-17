@@ -44,68 +44,6 @@ function sincronizar( dias, date ){
 
 	
  }
-function mostrarCapa(capa, callback){
-	// evento de salida
-	let lastLayer = $('#admin section.activa').attr('id')
-	if(typeof(window[lastLayer].exit) === 'function') window[lastLayer].exit()
-
-	var data = { 
-			controller : capa ,  
-			fecha :  Fecha.sql ,
-	 	 }, 
-	 	$capa = $('#'+capa),
-		$menu = $('#mySidenav')
-	
-	//Cambia el estado del menu
-	$('.app-bar-pullmenu ').hide('blind');
-	$menu.find('.selected').removeClass('selected')
-	$menu.find('[data-capa="'+capa+'"]').addClass('selected')
-	//***	  
-	
-	// Cerramos funcion si es la misma capa
-	if($capa.hasClass('activa')) return false;
-
-	$('#chckOpUsersDel').prop( "checked", false ) ;
-	$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
-	
-
-	if($capa.is(':empty') ){
-		$.post(INDEX,data,function(html){
-
-			$('#'+capa).html(html).promise().done(__INIT__);
-			function __INIT__ (){
-				//Si hay que iniciar en 
-			}
-
-			$.getScript("/js/"+capa+".js", function(){
-				main.scripts.push(capa)
-			})
-			.complete(()=>window[capa].init())
-
-		},'html')
-	 } else {
-		
-		capa=='crearCita' && crearCita.load()
-
-		if($('#config').is(':visible')&& config.change) config.guardar();
-		if($('#agendas').is(':visible')&& agendas.change) agendas.guardar();
-		Tools.exist('crearCita') &&  crearCita.reset();
-	 }
-	 
-	$('.capasPrincipales.activa').hide().removeClass('activa')
-	$capa.fadeIn().addClass('activa')
-
-	menu.status(capa)
-
-	if(capa=='main') $('#'+Fecha.id).show()
-		
-	$('html,body').animate({scrollTop:0}, 500)
-	
-	//Titulo de la seccion
-	//$('#navbar').find('#tile_seccion').text($capa.data('nombre'))
-
-	typeof callback == "function" && callback()
- }
 
 var  
 admin ={ 
@@ -806,12 +744,13 @@ admin ={
 			typeof callback == "function" && callback();
 		 },
 		style : function() {
-
+			let w = ($('#main th').is(':visible'))?$('#main th').first().width():this.width; 
 			$('.lbl')
 				.css('z-index',2)
-				.width($('#main th').first().width() - 3)	
+				.width(w - 3); 
 
-			this.color()	
+			this.width = w; 
+			this.color(); 
 		 }, 
 		delete: function(data, nomens = false ){
 			let idCita = (typeof data === 'object') ? data.idCita : data ,
@@ -984,7 +923,7 @@ menu = {
 							.width((admin.ancho-w-border))
 							.animate({'left':w})
 					 }
-					localStorage.setItem("menuOpen",2)
+					 localStorage.setItem("menuOpen",2)
 					break; 
 				default:
 					w = 0
@@ -1505,11 +1444,13 @@ $('#main')
 		admin.lbl.resize($(this))
 	 })
 	.on('click','.fnCogerCita',function(){
-		localStorage.setItem('agenda', $(this).parent().attr('agenda'))
-		localStorage.setItem('hora', $(this).parents('tr').data('hour'))
-
-		mostrarCapa('crearCita')
+		let $fnCogerCita = $(this) 
+		main.mostrarCapa('crearCita', function($this){
+			crearCita.data.agenda = $fnCogerCita.parent().attr('agenda')
+			crearCita.data.hora = $fnCogerCita.parents('tr').data('hour')
+			$this.find('#agenda'+crearCita.data.agenda).prop('checked', true)
 		})
+	 })
 	.on('click','#mainLstDiasSemana a',function(){
 		var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
 		var diaB = parseInt($(this).data('value'));
@@ -1615,7 +1556,7 @@ $('#main')
 				menu.nav.estado(0)
 			}
 
-			mostrarCapa($(this).find('a').data('capa'));
+			main.mostrarCapa($(this).find('a').data('capa'));
 			
 			})
 	$('#notas')

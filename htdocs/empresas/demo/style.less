@@ -6,6 +6,9 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
+@light: #101010; 
+@dark: #fdfdfd;
+
 @base: #fff ;
 @t1:mix(@color,@text-color, 50%); 
 @t2:spin(@color, 20);
@@ -178,7 +181,6 @@ a,i , .a{
 		}
 	 }
  }
-
 .highlighted{
 	color : @orange;
 	text-decoration: underline;
@@ -551,7 +553,6 @@ a,i , .a{
 		}
 	}
  }
-
 .cuerpo {
 	.caption {
 		font-family : @main-font;
@@ -559,7 +560,13 @@ a,i , .a{
 	}
  }
 .charm{
-	background-color: darken(mix(@color,@color_secon, 70%),30%);
+	@bk-color: darken(mix(@color,@color_secon, 70%),30%); 
+	background-color: @bk-color;
+	button{
+		@c : contrast(@bk-color, @light, @dark , 45%); 
+		color: @c; 
+		border-color: @c;
+	}
  }
 //notifies
 .fnNotify(@c){
@@ -593,7 +600,20 @@ a,i , .a{
 		.fnNotify(@blue);
 	}
  }
-
+.hay-nota{
+	background-color: darken(mix(@color_secon,@color, 70%),20%);
+}
+#admin{
+	#sections{
+		#agendas{
+			.contenedor-agenda{
+				background-color: @color_secon; 
+				border-radius: @radius;
+				color: contrast(@color_secon, @light, @dark,45);
+			}
+		}
+	}
+}
 #mnuContacto{
 
 	h1, h4{
@@ -606,7 +626,6 @@ a,i , .a{
 		background-color:@base;
 	}
  }
-
 #frameSocialMedia{
 	button{
 		border-radius: @radius;
@@ -646,7 +665,6 @@ a,i , .a{
 		}
 	}	
  }
-
 #usuarios{
 	#popupHistorial{
 		.tabla{
@@ -664,7 +682,6 @@ a,i , .a{
 		}
 	}
  }
-
 #users{
 	.tile-container{
 		*{
@@ -831,20 +848,20 @@ a,i , .a{
 	}
  }
 
-
 .color-menu(@porcentaje){
 	@menu-color: darken(@color,@porcentaje);
-	background-color: @menu-color !important;
-	color: @base !important;
-	border-color:  @base !important;
+	@font-color:  contrast(@menu-color, @light, #fdfdfd,70); 
+	background-color: @menu-color;
+	color: @font-color;
+	border-color:  @font-color;
 	li:not(.noHover), &-pullbutton, .app-bar-element{
 		&:active, &:hover{
-			background-color: @base;
+			background-color: @font-color;
 			*{
 				.color-sel(@porcentaje);
 				.fg-white{.color-sel(@porcentaje);}
 				.tile-container{
-					color: @base !important;
+					color: @font-color;
 				}
 			}
 		}
@@ -908,18 +925,18 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	background-color: darken(mix(@color,@color_secon, 70%),20%);
-	color: @base;
+	@bk-color: darken(mix(@color,@color_secon, 70%),20%);
+	@fnt-color:  contrast(@bk-color, #101010, #fdfdfd,70); 
+	background-color: @bk-color;
+	color: @fnt-color;
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
-		color:@base;
-		background-color: darken(mix(@color,@color_secon, 70%),20%);
+		color:@fnt-color; 
+		background-color: @bk-color;
 	}
-	.hay-nota{
-		background-color: darken(mix(@color_secon,@color, 70%),20%);
-	}
+
  }
 #boton-menu{
 	border-radius: @radius; 

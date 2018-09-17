@@ -29,8 +29,7 @@ var crearCita ={
 			var clase_id = clase.replace(/\D/g,'');
 			servicios.mostrar(clase_id) ;
 		}
-		cargarDatepicker()	
-		crearCita.load()
+		cargarDatepicker()
 	 },
 	set : {
 		nameAgenda :function(id,name){
@@ -159,7 +158,13 @@ var crearCita ={
 				crearCita.horas.crear(Fecha.number(date))
 			}
 			
-		 },	
+		 },
+		hide: function(){
+			$('#crearCita').find('#tablas').hide()
+		}, 
+		show: function(){
+			$('#crearCita').find('#tablas').show()
+		}, 
 		load : function () {
 
 			var tiempoServicios = 0, 
@@ -175,18 +180,20 @@ var crearCita ={
 			crearCita.horas.pintar(Fecha.id,tiempoServicios)
 	
 		 } ,
-		crear: function (id_table, callback){
+		crear: function (id_table){
 			var data = {
 				agenda: crearCita.data.agenda,
 				fecha:id_table , 
 				controller : 'crearCita.horas'}
 
 			if ($('#crearCita #'+id_table).length) $('#crearCita #'+id_table).remove()
-					
+			this.hide()
+			let that = this
 			$.post(INDEX , data , function(html){
 				var m = document.getElementById('tablas')
 				m.innerHTML = html	
 				crearCita.horas.load()
+				that.show()
 			})
 
 		 },		
@@ -209,12 +216,7 @@ var crearCita ={
 				count-- 		
 			}
 		 },
-		sincronizar: function(callback){
-
-			var context = $('#tablas')
-			var activa = context.find('.activa')
-			var activar = context.find('#'+ Fecha.id)
-
+		sincronizar: function(){
 			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },

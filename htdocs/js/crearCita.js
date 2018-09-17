@@ -5,7 +5,7 @@ crearCita={
 	data : new Object(), 
 	init : function(){
 		var clase = $('#crearCita .contenedorServicios tbody tr').attr('class') ; 
-		
+		$('#btnSearch').hide()
 		$('#crearCita')
 			.on('click','a',function(){crearCita.servicios.mostrar($(this).attr('id'))})
 			.on('click','.idServicios',function(){
@@ -29,14 +29,12 @@ crearCita={
 				crearCita.data.nota = $(this).val() 
 			})
 			.on("swipeleft",'.tablas')
-			.on('click','.cancelar',function(){mostrarCapa('main')})
+			.on('click','.cancelar',function(){main.mostrarCapa('main')})
 
 		if (!$.isEmpty(clase)){
 			var clase_id = clase.replace(/\D/g,'');
 			crearCita.servicios.mostrar(clase_id) ;
-		}
-		crearCita.load()
-		
+		}		
 	 },
 	set : {
 		nameAgenda :function(id,name){
@@ -152,7 +150,7 @@ crearCita={
 						//Para que refresque la siguiente vez que se entre en las horas coger Cita
 						
 						$('#crearCita').find('.dia').remove()
-						mostrarCapa('main' , true )			
+						main.mostrarCapa('main' )			
 					}
 				} else {
 					echo(rsp)
@@ -170,17 +168,6 @@ crearCita={
 		}
 
 	 },
-	load: function(){
-		this.reset()
-		$('#btnSearch').hide()
-		if(localStorage.getItem('hora')){
-			crearCita.data.hora = localStorage.getItem('hora')
-			crearCita.data.agenda = localStorage.getItem('agenda')
-			$('#crearCita').find('#agenda'+crearCita.data.agenda).prop('checked', true)
-			localStorage.removeItem('hora')
-			localStorage.removeItem('agenda') 
-		}
-	 }, 
 	horas: {
 		iniciar: function(){	
 
@@ -193,6 +180,14 @@ crearCita={
 			}
 			
 		 },	
+		hide: function () {
+			console.log('ocultando horas...')
+			$('#crearCita').find('#tablas.tblhoras').hide()
+		 },
+		show: function(){
+			console.log('mostrando horas...')
+			$('#crearCita').find('#tablas.tblhoras').show()
+		}, 
 		load : function () {
 
 			var tiempoServicios = 0, 
@@ -200,9 +195,9 @@ crearCita={
 				$sec = $('#crearCita'), 
 				serviciosSeleccionados = $sec.find('.idServicios:checked')
 
-				serviciosSeleccionados.each(function(){
-					tiempoServicios += $(this).data('time')
-				})
+			serviciosSeleccionados.each(function(){
+				tiempoServicios += $(this).data('time')
+			})
 
 			lblTS.text(tiempoServicios)
 			crearCita.horas.pintar(Fecha.id,tiempoServicios)
@@ -213,25 +208,29 @@ crearCita={
 			}
 	
 		 } ,
-		crear: function (id_table, callback){
-			var data = {
+		crear: function (id_table){
+				
+			let data = {
 				agenda: crearCita.data.agenda,
 				fecha:id_table , 
-				controller : 'crearCita.horas'}
+				controller : 'crearCita.horas'
+			 	}, 
+				that = this
 
 			if ($('#crearCita #'+id_table).length) $('#crearCita #'+id_table).remove()
-					
+			
+			that.hide()
 			$.post(INDEX , data , function(html){
 				var m = document.getElementById('tablas')
 				m.innerHTML = html	
 				crearCita.horas.load()
+				that.show()
 			})
 
 		 },		
 		pintar: function(id_table, tiempoServicios = 0){
 
-			var self = crearCita, 	
-				$sec = $('#crearCita'),  
+			var $sec = $('#crearCita'),  
 				ts = parseInt(Math.ceil(tiempoServicios/15)),
 				$dia = $sec.find('#'+ id_table), 
 				$horas = $dia.find('.horas'), 
@@ -247,11 +246,11 @@ crearCita={
 				count-- 		
 			}
 		 },
-		sincronizar: function(callback){
+		sincronizar: function(){
 			crearCita.horas.crear(Fecha.id)	
 		 },
 	 },
-	reset: function(){
+	exit: function(){
 		
 		$('#step0').show()
 
@@ -284,9 +283,10 @@ crearCita={
 			.find('#lblSer').empty().end()
 			.find('#lblCliente').empty()
 
-		crearCita.data.hora = null
-		crearCita.data.agenda = null 
-		crearCita.data.nota = null
+		crearCita.data = new Object; 
+		sessionStorage.removeItem('hora')
+		sessionStorage.removeItem('agenda')
+
 		dialog.close('dlgGuardar')
 	 },
 	stepper: function(index){
@@ -307,7 +307,7 @@ crearCita={
 			} else if(index==2&&crearCita.validate.service()){
 				
 				menu.status('calendar')
-			
+				
 				!$('#crearCita').find('#'+Fecha.id).length && crearCita.horas.sincronizar()
 				crearCita.validate.name() && _slider()
 				

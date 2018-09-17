@@ -6,8 +6,10 @@
     <?php if($val['idUsuario']==$val['usuarioCogeCita']&&$val['admin']!=1){?>
         <i class ='lnr-laptop-phone' title="La cita ha sido cogida por el usuario"></i>  
     <?php }?>
-        <?php if($number_services >= $rows){?>
-            <i class ='icon-angle-down fnExtend' title="Desplegar cita" ></i>  
+        <?php
+        $row_nota = ($val['obs'])?1:0;            
+        if( ($number_services + $row_nota) >= $rows){?>
+            <i class ='icon-angle-down fnExtend' title="Desplegar cita" ></i>    
             <?php
         }?>
         <div class='icons_crud'>           

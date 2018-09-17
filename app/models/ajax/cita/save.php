@@ -1,13 +1,10 @@
 <?php
-
-$Forms::sanitize($_POST);
-
 $r['success']=true;
 $userId = $_POST['idUser'];
 $fecha =$_POST['fecha']??mnsExit('Sin fecha');
 $hora = date('H:i',strtotime($_POST['hora']))??mnsExit('Sin hora');
 $servicios = $_POST['servicios']??mnsExit('No se han pasado servicios');
-$agenda =  $_POST['agenda'][0]??mnsExit('Sin agenda');
+$agenda =  $_POST['agenda']??mnsExit('Sin agenda');
 
 $data = $Data->getBy(array('fecha','hora','agenda'),array($fecha, $hora, $agenda)); 
 

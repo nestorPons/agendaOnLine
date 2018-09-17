@@ -664,23 +664,17 @@ dialog = {
 					.find('.btn-success').attr('disabled',false)			
 
 				$('.popup-overlay').fadeIn()		
+				typeof callback == "function" && callback(false)	
 			};
 
-		if($('#dialogs').find('#'+objName).length){
-			
-			
+		if(loads.includes(objName)){			
 			dialog.reset(objName)
-			
 			_open($('#dialogs #'+objName))
-			typeof callback == "function" && callback(false)	
 			
 		}else{
 			loads.push(objName)	
-			dialog.create(objName,fnOk,fnCancel,function($this){
-
+			dialog.create(objName,fnOk,fnCancel,function(){
 				_open( $('#dialogs #'+objName))
-				typeof callback == "function" && callback(true)	
-
 			})
 
 		}
@@ -1111,5 +1105,6 @@ $.ajaxSetup({
 		} else {
 			alert('Uncaught Error: ' + jqXHR.responseText);
 		}
+		console.error(errorThrowne)
 	}
 });
