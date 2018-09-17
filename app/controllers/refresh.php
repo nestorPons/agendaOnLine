@@ -29,6 +29,7 @@ while ($n < 60) {
      * si no esperamos un minuto y volvemos a realizar la consulta 
      * 
      */
+    sleep(5);
     if(count($result)){
         foreach($result as $key => $val){ 
             $Query =  new \core\BaseClass($val['tables']); 
@@ -66,7 +67,6 @@ while ($n < 60) {
         } 
         break;
     } else {
-        sleep(5);
         $n++; 
         continue;
     }

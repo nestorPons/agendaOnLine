@@ -51,7 +51,6 @@ if (isset($_POST['action'])){
             URL_JS . 'lib/metro.js',
             URL_JS . 'lib/jquery.mask.min.js',
             URL_JS . 'funciones.js', 
-            URL_JS . 'main.js',
             URL_JS . 'login.js'
         );
         $minifier->minify(URL_JS . 'index.min.js');

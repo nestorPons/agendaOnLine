@@ -458,11 +458,13 @@ btn = {
 			},
 		hide : function(){		
 			var $btn = this.active
-			$btn
+			if($btn){ 
+				$btn
 				.find('i')
 				.removeClass()
 				.addClass($btn.data('icon'))
 				.prop('disabled',false)
+			 }
 		 },
 		reset :	function (callback){
 			$('.btnLoad').each(function(){
@@ -1088,23 +1090,24 @@ $.ajaxSetup({
 		btn.load.hide();
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
 		typeof callback == "function" && callback()
-	},
+	 },
 	error : function(jqXHR, textStatus, errorThrowne){
 		if (jqXHR.status === 0) {
-			alert('Not connect: Verify Network.');
+			console.warn('Not connect: Verify Network.');
 		} else if (jqXHR.status == 404) {
-			alert('Requested page not found [404]');
+			console.warn('Requested page not found [404]');
 		} else if (jqXHR.status == 500) {
-			alert('Internal Server Error [500].');
+			console.warn('Internal Server Error [500].');
 		} else if (textStatus === 'parsererror') {
-			alert('Requested JSON parse failed.');
+			console.warn('Requested JSON parse failed.');
 		} else if (textStatus === 'timeout') {
-			alert('Time out error.');
+			console.warn('Time out error.');
 		} else if (textStatus === 'abort') {
-			alert('Ajax request aborted.');
+			console.warn('Ajax request aborted.');
 		} else {
-			alert('Uncaught Error: ' + jqXHR.responseText);
+			console.warn('Uncaught Error: ' + jqXHR.responseText);
 		}
-		console.error(errorThrowne)
-	}
+		console.error(jqXHR);
+		console.error(errorThrowne);
+	 }
 });

@@ -164,7 +164,7 @@ $(function(){
 						.append(r)
 						.removeClass()
 					let section = $(r).filter('main').attr('id');
-					$.getScript('js/'+section+'.js');
+					$.getScript('/js/'+section+'.js');
 				} else { 
 					let res = r.error.split("<br>")
 					notify.error(res[1], res[0], 5000);
