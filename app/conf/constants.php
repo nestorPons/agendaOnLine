@@ -29,9 +29,9 @@ define('URL_PROTOCOL', 'https://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
 const PREFIX_DB = 'rtc_'; 
-const MARGIN_DAYS = 6;
+const MARGIN_DAYS = 32;
 const DEFAULT_HISTORY_DAYS = 1;
-const NUM_MAX_ATTEMPT = 5; //attempts for crack brute force pass
+const NUM_MAX_ATTEMPT = 10; //attempts for crack brute force pass
 
 // Constantes de desarrollo
 const SAVE = 'save';
@@ -47,3 +47,6 @@ const _NEW = -1;
 define ('ADMIN_WEB','https://www.reservatucita.com');
 define ('ADMIN_NAME' , 'Nestor Pons') ; 
 define ('ADMIN_EMAIL' , 'nestorpons@gmail.com') ; 
+
+const VERSION = 'v7.2'; 
+const STABLE = false; 

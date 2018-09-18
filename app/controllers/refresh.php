@@ -2,7 +2,7 @@
 /**
  * long polling
  * Un bucle infinito
- * Obtenemos la marca de tiempo que se hizo la peticion 
+ * Obtenemos la marca de tiempo que se hizo la peticion ss
  * Y realizamos continuas consultas cada minuto a la espera 
  * de que se hayan actualizado los datos en la tabla logs 
  * si en una hora no se ha actualizado nada paramos el bucle y esperamos una nueva peticion probocada por el usuario

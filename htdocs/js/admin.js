@@ -7,7 +7,6 @@ function menuEsMovil(tab){
 	return true
  }
 function sincronizar( dias, date ){
-	main.worker.sync()
 
 	var fecha = date||Fecha.general ,
 		$datepicker= $('.datepicker')
@@ -44,7 +43,7 @@ function sincronizar( dias, date ){
 
 	
  }
-let 
+var 
 main = { 
 	scripts  : [], 
 	isActive: true, 
@@ -56,9 +55,9 @@ main = {
 				this.w.postMessage(0);
 				this.isActive = true;  // Cambiar a false,  true solo para desarrollo 
 			}
-		}, 
+		 }, 
 		send : function(){
-		}, 
+		 }, 
 		sync : function(){
 			this.w = new Worker('/js/worker.js');
 			this.w.onmessage = e =>{
@@ -97,11 +96,10 @@ main = {
 					console.log('No se encontraron datos')
 				}
 				setTimeout(this.init(), 5000); 				
-			}
+			 }
 			// Inicializa los long pollings
 			this.init();
-		}
-
+		 }
 	}, 
 	mostrarCapa(capa, callback){
 		// Muestra las capas de navegacion 
@@ -159,7 +157,6 @@ main = {
 		if(capa=='main') $('#'+Fecha.id).show()		
 		$('html,body').animate({scrollTop:0}, 500)
 	 }
-
 }
 var  
 admin ={ 
@@ -175,13 +172,12 @@ admin ={
 	init : function(){
 		this.lbl.width = $('#main th').first().width() - 2;
 		this.ancho = $('#sections').width()
-		let n = (localStorage.getItem("showRows"))?1:0;
+		let n = (localStorage.getItem("showRows")==1)?1:0;
 		this.inactivas.change(n)
 		this.inactivas.comprobar()
 		this.lbl.load()
 		notas.init()
 		main.worker.sync()
-
 	 },
 	reload : function(){
 		let that = this

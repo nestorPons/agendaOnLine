@@ -3,8 +3,9 @@ Options +FollowSymLinks -MultiViews
 RewriteEngine On
 #AddDefaultCharset UTF-8
 
-##activa errores php
+#Flags php
 #php_flag display_errors On
+php_flag "output_buffering" off
 
 #Cache y velocidad de carga
 SetOutputFilter DEFLATE
