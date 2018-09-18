@@ -279,7 +279,7 @@ class BaseClass{
         if (empty($post)) return false; 
 
         if(isset($post['controller'])) unset($post['controller']);
-        if(isset($post['action']) && !is_numeric($post['action'])) unset($post['action']);
+        if(isset($post['action']) && is_string($post['action'])) unset($post['action']);
 
         // combierto post a tipo de dato devuelto 
         foreach($post as $k => $v){
