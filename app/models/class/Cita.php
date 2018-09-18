@@ -2,7 +2,7 @@
 
 class Cita extends \core\BaseClass {
     public $Data , $Cita , $Data_del , $Cita_del ;
-    private $data, $exist; 
+    private $data, $exist = false; 
     function __CONSTRUCT(int $id = null){
         $this->Data = new \core\BaseClass('data');
         $this->Cita = new \core\BaseClass('cita');
@@ -17,20 +17,18 @@ class Cita extends \core\BaseClass {
                 $this->User = new User($tmp_data['idUsuario']); 
                 $tmp_user = $this->User->data();
                 $this->data = array_merge(
-                    $tmp_data,
+                    ['idCita' => $id],
+                    ['cliente' => $tmp_user], 
                     ['servicios' => $tmp_services??null], 
-                    $tmp_user
+                    $tmp_data
                 ); 
-            } else {
-                $this->exist = false; 
-            }
+            } 
         } else {
             $this->Data_del = parent::__construct('data_del');
             $this->Cita_del = parent::__construct('cita_del');
         }
      }
     public function add () {
-       
         $sql= "INSERT INTO data (agenda,idUsuario,fecha,hora,obs,usuarioCogeCita) 
         VALUE ('$agenda','$userId','$fecha', '$hora' ,'$nota','".$_SESSION['id_usuario']."')";
         return $this->conn->query($sql);
@@ -56,11 +54,11 @@ class Cita extends \core\BaseClass {
         
      }
     public function data(array $arg = null){
-		if($arg) $this->data = $arg;
+		if(!is_null($arg)) $this->data = $arg;
 		return $this->data;  
 	 }
     public function exist(bool $arg = null){
-        if($arg != null) $this->exist = $arg; 
-        return $arg; 
+        if(!is_null($arg)) $this->exist = $arg; 
+        return $this->exist; 
     }
 }

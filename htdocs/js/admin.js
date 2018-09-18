@@ -100,7 +100,7 @@ main = {
 			// Inicializa los long pollings
 			this.init();
 		 }
-	}, 
+	 }, 
 	mostrarCapa(capa, callback){
 		// Muestra las capas de navegacion 
 		// El callback devuelve el selector dom jquery de la capa mostrada
@@ -213,7 +213,7 @@ admin ={
 				hora : lbl.parents('tr').data('hour') ,
 				obs :  lbl.find('.note').text().trim() ,
 				servicios : new Array() ,
-				tiempoServicios :parseInt(lbl.attr('tiempo'))
+				tiempo_servicios :parseInt(lbl.attr('tiempo'))
 			 }
 
 			lbl.find('.codigo').each(function(i,o){
@@ -227,7 +227,7 @@ admin ={
 			 })
 		  }, 
 		tiempoServicios : function(){
-			var ts = admin.data[admin.idCita].tiempoServicios// < 0 ? 1: admin.data[admin.idCita].tiempoServicios
+			var ts = admin.data[admin.idCita].tiempo_servicios// < 0 ? 1: admin.data[admin.idCita].tiempoServicios
 			$('#dlgEditCita').find('#tiempoServicios').val(ts)
 		 }
 	 }, 
@@ -409,7 +409,7 @@ admin ={
 		admin.last = {
 			idCita : admin.data[admin.idCita].idCita,
 			agenda : admin.data[admin.idCita].agenda,
-			tiempoServicios : admin.data[admin.idCita].tiempoServicios , 
+			tiempo_servicios : admin.data[admin.idCita].tiempo_servicios , 
 			hora : admin.data[admin.idCita].hora , 
 			fecha : admin.data[admin.idCita].fecha, 
 			cliente : {
@@ -442,7 +442,7 @@ admin ={
 			lblSer.html(html)
 
 			admin.lbl.obj.removeClassPrefix('row_').addClass('row_'+
-				Math.ceil(admin.data[admin.idCita].tiempoServicios / 15) 
+				Math.ceil(admin.data[admin.idCita].tiempo_servicios / 15) 
 			)
 	
 			typeof callback == "function" && callback();
@@ -453,14 +453,14 @@ admin ={
 				arrSer = admin.data[admin.idCita].servicios, 
 				len = arrSer.length
 				//Buscamos posicion del elemento a eliminar
-				admin.data[admin.idCita].tiempoServicios =  0 
+				admin.data[admin.idCita].tiempo_servicios =  0 
 				var borrar_index = null
 				for(let i = 0; i < len; i++){
 					if(idCod==arrSer[i].id){						
 						// Si encuentra el indice borra el elemento
 						borrar_index = i 
 					} else {
-						admin.data[admin.idCita].tiempoServicios += parseInt(arrSer[i].tiempo)
+						admin.data[admin.idCita].tiempo_servicios += parseInt(arrSer[i].tiempo)
 					}
 				}
 				if(borrar_index!=null) {
@@ -500,7 +500,7 @@ admin ={
 					tiempo = select.attr('tiempo')
 
 				admin.data[admin.idCita].servicios.push({id ,  codigo ,  descripcion , tiempo})
-				admin.data[admin.idCita].tiempoServicios += parseInt(tiempo)	
+				admin.data[admin.idCita].tiempo_servicios += parseInt(tiempo)	
 				_addRow (id ,  codigo ,  descripcion , tiempo, admin.set.tiempoServicios)
 
 
@@ -522,7 +522,7 @@ admin ={
 			admin.data[admin.idCita].fecha = data['fecha']
 			admin.data[admin.idCita].hora = data['hora']
 			admin.data[admin.idCita].obs = data['obs']
-			admin.data[admin.idCita].tiempoServicios = data['tiempoServicios']
+			admin.data[admin.idCita].tiempo_servicios = data['tiempo_servicios']
 
 			$.each(admin.data[ admin.idCita].servicios, function( i , v){
 
@@ -540,7 +540,7 @@ admin ={
 				obs :  dlg.find('#obs').val(),
 				servicios : arrIdSer ,
 				status : false , 
-				tiempoServicios: admin.data[admin.idCita].tiempoServicios
+				tiempo_servicios: admin.data[admin.idCita].tiempo_servicios
 			}
 
 			admin.save(sendData,function(){
@@ -611,7 +611,7 @@ admin ={
 					.find('#hora')
 						.val(admin.data[admin.idCita].hora)
 					.find('#tiempoServicios')
-						.val(admin.data[admin.idCita].tiempoServicios)
+						.val(admin.data[admin.idCita].tiempo_servicios)
 						
 				$.each(admin.data[admin.idCita].servicios , function(i,a){
 					_addRow( a.id , a.codigo , a.descripcion , a.tiempo,  admin.set.tiempoServicios)
@@ -665,10 +665,7 @@ admin ={
 			.always($this.find('.icon-load').fadeOut());
 		}
 	 },
-	unidadTiempo : function(tiempoServicios ){
-
-		return Math.ceil(tiempoServicios / 15)
-	 }, 
+	unidadTiempo : tiempoServicios=>  Math.ceil(tiempoServicios / 15), 
 	inactivas:{ 
 		click :	function(){
 
@@ -723,9 +720,7 @@ admin ={
 			this.color()
 		 }, 
 		create: function(data){
-			data.idCita = $.isEmpty(data.idCita)?data.id:data.idCita; 
-		
-			if ($('#idCita_'+data.idCita+'.lbl').length) return false; 
+
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
 			var lbl = admin.lbl,
 				htmlSer = '', 
@@ -745,48 +740,63 @@ admin ={
 				admin.lbl.draggable(this.obj)
 			}
 		 },
-		edit: function (data, last){
-			var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
-			$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempoServicios )
+		edit: function (data, last = null){
+			if(last){
+				var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
+				$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios )
 
-			if (data.cliente.id != last.cliente.id){
-				object.find('.nombre')
-					.attr('id', data.cliente.id)
-					.find('.text-value').html(data.cliente.nombre)
-		     } 
-			if (data.fecha != last.fecha || data.hora != last.hora){
-					let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
-						lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
-						clon = object.clone()
+				if (data.cliente.id != last.cliente.id){
+					object.find('.nombre')
+						.attr('id', data.cliente.id)
+						.find('.text-value').html(data.cliente.nombre)
+				} 
+				if (data.fecha != last.fecha || data.hora != last.hora){
+						let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
+							lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
+							clon = object.clone()
+						
+						object.remove()
+						clon.appendTo('#'+idCell)
+						admin.lbl.style()
+					}
+				if (data.obs != last.obs) object.find('#obs').val(data.obs)
+			}else{
+				let that = this
+				this.delete(data, true, function(){
 					
-					object.remove()
-					clon.appendTo('#'+idCell)
-					admin.lbl.style()
-				}
-			if (data.obs != last.obs) object.find('#obs').val(data.obs)
+					that.create(data)
+				})
+			}
 			
 		 },
 		container : function (data, htmlSer) {
-			var html_icono_desplegar = (data.servicios.length <= data.tiempoServicios) 
+			var html_icono_desplegar = (data.servicios.length <= data.tiempo_servicios) 
 				? "<i class ='icon-angle-down fnExtend' ></i>"
-				:""
+				:"",
+				html_icono_usuario_coge_cita = typeof data.cliente.id != undefined 
+				? "<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>"
+				: "",  
+				idUsuario = data.idUsuario||data.cliente.id, 
+				nombre = data.nombre||data.cliente.nombre
+
 			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
 			var nota  = $.isEmpty(data.nota)?'':data.nota
 			var html = "\
-				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempoServicios)+"' tiempo='"+data.tiempoServicios+"'> \
+				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+ 
-					html_icono_desplegar
-					+"<div class='icons_crud'>\
+					html_icono_desplegar + 
+					html_icono_usuario_coge_cita +
+					"<div class='icons_crud'>\
 							<i class ='fnEdit icon-pencil-1'></i>  \
 							<i class ='fnDel icon-trash'></i>  \
 						</div>\
 						<i class ='fnMove icon-move '></i>  \
 					</div> \
-					<div id ='"+data.idUsuario+"' class='nombre'> \
+					<div id ='"+idUsuario+"' class='nombre'> \
 						<i class ='icon-user-1'></i> \
-						<span>"+data.nombre+"</span> \
+						<span>"+nombre+"</span> \
 					</div> \
-					<div class='servicios "+admin.unidadTiempo(data.tiempoServicios)+"'>"+htmlSer+"</div> \
+					<div class='servicios "+admin.unidadTiempo(data.tiempo_servicios)+"'>"+htmlSer+"</div> \
 					<div class='note "+ claseNotas + "'> \
 						<i class='icon-note'></i> \
 						<span class='text_note'>"+nota+"</span> \
@@ -866,16 +876,17 @@ admin ={
 			this.width = w; 
 			this.color(); 
 		 }, 
-		delete: function(data, nomens = false ){
+		delete: function(data, nomens = false, callback ){
 			let idCita = (typeof data === 'object') ? data.idCita : data ,
 				$this = $('#idCita_'+idCita), 
 				_del = function(){
-					$this.hide('explode',function(){$this.remove()})
+					$this.hide('explode',1000, function(){$this.remove()})
 					admin.lbl.color()
 					return true;
-				}
-			return (nomens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?'))? _del() : false ;
-
+				}, 
+				r = (nomens || confirm('Desea eliminar la cita con id: ' + idCita + ' ?'))? _del() : false ;
+			typeof callback == "function" && callback();
+			return r;
 		 },
 		draggable : function($this){							
 			$this.draggable({

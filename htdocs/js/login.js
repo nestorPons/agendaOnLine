@@ -56,9 +56,11 @@ var error = function (mns){
 			})
  }
 let 
+
 Login = {
 	isLoad : true, 
 	html : '', 
+	scripts : [], 
 	setCookie : ()=>{
 		localStorage.setItem("AOLAvisoCookie", 1);
 		document.getElementById("barraaceptacion").style.display="none";
@@ -164,7 +166,12 @@ $(function(){
 						.append(r)
 						.removeClass()
 					let section = $(r).filter('main').attr('id');
-					$.getScript('/js/'+section+'.js');
+					if (!Login.scripts.includes(section)){
+						$.getScript('/js/'+section+'.js');
+						Login.scripts.push(section)
+					}else{
+					//window[section].init()
+					}
 				} else { 
 					let res = r.error.split("<br>")
 					notify.error(res[1], res[0], 5000);

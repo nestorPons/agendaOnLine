@@ -38,6 +38,7 @@ while ($n < 60) {
                 // Extraigo datos de cita
                 // SOLO PARA DATA 
                 $Cita =  new models\Cita($val['idFK']); 
+
                 if ($Cita->exist()){
                     $data[$val['tables']][] = array_merge(
                         $Cita->data(), 

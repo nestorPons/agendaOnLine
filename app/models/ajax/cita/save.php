@@ -17,7 +17,7 @@ if ($data <= 1 || 1 ){
 			'hora' => $hora, 
 			'obs' => $_POST['nota']??"", 
 			'usuarioCogeCita' => $_SESSION['id_usuario'],
-			'tiempo_servicios' => $_POST['tiempoServicios']
+			'tiempo_servicios' => $_POST['tiempo_servicios']
 		])){
 		
 			$id_servicio = $Data->getId();
@@ -43,7 +43,7 @@ if ($data <= 1 || 1 ){
 				$User->sendMail(
 					'mailConfirmation.php', 
 					'Confirmación reserva', 
-					[$fecha,$hora, $_POST['tiempoServicios'], $Empresa]
+					[$fecha,$hora, $_POST['tiempo_servicios'], $Empresa]
 				);
 
 			 }

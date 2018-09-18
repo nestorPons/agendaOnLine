@@ -48,5 +48,5 @@ define ('ADMIN_WEB','https://www.reservatucita.com');
 define ('ADMIN_NAME' , 'Nestor Pons') ; 
 define ('ADMIN_EMAIL' , 'nestorpons@gmail.com') ; 
 
-const VERSION = 'v7.2'; 
+const VERSION = 'v7.4'; 
 const STABLE = false; 

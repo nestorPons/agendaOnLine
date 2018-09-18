@@ -78,7 +78,7 @@ var crearCita ={
 				agenda : crearCita.data.agenda,
 				servicios : idSer ,
 				nota : sec.find('#crearCitaNota').val(),
-				tiempoServicios : parseInt(sec.find('#tSer').text()) 
+				tiempo_servicios : parseInt(sec.find('#tSer').text()) 
 			}
 			$.extend(crearCita.data, data)
 
@@ -115,7 +115,7 @@ var crearCita ={
 								notify.info(
 									'Acepte la siguiente solicitud,<br/> si desea recibir notificaciones para recordarle sus citas<br/> Gracias.', 
 									'SOLICITUD', 
-									2, 
+									3000, 
 									Notification.requestPermission
 
 								)

@@ -19,12 +19,11 @@ if ($arrSerPost && $arrSerPost!=$arrSerDb && $r['success']) {
     $Cita->multi_query = true ;
         $Cita->deleteBy('idCita', $idCita ) ;
         foreach ($arrSerPost as $ser){
-
             $args = [
                 'idCita' => $idCita , 
                 'servicio' => $ser
             ]; 
-        $Cita->saveById( -1, $args) ; 
+            $Cita->saveById( -1, $args) ; 
         }
     
     if(!$r['success'] = $Cita->multi_query()) $r['err'] = 'Save cita'; 

@@ -157,7 +157,6 @@ class BaseClass{
 
             $this->sql .= $this->updateSql($args , $id);
         }
-
       if(!$this->multi_query){
             $this->return = $this->query();
             return $this->return;
