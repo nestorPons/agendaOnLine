@@ -5,7 +5,7 @@ RewriteEngine On
 
 #Flags php
 #php_flag display_errors On
-php_flag "output_buffering" off
+#php_flag "output_buffering" off
 
 #Cache y velocidad de carga
 SetOutputFilter DEFLATE

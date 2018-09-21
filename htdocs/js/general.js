@@ -2,11 +2,7 @@
 var general = {
 	isLoad : true, 
 	init : function(){
-		$('#general')
-			.on('click','#btnCambiarPass',function(){
-
-					dialog.open('dlgCambiarPass',general.pass)
-			})
+		
 	}, 
 	guardar: function (callback){
 
@@ -42,41 +38,6 @@ var general = {
 		
 		return r
 	 }, 
-	 pass: function(pass,rpass,opass){
-	 var
-	  	$dlg =  $('#dlgCambiarPass'),
-		$pass = $dlg.find('#pass'),
-		pass = $pass.val(), 
-		$rpass = $dlg.find('#repeatPass'), 
-		rpass = $rpass.val(), 
-		$oldPass = $dlg.find('#oldPass'), 
-		opass = $oldPass.val()		
 
-		 data ={
-			controller: 'password', 
-			action : EDIT, 
-			pass: Tools.SHA(pass), 
-			oldPass: Tools.SHA(opass)
-		 }
-		 if(pass!=undefined && pass===rpass){
-			$.post(INDEX, data,
-				function (r, textStatus, jqXHR) {
-					if(r.success){
-						notify.success('Password cambiado con exito')
-						dialog.close()
-					} else {
-						$oldPass.removeClass().addClass('input-error')
-						notify.error('Error en passwords!!')
-					}
-					btn.load.hide()
-				},
-				'json'
-			)
-		 }else {
-			$pass.removeClass().addClass('input-error')
-			$rpass.removeClass().addClass('input-error')
-			btn.load.hide()
-		 }
-	 }
  }
 

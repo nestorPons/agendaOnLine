@@ -125,11 +125,11 @@ var agendas = {
 
 			admin.set.nameAgenda(id,value)
 
-			if(main.scripts.includes('crearCita')) crearCita.set.nameAgenda(id,value)
+			if(general.loaded.includes('crearCita')) crearCita.set.nameAgenda(id,value)
 
-			if(main.scripts.includes('horarios')) horarios.set.nameAgenda(id,value)
+			if(general.loaded.includes('horarios')) horarios.set.nameAgenda(id,value)
 
-			if(main.scripts.includes('config')) config.set.nameAgenda(id,value)
+			if(general.loaded.includes('config')) config.set.nameAgenda(id,value)
 		}
 	 }
 	

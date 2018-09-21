@@ -20,7 +20,7 @@ var estilos = {
 			action : SAVE
 		}
 		$.post(INDEX,data,function(r){ 
-			if (r.success) location.reload() 
+			if (r.success) admin.reload() 
 		},'json')
 	 }, 
 	_getTheColor : function  (colorVal) {

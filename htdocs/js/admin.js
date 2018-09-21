@@ -38,130 +38,64 @@ function sincronizar( dias, date ){
 
 	$datepicker
 		.val(Fecha.print(fecha))
-		.datepicker("setDate",Fecha.print(fecha));
-
-
-	
+		.datepicker("setDate",Fecha.print(fecha));	
  }
 var 
-main = { 
-	scripts  : [], 
-	isActive: true, 
-	worker : {
-		w : null , 
-		isActive : true, 
-		init : function(){
-			if (this.isActive) {
-				this.w.postMessage(0);
-				this.isActive = true;  // Cambiar a false,  true solo para desarrollo 
+worker =  {
+	w : null , 
+	isActive : true, 
+	init : function(){
+		if (this.isActive) {
+			this.w.postMessage(0);
+			this.isActive = true;  // Cambiar a false,  true solo para desarrollo 
+		}
+	} , 
+	send : function(){
+	 }, 
+	sync : function(){
+		this.w = new Worker('/js/worker.js');
+		this.w.onmessage = e =>{
+			let data = JSON.parse(e.data);
+			if(data){
+				$.each(data, function (i, d) { 
+					$.each(d, function (i, v) { 
+						let action = parseInt(v.action), obj = null
+
+						switch(v.table){
+							case "data": 
+								obj = admin.lbl;
+								break; 
+							case 'notas':
+								obj = notas;
+								break; 
+							case 'usuarios': 
+								obj = usuarios.rows;
+								break; 
+							case 'servicios': 
+								obj = servicios;
+								break; 
+							case 'familias': 
+								obj = familias;
+								break; 
+							};
+
+						switch(action){
+							case 1: obj.create(v); 			break;  
+							case 2: obj.edit(v);			break;
+							case 3: obj.delete(v, true);	break; 
+						}
+					});	 
+				});
+			} else {
+				console.log('No se encontraron datos')
 			}
-		 }, 
-		send : function(){
-		 }, 
-		sync : function(){
-			this.w = new Worker('/js/worker.js');
-			this.w.onmessage = e =>{
-				let data = JSON.parse(e.data);
-				if(data){
-					$.each(data, function (i, d) { 
-						$.each(d, function (i, v) { 
-							let action = parseInt(v.action), obj = null
-
-							switch(v.table){
-								case "data": 
-									obj = admin.lbl;
-									break; 
-								case 'notas':
-									obj = notas;
-									break; 
-								case 'usuarios': 
-									obj = usuarios.rows;
-									break; 
-								case 'servicios': 
-									obj = servicios;
-									break; 
-								case 'familias': 
-									obj = familias;
-									break; 
-								};
- 
-							switch(action){
-								case 1: obj.create(v); 			break;  
-								case 2: obj.edit(v);			break;
-								case 3: obj.delete(v, true);	break; 
-							}
-						});	 
-					});
-				} else {
-					console.log('No se encontraron datos')
-				}
-				setTimeout(this.init(), 5000); 				
-			 }
-			// Inicializa los long pollings
-			this.init();
-		 }
-	}, 
-	mostrarCapa(capa, callback){
-		// Muestra las capas de navegacion 
-		// El callback devuelve el selector dom jquery de la capa mostrada
-
-		// evento de salida
-		let lastLayer = $('#admin section.activa').attr('id')
-		if(typeof(window[lastLayer].exit) === 'function') window[lastLayer].exit()
-		// ++++++
-
-		var data = { 
-				controller : capa ,  
-				fecha :  Fecha.sql ,
-			  }, 
-			 $capa = $('#'+capa),
-			$menu = $('#mySidenav')
-		
-		//Cambia el estado del menu
-		$('.app-bar-pullmenu ').hide('blind');
-		$menu.find('.selected').removeClass('selected')
-		$menu.find('[data-capa="'+capa+'"]').addClass('selected')
-		//***	  
-		
-		// Cerramos funcion si es la misma capa
-		if($capa.hasClass('activa')) return false;
-	
-		$('#chckOpUsersDel').prop( "checked", false ) ;
-		$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
-		
-		if($capa.is(':empty') ){
-			console.log('Peticion capa => ' + capa)
-			$.post(INDEX,data,function(html){
-	
-				$('#'+capa).html(html).promise().done(__INIT__);
-				function __INIT__ (){
-					//Si hay que iniciar en 
-				}
-				console.log('Peticion capa => ' + capa)
-				$.getScript("/js/"+capa+".js", function(){
-					main.scripts.push(capa)
-
-					typeof callback == "function" && callback($('#'+ capa))
-				})
-				.complete(()=>window[capa].init())
-	
-			},'html')
-		 } else {
-			if($('#config').is(':visible')&& config.change) config.guardar();
-			if($('#agendas').is(':visible')&& agendas.change) agendas.guardar();
-			typeof callback == "function" && callback($('#'+ capa))
-		 }
-		$('.capasPrincipales.activa').hide().removeClass('activa')
-		$capa.fadeIn().addClass('activa')
-		menu.status(capa)
-		if(capa=='main') $('#'+Fecha.id).show()		
-		$('html,body').animate({scrollTop:0}, 500)
-	 }
-}
-var  
+			setTimeout(this.init(), 5000); 				
+			}
+		// Inicializa los long pollings
+		this.init();
+	 },
+}, 
 admin ={ 
-	section : $("#main"), 
-	body : $('#main .cuerpo') ,
 	z_index : 2 ,
 	data : new Object(), 
 	arrSer : new Array(), 
@@ -177,7 +111,9 @@ admin ={
 		this.inactivas.comprobar()
 		this.lbl.load()
 		notas.init()
-		main.worker.sync()
+		worker.sync()
+		cargarDatepicker()
+		colorearMenuDiasSemana()
 	 },
 	reload : function(){
 		let that = this
@@ -234,17 +170,16 @@ admin ={
 	sincronizar: function (dir){
 		var dir= dir||0
 		admin.cargado = false
-		var section = admin.section , 
-			body = admin.body, 
+		var
 			_pasarDia = function(){
-				if (Fecha.id != section.find('.dia.activa').attr('id')) {
+				if (Fecha.id != $("#main").find('.dia.activa').attr('id')) {
 					var ent = dir>0?'right':'left',
 						sal = dir>0?'left':'right'
 
-					body.hide("slide", { direction: sal }, 500,function(){
+					$('#main .cuerpo').hide("slide", { direction: sal }, 500,function(){
 						$('.dia.activa').removeClass('activa')
-						section.find('#'+ Fecha.id).addClass('activa')
-						body.show("slide", { direction: ent }, 500)
+						$("#main").find('#'+ Fecha.id).addClass('activa')
+						$('#main .cuerpo').show("slide", { direction: ent }, 500)
 
 						admin.inactivas.comprobar()
 						admin.cargado = true	
@@ -253,7 +188,7 @@ admin ={
 				}
 			}
 
-		if (!section.find('#'+Fecha.id).length)
+		if (!$("#main").find('#'+Fecha.id).length)
 				admin.crearDias(_pasarDia)
 			else{
 				//admin.check()
@@ -329,11 +264,8 @@ admin ={
 	 },
 	crearDias: function(callback){
 
-		var self = this , section = this.section , body = this.body 
-		var mD = parseInt(config.margenDias)/2;
-		var fechaIni = Fecha.calcular(-1*mD,Fecha.general);
 		var fecha = fecha||Fecha.general;
-		var dias = body.find('.dia')
+		var dias = $('#main .cuerpo').find('.dia')
 		var ids = new Array();
 
 		// Se crea array de dias cargados
@@ -351,15 +283,16 @@ admin ={
 				ids : ids ,
 				controller : 'main' ,
 				action : VIEW
-			},
+			 },
 			cache: false
 		})
 		.done(function(html){
-			body.append(html)
+			$('#main .cuerpo').append(html)
 		 
 			admin.lbl.load()
 			typeof callback == "function" && callback()
-		}).fail(function(r,status){console.log("Fallo refrescando=>"+status)});
+		})
+		.fail(function(r,status){console.log("Fallo refrescando=>"+status)});
 		
 	 },
 	citasSup: function($this){
@@ -982,7 +915,99 @@ admin ={
 				
 				 }
 		 }
-	 }
+	 }, 
+	mostrarCapa(capa, callback){
+		// Muestra las capas de navegacion 
+		// El callback devuelve el selector dom jquery de la capa mostrada
+
+		// evento de salida
+		let lastLayer = $('#admin section.activa').attr('id')
+		if(typeof(window[lastLayer].exit) === 'function') window[lastLayer].exit()
+		// ++++++
+
+		var data = { 
+				controller : capa ,  
+				fecha :  Fecha.sql ,
+			  }, 
+			 $capa = $('#'+capa),
+			$menu = $('#mySidenav')
+		
+		//Cambia el estado del menu
+		$('.app-bar-pullmenu ').hide('blind');
+		$menu.find('.selected').removeClass('selected')
+		$menu.find('[data-capa="'+capa+'"]').addClass('selected')
+		//***	  
+		
+		// Cerramos funcion si es la misma capa
+		if($capa.hasClass('activa')) return false;
+	
+		$('#chckOpUsersDel').prop( "checked", false ) ;
+		$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
+		
+		if($capa.is(':empty') ){
+			console.log('Peticion capa => ' + capa)
+			$.post(INDEX,data,function(html){
+	
+				$('#'+capa).html(html).promise().done(__INIT__);
+				function __INIT__ (){
+					//Si hay que iniciar en 
+				}
+				console.log('Peticion capa => ' + capa)
+				$.getScript("/js/"+capa+".js", function(){
+					general.loaded.push(capa)
+
+					typeof callback == "function" && callback($('#'+ capa))
+				})
+				.complete(()=>window[capa].init())
+	
+			},'html')
+		 } else {
+			if($('#config').is(':visible')&& config.change) config.guardar();
+			if($('#agendas').is(':visible')&& agendas.change) agendas.guardar();
+			typeof callback == "function" && callback($('#'+ capa))
+		 }
+		$('.capasPrincipales.activa').hide().removeClass('activa')
+		$capa.fadeIn().addClass('activa')
+		menu.status(capa)
+		if(capa=='main') $('#'+Fecha.id).show()		
+		$('html,body').animate({scrollTop:0}, 500)
+	 }, 
+	pass: function(pass,rpass,opass){
+		var
+			 $dlg =  $('#dlgCambiarPass'),
+		   $pass = $dlg.find('#pass'),
+		   pass = $pass.val(), 
+		   $rpass = $dlg.find('#repeatPass'), 
+		   rpass = $rpass.val(), 
+		   $oldPass = $dlg.find('#oldPass'), 
+		   opass = $oldPass.val()		
+   
+			data ={
+			   controller: 'password', 
+			   action : EDIT, 
+			   pass: Tools.SHA(pass), 
+			   oldPass: Tools.SHA(opass)
+			}
+			if(pass!=undefined && pass===rpass){
+			   $.post(INDEX, data,
+				   function (r, textStatus, jqXHR) {
+					   if(r.success){
+						   notify.success('Password cambiado con exito')
+						   dialog.close()
+					   } else {
+						   $oldPass.removeClass().addClass('input-error')
+						   notify.error('Error en passwords!!')
+					   }
+					   btn.load.hide()
+				   },
+				   'json'
+			   )
+			}else {
+			   $pass.removeClass().addClass('input-error')
+			   $rpass.removeClass().addClass('input-error')
+			   btn.load.hide()
+			}
+		}
 },
 menu = {
 	nav: {
@@ -1486,9 +1511,6 @@ admin.init()
 Device.init()
 if(Device.isCel()) localStorage.setItem('menuOpen',0)
 
-cargarDatepicker()
-colorearMenuDiasSemana()
-
 $('body')
 	.on('click',".idDateAction",function(){
 		if(!$(this).data('disabled')) {
@@ -1502,6 +1524,10 @@ $('body')
 		menu.nav.estado(estado)
 
 	})
+	.on('click','#btnCambiarPass',function(){
+		console.log("Abriendo cambio pass ...")
+		dialog.open('dlgCambiarPass',admin.pass)
+	 })
 $('.tabcontrol').tabcontrol()	
 
 $('html')
@@ -1559,7 +1585,7 @@ $('#main')
 	 })
 	.on('click','.fnCogerCita',function(){
 		let $fnCogerCita = $(this) 
-		main.mostrarCapa('crearCita', function($this){
+		admin.mostrarCapa('crearCita', function($this){
 			crearCita.data.agenda = $fnCogerCita.parent().attr('agenda')
 			crearCita.data.hora = $fnCogerCita.parents('tr').data('hour')
 			$this.find('#agenda'+crearCita.data.agenda).prop('checked', true)
@@ -1598,7 +1624,7 @@ $('#main')
 		$( ".selector" ).draggable( "option", "disabled", true );
 		e.stopPropagation();
 		admin.del($(this).parents('.lbl').attr('idcita'))
-	})
+	 })
 	.on('change','.nombreagenda',function(){
 
 		var data = {
@@ -1611,7 +1637,7 @@ $('#main')
 				
 			},'json')
 
-		})
+	 })
 	.find('.cuerpo')
 		.on("swipeleft",function(){sincronizar(1)})
 		.on("swiperight",function(){sincronizar(-1)})
@@ -1658,9 +1684,9 @@ $('#main')
 		.on('click','#btnOptions #chckOpUsersDel',menu.options)
 		.find('#showByTime')
 			.on('click','input', function(){
-					$(this).prop('checked',true)
-					historial.get($(this).val())
-				}
+				$(this).prop('checked',true)
+				historial.get($(this).val())
+			 }
 			).end()
 
 	$('#mySidenav')
@@ -1670,9 +1696,9 @@ $('#main')
 				menu.nav.estado(0)
 			}
 
-			main.mostrarCapa($(this).find('a').data('capa'));
+			admin.mostrarCapa($(this).find('a').data('capa'));
 			
-			})
+	 })
 	$('#notas')
 		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('id'))})
 		.on( "click", ".fnDel", function(e){
