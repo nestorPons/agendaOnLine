@@ -17,4 +17,7 @@
 		<section id='historial' data-nombre="Historial" class="capasPrincipales" ></section>
 	</div>
 	<div id="dialogs" class="popup-overlay"></div>	
+	<div id="loader" class="popup-overlay hide">
+		<i class="icon-load animate-spin"></i>
+	</div>
 </main>

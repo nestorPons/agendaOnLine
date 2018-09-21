@@ -1,7 +1,8 @@
 const 
 	EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
-var general = {  
+var 
+general = {  
 	loaded : ['secLogin'],
 	dir1 : RIGHT, 
 	dir2 : LEFT, 
@@ -45,18 +46,7 @@ var general = {
 		}
 
 	 }
- }
-var error = function (mns){
-	$('#loginUsuarioPopoverTxt').html(mns)
-	$('#frmLogin')
-		.popover('show')
-		.find('input')
-			.each(function(){
-				$(this).addClass('input-error');
-			})
- }
-let 
-
+ }, 
 Login = {
 	isLoad : true, 
 	html : '', 
@@ -166,12 +156,21 @@ $(function(){
 						.append(r)
 						.removeClass()
 					let section = $(r).filter('main').attr('id');
+<<<<<<< HEAD
 					if (!Login.scripts.includes(section)){
 						$.getScript('/js/'+section+'.js');
 						Login.scripts.push(section)
 					}else{
 					//window[section].init()
 					}
+=======
+					if(!general.loaded.includes(section)){
+						general.loaded.push(section)
+						$.getScript('/js/'+section+'.js');
+					}
+					else
+						window[section].init()
+>>>>>>> b71119f643773995d877240bca278316f5b730e7
 				} else { 
 					let res = r.error.split("<br>")
 					notify.error(res[1], res[0], 5000);

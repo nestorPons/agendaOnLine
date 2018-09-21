@@ -417,7 +417,7 @@ Tools = {
 		return outputArray;
 	}, 
 	exist(nameScript){
-		return (main.scripts.includes(nameScript) && $('#' +nameScript + '> *').length)
+		return (general.loaded.includes(nameScript) && $('#' +nameScript + '> *').length)
 	}
  }, 
 generateId = {
@@ -1091,6 +1091,9 @@ $.ajaxSetup({
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
 		typeof callback == "function" && callback()
 	 },
+	send: function(){
+		
+	}, 
 	error : function(jqXHR, textStatus, errorThrowne){
 		if (jqXHR.status === 0) {
 			console.warn('Not connect: Verify Network.');
