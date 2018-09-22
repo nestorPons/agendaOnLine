@@ -45,16 +45,13 @@ worker =  {
 	w : null , 
 	isActive : true, 
 	init : function(){
-		if (this.isActive) {
-			this.w.postMessage(0);
-			this.isActive = true;  // Cambiar a false,  true solo para desarrollo 
-		}
-	} , 
+		if (this.isActive)	this.w.postMessage(0); 
+	 } , 
 	send : function(){
 	 }, 
 	sync : function(){
 		this.w = new Worker('/js/worker.js');
-		this.w.onmessage = e =>{
+		this.w.onmessage = e =>{			
 			let data = JSON.parse(e.data);
 			if(data){
 				$.each(data, function (i, d) { 
@@ -86,11 +83,9 @@ worker =  {
 						}
 					});	 
 				});
-			} else {
-				console.log('No se encontraron datos')
 			}
-			setTimeout(this.init(), 5000); 				
-			}
+			setTimeout(this.init(), 5000);			
+		 }
 		// Inicializa los long pollings
 		this.init();
 	 },
@@ -114,6 +109,185 @@ admin ={
 		worker.sync()
 		cargarDatepicker()
 		colorearMenuDiasSemana()
+		//Construyo la "clase" device para saber el dispositivo usado
+		Device.init()
+		if(Device.isCel()) localStorage.setItem('menuOpen',0)
+		$('.tabcontrol').tabcontrol()
+
+		
+		$('.fnToggleCharm').click(function(){
+			menu.nav.charm.toggle($(this))
+		})
+
+		$('#frmContact button')
+			.click(function(event){			
+				event.preventDefault()
+				var data = $("#frmContact").serializeArray()
+				data.push({name : 'controller' , value : 'contacto'})
+
+				data[1].value = normalize(data[1].value)
+				$.post(INDEX,data,function(r){
+					if(r.success)
+						notify.success('Email mandado con éxito') 
+					else 
+						notify.error('No se pudo mandar el email!! <br> Compruebe que estan todos los datos')
+					
+					menu.nav.contacto.cerrar()
+					btn.load.hide()
+				},'json')
+			})
+
+		$(".login")
+			.on('focusout','[data-max-leght]',function(){
+			var $this = $("[data-max-leght]");
+			if($this.val().length>$this.data("max-leght")){
+				$this.removeClass("valid");
+				$this.addClass("invalid");
+			}else{
+				$this.removeClass("invalid");
+				$this.addClass("valid");
+			}
+		});
+
+		$('#main')
+			.on('click','.lbl',function(e){
+				var val = ($(this).css('z-index')==3)?1:3
+				$('.lbl').css({'z-index': 2 })	
+				$(this).css({'z-index': val})	
+				
+				admin.lbl.resize($(this))
+			})
+			.on('click','.celda',function(){
+				let celda = $(this) 
+				admin.mostrarCapa('crearCita', function($this){
+					crearCita.data.agenda = celda.attr('agenda')
+					crearCita.data.hora = celda.parents('tr').data('hour')
+					$this.find('#agenda'+crearCita.data.agenda).prop('checked', true)
+				})
+			})
+			.on('click','#mainLstDiasSemana a',function(){
+				var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
+				var diaB = parseInt($(this).data('value'));
+				sincronizar(diaB-diaA);
+				})
+			.on('change','#lstDiasSemana',function(){
+				var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
+				var diaB = parseInt($(this).val());
+				sincronizar(diaB-diaA);
+				})
+			.on('click','.icon-attention',function(e){
+				admin.citasSup($(this));
+				e.stopPropagation()
+				})
+			.on('click','.fnEdit', function(e){
+				e.stopPropagation() 
+				admin.edit($(this).parents('.lbl').attr('idcita'))
+				})
+			.on('dblclick','.lbl', function(e){	
+				admin.edit($(this).attr('idcita'))
+				})
+			.on('click','.cita',function(e){
+				$(this).parent()
+					.find('.note')
+						.addClass('show')
+						.find('input')
+							.focus();
+
+				})
+			.on('click','.lbl .fnDel',function(e){
+				$( ".selector" ).draggable( "option", "disabled", true );
+				e.stopPropagation();
+				admin.del($(this).parents('.lbl').attr('idcita'))
+			})
+			.on('change','.nombreagenda',function(){
+
+				var data = {
+					id : $(this).data('agenda'), 
+					nombre : $(this).val(),
+					controller: 'agendas',
+					action:'saveName'
+				}
+					$.post(INDEX,data,function(r){
+						
+					},'json')
+
+			})
+			.find('.cuerpo')
+				.on("swipeleft",function(){sincronizar(1)})
+				.on("swiperight",function(){sincronizar(-1)})
+
+			$('#navbar')
+				.on('click','#btnShow',menu.show)
+				.on('click','#btnEdit',menu.edit)
+				.on('click','#btnSearch',function(){
+					if ($('#txtBuscar').is(':hidden')){
+						$('#txtBuscar')
+							.parent().show('slide',{direction:'right'}).end()
+							.focus();
+						$('#btnSearch')
+							.find('i').removeClass().addClass('lnr-cross').end()
+							.find('span').text('Cerrar');
+							
+					}else{
+
+						menu.load();
+
+					}
+			})
+			.on('change','#txtBuscar',function(){
+				if($('#txtBuscar').val()!=""){
+					menu.buscar(
+						$('#txtBuscar').val(),
+						$('.capasPrincipales.activa').attr('id')
+					)
+				}
+			})
+			.on('click','#btnReset',function(){
+				if($('#usuarios').is(':visible')) usuarios.select('A');
+			})
+			.on('click','#btnSave',menu.save)
+			.on('keyup','#txtBuscar',function(event){
+				if(event.which==13) menu.load();
+				if(event.which==27) 
+					menu.exit();
+					event.stopPropagation(); 
+			})
+			.on('click','#btnAdd',menu.add)
+			.on('click','#btnDel',menu.del)
+			.on('click','#btnReset',menu.reset)
+			.on('click','#btnOptions #chckOpUsersDel',menu.options)
+			.find('#showByTime')
+				.on('click','input', function(){
+					$(this).prop('checked',true)
+					historial.get($(this).val())
+				}
+				).end()
+
+		$('#mySidenav')
+				.find('[name="menu[]"]').parent().click(function(){
+					if(Device.isCel()) {
+						menu.nav.open(0)	
+						menu.nav.estado(0)
+					}
+
+					admin.mostrarCapa($(this).find('a').data('capa'));
+					
+			})
+		$('#notas')
+				.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('id'))})
+				.on( "click", ".fnDel", function(e){
+					e.stopPropagation()
+					notas.delete(
+						$(this).parent().attr('id')
+					)
+				})
+				.on('click','#nuevaNota',function(){
+					notas.dialog(-1) 
+				})
+
+
+			// Añadimos etiqueta al head
+		$('<title/>').text('AgendaOnline zona admin').appendTo('head')
 	 },
 	reload : function(){
 		let that = this
@@ -163,15 +337,13 @@ admin ={
 			 })
 		  }, 
 		tiempoServicios : function(){
-			var ts = admin.data[admin.idCita].tiempo_servicios// < 0 ? 1: admin.data[admin.idCita].tiempoServicios
+			var ts = admin.data[admin.idCita].tiempo_servicios
 			$('#dlgEditCita').find('#tiempoServicios').val(ts)
 		 }
 	 }, 
-	sincronizar: function (dir){
-		var dir= dir||0
-		admin.cargado = false
-		var
-			_pasarDia = function(){
+	sincronizar: function (dir =0 ){
+		main.loader.show()
+		let _pasarDia = function(){
 				if (Fecha.id != $("#main").find('.dia.activa').attr('id')) {
 					var ent = dir>0?'right':'left',
 						sal = dir>0?'left':'right'
@@ -181,86 +353,20 @@ admin ={
 						$("#main").find('#'+ Fecha.id).addClass('activa')
 						$('#main .cuerpo').show("slide", { direction: ent }, 500)
 
-						admin.inactivas.comprobar()
-						admin.cargado = true	
-						
+						admin.inactivas.comprobar()						
 					})
 				}
+				main.loader.hide()
 			}
 
 		if (!$("#main").find('#'+Fecha.id).length)
-				admin.crearDias(_pasarDia)
-			else{
-				//admin.check()
-				_pasarDia()
-			}
-		
-
+			admin.crearDias(_pasarDia)
+		else
+			_pasarDia()
 	 },
 	activeDay : function () {
 		$('.activa').removeClass('activa')
 		$('#' + Fecha.id).addClass('activa')
-	 }, 
-	check : function () {
-		/*
-			var _citas = function(){
-					var citas = new Array();
-					$('#'+Fecha.id).find('.lbl').each(function(){
-						//if (!$.isEmpty($(this).attr('lastmod') ))
-							citas.push({
-								'id':$(this).attr('idcita'),
-								'lastMod':$(this).attr('lastmod')
-							})
-					})
-					
-					return citas
-				},
-				data = {
-					controller : 'cita' ,
-					action : 'check',
-					citas : _citas(),
-					fecha : Fecha.general
-				},
-				_getData = function(arr, isDel ,isAdd ){
-					$.each(arr,function(i,dataEdit){
-						var data = dataEdit[0] , tt = 0 
-						//Se declaran dos variables para adecuarlo al antiguo formato
-						data.idCita = data.id
-						data.nota = data.obs
-
-						data.servicios = dataEdit[1]
-						$.each(data.servicios, function( index, $this ){
-							tt += parseInt($this.tiempo)
-						})
-
-						if (isDel) admin.lbl.delete(data.idCita ,true)
-						if (isAdd) admin.lbl.create(data)
-					})
-				}
-
-			$.ajax({
-				type:"POST",
-				url: INDEX ,
-				dataType: 'json',
-				data: data,
-				cache: false
-			})
-			.done(function(r){
-				
-				if (!$.isEmpty(r.del)){
-					$.each(r.del,function(i,value){
-						admin.lbl.delete(value ,true)
-					})
-				}
-				if (!$.isEmpty(r.add)){ 
-					_getData(r.add, false, true)
-				}
-				if (!$.isEmpty(r.edit)){
-					_getData(r._edit, true, true)
-				}
-				
-			},'json')
-		*/
 	 },
 	crearDias: function(callback){
 
@@ -653,7 +759,6 @@ admin ={
 			this.color()
 		 }, 
 		create: function(data){
-
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
 			var lbl = admin.lbl,
 				htmlSer = '', 
@@ -663,12 +768,11 @@ admin ={
 				$.each(data.servicios, function ( id , serv ) {
 					htmlSer += lbl.service(serv)
 				})
-
 				$celda
 					.find('.fnCogerCita').remove().end()
 					.append(lbl.container(data , htmlSer))
+
 				this.obj = $('#idCita_'+data.idCita+'.lbl')
-				
 				lbl.style()
 				admin.lbl.draggable(this.obj)
 			}
@@ -703,10 +807,11 @@ admin ={
 			
 		 },
 		container : function (data, htmlSer) {
+
 			var html_icono_desplegar = (data.servicios.length <= data.tiempo_servicios) 
 				? "<i class ='icon-angle-down fnExtend' ></i>"
 				:"",
-				html_icono_usuario_coge_cita = typeof data.cliente.id != undefined 
+				html_icono_usuario_coge_cita = typeof data.cliente != 'undefined' 
 				? "<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>"
 				: "",  
 				idUsuario = data.idUsuario||data.cliente.id, 
@@ -963,13 +1068,7 @@ admin ={
 				function __INIT__ (){
 					//Si hay que iniciar en 
 				}
-				console.log('Peticion capa => ' + capa)
-				$.getScript("/js/"+capa+".js", function(){
-					general.loaded.push(capa)
-
-					typeof callback == "function" && callback($('#'+ capa))
-				})
-				.complete(()=>window[capa].init())
+				main.scripts.load(capa, function(){callback($('#'+ capa))})
 	
 			},'html')
 		 } else {
@@ -1517,211 +1616,29 @@ Device = {
 		}
 	 }
 }
-admin.init()	
-//Construyo la "clase" device para saber el dispositivo usado
-Device.init()
-if(Device.isCel()) localStorage.setItem('menuOpen',0)
-
 $('body')
 	.on('click',".idDateAction",function(){
 		if(!$(this).data('disabled')) {
 			sincronizar($(this).data('action'));
 		}
-	})
+	 })
 	.on('click','#boton-menu', function(){
 		var estado = parseInt(localStorage.getItem("menuOpen"))+1
 
 		menu.nav.open(estado)
 		menu.nav.estado(estado)
 
-	})
+	 })
 	.on('click','#btnCambiarPass',function(){
 		console.log("Abriendo cambio pass ...")
 		dialog.open('dlgCambiarPass',admin.pass)
 	 })
-$('.tabcontrol').tabcontrol()	
-
-$('html')
 	.on('click','.close',function(e){dialog.close()})
 	.on('change','input',function(){$(this).removeClass('input-error')})
-	.on('change','#lstSerSelect',function(){
+																																																																	.on('change','#lstSerSelect',function(){
 		var id = $(this).val();
 		// servicios.mostrar(id);
 		$('#lstSerSelect').each(function(){
 			$(this).find('option[value='+id+']').attr('selected','selected');
 		})
-	})
-
-$('.fnToggleCharm').click(function(){
-	menu.nav.charm.toggle($(this))
- })
-
-$('#frmContact button')
-	.click(function(event){			
-		event.preventDefault()
-		var data = $("#frmContact").serializeArray()
-		data.push({name : 'controller' , value : 'contacto'})
-
-		data[1].value = normalize(data[1].value)
-		$.post(INDEX,data,function(r){
-			if(r.success)
-				notify.success('Email mandado con éxito') 
-			else 
-				notify.error('No se pudo mandar el email!! <br> Compruebe que estan todos los datos')
-			
-			menu.nav.contacto.cerrar()
-			btn.load.hide()
-		},'json')
-	})
-
-$(".login")
-	.on('focusout','[data-max-leght]',function(){
-		var $this = $("[data-max-leght]");
-		if($this.val().length>$this.data("max-leght")){
-			$this.removeClass("valid");
-			$this.addClass("invalid");
-		}else{
-			$this.removeClass("invalid");
-			$this.addClass("valid");
-		}
-	});
-
-$('#main')
-	.on('click','.lbl',function(e){
-		var val = ($(this).css('z-index')==3)?1:3
-		$('.lbl').css({'z-index': 2 })	
-		$(this).css({'z-index': val})	
-		
-		admin.lbl.resize($(this))
-	 })
-	.on('click','.fnCogerCita',function(){
-		let $fnCogerCita = $(this) 
-		admin.mostrarCapa('crearCita', function($this){
-			crearCita.data.agenda = $fnCogerCita.parent().attr('agenda')
-			crearCita.data.hora = $fnCogerCita.parents('tr').data('hour')
-			$this.find('#agenda'+crearCita.data.agenda).prop('checked', true)
 		})
-	 })
-	.on('click','#mainLstDiasSemana a',function(){
-		var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
-		var diaB = parseInt($(this).data('value'));
-		sincronizar(diaB-diaA);
-		})
-	.on('change','#lstDiasSemana',function(){
-		var diaA =  parseInt(Fecha.diaSemana(Fecha.general));
-		var diaB = parseInt($(this).val());
-		sincronizar(diaB-diaA);
-		})
-	.on('click','.icon-attention',function(e){
-		admin.citasSup($(this));
-		e.stopPropagation()
-		})
-	.on('click','.fnEdit', function(e){
-		e.stopPropagation() 
-		admin.edit($(this).parents('.lbl').attr('idcita'))
-		})
-	.on('dblclick','.lbl', function(e){	
-		admin.edit($(this).attr('idcita'))
-		})
-	.on('click','.cita',function(e){
-		$(this).parent()
-			.find('.note')
-				.addClass('show')
-				.find('input')
-					.focus();
-
-		})
-	.on('click','.lbl .fnDel',function(e){
-		$( ".selector" ).draggable( "option", "disabled", true );
-		e.stopPropagation();
-		admin.del($(this).parents('.lbl').attr('idcita'))
-	 })
-	.on('change','.nombreagenda',function(){
-
-		var data = {
-			id : $(this).data('agenda'), 
-			nombre : $(this).val(),
-			controller: 'agendas',
-			action:'saveName'
-		}
-			$.post(INDEX,data,function(r){
-				
-			},'json')
-
-	 })
-	.find('.cuerpo')
-		.on("swipeleft",function(){sincronizar(1)})
-		.on("swiperight",function(){sincronizar(-1)})
-
-	$('#navbar')
-		.on('click','#btnShow',menu.show)
-		.on('click','#btnEdit',menu.edit)
-		.on('click','#btnSearch',function(){
-			if ($('#txtBuscar').is(':hidden')){
-				$('#txtBuscar')
-					.parent().show('slide',{direction:'right'}).end()
-					.focus();
-				$('#btnSearch')
-					.find('i').removeClass().addClass('lnr-cross').end()
-					.find('span').text('Cerrar');
-					
-			}else{
-
-				menu.load();
-
-			}
-		 })
-		.on('change','#txtBuscar',function(){
-			if($('#txtBuscar').val()!=""){
-				menu.buscar(
-					$('#txtBuscar').val(),
-					$('.capasPrincipales.activa').attr('id')
-				)
-			}
-		 })
-		.on('click','#btnReset',function(){
-			if($('#usuarios').is(':visible')) usuarios.select('A');
-		 })
-		.on('click','#btnSave',menu.save)
-		.on('keyup','#txtBuscar',function(event){
-			if(event.which==13) menu.load();
-			if(event.which==27) 
-				menu.exit();
-				event.stopPropagation(); 
-		 })
-		.on('click','#btnAdd',menu.add)
-		.on('click','#btnDel',menu.del)
-		.on('click','#btnReset',menu.reset)
-		.on('click','#btnOptions #chckOpUsersDel',menu.options)
-		.find('#showByTime')
-			.on('click','input', function(){
-				$(this).prop('checked',true)
-				historial.get($(this).val())
-			 }
-			).end()
-
-	$('#mySidenav')
-		.find('[name="menu[]"]').parent().click(function(){
-			if(Device.isCel()) {
-				menu.nav.open(0)	
-				menu.nav.estado(0)
-			}
-
-			admin.mostrarCapa($(this).find('a').data('capa'));
-			
-	 })
-	$('#notas')
-		.on( "click", ".fnEdit", function(e){notas.dialog($(this).attr('id'))})
-		.on( "click", ".fnDel", function(e){
-			e.stopPropagation()
-			notas.delete(
-				$(this).parent().attr('id')
-			)
-		})
-		.on('click','#nuevaNota',function(){
-			notas.dialog(-1) 
-		})
-
-
-	// Añadimos etiqueta al head
-	$('<title/>').text('AgendaOnline zona admin').appendTo('head')

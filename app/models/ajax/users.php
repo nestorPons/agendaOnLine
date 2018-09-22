@@ -19,5 +19,3 @@ switch ($_POST['action']) {
 		$r['succcess'] = $User->saveById();
 		break;
 }
-header('Content-Type: application/json');
-echo json_encode($r);

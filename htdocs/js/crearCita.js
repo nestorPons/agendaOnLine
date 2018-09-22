@@ -91,7 +91,7 @@ crearCita={
 				usuarios.guardar()
 		
 		}
-	},  
+	 },  
 	dialog: function (){
 
 		var $sec =  $('#crearCita') , 
@@ -117,7 +117,7 @@ crearCita={
 				agenda : crearCita.data.agenda,
 				servicios : idSer ,
 				nota : crearCita.data.nota,
-				tiempoServicios : parseInt($sec.find('#tSer').text()) 
+				tiempo_servicios : parseInt($sec.find('#tSer').text()) 
 			 }
 			$.extend(crearCita.data, data)
 
@@ -135,7 +135,9 @@ crearCita={
 
 		if(self.validate.form()){
 			$.post(INDEX,crearCita.data,function( rsp ){
+		
 				if(rsp.success){
+				
 					if(rsp.ocupado){
 
 						notify.error( rsp.mns.body , rsp.mns.tile )
@@ -146,12 +148,14 @@ crearCita={
 						self.data.servicios = rsp.services
 						self.data.nota = crearCita.data.nota
 						admin.lbl.create(self.data)
-						
+					
 						//Para que refresque la siguiente vez que se entre en las horas coger Cita
 						
 						$('#crearCita').find('.dia').remove()
-						main.mostrarCapa('main' )			
+						admin.mostrarCapa('main')
+								
 					}
+					
 				} else {
 					echo(rsp)
 					notify.error('Error inesperado')
@@ -210,12 +214,12 @@ crearCita={
 		 } ,
 		crear: function (id_table){
 				
-			let data = {
-				agenda: crearCita.data.agenda,
-				fecha:id_table , 
-				controller : 'crearCita.horas'
-			 	}, 
-				that = this
+			let	that = this,
+				data = {
+					agenda: crearCita.data.agenda,
+					fecha: id_table , 
+					controller : 'crearCita.horas'
+			 	} 
 
 			if ($('#crearCita #'+id_table).length) $('#crearCita #'+id_table).remove()
 			

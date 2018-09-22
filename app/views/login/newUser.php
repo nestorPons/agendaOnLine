@@ -4,7 +4,7 @@
     <form id="frmNewUSer">
         <input type="hidden" id="empresa"  value="<?php  ?>">
         <div class="iconClass-container icon-left">
-            <input type="text" class="nombre" name ="nombre" id="nombre" placeholder="Introduzca nombre y apellidos." required >	
+            <input type="text" id="nombre" placeholder="Introduzca nombre y apellidos." required >	
             <span class="iconClass-inside icon-user-1"></span>
         </div>
         <div class="iconClass-container icon-left">
@@ -16,12 +16,12 @@
             <span class="iconClass-inside icon-phone"></span>
         </div>
         <div class="iconClass-container icon-left">
-            <input type="password" id="fakePass"  placeholder="Introduzca contraseña" required>
+            <input type="password" id="pass"  placeholder="Introduzca contraseña" required>
             <span class="iconClass-inside icon-eye"></span>
         </div>
             <input type="hidden" name="pass" id="pass">
         <div class="iconClass-container icon-left">
-            <input type="password" id="fakePassR"  placeholder="repita contraseña" required>
+            <input type="password" id="passR"  placeholder="repita contraseña" required>
             <span class="iconClass-inside icon-eye"></span>
         </div>
 

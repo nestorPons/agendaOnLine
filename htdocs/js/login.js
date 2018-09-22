@@ -2,34 +2,48 @@ const
 	EMPRESA = $('body').data('empresa'), 
 	URL = 'app.php?empresa='+$('body').data('empresa')
 var 
-general = {  
-	loaded : ['secLogin'],
+main = {  
+	scripts : {
+		loaded: ['secLogin'],
+		load : function(arg, callback){
+			if(!this.loaded.includes(arg)){
+				this.loaded.push(arg)
+				$.getScript('/js/'+arg+'.js',function(){
+					typeof window[arg].init() == 'function' && window[arg].init()	
+					typeof callback == 'function' && callback()
+				});
+			} else 	{
+				typeof window[arg].init() == 'function' && window[arg].init()
+				typeof callback == 'function' && callback()
+			}
+		},
+	 }, 
 	dir1 : RIGHT, 
 	dir2 : LEFT, 
 	toggle : function($in){
 		var $out = $('section:visible'),
 			_toggle = function($in){
-				$out.hide('drop',{direction:general.dir1},function(){
+				$out.hide('drop',{direction:main.dir1},function(){
 					var id = $in.attr('id')
 					$('#'+id)
-						.show('drop',{direction:general.dir2})
+						.show('drop',{direction:main.dir2})
 
-						if(general.dir1 == RIGHT){
-							general.dir1 = LEFT
-							general.dir2 = RIGHT
+						if(main.dir1 == RIGHT){
+							main.dir1 = LEFT
+							main.dir2 = RIGHT
 						} else {
-							general.dir1 = RIGHT
-							general.dir2 = LEFT
+							main.dir1 = RIGHT
+							main.dir2 = LEFT
 						}
 				})
 			},
 			nameId = $in.selector.replace('#',''); 
 
-		if(general.loaded.indexOf(nameId)==-1){
+		if(main.scripts.loaded.indexOf(nameId)==-1){
 			//Cargo el id en la variable para saber cuales estan cargados
 			
-			general.loaded[general.loaded.length] = nameId
-			if (nameId == 'newUser') general.loaded[general.loaded.length] = 'secNewNotification'
+			main.scripts.loaded[main.scripts.length] = nameId
+			if (nameId == 'newUser') main.scripts.loaded[main.scripts.loaded.length] = 'secNewNotification'; 
 			var data = {
 				controller: 'login',
 				view: nameId
@@ -45,12 +59,21 @@ general = {
 			_toggle($in)
 		}
 
-	 }
+	 }, 
+
+	loader : {
+		show : function(){
+			$('main').find('#loading').removeClass('hidden')
+		},
+		hide: function(){
+			$('main').find('#loading').addClass('hidden')
+		}
+
+	}
  }, 
 Login = {
 	isLoad : true, 
 	html : '', 
-	scripts : [], 
 	setCookie : ()=>{
 		localStorage.setItem("AOLAvisoCookie", 1);
 		document.getElementById("barraaceptacion").style.display="none";
@@ -96,7 +119,7 @@ user = {
 			
 	 },
 	notification: function(){
-		general.toggle($('#secNewNotification'))
+		main.toggle($('#secNewNotification'))
 	 }
  },
 validate = {
@@ -118,7 +141,7 @@ validate = {
 			}
 		} else {
 			notify.error('Los passwords no coinciden','Password invalido') 
-			$('#fakePassR').removeClass('input-success').addClass('input-error')
+			$('#passR').removeClass('input-success').addClass('input-error')
 			return false
 		}
 		return true
@@ -128,10 +151,9 @@ validate = {
 $(function(){
 
 	$('body')
-		// Logueamos usuarios y cargamos vista correspondiente 
-		.on('click','#btnbarraaceptacion',Login.setCookie)
 		.find('form button').prop('disabled',false).end()	
-		.on('submit','#loginUsuario',function(e){
+		.on('click','#btnbarraaceptacion',Login.setCookie)
+		.on('submit','#loginUsuario ',function(e){
 			e.preventDefault()
 			if (localStorage.getItem('AOLAvisoCookie')!=1) {
 				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
@@ -156,21 +178,7 @@ $(function(){
 						.append(r)
 						.removeClass()
 					let section = $(r).filter('main').attr('id');
-<<<<<<< HEAD
-					if (!Login.scripts.includes(section)){
-						$.getScript('/js/'+section+'.js');
-						Login.scripts.push(section)
-					}else{
-					//window[section].init()
-					}
-=======
-					if(!general.loaded.includes(section)){
-						general.loaded.push(section)
-						$.getScript('/js/'+section+'.js');
-					}
-					else
-						window[section].init()
->>>>>>> b71119f643773995d877240bca278316f5b730e7
+					main.scripts.load(section)
 				} else { 
 					let res = r.error.split("<br>")
 					notify.error(res[1], res[0], 5000);
@@ -178,24 +186,24 @@ $(function(){
 			})
 		 })
 		.on('click','.cancel',function(e){
-			general.toggle($('#secLogin'))
+			main.toggle($('#secLogin'))
 		 })
 		.on('click','#aNewUser',function(){
-			general.toggle($('#newUser'))
+			main.toggle($('#newUser'))
 		 })
 		.on('submit','#frmNewUSer',function(e){
 			e.preventDefault()
-			if (validate.pass($('input#fakePass').val(), $('input#fakePassR').val()))
+			if (validate.pass($('input#pass').val(), $('input#passR').val()))
 				user.save()
 		 })
 		.on('click','#forgotPass',function(){
-			general.toggle($('#recover'))
+			main.toggle($('#recover'))
 		 })
 		.on('submit','#recover form',function(e){
 			e.preventDefault()
 			
 			recover.send(
-				()=>general.toggle($('#newPass'))
+				()=>main.toggle($('#newPass'))
 			)
 					
 		 })

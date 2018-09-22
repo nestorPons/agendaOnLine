@@ -16,6 +16,19 @@ jQuery.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
     });
     return this;
  };
+jQuery.fn.extend({
+  display: (function(e = null) {
+	  if(e){
+		return this.each(function() {
+			this.css('display',e ) ;
+		})
+	  }else{
+		return this.each(function() {
+			this.css('display');
+		})
+	  }
+  }),
+});
 jQuery.isEmpty = function(){
 	var isEmpty = false 
 	for (var i = 0; i < arguments.length; i++) {
@@ -450,20 +463,21 @@ btn = {
 		show : function($this){
 			this.active = $this
 			if(!$this.find('i').length) $this.prepend('<i></i>')
-			$this.find('i')
-				.data('icon',$this.attr('class'))
-				.removeClass()
-				.addClass('lnr-sync animate-spin')
+			$this
 				.prop('disabled',true)
+				.find('i')
+					.data('icon',$this.attr('class'))
+					.removeClass()
+					.addClass('lnr-sync animate-spin')
 			},
 		hide : function(){		
 			var $btn = this.active
 			if($btn){ 
 				$btn
-				.find('i')
-				.removeClass()
-				.addClass($btn.data('icon'))
 				.prop('disabled',false)
+				.find('i')
+					.removeClass()
+					.addClass($btn.data('icon'))
 			 }
 		 },
 		reset :	function (callback){
@@ -1052,8 +1066,12 @@ $(function(){
 
 			 })
 		 })
-		.on('mouseup',".btnLoad",function(){
+		.on('click',".btnLoad",function(){
+			let frm = $(this).parents('form'), 
+				enabled = !$(this).prop('disabled')
+				
 			btn.load.show($(this))
+			enabled && $(this).is(':submit') && !$.isEmpty(frm) && frm.submit()
 		 })
 		.on('click','.icon-eye',function(e){
 			var $pass = $(this).siblings('input:password'),
@@ -1092,7 +1110,7 @@ $.ajaxSetup({
 		typeof callback == "function" && callback()
 	 },
 	send: function(){
-		
+
 	}, 
 	error : function(jqXHR, textStatus, errorThrowne){
 		if (jqXHR.status === 0) {

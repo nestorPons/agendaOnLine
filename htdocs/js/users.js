@@ -434,9 +434,96 @@ var cita = {
 	add : function () {
 	 }
  }
-var usuario = {
+var users = {
 	data: new Object,
 	last:  new Object,
+	init : function(){
+		console.log('Zone user init...')
+		cargarDatepicker()
+		crearCita.init()
+		historial.actualizar()
+		$('tytle').text('Menu agenda On line zona usuarios')
+		$('#navbar')
+	.on('click','#btnConfig, #btnDatos',function(){
+		menu.toggle($(this))
+	 })
+	.on('click','#goHome',menu.cerrar)
+
+$('input:password').blur(function(){
+	var pass1 = $('#pass').val()		
+	var pass2 = $('#rpass').val()
+	validar.pass(pass1,pass2)
+
+ })
+
+$('.nextSteeper').click(function(){
+	var val = $('.steperCapa:visible').data('value')
+	crearCita.stepper(val+1)
+ })
+
+$('#crearCita')
+	.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
+	.on('change','#lstSerSelect',function(){servicios.mostrar($(this).val())})
+	.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})	
+	.on('click','.horas',crearCita.dialog)
+	.on('click','.idServicios',function(){crearCita.horas.load($(this))})
+	.on('click','[name="agenda[]"]',function(){
+		crearCita.data.agenda = $(this).val()
+		})
+	.on('change','#crearCitaNota',function(){
+		crearCita.data.nota = $(this).val() 
+		})
+	.find('#tablas')
+		.on("swipeleft",function(){sincronizar(null,1)})
+		.on("swiperight",function(){sincronizar(null,-1)})
+	.end()
+		.on('click','#btnCancelarDlg',function(){closeDialog('#crearCita #dlgCliente')})
+	
+$('#historial')
+	.on('click','.fnDel',function(){
+		cita.del($(this).parent().attr('idSer'))
+	 })
+
+$('#usuarioFrm')
+	.on('submit',function(e){users.guardar(e,$(this))})
+	.on('blur','#oldPassFake',function(){
+		$('#oldPass').val(Tools.SHA($(this).val()))
+		users.comprobarContraseña($('#oldPass'));
+		})
+	.on('change','#oldPassFake',function(){
+		$(this).removeClass('input-error input-success');
+		})
+	.on('blur','#passFake',function(){
+		$('#pass').val(Tools.SHA($(this).val()))
+		})
+	.on('blur','#rpassFake',function(){
+		$('#rpass').val(Tools.SHA($(this).val()))
+		})
+
+	$('main')
+		.on('click','#eliminar',function(e){
+			alert('Servicio no disponible, pongase en contacto con el administrador')
+			return false
+		})
+		.on('click','.cancelar', menu.cerrar)
+		.on('click',".idDateAction",function(){
+			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
+			})
+		.on('click','#authEmail',function(){
+			var $input = $(this).find('input:checkbox')
+			$input.prop('checked',!$input.prop('checked'))
+			})
+		.on('click','.del',function(){
+			let $cita =  $(this).parents('.cita')
+			cita.del(
+				$cita.attr('idCita'), 
+				$cita.data('fecha'),
+				$cita.data('hora'),
+				$cita.data('agenda')
+			)
+		 })
+		.on('click','.tile-content',function(){menu.abrir($(this).parent())})
+	},
 	guardar_array: function(){
 		this.last = this.data
 
@@ -464,13 +551,13 @@ var usuario = {
 		$('#authEmail').is('checked',this.last.authEmail)
 	 }, 
 	guardar: function($this){
-		usuario.guardar_array()
+		users.guardar_array()
 		var opass = $('#opass').val(),
 			npass = $('#npass').val(),
 			rpass = $('#rpass').val()
 		
 		if(!$.isEmpty(opass)) {
-			if(usuario.validar.pass(opass, npass, rpass)){
+			if(users.validar.pass(opass, npass, rpass)){
 				notify.error('Al cambiar la contraseña' , 'ERROR CONTRASEÑA')	
 				return false 
 			} else {
@@ -491,12 +578,12 @@ var usuario = {
 
 			}else{
 				notify.error('No se han podido guardar los datos')
-				usuario.revertir_cambios()
+				users.revertir_cambios()
 			}
 		 })	
 		.fail(function(r){
 			notify.error('No se han podido guardar los datos')
-			usuario.revertir_cambios()
+			users.revertir_cambios()
 		})
 	 },
 	validar : {
@@ -536,7 +623,7 @@ menu = {
 			mnu.hide('slide',{ direction: 'right' })
 			span.removeClass('lnr-cross').addClass(c)
 
-			if(usuario.hay_cambios()) usuario.guardar()
+			if(users.hay_cambios()) users.guardar()
 			
 		}else{
 			$('.charm:visible').hide('slide',{ direction: 'right' })
@@ -548,7 +635,7 @@ menu = {
 			.removeClass('lnr-cross')			
 
 			mnu.show('slide',{ direction: 'right' })
-			usuario.guardar_array()
+			users.guardar_array()
 			span.removeClass(c).addClass('lnr-cross')
 		}
 	 }, 
@@ -650,90 +737,5 @@ function resize(that){
  }
 
 //INIT
-$('tytle').text('Menu agenda On line zona usuarios')
-$('body')
-	.on('click','.cancelar', menu.cerrar)
-	.on('click',".idDateAction",function(){
-		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
-		})
-	.on('click','#authEmail',function(){
-		var $input = $(this).find('input:checkbox')
-		$input.prop('checked',!$input.prop('checked'))
-		})
-	.on('click','.del',function(){
-		let $cita =  $(this).parents('.cita')
-		cita.del(
-			$cita.attr('idCita'), 
-			$cita.data('fecha'),
-			$cita.data('hora'),
-			$cita.data('agenda')
-		)
-		})
-		//PRODUCCION
-		.on('click','.lnr-home',function(){
-			$.post(INDEX, {controller : 'service-worker', action: 'stop'} ,'json')
-		})
-	
-$('#navbar')
-	.on('click','#btnConfig, #btnDatos',function(){
-		menu.toggle($(this))
-	 })
-	.on('click','#goHome',menu.cerrar)
 
-$('input:password').blur(function(){
-	var pass1 = $('#pass').val()		
-	var pass2 = $('#rpass').val()
-	validar.pass(pass1,pass2)
 
-	})
-
-$('.tile-content').click(function(e){menu.abrir($(this).parent())})
-$('.nextSteeper').click(function(){
-	var val = $('.steperCapa:visible').data('value')
-	crearCita.stepper(val+1)
-	})
-
-$('#crearCita')
-	.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
-	.on('change','#lstSerSelect',function(){servicios.mostrar($(this).val())})
-	.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})	
-	.on('click','.horas',crearCita.dialog)
-	.on('click','.idServicios',function(){crearCita.horas.load($(this))})
-	.on('click','[name="agenda[]"]',function(){
-		crearCita.data.agenda = $(this).val()
-		})
-	.on('change','#crearCitaNota',function(){
-		crearCita.data.nota = $(this).val() 
-		})
-	.find('#tablas')
-		.on("swipeleft",function(){sincronizar(null,1)})
-		.on("swiperight",function(){sincronizar(null,-1)})
-	.end()
-	.find('#btnCancelarDlg')
-		.click(function(){closeDialog('#crearCita #dlgCliente')})
-	
-$('#historial')
-	.find('#tableHistory').on('click','.fnDel',function(){
-		cita.del($(this).parent().attr('idSer'))
-		})
-$('#calNotas').click(function(e){cargarCalendario()})
-$('#usuarioFrm')
-	.submit(function(e){usuario.guardar(e,$(this))})
-	.on('blur','#oldPassFake',function(){
-		$('#oldPass').val(Tools.SHA($(this).val()))
-		usuario.comprobarContraseña($('#oldPass'));
-		})
-	.on('change','#oldPassFake',function(){
-		$(this).removeClass('input-error input-success');
-		})
-	.on('blur','#passFake',function(){
-		$('#pass').val(Tools.SHA($(this).val()))
-		})
-	.on('blur','#rpassFake',function(){
-		$('#rpass').val(Tools.SHA($(this).val()))
-		})
-$('#eliminar').click(function(){eliminarUsuario()})
-
-cargarDatepicker()
-crearCita.init()
-historial.actualizar()

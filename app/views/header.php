@@ -35,11 +35,12 @@
         <link rel="stylesheet"  type="text/css" href="/css/main.css">
         <link rel="stylesheet"  type="text/css" href="/css/login.css">
         <link rel="stylesheet"  type="text/css" href="/empresas/<?=$Empresa->code()?>/style.css">
-        <script  src="/js/main.js" ></script>-->
-        <link rel="stylesheet"  type="text/css" href="/css/index.min.css">
-
         <script  src="/js/index.min.js" async></script>
         <script  src="/js/service-worker/registration.min.js" async></script>
+        -->
+        <link rel="stylesheet"  type="text/css" href="/css/index.min.css">
+        <script  src="/js/main.js" ></script>
+
       
         <!-- AKI:: hay que quitar esto del login-->
         <script>
