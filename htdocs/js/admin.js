@@ -43,12 +43,8 @@ function sincronizar( dias, date ){
 var 
 worker =  {
 	w : null , 
-	isActive : true, 
-	init : function(){
-		if (this.isActive)	this.w.postMessage(0); 
-	 } , 
-	send : function(){
-	 }, 
+	init : fun => this.w.postMessage(0), 
+	send : fun => setTimeout(worker.init(), 1000 * 60), 
 	sync : function(){
 		this.w = new Worker('/js/worker.js');
 		this.w.onmessage = e =>{			
@@ -84,10 +80,10 @@ worker =  {
 					});	 
 				});
 			}
-			setTimeout(this.init(), 5000);			
+			worker.send();		
 		 }
 		// Inicializa los long pollings
-		this.init();
+		worker.send();
 	 },
 }, 
 admin ={ 
