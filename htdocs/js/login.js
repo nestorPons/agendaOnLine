@@ -9,8 +9,8 @@ main = {
 			if(!this.loaded.includes(arg)){
 				this.loaded.push(arg)
 				$.getScript('/js/'+arg+'.js',function(){
-					typeof window[arg].init() == 'function' && window[arg].init()	
-					typeof callback == 'function' && callback()
+					typeof window[arg].init() == 'function' && window[arg].init();
+					typeof callback == 'function' && callback();
 				});
 			} else 	{
 				typeof window[arg].init() == 'function' && window[arg].init()

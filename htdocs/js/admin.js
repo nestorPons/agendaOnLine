@@ -1067,8 +1067,8 @@ admin ={
 				$('#'+capa).html(html).promise().done(__INIT__);
 				function __INIT__ (){
 					//Si hay que iniciar en 
-				}
-				main.scripts.load(capa, function(){callback($('#'+ capa))})
+				 }
+				main.scripts.load(capa, typeof callback == 'function' && callback($('#'+ capa)))
 	
 			},'html')
 		 } else {
