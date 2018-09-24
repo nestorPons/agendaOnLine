@@ -5,6 +5,7 @@ var
 main = {  
 	scripts : {
 		loaded: ['secLogin'],
+		isLoaded : function(arg){this.loaded.includes(arg)}, 
 		load : function(arg, callback){
 			if(!this.loaded.includes(arg)){
 				this.loaded.push(arg)

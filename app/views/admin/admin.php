@@ -1,6 +1,6 @@
 <header><?php include URL_MENUS . "admin.php"?></header>
 <nav><?php include URL_MENUS . "navbar.php"?></nav>
-<main id="admin" data-empresa="<?=$Empresa->code()?>">
+<main id="admin" data-empresa="<?=$Empresa->code()?>" data-user="<?=$_SESSION['id_usuario']?>">
 	<div id='sections'>
 		<section id='main' data-nombre="Principal" class="capasPrincipales activa" ><?php include URL_CONTROLLERS . "main.php"?></section>
 		<section id='notas' data-nombre="Notas" class="capasPrincipales" ><?php include URL_CONTROLLERS . "notas.php"?></section>

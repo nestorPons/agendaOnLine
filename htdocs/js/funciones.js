@@ -63,7 +63,7 @@ function decode(s) {
  }
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 	$_GET[decode(arguments[1])] = decode(arguments[2]);
-});
+ });
 
 var 
 Fecha = {
@@ -669,6 +669,7 @@ dialog = {
 	loads: new Array,
 	section : $('#dialogs') , 
 	isOpen : null,  
+	new : false, 
 	open:function(objName,fnOk,fnCancel,callback){
 		dialog.isOpen = objName
 
@@ -680,17 +681,19 @@ dialog = {
 					.find('.btn-success').attr('disabled',false)			
 
 				$('.popup-overlay').fadeIn()		
-				typeof callback == "function" && callback(false)	
+				typeof callback == "function" && callback($this)	
 			};
 
-		if(loads.includes(objName)){			
+		if(loads.includes(objName)){
+			this.new = false ;			
 			dialog.reset(objName)
 			_open($('#dialogs #'+objName))
 			
 		}else{
 			loads.push(objName)	
+			this.new = true; 
 			dialog.create(objName,fnOk,fnCancel,function(){
-				_open( $('#dialogs #'+objName))
+				_open($('#dialogs #'+objName))
 			})
 
 		}
@@ -729,17 +732,14 @@ dialog = {
 						start : function(){}
 					 })
 					.keypress(function(e){
-							var code = e.keyCode ;
-			
-							//BOTON PREDETERMINADO EN LOS DIALOGS
-							if(event.which==13) 
-								$this.find('.aceptar').click()
-
+						var code = e.keyCode ;
+		
+						//BOTON PREDETERMINADO EN LOS DIALOGS
+						if(event.which==13) $this.find('.aceptar').click()
 				     })
 				 			
 					$this
 						.on('click','.fnClose',function(){
-
 							dialog.close(objName)
 						})
 						.on('keydown',function(event){
@@ -749,9 +749,8 @@ dialog = {
 							typeof fnCancel == "function"?fnCancel():dialog.close(objName)
 						})
 
-					if(typeof fnOk == "function"){
-						$this.on('click','.btn-success',fnOk)
-					 }	
+					if(typeof fnOk == "function") $this.on('click','.btn-success',fnOk)
+					 	
 				})
 				.done(()=>callback($this))
 		},'html')
@@ -1091,7 +1090,7 @@ $(function(){
 		.on('change','.email',function(e){
 			validar.email.estado=false
 			validar.email.funcion($(this),e)
-		})
+		 })
 		.on('blur','.tel',function(){validar.tel.funcion($(this))})
 		.on('change','.tel',function(){validar.tel.estado=false})
 		.on('blur','.nombre',function(){validar.nombre.funcion($(this))})

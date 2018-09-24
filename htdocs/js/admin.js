@@ -56,7 +56,7 @@ worker =  {
 						let action = parseInt(v.action), obj = null
 
 						switch(v.table){
-							case "data": 
+							case 'data': 
 								obj = admin.lbl;
 								break; 
 							case 'notas':
@@ -84,7 +84,7 @@ worker =  {
 			worker.send();		
 		 }
 		// Inicializa los long pollings
-		worker.send();
+		//worker.send();
 	 },
 }, 
 admin ={ 
@@ -153,6 +153,10 @@ admin ={
 				$(this).css({'z-index': val})	
 				
 				admin.lbl.resize($(this))
+				e.stopPropagation();
+			})
+			.on('dblclick','.lbl', function(e){	
+				admin.edit($(this).attr('idcita'))
 			})
 			.on('click','.celda',function(){
 				let celda = $(this) 
@@ -179,9 +183,6 @@ admin ={
 			.on('click','.fnEdit', function(e){
 				e.stopPropagation() 
 				admin.edit($(this).parents('.lbl').attr('idcita'))
-				})
-			.on('dblclick','.lbl', function(e){	
-				admin.edit($(this).attr('idcita'))
 				})
 			.on('click','.cita',function(e){
 				$(this).parent()
@@ -451,7 +452,7 @@ admin ={
 			cliente : {
 				id : admin.data[admin.idCita].cliente.id, 
 				nombre : admin.data[admin.idCita].cliente.nombre
-			},
+			 },
 			obs : admin.data[admin.idCita].obs 
 		 }
 	
@@ -477,8 +478,8 @@ admin ={
 
 			lblSer.html(html)
 
-			admin.lbl.obj.removeClassPrefix('row_').addClass('row_'+
-				Math.ceil(admin.data[admin.idCita].tiempo_servicios / 15) 
+			admin.lbl.obj.removeClassPrefix('row_')
+				.addClass('row_'+ Math.ceil(admin.data[admin.idCita].tiempo_servicios / 15) 
 			)
 	
 			typeof callback == "function" && callback();
@@ -508,7 +509,7 @@ admin ={
 		 }
 		var _addRow = function (id , codigo , descripcion ,tiempo, callback ){
 			var $dlg = $('#dlgEditCita')
-			
+		
 			$dlg.find('.template')
 				.clone()
 					.removeClass('template')
@@ -527,8 +528,9 @@ admin ={
 			typeof callback == "function" && callback()
 		 }
 		var _eventAddService = function () {
-			
+	
 			$('#dlgEditCita').on('change','#lstServ',function(){
+
 				var select  = $(this).find(':selected')
 					id = select.val() , 
 					codigo = select.attr('codigo') , 
@@ -558,25 +560,23 @@ admin ={
 			admin.data[admin.idCita].fecha = data['fecha']
 			admin.data[admin.idCita].hora = data['hora']
 			admin.data[admin.idCita].obs = data['obs']
-			admin.data[admin.idCita].tiempo_servicios = data['tiempo_servicios']
+			admin.data[admin.idCita].tiempo_servicios = data['tiempoServicios']
 
 			$.each(admin.data[ admin.idCita].servicios, function( i , v){
-
 				arrIdSer.push(v.id)
-
 			})
 
 			var sendData = {
 				action : EDIT ,
 				idCita :  admin.idCita ,
-				agenda : admin.data[ admin.idCita].agenda ,
-				idUsuario : admin.data[ admin.idCita].cliente.id || false ,
+				agenda : admin.data[admin.idCita].agenda ,
+				idUsuario : admin.data[admin.idCita].cliente.id || false ,
 				fecha :  Fecha.sql(dlg.find('#fecha').val()) ,
 				hora : dlg.find('#hora').val() ,
 				obs :  dlg.find('#obs').val(),
+				tiempo_servicios:  data['tiempoServicios'],
 				servicios : arrIdSer ,
-				status : false , 
-				tiempo_servicios: admin.data[admin.idCita].tiempo_servicios
+				status : false 
 			}
 
 			admin.save(sendData,function(){
@@ -626,13 +626,9 @@ admin ={
 			fnCancel = function(){
 				admin.del(admin.data[admin.idCita].idCita)
 			 }, 
-			callback = function(isNew){
-
-				var section = $('#dlgEditCita')
-
-				$('#dlgEditCita #codigos').html('') 
-
-				section
+			callback = function($this){
+				$this 
+					.find('#codigos').html('').end()
 					.data('idCita',admin.idCita)
 					.find('#id').val(admin.idCita).end()
 					.find('#cliente')
@@ -640,25 +636,23 @@ admin ={
 						.end()
 					.find('#obs')
 						.val(admin.data[admin.idCita].obs||null)
-						.end()
+					.end()
 					.find('#fecha')
 						.val(admin.data[admin.idCita].fecha)
-						.end()
+					.end()
 					.find('#hora')
 						.val(admin.data[admin.idCita].hora)
+					.end()
 					.find('#tiempoServicios')
-						.val(admin.data[admin.idCita].tiempo_servicios)
+						.val(admin.data[admin.idCita].tiempo_servicios); 
 						
 				$.each(admin.data[admin.idCita].servicios , function(i,a){
-					_addRow( a.id , a.codigo , a.descripcion , a.tiempo,  admin.set.tiempoServicios)
+					_addRow( a.id , a.codigo , a.descripcion , a.tiempo,  admin.set.tiempoServicios);
 				})
 
-				if (isNew) _eventAddService()
-
+				if (dialog.new) _eventAddService()
 			 }
-
-			dialog.open('dlgEditCita',_save, fnCancel,  callback)
-			
+			dialog.open('dlgEditCita',_save, fnCancel, callback)	
 		 }
 	 },
 	del: function(idCita){
@@ -816,8 +810,7 @@ admin ={
 
 			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
 			var nota  = $.isEmpty(data.nota)?'':data.nota
-			var html = "\
-				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
+			var html = "<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+ 
 					html_icono_desplegar + 
 					html_icono_usuario_coge_cita +
@@ -836,9 +829,7 @@ admin ={
 						<i class='icon-note'></i> \
 						<span class='text_note'>"+nota+"</span> \
 					</div> \
-				</div> \
-			"
-			
+				</div>";
 			return html 					
 		 }, 
 		service : function (data) {
@@ -925,7 +916,7 @@ admin ={
 		 },
 		draggable : function($this){							
 			$this.draggable({
-				handle : $this.find('.iconos, .nombre'), 
+				handle : $this.find('.fnMove'), 
 				disabled : false, 
 				opacity : 0.50 , 
 				zIndex: 100 ,
@@ -1065,7 +1056,7 @@ admin ={
 				function __INIT__ (){
 					//Si hay que iniciar en 
 				 }
-				main.scripts.load(capa, typeof callback == 'function' && callback($('#'+ capa)))
+				main.scripts.load(capa, typeof callback == 'function' && function(){callback($('#'+ capa))})
 	
 			},'html')
 		 } else {

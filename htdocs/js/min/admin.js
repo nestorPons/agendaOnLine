@@ -13,9 +13,8 @@ if(typeof historial.sinc=='function')historial.sinc()
 var diaFestivo=$.inArray(Fecha.md(Fecha.general),config.festivos)!=-1;(diaFestivo)?$datepicker.addClass('c-red'):$datepicker.removeClass('c-red')
 $datepicker.val(Fecha.print(fecha)).datepicker("setDate",Fecha.print(fecha))}
 var worker={w:null,init:function(){this.w.postMessage(0)},send:function(){setTimeout(this.init(),1000*60)},sync:function(){this.w=new Worker('/js/worker.js');this.w.onmessage=e=>{let data=JSON.parse(e.data);if(data){$.each(data,function(i,d){$.each(d,function(i,v){let action=parseInt(v.action),obj=null
-switch(v.table){case "data":obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}})})}
-worker.send()}
-worker.send()},},admin={z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
+switch(v.table){case 'data':obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}})})}
+worker.send()}},},admin={z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
 let n=(localStorage.getItem("showRows")==1)?1:0;this.inactivas.change(n)
 this.inactivas.comprobar()
 this.lbl.load()
@@ -39,11 +38,12 @@ btn.load.hide()},'json')})
 $(".login").on('focusout','[data-max-leght]',function(){var $this=$("[data-max-leght]");if($this.val().length>$this.data("max-leght")){$this.removeClass("valid");$this.addClass("invalid")}else{$this.removeClass("invalid");$this.addClass("valid")}});$('#main').on('click','.lbl',function(e){var val=($(this).css('z-index')==3)?1:3
 $('.lbl').css({'z-index':2})
 $(this).css({'z-index':val})
-admin.lbl.resize($(this))}).on('click','.celda',function(){let celda=$(this)
+admin.lbl.resize($(this))
+e.stopPropagation()}).on('dblclick','.lbl',function(e){admin.edit($(this).attr('idcita'))}).on('click','.celda',function(){let celda=$(this)
 admin.mostrarCapa('crearCita',function($this){crearCita.data.agenda=celda.attr('agenda')
 crearCita.data.hora=celda.parents('tr').data('hour')
 $this.find('#agenda'+crearCita.data.agenda).prop('checked',!0)})}).on('click','#mainLstDiasSemana a',function(){var diaA=parseInt(Fecha.diaSemana(Fecha.general));var diaB=parseInt($(this).data('value'));sincronizar(diaB-diaA)}).on('change','#lstDiasSemana',function(){var diaA=parseInt(Fecha.diaSemana(Fecha.general));var diaB=parseInt($(this).val());sincronizar(diaB-diaA)}).on('click','.icon-attention',function(e){admin.citasSup($(this));e.stopPropagation()}).on('click','.fnEdit',function(e){e.stopPropagation()
-admin.edit($(this).parents('.lbl').attr('idcita'))}).on('dblclick','.lbl',function(e){admin.edit($(this).attr('idcita'))}).on('click','.cita',function(e){$(this).parent().find('.note').addClass('show').find('input').focus()}).on('click','.lbl .fnDel',function(e){$(".selector").draggable("option","disabled",!0);e.stopPropagation();admin.del($(this).parents('.lbl').attr('idcita'))}).on('change','.nombreagenda',function(){var data={id:$(this).data('agenda'),nombre:$(this).val(),controller:'agendas',action:'saveName'}
+admin.edit($(this).parents('.lbl').attr('idcita'))}).on('click','.cita',function(e){$(this).parent().find('.note').addClass('show').find('input').focus()}).on('click','.lbl .fnDel',function(e){$(".selector").draggable("option","disabled",!0);e.stopPropagation();admin.del($(this).parents('.lbl').attr('idcita'))}).on('change','.nombreagenda',function(){var data={id:$(this).data('agenda'),nombre:$(this).val(),controller:'agendas',action:'saveName'}
 $.post(INDEX,data,function(r){},'json')}).find('.cuerpo').on("swipeleft",function(){sincronizar(1)}).on("swiperight",function(){sincronizar(-1)})
 $('#navbar').on('click','#btnShow',menu.show).on('click','#btnEdit',menu.edit).on('click','#btnSearch',function(){if($('#txtBuscar').is(':hidden')){$('#txtBuscar').parent().show('slide',{direction:'right'}).end().focus();$('#btnSearch').find('i').removeClass().addClass('lnr-cross').end().find('span').text('Cerrar')}else{menu.load()}}).on('change','#txtBuscar',function(){if($('#txtBuscar').val()!=""){menu.buscar($('#txtBuscar').val(),$('.capasPrincipales.activa').attr('id'))}}).on('click','#btnReset',function(){if($('#usuarios').is(':visible'))usuarios.select('A')}).on('click','#btnSave',menu.save).on('keyup','#txtBuscar',function(event){if(event.which==13)menu.load();if(event.which==27)
 menu.exit();event.stopPropagation()}).on('click','#btnAdd',menu.add).on('click','#btnDel',menu.del).on('click','#btnReset',menu.reset).on('click','#btnOptions #chckOpUsersDel',menu.options).find('#showByTime').on('click','input',function(){$(this).prop('checked',!0)
@@ -114,9 +114,9 @@ admin.data[admin.idCita].cliente.nombre=selCli.val()
 admin.data[admin.idCita].fecha=data.fecha
 admin.data[admin.idCita].hora=data.hora
 admin.data[admin.idCita].obs=data.obs
-admin.data[admin.idCita].tiempo_servicios=data.tiempo_servicios
+admin.data[admin.idCita].tiempo_servicios=data.tiempoServicios
 $.each(admin.data[admin.idCita].servicios,function(i,v){arrIdSer.push(v.id)})
-var sendData={action:EDIT,idCita:admin.idCita,agenda:admin.data[admin.idCita].agenda,idUsuario:admin.data[admin.idCita].cliente.id||!1,fecha:Fecha.sql(dlg.find('#fecha').val()),hora:dlg.find('#hora').val(),obs:dlg.find('#obs').val(),servicios:arrIdSer,status:!1,tiempo_servicios:admin.data[admin.idCita].tiempo_servicios}
+var sendData={action:EDIT,idCita:admin.idCita,agenda:admin.data[admin.idCita].agenda,idUsuario:admin.data[admin.idCita].cliente.id||!1,fecha:Fecha.sql(dlg.find('#fecha').val()),hora:dlg.find('#hora').val(),obs:dlg.find('#obs').val(),tiempo_servicios:data.tiempoServicios,servicios:arrIdSer,status:!1}
 admin.save(sendData,function(){admin.lbl.edit(admin.data[admin.idCita],admin.last)
 _addServiceToLbl(function(){dialog.close('dlgEditCita')
 if(!$.isEmpty(sendData.obs)){admin.lbl.obj.find('.text_note').text(sendData.obs).end().find('.note').addClass('show')}else{admin.lbl.obj.find('.text_note').text(sendData.obs).end().find('.note').removeClass('show')}})})}
@@ -130,11 +130,8 @@ delete edata.cliente
 for(let i=0;i<len;i++){edata.servicios.push(ser[i].id)}
 edata.action=EDIT
 admin.save(edata)}else{var
-fnCancel=function(){admin.del(admin.data[admin.idCita].idCita)},callback=function(isNew){var section=$('#dlgEditCita')
-$('#dlgEditCita #codigos').html('')
-section.data('idCita',admin.idCita).find('#id').val(admin.idCita).end().find('#cliente').val(admin.data[admin.idCita].cliente.nombre).end().find('#obs').val(admin.data[admin.idCita].obs||null).end().find('#fecha').val(admin.data[admin.idCita].fecha).end().find('#hora').val(admin.data[admin.idCita].hora).find('#tiempoServicios').val(admin.data[admin.idCita].tiempo_servicios)
-$.each(admin.data[admin.idCita].servicios,function(i,a){_addRow(a.id,a.codigo,a.descripcion,a.tiempo,admin.set.tiempoServicios)})
-if(isNew)_eventAddService()}
+fnCancel=function(){admin.del(admin.data[admin.idCita].idCita)},callback=function($this){$this.find('#codigos').html('').end().data('idCita',admin.idCita).find('#id').val(admin.idCita).end().find('#cliente').val(admin.data[admin.idCita].cliente.nombre).end().find('#obs').val(admin.data[admin.idCita].obs||null).end().find('#fecha').val(admin.data[admin.idCita].fecha).end().find('#hora').val(admin.data[admin.idCita].hora).end().find('#tiempoServicios').val(admin.data[admin.idCita].tiempo_servicios);$.each(admin.data[admin.idCita].servicios,function(i,a){_addRow(a.id,a.codigo,a.descripcion,a.tiempo,admin.set.tiempoServicios)})
+if(dialog.new)_eventAddService()}
 dialog.open('dlgEditCita',_save,fnCancel,callback)}},del:function(idCita){data={id:idCita,action:'del',controller:'cita',fecha:Fecha.sql(Fecha.general)}
 if(admin.lbl.delete(data.id,!1)){$.post(INDEX,data,function(r){if(r.success){$('#lstChckSer').empty();$('#dlgEditCita').removeData('idCita')
 dialog.close('dlgEditCita')}},'json').fail(function(jqXHR,textStatus,errorThrown){echo(jqXHR.responseText)})}},guardarNota:function($this){var txt=$this.find('input').val();var id=$this.parents(':eq(3)').attr('idcita')
@@ -163,8 +160,7 @@ if(data.obs!=last.obs)object.find('#obs').val(data.obs)}else{let that=this
 this.delete(data,!0,function(){that.create(data)})}},container:function(data,htmlSer){var html_icono_desplegar=(data.servicios.length<=data.tiempo_servicios)?"<i class ='icon-angle-down fnExtend' ></i>":"",html_icono_usuario_coge_cita=typeof data.cliente!='undefined'?"<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>":"",idUsuario=data.idUsuario||data.cliente.id,nombre=data.nombre||data.cliente.nombre
 var claseNotas=($.isEmpty(data.nota))?'':'show'
 var nota=$.isEmpty(data.nota)?'':data.nota
-var html="\
-				<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
+var html="<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+html_icono_desplegar+html_icono_usuario_coge_cita+"<div class='icons_crud'>\
 							<i class ='fnEdit icon-pencil-1'></i>  \
 							<i class ='fnDel icon-trash'></i>  \
@@ -180,9 +176,7 @@ var html="\
 						<i class='icon-note'></i> \
 						<span class='text_note'>"+nota+"</span> \
 					</div> \
-				</div> \
-			"
-return html},service:function(data){var html="\
+				</div>";return html},service:function(data){var html="\
 					<div class='servicio'>\
 						<i class ='icon-angle-right'></i>\
 						<span class='codigo' des_codigo='"+data.descripcion+"' \
@@ -200,7 +194,7 @@ $(this).removeClass('color1 color2 color3 color-admin').addClass(color)}
 var tiempo=Math.ceil($(this).attr('tiempo')/15),servicios=$(this).find('.servicio').length})})
 typeof callback=="function"&&callback()},style:function(){let w=($('#main th').is(':visible'))?$('#main th').first().width():this.width;$('.lbl').css('z-index',2).width(w-3);this.width=w;this.color()},delete:function(data,nomens=!1,callback){let idCita=(typeof data==='object')?data.idCita:data,$this=$('#idCita_'+idCita),_del=function(){$this.hide('explode',1000,function(){$this.remove()})
 admin.lbl.color()
-return!0},r=(nomens||confirm('Desea eliminar la cita con id: '+idCita+' ?'))?_del():!1;typeof callback=="function"&&callback();return r},draggable:function($this){$this.draggable({handle:$this.find('.iconos, .nombre'),disabled:!1,opacity:0.50,zIndex:100,revertDuration:500,revert:function(ob){if(ob==!1){$('.ui-draggable-dragging').remove()
+return!0},r=(nomens||confirm('Desea eliminar la cita con id: '+idCita+' ?'))?_del():!1;typeof callback=="function"&&callback();return r},draggable:function($this){$this.draggable({handle:$this.find('.fnMove'),disabled:!1,opacity:0.50,zIndex:100,revertDuration:500,revert:function(ob){if(ob==!1){$('.ui-draggable-dragging').remove()
 $('#'+admin.lbl.idLastCelda).html(admin.lbl.clone)
 admin.lbl.draggable(admin.lbl.clone)
 return!0}},start:function(e,ui){admin.lbl.clone=$this.clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
@@ -233,7 +227,7 @@ $('.app-bar-pullmenu ').hide('blind');$menu.find('.selected').removeClass('selec
 $menu.find('[data-capa="'+capa+'"]').addClass('selected')
 if($capa.hasClass('activa'))return!1;$('#chckOpUsersDel').prop("checked",!1);$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja');if($capa.is(':empty')){console.log('Peticion capa => '+capa)
 $.post(INDEX,data,function(html){$('#'+capa).html(html).promise().done(__INIT__);function __INIT__(){}
-main.scripts.load(capa,typeof callback=='function'&&callback($('#'+capa)))},'html')}else{if($('#config').is(':visible')&&config.change)config.guardar();if($('#agendas').is(':visible')&&agendas.change)agendas.guardar();typeof callback=="function"&&callback($('#'+capa))}
+main.scripts.load(capa,typeof callback=='function'&&function(){callback($('#'+capa))})},'html')}else{if($('#config').is(':visible')&&config.change)config.guardar();if($('#agendas').is(':visible')&&agendas.change)agendas.guardar();typeof callback=="function"&&callback($('#'+capa))}
 $('.capasPrincipales.activa').hide().removeClass('activa')
 $capa.fadeIn().addClass('activa')
 menu.status(capa)

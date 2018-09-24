@@ -321,22 +321,21 @@ validar.pass.estado=!1}}else{$this.removeClass('input-error input-success')
 return!1}},reset:function($this){$this.find(':password').each(function(){$(this).removeClass('input-error input-success').val('')})}},form:function(idFrm){var frm=$('#'+idFrm);if(frm[0].checkValidity()!=!1){return!0}else{notify.error(frm[0].validationMessage,'Error formulario')
 return!1}},},input={success:function($input){if($.isEmpty())return!1
 $input.removeClass('input-error').addClass('input-success')},error:function($input){if($.isEmpty())return!1
-$input.removeClass('input-success').addClass('input-error')}},dialog={loads:new Array,section:$('#dialogs'),isOpen:null,open:function(objName,fnOk,fnCancel,callback){dialog.isOpen=objName
+$input.removeClass('input-success').addClass('input-error')}},dialog={loads:new Array,section:$('#dialogs'),isOpen:null,new:!1,open:function(objName,fnOk,fnCancel,callback){dialog.isOpen=objName
 let loads=dialog.loads,_open=function($this){$this.show('fade','fast').find('.iconClass-container input').first().focus().end().find('.btn-success').attr('disabled',!1)
 $('.popup-overlay').fadeIn()
-typeof callback=="function"&&callback(!1)};if(loads.includes(objName)){dialog.reset(objName)
+typeof callback=="function"&&callback($this)};if(loads.includes(objName)){this.new=!1;dialog.reset(objName)
 _open($('#dialogs #'+objName))}else{loads.push(objName)
-dialog.create(objName,fnOk,fnCancel,function(){_open($('#dialogs #'+objName))})}},close:function(objName,callback){var $this=$('#'+objName)||$('#'.dialog.isOpen)
+this.new=!0;dialog.create(objName,fnOk,fnCancel,function(){_open($('#dialogs #'+objName))})}},close:function(objName,callback){var $this=$('#'+objName)||$('#'.dialog.isOpen)
 validar.pass.reset($('#'+objName))
 $this.fadeOut()
 $('#dialogs').fadeOut()
 dialog.isOpen=null
 typeof callback=="function"&&callback(!0)},create:function(objName,fnOk,fnCancel,callback){let $this,data={controller:'dialogs',view:objName}
 $.post(INDEX,data,function(html){$('#dialogs').append(html).promise().done(function(){$this=$('#dialogs').find('#'+objName)
-$this.draggable({disabled:!1,opacity:0.70,zIndex:100,start:function(){}}).keypress(function(e){var code=e.keyCode;if(event.which==13)
-$this.find('.aceptar').click()})
+$this.draggable({disabled:!1,opacity:0.70,zIndex:100,start:function(){}}).keypress(function(e){var code=e.keyCode;if(event.which==13)$this.find('.aceptar').click()})
 $this.on('click','.fnClose',function(){dialog.close(objName)}).on('keydown',function(event){if(event.which==27)dialog.close(objName)}).on('click','.btn-danger',function(e){typeof fnCancel=="function"?fnCancel():dialog.close(objName)})
-if(typeof fnOk=="function"){$this.on('click','.btn-success',fnOk)}}).done(()=>callback($this))},'html')},reset:function(objName){var $this=$('#'+objName)
+if(typeof fnOk=="function")$this.on('click','.btn-success',fnOk)}).done(()=>callback($this))},'html')},reset:function(objName){var $this=$('#'+objName)
 var $load=$this.find('.btnLoad');if($this.find('form').length){$this.find('form')[0].reset()}else{$this.find('input').each(function(){$(this).val('')})
 $this.find('.lst').each(function(){$(this).empty()})}
 if($load.length){$load.each(function(){var caption=$(this).data('value');$(this).html(caption)})}}},notify={success:function(mns,cptn,keep,$input){var cptn=cptn||'Guardado',mns=mns||'El registro ha sido guardado';$.Notify({type:'success',caption:cptn,content:mns,icon:'icon-floppy',keepOpen:keep||!1,})
@@ -381,7 +380,7 @@ validar.email.funcion($(this),e)}).on('blur','.tel',function(){validar.tel.funci
 $.ajaxSetup({url:INDEX,cache:!0,complete:function(){btn.load.hide();if(typeof window.menu!=undefined)()=>menu.btn.save.off()
 typeof callback=="function"&&callback()},send:function(){},error:function(jqXHR,textStatus,errorThrowne){if(jqXHR.status===0){console.warn('Not connect: Verify Network.')}else if(jqXHR.status==404){console.warn('Requested page not found [404]')}else if(jqXHR.status==500){console.warn('Internal Server Error [500].')}else if(textStatus==='parsererror'){console.warn('Requested JSON parse failed.')}else if(textStatus==='timeout'){console.warn('Time out error.')}else if(textStatus==='abort'){console.warn('Ajax request aborted.')}else{console.warn('Uncaught Error: '+jqXHR.responseText)}
 console.error(jqXHR);console.error(errorThrowne)}});const EMPRESA=$('body').data('empresa'),URL='app.php?empresa='+$('body').data('empresa')
-var main={scripts:{loaded:['secLogin'],load:function(arg,callback){if(!this.loaded.includes(arg)){this.loaded.push(arg)
+var main={scripts:{loaded:['secLogin'],isLoaded:function(arg){this.loaded.includes(arg)},load:function(arg,callback){if(!this.loaded.includes(arg)){this.loaded.push(arg)
 $.getScript('/js/min/'+arg+'.js',function(){typeof window[arg].init=='function'&&window[arg].init();typeof callback=='function'&&callback()})}else{typeof window[arg].init()=='function'&&window[arg].init()
 typeof callback=='function'&&callback()}},},dir1:RIGHT,dir2:LEFT,toggle:function($in){var $out=$('section:visible'),_toggle=function($in){$out.hide('drop',{direction:main.dir1},function(){var id=$in.attr('id')
 $('#'+id).show('drop',{direction:main.dir2})

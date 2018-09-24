@@ -39,9 +39,13 @@ if(typeof $!='function') {
 			return  '/js/login.js';
 		}
 	 }
+
+	/*
+	AKI :: Descomenta esto
 	loadSync('/js/lib/idb.js' , function(){
 		loadSync('/js/service-worker/sw-registration.js')
 	 })
+	*/
 	loadSync('/js/lib/jquery.min.js' , function(){
 		if (window.innerWidth < 800) {loadAsync('/js/lib/jquery.mobile.min.js' )}
 		//Para cargar jquery en electron
