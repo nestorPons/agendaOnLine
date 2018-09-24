@@ -9,7 +9,6 @@
  */
 // Quitamos el limite de tiempo que tenemos en php.ini
 
-ini_set('output_buffering', 'off');
 session_write_close(); //Cerramos la session para que ejecute otras peticiones 
 set_time_limit(0);
 $timestamp = date('Y-m-d H:i:s'); 
