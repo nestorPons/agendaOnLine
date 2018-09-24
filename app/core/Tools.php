@@ -133,7 +133,7 @@ class Tools{
         $str = str_replace($a, $b, $str);
 	    $str = str_replace(' ', '%20', $str);
 	    return $str;
-    }
+     }
     public static function generateId( $f = null , $h = null , $a = null) { 
 
         $a = (!empty($a)) ? str_pad($a, 2, "0", STR_PAD_LEFT) : '';
@@ -144,4 +144,20 @@ class Tools{
         return str_pad($input,14,'0',STR_PAD_LEFT); 
     
      }
+    public static function minifierJS($args){
+        require_once URL_LIB . 'minify/src/Minify.php';
+        require_once URL_LIB . 'minify/src/JS.php';
+        require_once URL_LIB . 'minify/src/Exception.php';
+        $minifier = new \MatthiasMullie\Minify\JS(); 
+        if(is_array($args)){
+            $name = $args[0]; 
+            foreach($args as $val){
+                $minifier->add(URL_JS .$val.'.js');
+            }
+        }else{ 
+            $name = $args; 
+            $minifier->add(URL_JS . $args.'.js');
+        }
+        $minifier->minify(URL_JS . 'min/' . $name .'.js' );
+    }
 }

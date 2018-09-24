@@ -1,5 +1,6 @@
 //Funcion para menu responsive 
 //No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
+
 function menuEsMovil(tab){
 	$('.esMovil .dia').find('[agenda]:visible').hide()
 	$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').show()
@@ -43,8 +44,8 @@ function sincronizar( dias, date ){
 var 
 worker =  {
 	w : null , 
-	init : fun => this.w.postMessage(0), 
-	send : fun => setTimeout(worker.init(), 1000 * 60), 
+	init : function(){this.w.postMessage(0)}, 
+	send : function(){setTimeout(this.init(), 1000 * 60)}, 
 	sync : function(){
 		this.w = new Worker('/js/worker.js');
 		this.w.onmessage = e =>{			

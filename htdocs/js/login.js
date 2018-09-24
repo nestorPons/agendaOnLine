@@ -8,8 +8,8 @@ main = {
 		load : function(arg, callback){
 			if(!this.loaded.includes(arg)){
 				this.loaded.push(arg)
-				$.getScript('/js/'+arg+'.js',function(){
-					typeof window[arg].init() == 'function' && window[arg].init();
+				$.getScript('/js/min/'+arg+'.js',function(){
+					typeof window[arg].init == 'function' && window[arg].init();
 					typeof callback == 'function' && callback();
 				});
 			} else 	{

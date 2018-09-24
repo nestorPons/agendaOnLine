@@ -9,6 +9,6 @@ if (isset($_POST['action'])) {
     echo json_encode($r);
 
 } else { 
-
+    \core\Tools::minified($_POST['controller']); 
     include URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 
 }

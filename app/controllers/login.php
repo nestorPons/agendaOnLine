@@ -53,7 +53,7 @@ if (isset($_POST['action'])){
             URL_JS . 'funciones.js', 
             URL_JS . 'login.js'
         );
-        $minifier->minify(URL_JS . 'index.min.js');
+        $minifier->minify(URL_JS . 'min/index.js');
         
         $minifier = new Minify\CSS( 
             URL_CSS . 'jquery-ui.min.css',

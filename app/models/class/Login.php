@@ -185,7 +185,7 @@ class Login extends \core\BaseClass {
 
         if (!empty(\core\Error::getLast())) $err = '?err=' . \core\Error::getLast();
         if ($redirect){
-            header('location:'.$url. $err??'');
+            header('location:'.$url);
             exit(1);
         } else  {
             return true;

@@ -1,4 +1,4 @@
-htdocs/css/main.css
-htdocs/css/index.min.css
-htdocs/empresas/**/*.css
-htdocs/js/index.min.js
+/htdocs/css/main.css
+/htdocs/css/index.min.css
+/htdocs/empresas/**/*.css
+/htdocs/js/index.min.js

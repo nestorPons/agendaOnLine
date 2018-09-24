@@ -12,13 +12,5 @@ $_SESSION['FAMILIAS'] = $Fam->getAll('*',MYSQLI_NUM, 'nombre') ;
 
 $action =  $_REQUEST['action'] ?? 'main' ;
 
-/* AKI 
-
-$minifier = new Minify\JS( 
-    URL_JS . 'main.js', 
-    URL_JS . 'admin.js'
-);
-$minifier->minify(URL_JS . 'admin.min.js');
-*/
-
+\core\Tools::minifierJS('admin');
 require_once  URL_VIEWS_ADMIN . 'admin.php' ;        
