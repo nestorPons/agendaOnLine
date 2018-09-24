@@ -7,5 +7,5 @@ if ($User->isAdmin()){
     $users  = $cls_users->getAll( '*' ,  MYSQLI_ASSOC  ) ;
 } 
 $fecha = $_GET['fecha'] ?? date('Y-m-d') ;
-
+\core\Tools::minifierJS('crearCita'); 
 require_once URL_VIEWS_ADMIN . 'crearCita.php' ; 

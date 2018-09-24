@@ -8,7 +8,7 @@ if (isset($_POST['action'])) {
 } else {
 
     $festivos = $Festivos->getAll() ; 
-
+    \core\Tools::minifierJS($_POST['controller']);   
     $url =  URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 
 }
 

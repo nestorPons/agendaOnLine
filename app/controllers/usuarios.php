@@ -24,9 +24,9 @@ if (isset($_POST['action'])) {
     header('Content-Type: application/json');
     echo json_encode($r);
 } else {
-    
     $Users = new core\BaseClass('usuarios') ;
     $users  = $Users->getAll('*',MYSQLI_ASSOC,'nombre') ;
+    \core\Tools::minifierJS($_POST['controller']);   
     require_once URL_VIEWS_ADMIN . 'usuarios.php' ; 
 
 }

@@ -1,4 +1,7 @@
 <?php 
+const VERSION = 'v7.7'; 
+const STABLE = false; 
+
 define('NAME_EMPRESA' ,  $Empresa->name());
 define('NAME_CODE' ,  $Empresa->code());
 // Se necesita para no tener que declarar en la clase BaseClass y poder poner una bd por defecto

@@ -60,7 +60,6 @@ main = {
 		}
 
 	 }, 
-
 	loader : {
 		show : function(){
 			$('main').find('#loading').removeClass('hidden')

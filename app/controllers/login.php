@@ -35,9 +35,7 @@ if (isset($_POST['action'])){
         require_once $path . 'minify/src/Exceptions/IOException.php';
         require_once $path . 'path-converter/src/ConverterInterface.php';
         require_once $path . 'path-converter/src/Converter.php';
-        
-        
-        
+    
         $minifier = new Minify\JS( 
             URL_JS . 'lib/idb.js',
             URL_JS . 'service-worker/sw-registration.js'

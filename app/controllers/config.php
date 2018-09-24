@@ -12,9 +12,12 @@ if (!empty($_POST['oldPass']) && !empty($_POST['newPass'])){
      
     echo json_encode($r) ;
 } else {
-    $url = (isset($_POST['action'])) ? 
-        URL_AJAX . $_POST['controller'] . '.php' :
-        URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 
+    if(isset($_POST['action'])){
+        require_once (URL_AJAX . $_POST['controller'] . '.php');
 
-    require_once $url;  
+    } else { 
+        \core\Tools::minifierJS($_POST['controller']); 
+        require_once (URL_VIEWS_ADMIN . $_POST['controller'] .'.php'); 
+
+    }
 }

@@ -28,6 +28,7 @@ if (isset($_POST['action'])) {
     $Agendas = new models\Agendas();
     $horarios = $Horarios->horarios() ;
     $agendas = $Agendas->get();
+    \core\Tools::minifierJS($_POST['controller']); 
     require_once URL_VIEWS_ADMIN . $_POST['controller'] .'.php' ; 
 
 }

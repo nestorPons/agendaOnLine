@@ -24,6 +24,7 @@ if(isset($_POST['action'])){
 }
 else
 {
+    \core\Tools::minifierJS($_POST['controller']); 
     require_once    URL_VIEWS_ADMIN . 'notas.php' ; 
 }   
 
