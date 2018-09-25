@@ -1,4 +1,3 @@
-
 var 
 crearCita={
 	isLoad : true, 
@@ -130,6 +129,7 @@ crearCita={
 	 },
 	guardar: function(){
 		var self = crearCita 
+		self.data.lastMod = Fecha.now()
 		self.data.controller = 'cita'
 		self.data.action = 'save'
 

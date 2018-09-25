@@ -64,7 +64,6 @@ function decode(s) {
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 	$_GET[decode(arguments[1])] = decode(arguments[2]);
  });
-
 var 
 Fecha = {
 	actual: fechaActual(),
@@ -74,6 +73,28 @@ Fecha = {
 	day : formatofecha(fechaActual(),'day'),
 	month : formatofecha(fechaActual(),'month'),
 	year : formatofecha(fechaActual(),'year'),
+	now : function(){
+		let date = new Date(),
+			hour = date.getHours(),
+			min = date.getMinutes(), 
+			seg = date.getSeconds(); 
+
+		return this.actual + ' ' + hour + ':' + min + ':' + seg; 
+	}, 
+	equate : function(dateString1, dateString2){
+		let d1 = new Date(dateString1), 
+			d2 = new Date(dateString2)
+
+		if(d1>d2){
+			return 1
+		}
+		else
+		if(d1<d2){
+			return -1
+		}
+		else 
+		return 0 
+	}, 
 	sql: function(fecha){return formatofecha(fecha,'sql')},
 	print: function(fecha){return formatofecha(fecha,'print')},
 	md: function(fecha){return formatofecha(fecha,'md')},
@@ -1103,6 +1124,7 @@ $(function(){
 $.ajaxSetup({
 	url : INDEX , 
 	cache :true,
+	async : false,
 	complete : function(){
 		btn.load.hide();
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()

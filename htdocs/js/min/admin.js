@@ -81,7 +81,7 @@ admin.idCita=idCita
 var lbl=$('#idCita_'+admin.idCita+'.lbl')
 admin.lbl.obj=lbl
 admin.set.data(admin.idCita)
-admin.last={idCita:admin.data[admin.idCita].idCita,agenda:admin.data[admin.idCita].agenda,tiempo_servicios:admin.data[admin.idCita].tiempo_servicios,hora:admin.data[admin.idCita].hora,fecha:admin.data[admin.idCita].fecha,cliente:{id:admin.data[admin.idCita].cliente.id,nombre:admin.data[admin.idCita].cliente.nombre},obs:admin.data[admin.idCita].obs}
+admin.last={idCita:admin.data[admin.idCita].idCita,agenda:admin.data[admin.idCita].agenda,tiempo_servicios:admin.data[admin.idCita].tiempo_servicios,hora:admin.data[admin.idCita].hora,fecha:admin.data[admin.idCita].fecha,cliente:{id:admin.data[admin.idCita].cliente.id,nombre:admin.data[admin.idCita].cliente.nombre},obs:admin.data[admin.idCita].obs,lastmod:admin.data[admin.idCita].lastMod}
 var _addServiceToLbl=function(callback){var arrSer=admin.data[admin.idCita].servicios,lblSer=admin.lbl.obj.find('.servicios'),html=''
 lblSer.empty()
 for(let i=0;i<arrSer.length;i++){let self=arrSer[i]
@@ -115,6 +115,7 @@ admin.data[admin.idCita].fecha=data.fecha
 admin.data[admin.idCita].hora=data.hora
 admin.data[admin.idCita].obs=data.obs
 admin.data[admin.idCita].tiempo_servicios=data.tiempoServicios
+admin.data[admin.idCita].lastMod=Fecha.now()
 $.each(admin.data[admin.idCita].servicios,function(i,v){arrIdSer.push(v.id)})
 var sendData={action:EDIT,idCita:admin.idCita,agenda:admin.data[admin.idCita].agenda,idUsuario:admin.data[admin.idCita].cliente.id||!1,fecha:Fecha.sql(dlg.find('#fecha').val()),hora:dlg.find('#hora').val(),obs:dlg.find('#obs').val(),tiempo_servicios:data.tiempoServicios,servicios:arrIdSer,status:!1}
 admin.save(sendData,function(){admin.lbl.edit(admin.data[admin.idCita],admin.last)
@@ -144,23 +145,22 @@ else if(localStorage.getItem("showRows")==0)
 admin.inactivas.change(!1,!1)}},lbl:{width:'25',height:new Array,clone:new Object,idLastcelda:0,obj:null,load:function(){$('.lbl').each(function(){admin.lbl.draggable($(this))})
 this.droppable()
 menu.nav.estado(localStorage.getItem("menuOpen"))
-this.color()},create:function(data){var lbl=admin.lbl,htmlSer='',idCelda=generateId.encode(data.agenda,data.fecha,data.hora),$celda=$('#'+idCelda)
+this.color()},create:function(data){if($('#idCita_'+data.idCita).length)return!1;var lbl=admin.lbl,htmlSer='',idCelda=generateId.encode(data.agenda,data.fecha,data.hora),$celda=$('#'+idCelda)
 if($celda.length){$.each(data.servicios,function(id,serv){htmlSer+=lbl.service(serv)})
 $celda.find('.fnCogerCita').remove().end().append(lbl.container(data,htmlSer))
 this.obj=$('#idCita_'+data.idCita+'.lbl')
 lbl.style()
-admin.lbl.draggable(this.obj)}},edit:function(data,last=null){if(last){var idCita=data.idCita,object=$('#main').find('#idCita_'+idCita)
+admin.lbl.draggable(this.obj)}},edit:function(data,last=null){let $lbl=$('#idCita_'+data.idCita);if($lbl.length&&Fecha.equate(data.lastMod,$lbl.attr('lastmod'))==1){$lbl.attr('lastmod',data.lastMod);if(last){var idCita=data.idCita,object=$('#main').find('#idCita_'+idCita)
 $('#idCita_'+data.idCita+'.lbl').attr('tiempo',data.tiempo_servicios)
 if(data.cliente.id!=last.cliente.id){object.find('.nombre').attr('id',data.cliente.id).find('.text-value').html(data.cliente.nombre)}
-if(data.fecha!=last.fecha||data.hora!=last.hora){let idCell=generateId.encode(data.agenda,data.fecha,data.hora),lastCell=generateId.encode(last.agenda,last.fecha,last.hora),clon=object.clone()
+if(data.fecha!=last.fecha||data.hora!=last.hora){let idCell=generateId.encode(data.agenda,data.fecha,data.hora),clon=object.clone()
 object.remove()
 clon.appendTo('#'+idCell)
 admin.lbl.style()}
 if(data.obs!=last.obs)object.find('#obs').val(data.obs)}else{let that=this
-this.delete(data,!0,function(){that.create(data)})}},container:function(data,htmlSer){var html_icono_desplegar=(data.servicios.length<=data.tiempo_servicios)?"<i class ='icon-angle-down fnExtend' ></i>":"",html_icono_usuario_coge_cita=typeof data.cliente!='undefined'?"<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>":"",idUsuario=data.idUsuario||data.cliente.id,nombre=data.nombre||data.cliente.nombre
-var claseNotas=($.isEmpty(data.nota))?'':'show'
+this.delete(data,!0,function(){that.create(data)})}}else return!1},container:function(data,htmlSer){var html_icono_desplegar=(data.servicios.length<=data.tiempo_servicios)?"<i class ='icon-angle-down fnExtend' ></i>":"",html_icono_usuario_coge_cita=typeof data.cliente!='undefined'?"<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>":"",idUsuario=data.idUsuario||data.cliente.id,nombre=data.nombre||data.cliente.nombre,lastMod=(typeof data.lastMod=='undefined')?Fecha.now:data.lastMod;var claseNotas=($.isEmpty(data.nota))?'':'show'
 var nota=$.isEmpty(data.nota)?'':data.nota
-var html="<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
+var html="<div id='idCita_"+data.idCita+"' lastmod='"+lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+html_icono_desplegar+html_icono_usuario_coge_cita+"<div class='icons_crud'>\
 							<i class ='fnEdit icon-pencil-1'></i>  \
 							<i class ='fnDel icon-trash'></i>  \

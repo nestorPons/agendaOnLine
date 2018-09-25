@@ -453,7 +453,8 @@ admin ={
 				id : admin.data[admin.idCita].cliente.id, 
 				nombre : admin.data[admin.idCita].cliente.nombre
 			 },
-			obs : admin.data[admin.idCita].obs 
+			obs : admin.data[admin.idCita].obs, 
+			lastmod : admin.data[admin.idCita].lastMod
 		 }
 	
 		var _addServiceToLbl = function (callback){
@@ -561,8 +562,9 @@ admin ={
 			admin.data[admin.idCita].hora = data['hora']
 			admin.data[admin.idCita].obs = data['obs']
 			admin.data[admin.idCita].tiempo_servicios = data['tiempoServicios']
+			admin.data[admin.idCita].lastMod = Fecha.now()
 
-			$.each(admin.data[ admin.idCita].servicios, function( i , v){
+			$.each(admin.data[admin.idCita].servicios, function( i , v){
 				arrIdSer.push(v.id)
 			})
 
@@ -751,6 +753,7 @@ admin ={
 		 }, 
 		create: function(data){
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
+			if($('#idCita_'+data.idCita).length) return false ;
 			var lbl = admin.lbl,
 				htmlSer = '', 
 				idCelda =  generateId.encode( data.agenda , data.fecha , data.hora ), 
@@ -769,32 +772,37 @@ admin ={
 			}
 		 },
 		edit: function (data, last = null){
-			if(last){
-				var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
-				$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios )
+			let $lbl = $('#idCita_'+ data.idCita); 
+			if($lbl.length && Fecha.equate(data.lastMod, $lbl.attr('lastmod'))==1) {
+				// Modificamos la fecha de edicion de la cita
+				$lbl.attr('lastmod',data.lastMod);
 
-				if (data.cliente.id != last.cliente.id){
-					object.find('.nombre')
-						.attr('id', data.cliente.id)
-						.find('.text-value').html(data.cliente.nombre)
-				} 
-				if (data.fecha != last.fecha || data.hora != last.hora){
-						let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
-							lastCell = generateId.encode( last.agenda , last.fecha , last.hora ),
-							clon = object.clone()
-						
-						object.remove()
-						clon.appendTo('#'+idCell)
-						admin.lbl.style()
-					}
-				if (data.obs != last.obs) object.find('#obs').val(data.obs)
-			}else{
-				let that = this
-				this.delete(data, true, function(){
-					
-					that.create(data)
-				})
-			}
+				if(last){
+					var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
+					$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios )
+	
+					if (data.cliente.id != last.cliente.id){
+						object.find('.nombre')
+							.attr('id', data.cliente.id)
+							.find('.text-value').html(data.cliente.nombre)
+					} 
+					if (data.fecha != last.fecha || data.hora != last.hora){
+							let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
+								clon = object.clone()
+							
+							object.remove()
+							clon.appendTo('#'+idCell)
+							admin.lbl.style()
+						}
+					if (data.obs != last.obs) object.find('#obs').val(data.obs)
+				}else{
+					let that = this
+					this.delete(data, true, function(){	
+						that.create(data)
+					})
+				}
+
+			} else return false; 
 			
 		 },
 		container : function (data, htmlSer) {
@@ -806,11 +814,12 @@ admin ={
 				? "<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>"
 				: "",  
 				idUsuario = data.idUsuario||data.cliente.id, 
-				nombre = data.nombre||data.cliente.nombre
+				nombre = data.nombre||data.cliente.nombre, 
+				lastMod = (typeof data.lastMod == 'undefined')?Fecha.now:data.lastMod;  
 
 			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
 			var nota  = $.isEmpty(data.nota)?'':data.nota
-			var html = "<div id='idCita_"+data.idCita+"' lastmod='"+data.lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
+			var html = "<div id='idCita_"+data.idCita+"' lastmod='"+lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+ 
 					html_icono_desplegar + 
 					html_icono_usuario_coge_cita +
