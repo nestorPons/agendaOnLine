@@ -75,6 +75,7 @@ class User extends \core\BaseClass {
 	}
 	public function save($args = null){
 		unset($args['id']);
+
 		return self::saveById((int)$this->id, $args);
 	 }
 	public function password($pass){

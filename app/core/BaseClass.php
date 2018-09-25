@@ -140,9 +140,7 @@ class BaseClass{
         $args = $this->sanitize($args); 
         if ( $id == -1) {
             unset($args['id']);
-            
-            if (!is_null($args)){
-
+            if (!is_null($args) && is_array($args)){
                foreach ($args as $column => $value ) {
                     $columns .=  $column . ',' ;
                     $values .= '"' . $value . '",' ; 
