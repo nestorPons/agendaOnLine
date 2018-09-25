@@ -1124,7 +1124,7 @@ $(function(){
 $.ajaxSetup({
 	url : INDEX , 
 	cache :true,
-	async : false,
+	async : true,
 	complete : function(){
 		btn.load.hide();
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
