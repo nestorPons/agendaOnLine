@@ -6,7 +6,7 @@ header('Content-Type: application/json');
     $ciudad = $_POST['ciudad']??"";
     $pais = $_POST['pais']??"";
     $mensaje = $_POST['mensaje']??"";
-    $empresa = $_POST['empresa']??"";
+    $empresa = $_POST['empresa']??""; 
     $rsp['success'] = false;
     //Validamos el nombre y el email no estén vacios
     if($nombre != "" && $email != ''){

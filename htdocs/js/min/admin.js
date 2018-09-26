@@ -12,7 +12,7 @@ $datepicker.val(Fecha.print(fecha)).datepicker("setDate",Fecha.print(fecha))}
 var worker={w:null,init:function(){this.w.postMessage(0)},send:function(){setTimeout(this.init(),1000*60)},sync:function(){this.w=new Worker('/js/worker.js');this.w.onmessage=e=>{let data=JSON.parse(e.data);if(data){$.each(data,function(i,d){$.each(d,function(i,v){let action=parseInt(v.action),obj=null
 switch(v.table){case 'data':obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}})})}
 worker.send()}
-worker.send()},},admin={z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
+worker.send()},},admin={idUser:$('#main').data('user'),z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
 let n=(localStorage.getItem("showRows")==1)?1:0;this.inactivas.change(n)
 this.inactivas.comprobar()
 this.lbl.load()
@@ -24,9 +24,10 @@ Device.init()
 if(Device.isCel())localStorage.setItem('menuOpen',0)
 $('.tabcontrol').tabcontrol()
 $('.fnToggleCharm').click(function(){menu.nav.charm.toggle($(this))})
-$('#frmContact button').click(function(event){event.preventDefault()
+$('#frmContact').submit(function(event){event.preventDefault()
 var data=$("#frmContact").serializeArray()
 data.push({name:'controller',value:'contacto'})
+data.empresa=$('main').data('empresa')
 data[1].value=normalize(data[1].value)
 $.post(INDEX,data,function(r){if(r.success)
 notify.success('Email mandado con éxito')
@@ -143,7 +144,8 @@ else if(localStorage.getItem("showRows")==0)
 admin.inactivas.change(!1,!1)}},lbl:{width:'25',height:new Array,clone:new Object,idLastcelda:0,obj:null,load:function(){$('.lbl').each(function(){admin.lbl.draggable($(this))})
 this.droppable()
 menu.nav.estado(localStorage.getItem("menuOpen"))
-this.color()},create:function(data){if($('#idCita_'+data.idCita).length)return!1;var lbl=admin.lbl,htmlSer='',idCelda=generateId.encode(data.agenda,data.fecha,data.hora),$celda=$('#'+idCelda)
+this.color()},loadData(data){let strSer='',classNote=($.isEmpty(data.nota))?'':'show';$.each(data.servicios,function(id,serv){strSer+=admin.lbl.service(serv)})
+$('#idCita_'+data.idCita).attr('lastmod',Fecha.now()).attr('idcita',data.idCita).attr('tiempo',data.tiempo_servicios).removeClassPrefix('row_').addClass('row_'+admin.unidadTiempo(data.tiempo_servicios)).find('.nombre').attr('id',data.cliente.id).find('span').text(data.cliente.nombre).end().end().find('.servicios').html(strSer).end().find('.note').removeClass('show').addClass(classNote).find('span').text(data.nota)},create:function(data){if($('#idCita_'+data.idCita).length)return!1;var lbl=admin.lbl,htmlSer='',idCelda=generateId.encode(data.agenda,data.fecha,data.hora),$celda=$('#'+idCelda)
 if($celda.length){$.each(data.servicios,function(id,serv){htmlSer+=lbl.service(serv)})
 $celda.find('.fnCogerCita').remove().end().append(lbl.container(data,htmlSer))
 this.obj=$('#idCita_'+data.idCita+'.lbl')
@@ -155,8 +157,7 @@ if(data.fecha!=last.fecha||data.hora!=last.hora){let idCell=generateId.encode(da
 object.remove()
 clon.appendTo('#'+idCell)
 admin.lbl.style()}
-if(data.obs!=last.obs)object.find('#obs').val(data.obs)}else{let that=this
-this.delete(data,!0,function(){that.create(data)})}}else return!1},container:function(data,htmlSer){var html_icono_desplegar=(data.servicios.length<=data.tiempo_servicios)?"<i class ='icon-angle-down fnExtend' ></i>":"",html_icono_usuario_coge_cita=typeof data.cliente!='undefined'?"<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>":"",idUsuario=data.idUsuario||data.cliente.id,nombre=data.nombre||data.cliente.nombre,lastMod=(typeof data.lastMod=='undefined')?Fecha.now:data.lastMod;var claseNotas=($.isEmpty(data.nota))?'':'show'
+if(data.obs!=last.obs)object.find('#obs').val(data.obs)}else{this.loadData(data)}}else return!1},container:function(data,htmlSer){var html_icono_desplegar=(data.servicios.length<=data.tiempo_servicios)?"<i class ='icon-angle-down fnExtend' ></i>":"",html_icono_usuario_coge_cita=typeof data.cliente!='undefined'&&data.cliente.usuarioCogeCita==admin.idUser?"<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>":"",idUsuario=data.idUsuario||data.cliente.id,nombre=data.nombre||data.cliente.nombre,lastMod=(typeof data.lastMod=='undefined')?Fecha.now:data.lastMod;var claseNotas=($.isEmpty(data.nota))?'':'show'
 var nota=$.isEmpty(data.nota)?'':data.nota
 var html="<div id='idCita_"+data.idCita+"' lastmod='"+lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+html_icono_desplegar+html_icono_usuario_coge_cita+"<div class='icons_crud'>\
@@ -169,18 +170,18 @@ var html="<div id='idCita_"+data.idCita+"' lastmod='"+lastMod+"'	 idcita="+data.
 						<i class ='icon-user-1'></i> \
 						<span>"+nombre+"</span> \
 					</div> \
-					<div class='servicios "+admin.unidadTiempo(data.tiempo_servicios)+"'>"+htmlSer+"</div> \
+					<div class='servicios'>"+htmlSer+"</div> \
 					<div class='note "+claseNotas+"'> \
 						<i class='icon-note'></i> \
 						<span class='text_note'>"+nota+"</span> \
 					</div> \
-				</div>";return html},service:function(data){var html="\
-					<div class='servicio'>\
-						<i class ='icon-angle-right'></i>\
-						<span class='codigo' des_codigo='"+data.descripcion+"' \
-						id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
-					</div>\
-				";return html},color:function(callback){var $sec=$("#main"),dias=$sec.find('.dia'),agendas=($sec.find('thead th').length)-1,color='',colorPares=new Array(),colorImpares=new Array(),$lstClientes=$('#lstClientes')
+				</div>";return html},service:function(data){return"\
+				<div class='servicio'>\
+					<i class ='icon-angle-right'></i>\
+					<span class='codigo' des_codigo='"+data.descripcion+"' \
+					id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
+				</div>\
+			"},color:function(callback){var $sec=$("#main"),dias=$sec.find('.dia'),agendas=($sec.find('thead th').length)-1,color='',colorPares=new Array(),colorImpares=new Array(),$lstClientes=$('#lstClientes')
 dias.each(function(){$(this).find('color1').removeClass('color1').end().find('color2').removeClass('color2').end().find('color3').removeClass('color3').end().find('color-red').removeClass('color-red')
 let idCita=0;$(this).find('.lbl').each(function(){let a=$(this).parent().attr('agenda'),id=$(this).find('.nombre').attr('id'),colorCliente=$lstClientes.find('option[data-id="'+id+'"]').data('color')
 if(!$.isEmpty(colorCliente)){$(this).css('background-color',colorCliente)}else{if(a%2==0){if(colorPares[a]=='undefined')colorPares[a]='color1'

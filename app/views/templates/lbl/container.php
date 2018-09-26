@@ -23,7 +23,7 @@
         <span class = 'text-value'><?=$val['nombre']?></span>
     </div>
    										  
-    <div class='servicios <?=$rows?>'>          
+    <div class='servicios'>          
        <?= $servicies?>
     </div> 
      <div class='note <?=$val['obs']?'show':''?>'>

@@ -80,6 +80,7 @@ worker =  {
 	 },
 }, 
 admin ={ 
+	idUser : $('#main').data('user'),
 	z_index : 2 ,
 	data : new Object(), 
 	arrSer : new Array(), 
@@ -108,11 +109,12 @@ admin ={
 			menu.nav.charm.toggle($(this))
 		})
 
-		$('#frmContact button')
-			.click(function(event){			
+		$('#frmContact')
+			.submit(function(event){			
 				event.preventDefault()
 				var data = $("#frmContact").serializeArray()
 				data.push({name : 'controller' , value : 'contacto'})
+				data.empresa = $('main').data('empresa')
 
 				data[1].value = normalize(data[1].value)
 				$.post(INDEX,data,function(r){
@@ -743,6 +745,29 @@ admin ={
 			menu.nav.estado(localStorage.getItem("menuOpen"))
 			this.color()
 		 }, 
+		loadData(data){
+			let strSer = '', 
+				classNote  = ($.isEmpty(data.nota))?'':'show'; 
+
+			$.each(data.servicios, function ( id , serv ) {
+				strSer += admin.lbl.service(serv)
+			})
+
+			$('#idCita_'+data.idCita)
+				.attr('lastmod', Fecha.now())
+				.attr('idcita', data.idCita)
+				.attr('tiempo', data.tiempo_servicios)
+				.removeClassPrefix('row_')
+				.addClass('row_'+admin.unidadTiempo(data.tiempo_servicios))
+				.find('.nombre').attr('id',data.cliente.id)
+					.find('span').text(data.cliente.nombre).end()
+				.end()
+				.find('.servicios').html(strSer).end()
+				.find('.note')
+					.removeClass('show')
+					.addClass(classNote)
+					.find('span').text(data.nota)
+		}, 
 		create: function(data){
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
 			if($('#idCita_'+data.idCita).length) return false ;
@@ -771,10 +796,6 @@ admin ={
 				// Modificamos la fecha de edicion de la cita
 				$lbl.attr('lastmod',data.lastMod);
 
-
-// AKI :: implementar edicion
-
-
 				if(last){
 					var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
 					$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios )
@@ -794,10 +815,7 @@ admin ={
 						}
 					if (data.obs != last.obs) object.find('#obs').val(data.obs)
 				}else{
-					let that = this
-					this.delete(data, true, function(){	
-						that.create(data)
-					})
+					this.loadData(data) ;
 				}
 
 			} else return false; 
@@ -808,7 +826,7 @@ admin ={
 			var html_icono_desplegar = (data.servicios.length <= data.tiempo_servicios) 
 				? "<i class ='icon-angle-down fnExtend' ></i>"
 				:"",
-				html_icono_usuario_coge_cita = typeof data.cliente != 'undefined' 
+				html_icono_usuario_coge_cita = typeof data.cliente != 'undefined' && data.cliente.usuarioCogeCita == admin.idUser
 				? "<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>"
 				: "",  
 				idUsuario = data.idUsuario||data.cliente.id, 
@@ -831,7 +849,7 @@ admin ={
 						<i class ='icon-user-1'></i> \
 						<span>"+nombre+"</span> \
 					</div> \
-					<div class='servicios "+admin.unidadTiempo(data.tiempo_servicios)+"'>"+htmlSer+"</div> \
+					<div class='servicios'>"+htmlSer+"</div> \
 					<div class='note "+ claseNotas + "'> \
 						<i class='icon-note'></i> \
 						<span class='text_note'>"+nota+"</span> \
@@ -840,14 +858,14 @@ admin ={
 			return html 					
 		 }, 
 		service : function (data) {
-				var html = "\
-					<div class='servicio'>\
-						<i class ='icon-angle-right'></i>\
-						<span class='codigo' des_codigo='"+data.descripcion+"' \
-						id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
-					</div>\
-				";
-				return html		
+			return "\
+				<div class='servicio'>\
+					<i class ='icon-angle-right'></i>\
+					<span class='codigo' des_codigo='"+data.descripcion+"' \
+					id_codigo = '"+data.id+"' tiempo = '"+data.tiempo+"'>"+data.codigo+"</span>\
+				</div>\
+			";
+	
 		 }, 
 		color: function(callback){	
 			var $sec = $("#main") , 

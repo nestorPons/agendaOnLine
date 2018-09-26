@@ -7,10 +7,12 @@
 				<input type="text" name="nombre" placeholder="nombre" value='<?=CONFIG['nombre_usuario']?>'>
 				<i class="icon-user iconClass-inside"></i>
 			</div>
+			<!--
 			<div class="iconClass-container icon-left">
 				<input type="text" name="empresa" placeholder="Empresa" value='<?=CONFIG['nombre_empresa']?>'>
 				<i class="icon-shop  iconClass-inside"></i>
 			</div>
+			-->
 			<div class="iconClass-container icon-left">
 				<input type="email" name="email" placeholder="Email de contacto" value='<?=CONFIG['email']?>'>
 				<i class="icon-mail iconClass-inside"></i>
