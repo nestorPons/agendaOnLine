@@ -134,3 +134,4 @@ var agendas = {
 	 }
 	
  } 
+main.scripts.loaded.push('agendas');

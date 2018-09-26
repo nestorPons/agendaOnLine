@@ -48,3 +48,4 @@
         </div>
     </div>
 </div>
+<scirpt src="js/min/estilos.js"></scirpt>

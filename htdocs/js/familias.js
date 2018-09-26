@@ -1,3 +1,4 @@
+main.scripts.loaded.push('familias');
 var familias = {
 	isLoad : true, 
 	change : false , 

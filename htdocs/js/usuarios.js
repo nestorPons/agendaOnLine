@@ -1,4 +1,4 @@
-
+main.scripts.loaded.push('usuarios');
 var usuarios = {
 	isLoad : true, 
 	controller : 'usuarios' , 

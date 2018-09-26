@@ -1,4 +1,4 @@
-var familias={isLoad:!0,change:!1,controller:'familias',data:new Object,init:function(){$('#familias').on('click','table .icon-edit',function(){familias.dialog($(this).attr('value'))}).find('input[name*="mostrar"]').change(function(){var mostrar=($(this).is(':checked'))?1:0;var id=$(this).attr('id');familias.chckGuardar(id,mostrar)})
+main.scripts.loaded.push('familias');var familias={isLoad:!0,change:!1,controller:'familias',data:new Object,init:function(){$('#familias').on('click','table .icon-edit',function(){familias.dialog($(this).attr('value'))}).find('input[name*="mostrar"]').change(function(){var mostrar=($(this).is(':checked'))?1:0;var id=$(this).attr('id');familias.chckGuardar(id,mostrar)})
 colorear_filas($('#familias').find('.colorear-filas'))},eliminar:function(){var id=$('#dlgFamilias #id').val(),del=!1
 nombre=$('#dlgFamilias #nombre').val()
 btn.load.show($('#dlgFamilias .cancelar'),!1)

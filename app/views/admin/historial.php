@@ -63,3 +63,4 @@
         </table>
     </div>
 </div>
+<scirpt src="js/min/historial.js"></scirpt>

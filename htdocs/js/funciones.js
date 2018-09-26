@@ -857,7 +857,20 @@ notify = {
 		typeof callback == "function" && setTimeout(callback,timewait);
 
 	},
- }
+ },
+Device = {
+	cel: false, 
+	init : function(){
+		this.cel = ($(window).width()<=425)
+	 }, 
+	isCel: function(val = false){
+		if($.isEmpty(val)){
+			return this.cel
+		} else  {
+			this.cel = val
+		}
+	 }
+}
 function formatofecha (fechaTxt,formatOut){ 
 
 	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;

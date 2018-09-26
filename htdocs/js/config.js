@@ -1,5 +1,5 @@
-
 'strict'
+main.scripts.loaded.push('config')
 config ={
 	isLoad :true,
 	change : false,

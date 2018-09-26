@@ -25,3 +25,4 @@
 	</div>
 	<label for="respuestaLogo"><div id="respuestaLogo"></div></label>
 </form>
+<scirpt src="js/min/config.js"></scirpt>

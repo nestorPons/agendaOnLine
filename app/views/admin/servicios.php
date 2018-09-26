@@ -23,3 +23,4 @@
 		</table>
 	</div>
 </div>
+<scirpt src="js/min/servicios.js"></scirpt>

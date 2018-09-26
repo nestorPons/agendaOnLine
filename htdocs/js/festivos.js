@@ -1,4 +1,5 @@
 'strict'
+main.scripts.loaded.push('festivos');
 var festivo = {
 	isLoad : true, 
 	init : function(){

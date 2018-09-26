@@ -178,6 +178,7 @@ $(function(){
 						.append(r)
 						.removeClass()
 					let section = $(r).filter('main').attr('id');
+
 					main.scripts.load(section)
 				} else { 
 					let res = r.error.split("<br>")

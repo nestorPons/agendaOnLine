@@ -394,3 +394,5 @@ crearCita={
 		 }
 	 },
  }
+
+ main.scripts.loaded.push('crearCita')

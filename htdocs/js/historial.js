@@ -1,4 +1,5 @@
 'strict'
+main.scripts.loaded.push('historial');
 var historial = {
 	isLoad : true, 
 	init : function(){
@@ -39,23 +40,23 @@ var historial = {
 				case 1: 
 					ico = 'plus'; 
 					accion = "Nueva cita";
-				break
+				break; 
 				case 2: 
 					ico = 'trash-empty';
 					accion = "Cita eliminada";
-				break
+				break; 
 				case 3: 
 					ico = 'edit';
 					accion = "Cita modificada";
-				break
+				break; 
 				case 4: 
 					ico = 'logout';
 					accion = "Salida usuario";
-				break
+				break; 
 				case 5: 
 					ico = 'login';    
 					accion = "Entrada usuario";
-				break
+				break; 
 			}
 
 			 

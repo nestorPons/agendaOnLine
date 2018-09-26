@@ -33,3 +33,5 @@
 	</div>
 <br>
 <a href="mailto:<?= ADMIN_EMAIL?>">Solicita otra agenda al administrador</a>
+
+<scirpt src="js/min/agendas.js"></scirpt>

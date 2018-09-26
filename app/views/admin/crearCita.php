@@ -33,3 +33,4 @@
 			</div>
 		</form>	
 	</div>
+<scirpt src="js/min/crearCita.js"></scirpt>

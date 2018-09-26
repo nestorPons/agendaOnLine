@@ -55,3 +55,4 @@
 		</tbody>
 	</table>
 </div> 
+<scirpt src="js/min/usuarios.js"></scirpt>

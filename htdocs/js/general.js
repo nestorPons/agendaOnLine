@@ -1,4 +1,5 @@
 'strict'
+main.scripts.loaded.push('general');
 var general = {
 	isLoad : true, 
 	init : function(){

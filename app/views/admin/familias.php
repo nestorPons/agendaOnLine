@@ -25,3 +25,4 @@
 		?>	
 	</tbody>
 </table>
+<scirpt src="js/min/familias.js"></scirpt>

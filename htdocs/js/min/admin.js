@@ -1,7 +1,4 @@
-function menuEsMovil(tab){$('.esMovil .dia').find('[agenda]:visible').hide()
-$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').show()
-return!0}
-function sincronizar(dias,date){var fecha=date||Fecha.general,$datepicker=$('.datepicker')
+main.scripts.loaded.push('admin');function sincronizar(dias,date){var fecha=date||Fecha.general,$datepicker=$('.datepicker')
 if(dias)
 fecha=Fecha.calcular(dias,fecha);else dias=0;Fecha.anterior=Fecha.general
 Fecha.general=Fecha.sql(fecha)
@@ -14,7 +11,8 @@ var diaFestivo=$.inArray(Fecha.md(Fecha.general),config.festivos)!=-1;(diaFestiv
 $datepicker.val(Fecha.print(fecha)).datepicker("setDate",Fecha.print(fecha))}
 var worker={w:null,init:function(){this.w.postMessage(0)},send:function(){setTimeout(this.init(),1000*60)},sync:function(){this.w=new Worker('/js/worker.js');this.w.onmessage=e=>{let data=JSON.parse(e.data);if(data){$.each(data,function(i,d){$.each(d,function(i,v){let action=parseInt(v.action),obj=null
 switch(v.table){case 'data':obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}})})}
-worker.send()}},},admin={z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
+worker.send()}
+worker.send()},},admin={z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
 let n=(localStorage.getItem("showRows")==1)?1:0;this.inactivas.change(n)
 this.inactivas.comprobar()
 this.lbl.load()
@@ -225,8 +223,7 @@ if(typeof(window[lastLayer].exit)==='function')window[lastLayer].exit()
 var data={controller:capa,fecha:Fecha.sql,},$capa=$('#'+capa),$menu=$('#mySidenav')
 $('.app-bar-pullmenu ').hide('blind');$menu.find('.selected').removeClass('selected')
 $menu.find('[data-capa="'+capa+'"]').addClass('selected')
-if($capa.hasClass('activa'))return!1;$('#chckOpUsersDel').prop("checked",!1);$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja');if($capa.is(':empty')){console.log('Peticion capa => '+capa)
-$.post(INDEX,data,function(html){$('#'+capa).html(html).promise().done(__INIT__);function __INIT__(){}
+if($capa.hasClass('activa'))return!1;$('#chckOpUsersDel').prop("checked",!1);$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja');if($capa.is(':empty')){$.post(INDEX,data,function(html){$('#'+capa).html(html).promise().done(__INIT__);function __INIT__(){}
 main.scripts.load(capa,typeof callback=='function'&&function(){callback($('#'+capa))})},'html')}else{if($('#config').is(':visible')&&config.change)config.guardar();if($('#agendas').is(':visible')&&agendas.change)agendas.guardar();typeof callback=="function"&&callback($('#'+capa))}
 $('.capasPrincipales.activa').hide().removeClass('activa')
 $capa.fadeIn().addClass('activa')
@@ -324,8 +321,6 @@ $sec.find('.nota').addClass('hide')
 $noteDay.removeClass('hide')
 $('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
 if($noteDay.length)$('#mySidenav #menu5').addClass('hay-nota')},edit:function(d){this.delete(d.id)
-this.create(d)}},Device={cel:!1,init:function(){this.cel=($(window).width()<=425)},isCel:function(val=!1){if($.isEmpty(val)){return this.cel}else{this.cel=val}}}
-$('body').on('click',".idDateAction",function(){if(!$(this).data('disabled')){sincronizar($(this).data('action'))}}).on('click','#boton-menu',function(){var estado=parseInt(localStorage.getItem("menuOpen"))+1
-menu.nav.open(estado)
-menu.nav.estado(estado)}).on('click','#btnCambiarPass',function(){console.log("Abriendo cambio pass ...")
-dialog.open('dlgCambiarPass',admin.pass)}).on('click','.close',function(e){dialog.close()}).on('change','input',function(){$(this).removeClass('input-error')}).on('change','#lstSerSelect',function(){var id=$(this).val();$('#lstSerSelect').each(function(){$(this).find('option[value='+id+']').attr('selected','selected')})})
+this.create(d)}}
+$('body').on('click',".idDateAction",function(){if(!$(this).data('disabled')){sincronizar($(this).data('action'))}}).on('click','#boton-menu',function(){let estado=parseInt(localStorage.getItem("menuOpen"))+1;menu.nav.open(estado);menu.nav.estado(estado)}).on('click','#btnCambiarPass',function(){console.log("Abriendo cambio pass ...")
+dialog.open('dlgCambiarPass',admin.pass)}).on('click','.close',function(e){dialog.close()}).on('change','input',function(){$(this).removeClass('input-error')}).on('change','#lstSerSelect',function(){let id=$(this).val();$('#lstSerSelect').each(function(){$(this).find('option[value='+id+']').attr('selected','selected')})})

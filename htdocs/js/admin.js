@@ -1,12 +1,4 @@
-//Funcion para menu responsive 
-//No se puede sobreesctribir la funcion en jquery asi que tengo que hacer una funcion suelta
-
-function menuEsMovil(tab){
-	$('.esMovil .dia').find('[agenda]:visible').hide()
-	$('.esMovil .dia').find('[agenda="'+tab.attr('agenda')+'"]').show()
-
-	return true
- }
+main.scripts.loaded.push('admin');
 function sincronizar( dias, date ){
 
 	var fecha = date||Fecha.general ,
@@ -84,7 +76,7 @@ worker =  {
 			worker.send();		
 		 }
 		// Inicializa los long pollings
-		//worker.send();
+		worker.send();
 	 },
 }, 
 admin ={ 
@@ -773,9 +765,15 @@ admin ={
 		 },
 		edit: function (data, last = null){
 			let $lbl = $('#idCita_'+ data.idCita); 
+
 			if($lbl.length && Fecha.equate(data.lastMod, $lbl.attr('lastmod'))==1) {
+
 				// Modificamos la fecha de edicion de la cita
 				$lbl.attr('lastmod',data.lastMod);
+
+
+// AKI :: implementar edicion
+
 
 				if(last){
 					var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
@@ -1058,15 +1056,13 @@ admin ={
 		$('.mostrar_baja').removeClass('mostrar_baja').addClass('ocultar_baja') ;
 		
 		if($capa.is(':empty') ){
-			console.log('Peticion capa => ' + capa)
 			$.post(INDEX,data,function(html){
-	
 				$('#'+capa).html(html).promise().done(__INIT__);
 				function __INIT__ (){
 					//Si hay que iniciar en 
 				 }
 				main.scripts.load(capa, typeof callback == 'function' && function(){callback($('#'+ capa))})
-	
+
 			},'html')
 		 } else {
 			if($('#config').is(':visible')&& config.change) config.guardar();
@@ -1599,43 +1595,29 @@ notas = {
 		this.create(d)
 	}
 
-}, 
-Device = {
-	cel: false, 
-	init : function(){
-		this.cel = ($(window).width()<=425)
-	 }, 
-	isCel: function(val = false){
-		if($.isEmpty(val)){
-			return this.cel
-		} else  {
-			this.cel = val
-		}
-	 }
 }
+
 $('body')
 	.on('click',".idDateAction",function(){
 		if(!$(this).data('disabled')) {
 			sincronizar($(this).data('action'));
 		}
-	 })
+	})
 	.on('click','#boton-menu', function(){
-		var estado = parseInt(localStorage.getItem("menuOpen"))+1
+		let estado = parseInt(localStorage.getItem("menuOpen"))+1; 
+		menu.nav.open(estado); 
+		menu.nav.estado(estado); 
 
-		menu.nav.open(estado)
-		menu.nav.estado(estado)
-
-	 })
+	})
 	.on('click','#btnCambiarPass',function(){
 		console.log("Abriendo cambio pass ...")
 		dialog.open('dlgCambiarPass',admin.pass)
-	 })
+	})
 	.on('click','.close',function(e){dialog.close()})
-	.on('change','input',function(){$(this).removeClass('input-error')})
-																																																																	.on('change','#lstSerSelect',function(){
-		var id = $(this).val();
-		// servicios.mostrar(id);
+	.on('change','input',function(){
+		$(this).removeClass('input-error')})																																																															.on('change','#lstSerSelect',function(){
+		let id = $(this).val();
 		$('#lstSerSelect').each(function(){
 			$(this).find('option[value='+id+']').attr('selected','selected');
-		})
-		})
+		});
+	});

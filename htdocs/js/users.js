@@ -1,3 +1,4 @@
+main.scripts.loaded.push('users');
 var servicios = { 
 	mostrar: function(id_familia, no_validate) {
 		var id = id_familia, no_validate = no_validate || false

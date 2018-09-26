@@ -55,3 +55,4 @@
 		<?php
 	}?>		
 </form>
+<scirpt src="js/min/horarios.js"></scirpt>

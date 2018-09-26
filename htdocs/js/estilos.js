@@ -1,4 +1,5 @@
 'strict'
+main.scripts.loaded.push('estilos');
 var estilos = {
 	isLoad : true, 
 	border : false , 

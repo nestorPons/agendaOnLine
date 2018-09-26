@@ -1,4 +1,4 @@
-var usuarios={isLoad:!0,controller:'usuarios',id:0,init:function(){let $this=this
+main.scripts.loaded.push('usuarios');var usuarios={isLoad:!0,controller:'usuarios',id:0,init:function(){let $this=this
 $this.select('A')
 $("#usuarios").on('click','[name*="editar"]',function(){var id=$(this).parents('tr:first').data('value')
 $this.dialog(id)}).on('click',"[name='historia']",function(e){$this.id=$(this).parents('tr').data('value')

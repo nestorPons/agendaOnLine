@@ -74,3 +74,4 @@ $('#crearCita #lblCliente').html($this.val())
 $this.removeClass('input-error').addClass('input-success');crearCita.data.nombre=cliente
 return!0}}else{$this.addClass('input-error').removeClass('input-success');$this.popover('show');return!1}},service:function(){$('#crearCita #lblSer').empty();var $ser=$('#crearCita [name="servicios[]"]:checked');if($ser.length==0){$('#login #crearCita [name="stepperServicios"]').popover('show');return!1}else{$ser.each(function(i,v){var txtSer=$(this).attr('id');$('#crearCita #lblSer').append(txtSer+', ')})
 return!0}}},}
+main.scripts.loaded.push('crearCita')
