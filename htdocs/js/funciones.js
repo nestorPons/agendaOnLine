@@ -1081,15 +1081,15 @@ $(function(){
 							$(this)
 								.addClass('background-personalized')
 								.empty()	
-								.append(Login.html)
+								.append(login.html)
 								.show(effect);
 
 						})
 				}
 
-				if($.isEmpty(Login.html)){
+				if($.isEmpty(login.html)){
 					$.post(INDEX,{controller: 'login'},r=>{
-						Login.html =  r;
+						login.html =  r;
 						goLogin();
 					},'html')
 				}else{

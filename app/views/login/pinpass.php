@@ -1,4 +1,5 @@
 <?php
+	require URL_VIEWS . 'header.php';
 	$url_validate= '/'. $Empresa->code() .'/'. 'validar';
 ?>
 	<title>Agenda Online zona login</title>

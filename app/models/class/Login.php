@@ -10,6 +10,10 @@ class Login extends \core\BaseClass {
 		parent::__construct('usuarios');	
         $this->Logs = new \models\Logs; 	
 	 }
+    public function id(int $id = null){
+        if($id) $this->id = $id; 
+        return $this->id; 
+    }
     public function findUserById(int $id){
         if ($this->user = parent::getById($id))
             $this->loadData();
@@ -102,8 +106,9 @@ class Login extends \core\BaseClass {
 
         $this->num = substr($token, -1);
         $this->selector = substr ($token, -$this->num-1, -1 );
-        $this->validator = substr($token, 0, -$this->num-1);
-
+        $arr = explode('.', substr($token, 0, -$this->num-1));
+        $this->id = $arr[0]; 
+        $this->validator = $arr[1];
         return array($this->num,$this->selector,$this->validator);
         
      }
@@ -134,7 +139,7 @@ class Login extends \core\BaseClass {
 
     public function authToken(string $tokenByPost){
         $Auth = new \core\BaseClass('auth_tokens');
-        $this->decodeToken($tokenByPost);
+        $arr = $this->decodeToken($tokenByPost);
         $auth = $Auth->getOneBy('selector',$this->selector );
         $this->findUserById((int)$auth['idUser']);
 
@@ -164,7 +169,10 @@ class Login extends \core\BaseClass {
          
 
         // Borra todas las variables de sesión  
-          
+        setcookie('auth','',time()-100);
+        setcookie('token','',time()-100);
+
+
         $_COOKIE = array();
         $_SESSION = array();
         if (ini_get("session.use_cookies")) {

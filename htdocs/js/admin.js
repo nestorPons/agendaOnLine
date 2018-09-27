@@ -1,6 +1,5 @@
 main.scripts.loaded.push('admin');
 
-
 function sincronizar( dias, date ){
 
 	var fecha = date||Fecha.general ,
@@ -84,7 +83,7 @@ worker =  {
 		let i = worker.interval; 
 		window.clearInterval(i);
 	}
-}, 
+ }, 
 admin ={ 
 	idUser : $('#main').data('user'),
 	z_index : 2 ,
@@ -1143,7 +1142,7 @@ admin ={
 			   btn.load.hide()
 			}
 		}
-},
+ },
 menu = {
 	nav: {
 		open: (estado=null)=>{
@@ -1474,7 +1473,7 @@ menu = {
 		}
 		colorear_filas($('.colorear-filas:visible'))
 	 }
-},
+ },
 notas = {
 	days : [Fecha.general], 
 	nombreDlg : 'dlgNotas',
@@ -1482,7 +1481,7 @@ notas = {
 	dir : 'right',
 	init : function(){
 		this.show()
-	}, 
+	 }, 
 	dialog:function(id=-1){
 		var _load = function () {
 			var  $dlg = $('#'+notas.nombreDlg)
@@ -1621,30 +1620,30 @@ notas = {
 
 		$('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
 		if($noteDay.length) $('#mySidenav #menu5').addClass('hay-nota')
-	}, 
+	 }, 
 	edit : function(d){
 		this.delete(d.id)
 		this.create(d)
-	}
+	 }
 
-}
+ }
 
 $('body')
 	.on('click',".idDateAction",function(){
 		if(!$(this).data('disabled')) {
 			sincronizar($(this).data('action'));
 		}
-	})
+	 })
 	.on('click','#boton-menu', function(){
 		let estado = parseInt(localStorage.getItem("menuOpen"))+1; 
 		menu.nav.open(estado); 
 		menu.nav.estado(estado); 
 
-	})
+	 })
 	.on('click','#btnCambiarPass',function(){
 		console.log("Abriendo cambio pass ...")
 		dialog.open('dlgCambiarPass',admin.pass)
-	})
+	 })
 	.on('click','.close',function(e){dialog.close()})
 	.on('change','input',function(){
 		$(this).removeClass('input-error')})																																																															.on('change','#lstSerSelect',function(){
@@ -1652,4 +1651,4 @@ $('body')
 		$('#lstSerSelect').each(function(){
 			$(this).find('option[value='+id+']').attr('selected','selected');
 		});
-	});
+	 });

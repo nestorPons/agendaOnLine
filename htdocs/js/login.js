@@ -71,12 +71,39 @@ main = {
 
 	}
  }, 
-Login = {
+login = {
 	isLoad : true, 
+	block : false, 
 	html : '', 
 	setCookie : ()=>{
 		localStorage.setItem("AOLAvisoCookie", 1);
 		document.getElementById("barraaceptacion").style.display="none";
+	}, 
+	send : {
+		validate : function(data){ 
+			if(!login.block){
+				login.block = true
+				$.post(INDEX, data, function(r){
+
+					if (r.error == undefined){
+						// Devuelve zona admin o users  logueo correcto
+						login.html = $('#login').detach()
+						$('body')
+							.append(r)
+							.removeClass()
+						let section = $(r).filter('main').attr('id');
+
+						main.scripts.load(section)
+					} else { 
+						let res = r.error.split("<br>")
+						notify.error(res[1], res[0], 5000);
+					}
+				})
+				.always(function() {
+					login.block = false;
+				});
+			}
+		}
 	}
  }, 
 recover = {
@@ -149,12 +176,12 @@ validate = {
  }
 
 $(function(){
-
 	$('body')
 		.find('form button').prop('disabled',false).end()	
-		.on('click','#btnbarraaceptacion',Login.setCookie)
+		.on('click','#btnbarraaceptacion',login.setCookie)
 		.on('submit','#loginUsuario ',function(e){
 			e.preventDefault()
+
 			if (localStorage.getItem('AOLAvisoCookie')!=1) {
 				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
 				btn.load.hide()
@@ -169,23 +196,26 @@ $(function(){
 				empresa : normalize(config.nombre_empresa)
 			}
 					
-			$.post(INDEX, data, function(r){
-
-				if (r.error == undefined){
-					// Devuelve zona admin o users  logueo correcto
-					Login.html = $('#login').detach()
-					$('body')
-						.append(r)
-						.removeClass()
-					let section = $(r).filter('main').attr('id');
-
-					main.scripts.load(section)
-				} else { 
-					let res = r.error.split("<br>")
-					notify.error(res[1], res[0], 5000);
-				}
-			})
+			login.send.validate(data) ;
+	
 		 })
+		.on('submit','#newpinpass ',function(e){
+			e.preventDefault()
+
+			if (localStorage.getItem('AOLAvisoCookie')!=1) {
+				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
+				btn.load.hide()
+				return false
+			}
+			let data ={
+				controller : 'newPin', 
+				newpinpass: $(this).find('#newpinpass').val(),
+				action: 'validate',
+				empresa : normalize(config.nombre_empresa)
+			}
+					
+			login.send.validate(data) ;
+		})
 		.on('click','.cancel',function(e){
 			main.toggle($('#secLogin'))
 		 })
@@ -212,9 +242,23 @@ $(function(){
 			deleteAllCookies();
 			location.href = '/'+EMPRESA + '';
 		 })
-		.on('keyup','#pinpass',function(){
-			pin = $(this).val()
-			if(pin.length == 4) $('#frmPinpass').submit()
+		.on('keyup','#pinpass',function(e){
+			e.preventDefault();
+			let pin = $(this).val(); 
+			if(pin.length == 4) {
+			
+				let data ={
+					controller : 'validar', 
+					pinpass : pin, 
+					empresa : normalize(config.nombre_empresa)
+				}
+				$(this).val('');	
+				login.send.validate(data) ;
+			} else 
+			if(pin.length > 4){
+				$(this).val('');
+				notify.error('Pin no puede ser mayor de 4 digitos', 'ERROR PIN MAYOR 4!!'); 
+			}
 		 })
 
 	if(!$.isEmpty($_GET['args'])){

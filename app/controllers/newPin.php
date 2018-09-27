@@ -8,8 +8,8 @@ if(isset($_POST['action'])){
         die('Error al guardar');    
     }
     
-    header('Location: ' . $action);
-    exit(0); 
+    include (URL_CONTROLLERS . $action. '.php');
+
 } else {
     $url = URL_VIEWS . 'login/newPin.php' ; 
     require_once $url;

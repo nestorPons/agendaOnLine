@@ -1,7 +1,6 @@
 <?php 
 try {
     require_once $url_base . 'app/conf/autoload.php' ;
-
     $Security = new \core\Security;
     $Forms = new models\Forms($_POST, ['fileLogo','tel','chck']);
 
@@ -16,12 +15,6 @@ try {
         $demo_email = "demo@demo.es"; 
         $demo_pass = "Demo1234"; 
     }
-
-    // LE BOUQUET 
-    
-    /*    include URL_SCRIPTS . 'exportacion.php';
-    exit(0); 
-    */
 
         // Comprobando el GET sabreos si estamos en login
         if(isset($_GET['empresa'])) $_SESSION['empresa'] = $_GET['empresa'];

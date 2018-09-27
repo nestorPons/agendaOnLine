@@ -368,8 +368,8 @@ function deleteAllCookies(){var cookies=document.cookie.split(";");for(var i=0;i
 function colorear_filas($this){$this=$this.find('tbody tr').css('background','').filter(':visible')
 if($this.length)$this.filter(':even').css('background','#eee')}
 $(function(){$('.time').mask('00:00');$('.tel').mask('##000000000');$('.date').mask('00/00/0000');$('.pin').mask('0000');jQuery.each(jQuery('textarea[data-autoresize]'),function(){var offset=this.offsetHeight-this.clientHeight;var resizeTextarea=function(el){jQuery(el).css('height','auto').css('height',el.scrollHeight+offset)};jQuery(this).on('keyup input',function(){resizeTextarea(this)}).removeAttr('data-autoresize')});$(document).on('click','#btnExit',function(){$.post(INDEX,{controller:'logout'},function(){let goLogin=function(){let effect='puff'
-$('body').hide(effect,function(){$(this).addClass('background-personalized').empty().append(Login.html).show(effect)})}
-if($.isEmpty(Login.html)){$.post(INDEX,{controller:'login'},r=>{Login.html=r;goLogin()},'html')}else{goLogin()}})}).on('click',".btnLoad",function(){let frm=$(this).parents('form'),enabled=!$(this).prop('disabled')
+$('body').hide(effect,function(){$(this).addClass('background-personalized').empty().append(login.html).show(effect)})}
+if($.isEmpty(login.html)){$.post(INDEX,{controller:'login'},r=>{login.html=r;goLogin()},'html')}else{goLogin()}})}).on('click',".btnLoad",function(){let frm=$(this).parents('form'),enabled=!$(this).prop('disabled')
 btn.load.show($(this))
 enabled&&$(this).is(':submit')&&!$.isEmpty(frm)&&frm.submit()}).on('click','.icon-eye',function(e){var $pass=$(this).siblings('input:password'),$text=$(this).siblings('input:text')
 if($pass.length==0)
@@ -391,7 +391,11 @@ main.dir2=LEFT}})},nameId=$in.selector.replace('#','');if(main.scripts.loaded.in
 if(nameId=='newUser')main.scripts.loaded[main.scripts.loaded.length]='secNewNotification';var data={controller:'login',view:nameId}
 $.post(URL,data,function(html){$('.login').prepend(html)
 $(html).attr('class','')
-_toggle($(html))},'html')}else{_toggle($in)}},loader:{show:function(){$('main').find('#loading').removeClass('hidden')},hide:function(){$('main').find('#loading').addClass('hidden')}}},Login={isLoad:!0,html:'',setCookie:()=>{localStorage.setItem("AOLAvisoCookie",1);document.getElementById("barraaceptacion").style.display="none"}},recover={send:function(callback){var data={email:$('#recover').find('#email').val(),controller:'login',action:'recover'}
+_toggle($(html))},'html')}else{_toggle($in)}},loader:{show:function(){$('main').find('#loading').removeClass('hidden')},hide:function(){$('main').find('#loading').addClass('hidden')}}},login={isLoad:!0,block:!1,html:'',setCookie:()=>{localStorage.setItem("AOLAvisoCookie",1);document.getElementById("barraaceptacion").style.display="none"},send:{validate:function(data){if(!login.block){login.block=!0
+$.post(INDEX,data,function(r){if(r.error==undefined){login.html=$('#login').detach()
+$('body').append(r).removeClass()
+let section=$(r).filter('main').attr('id');main.scripts.load(section)}else{let res=r.error.split("<br>")
+notify.error(res[1],res[0],5000)}}).always(function(){login.block=!1})}}}},recover={send:function(callback){var data={email:$('#recover').find('#email').val(),controller:'login',action:'recover'}
 $.post(URL,data,function(r){if(r.success){notify.success('Siga las instrucciones del email','Email enviado')}else{notify.error(r.err,'Error: '+r.code)
 echo(r)}
 btn.load.hide()},'json')}},user={save:function(){$('#frmNewUSer #pass').val(Tools.SHA$(('#frmNewUSer #fakePass').val()))
@@ -409,19 +413,21 @@ return!1}}else{notify.error('Los passwords no coinciden','Password invalido')
 $('#passR').removeClass('input-success').addClass('input-error')
 return!1}
 return!0}}
-$(function(){$('body').find('form button').prop('disabled',!1).end().on('click','#btnbarraaceptacion',Login.setCookie).on('submit','#loginUsuario ',function(e){e.preventDefault()
+$(function(){$('body').find('form button').prop('disabled',!1).end().on('click','#btnbarraaceptacion',login.setCookie).on('submit','#loginUsuario ',function(e){e.preventDefault()
 if(localStorage.getItem('AOLAvisoCookie')!=1){alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
 btn.load.hide()
 return!1}
 let data={controller:'validar',ancho:screen.width,login:$(this).find('#login').val(),pass:Tools.SHA($(this).find('#pass').val()),recordar:$(this).find('#recordar').is(':checked'),empresa:normalize(config.nombre_empresa)}
-$.post(INDEX,data,function(r){if(r.error==undefined){Login.html=$('#login').detach()
-$('body').append(r).removeClass()
-let section=$(r).filter('main').attr('id');main.scripts.load(section)}else{let res=r.error.split("<br>")
-notify.error(res[1],res[0],5000)}})}).on('click','.cancel',function(e){main.toggle($('#secLogin'))}).on('click','#aNewUser',function(){main.toggle($('#newUser'))}).on('submit','#frmNewUSer',function(e){e.preventDefault()
+login.send.validate(data)}).on('submit','#newpinpass ',function(e){e.preventDefault()
+if(localStorage.getItem('AOLAvisoCookie')!=1){alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
+btn.load.hide()
+return!1}
+let data={controller:'newPin',newpinpass:$(this).find('#newpinpass').val(),action:'validate',empresa:normalize(config.nombre_empresa)}
+login.send.validate(data)}).on('click','.cancel',function(e){main.toggle($('#secLogin'))}).on('click','#aNewUser',function(){main.toggle($('#newUser'))}).on('submit','#frmNewUSer',function(e){e.preventDefault()
 if(validate.pass($('input#pass').val(),$('input#passR').val()))
 user.save()}).on('click','#forgotPass',function(){main.toggle($('#recover'))}).on('submit','#recover form',function(e){e.preventDefault()
-recover.send(()=>main.toggle($('#newPass')))}).on('click','.logout',function(){deleteAllCookies();location.href='/'+EMPRESA+''}).on('keyup','#pinpass',function(){pin=$(this).val()
-if(pin.length==4)$('#frmPinpass').submit()})
+recover.send(()=>main.toggle($('#newPass')))}).on('click','.logout',function(){deleteAllCookies();location.href='/'+EMPRESA+''}).on('keyup','#pinpass',function(e){e.preventDefault();let pin=$(this).val();if(pin.length==4){let data={controller:'validar',pinpass:pin,empresa:normalize(config.nombre_empresa)}
+$(this).val('');login.send.validate(data)}else if(pin.length>4){$(this).val('');notify.error('Pin no puede ser mayor de 4 digitos','ERROR PIN MAYOR 4!!')}})
 if(!$.isEmpty($_GET.args)){let code=(!$.isEmpty($_GET.cod))?pad($_GET.cod,3):''
 if(!$.isEmpty($_GET.err))
 notify.error($_GET.err,'ERROR:'+code)}

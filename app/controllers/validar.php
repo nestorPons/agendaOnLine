@@ -4,6 +4,7 @@ $Login = new \models\Login;
 // si existe post pinpass hay que validar entrada por pin
 // si no que valide el formulario normal de entrada
 // Post token no es igual que session token 
+
 $script  =  
 	(isset($_POST['token']))
 		// Viene de recordar contraseña
@@ -13,7 +14,6 @@ $script  =
 			?'pinpass.php'
 			// Viene de login principal
 			:'loginpass.php' ); 
-
 
 $return = include URL_AJAX . 'login/' . $script;
 
@@ -25,5 +25,6 @@ if( !isset($return['action']) || $return['action'] == 'login'){
 	echo json_encode($return);
 }else{
 	// Si es correcto se devuelve la vista
+
 	include (URL_CONTROLLERS . $return['action'] . '.php');
 }

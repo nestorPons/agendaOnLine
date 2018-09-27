@@ -23,6 +23,7 @@ class Security {
         echo "6>>>" .var_dump($_SESSION['device'] == self::getDevice()).BR;
 echo BR;
     */
+    
         return !in_array($pageIn, $this->pageExcep)      
             ?isset($_SESSION)
                 &&isset($_SESSION['SKey'])
