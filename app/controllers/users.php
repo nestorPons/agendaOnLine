@@ -26,6 +26,6 @@ if (isset($_POST['action'])) {
 
     $historial =  $User->getData(); 
 
-
+    \core\Tools::minifierJS('users');   
     require_once    URL_VIEWS_USER . 'users.php' ; 
 }

@@ -26,6 +26,7 @@ if (isset($_POST['action'])) {
 } else {
     $Users = new core\BaseClass('usuarios') ;
     $users  = $Users->getAll('*',MYSQLI_ASSOC,'nombre') ;
+    
     \core\Tools::minifierJS($_POST['controller']);   
     require_once URL_VIEWS_ADMIN . 'usuarios.php' ; 
 

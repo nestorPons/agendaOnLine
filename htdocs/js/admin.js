@@ -1,4 +1,6 @@
 main.scripts.loaded.push('admin');
+
+
 function sincronizar( dias, date ){
 
 	var fecha = date||Fecha.general ,
@@ -35,10 +37,12 @@ function sincronizar( dias, date ){
  }
 var 
 worker =  {
-	w : null , 
-	init : function(){this.w.postMessage(0)}, 
-	send : function(){setTimeout(this.init(), 1000 * 60)}, 
-	sync : function(){
+	w : null ,
+	interval : null,
+	start : function(){
+		this.interval = window.setInterval(fun=>worker.w.postMessage(0), 1000 * 60);
+	}, 
+	init : function(){
 		this.w = new Worker('/js/worker.js');
 		this.w.onmessage = e =>{			
 			let data = JSON.parse(e.data);
@@ -72,12 +76,14 @@ worker =  {
 						}
 					});	 
 				});
-			}
-			worker.send();		
+			}		
 		 }
-		// Inicializa los long pollings
-		worker.send();
-	 },
+		this.start();
+	},  
+	stop : function(){
+		let i = worker.interval; 
+		window.clearInterval(i);
+	}
 }, 
 admin ={ 
 	idUser : $('#main').data('user'),
@@ -96,7 +102,7 @@ admin ={
 		this.inactivas.comprobar()
 		this.lbl.load()
 		notas.init()
-		worker.sync()
+		worker.init();
 		cargarDatepicker()
 		colorearMenuDiasSemana()
 		//Construyo la "clase" device para saber el dispositivo usado
@@ -104,7 +110,9 @@ admin ={
 		if(Device.isCel()) localStorage.setItem('menuOpen',0)
 		$('.tabcontrol').tabcontrol()
 
-		
+		window.addEventListener('offline', worker.stop);
+		window.addEventListener('online', worker.start);
+
 		$('.fnToggleCharm').click(function(){
 			menu.nav.charm.toggle($(this))
 		})
@@ -746,6 +754,8 @@ admin ={
 			this.color()
 		 }, 
 		loadData(data){
+			if(!$.isEmpty(data.obs)) data.nota = data.obs;
+
 			let strSer = '', 
 				classNote  = ($.isEmpty(data.nota))?'':'show'; 
 
@@ -764,10 +774,10 @@ admin ={
 				.end()
 				.find('.servicios').html(strSer).end()
 				.find('.note')
+					.find('span').text(data.obs).end()
 					.removeClass('show')
 					.addClass(classNote)
-					.find('span').text(data.nota)
-		}, 
+		 }, 
 		create: function(data){
 			//agenda,fecha,hora,idCita,idUsuario,nota,servicios.id
 			if($('#idCita_'+data.idCita).length) return false ;
@@ -775,7 +785,8 @@ admin ={
 				htmlSer = '', 
 				idCelda =  generateId.encode( data.agenda , data.fecha , data.hora ), 
 				$celda = $('#'+idCelda)
-			if($celda.length){
+
+			if($celda.length!==0){
 				$.each(data.servicios, function ( id , serv ) {
 					htmlSer += lbl.service(serv)
 				})
@@ -797,6 +808,7 @@ admin ={
 				$lbl.attr('lastmod',data.lastMod);
 
 				if(last){
+
 					var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
 					$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios )
 	
@@ -815,6 +827,7 @@ admin ={
 						}
 					if (data.obs != last.obs) object.find('#obs').val(data.obs)
 				}else{
+
 					this.loadData(data) ;
 				}
 
@@ -822,6 +835,7 @@ admin ={
 			
 		 },
 		container : function (data, htmlSer) {
+			if(!$.isEmpty(data.obs)) data.nota = data.obs; 
 
 			var html_icono_desplegar = (data.servicios.length <= data.tiempo_servicios) 
 				? "<i class ='icon-angle-down fnExtend' ></i>"
