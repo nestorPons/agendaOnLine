@@ -5,7 +5,7 @@ class User extends \core\BaseClass {
 	private $user, $pass, $config, $data, 
 		$authEmail, $color, $lang;
 		
-	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $pin, $token = 'undefined';
+	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $token = 'undefined';
 
 	public function __construct( $id ){
 
@@ -51,7 +51,6 @@ class User extends \core\BaseClass {
 				$this->dateReg = $this->user['dateReg'];
 				$this->admin = $this->user['admin'];
 				$this->status = $this->user['status'];
-				$this->pin = $this->user['pin'];
 				//Configuracion de usuario 
 				$this->color = $this->user['color'];
 				$this->idioma = $this->user['idioma'];
@@ -72,7 +71,7 @@ class User extends \core\BaseClass {
 	public function data(array $arg = null){
 		if($arg) $this->user = $arg;
 		return $this->user;  
-	}
+	 }
 	public function save($args = null){
 		unset($args['id']);
 

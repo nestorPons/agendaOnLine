@@ -8,7 +8,9 @@ main = {
 		isLoaded : function(arg){this.loaded.includes(arg)}, 
 		load : function(arg, callback){
 			if(!this.loaded.includes(arg)){
+				if(typeof arg == 'undefined') return false;
 				this.loaded.push(arg)
+
 				$.getScript('/js/min/'+arg+'.js',function(){
 					typeof window[arg].init == 'function' && window[arg].init();
 					typeof callback == 'function' && callback();
@@ -78,7 +80,7 @@ login = {
 	setCookie : ()=>{
 		localStorage.setItem("AOLAvisoCookie", 1);
 		document.getElementById("barraaceptacion").style.display="none";
-	}, 
+	 }, 
 	send : {
 		validate : function(data){ 
 			if(!login.block){
@@ -104,7 +106,7 @@ login = {
 				});
 			}
 		}
-	}
+	 }
  }, 
 recover = {
 	send : function (callback){

@@ -94,6 +94,7 @@ admin ={
 	idCita : -1,
 	ancho : 0, 
 	init : function(){
+		console.log('admin.init');
 		this.lbl.width = $('#main th').first().width() - 2;
 		this.ancho = $('#sections').width()
 		let n = (localStorage.getItem("showRows")==1)?1:0;

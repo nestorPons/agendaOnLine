@@ -1,7 +1,7 @@
 <?php 
 if(isset($_COOKIE["auth"]) && $Login->authToken($_COOKIE["auth"])){
     if ((int)$Login->attempts() <= (int)NUM_MAX_ATTEMPT){
-        if($Login->user['pin']==$_POST['pinpass']){
+        if($Login->pin() == $_POST['pinpass']){
             $return['action'] =  $Login->createSession();
             return ($Login->admin>0)?['action'=>'admin']:['action'=>'users'] ;
         } else {

@@ -2,7 +2,9 @@
 
 if(isset($_POST['action'])){
     $User = new \models\User($_SESSION['id_usuario']); 
-    if($User->set(['pin'=>$_POST['newpinpass']])){
+    $Login = new models\Login; 
+
+    if($Login->pin($_POST['newpinpass'])){
         $action = ($User->isAdmin())?'admin':'users';
     }else{
         die('Error al guardar');    

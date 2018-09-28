@@ -1,18 +1,31 @@
 <?php namespace models;
 
 class Login extends \core\BaseClass {
-	private $num, $selector, $validator, $pass, $Logs, $company;
+	private $num, $selector, $validator, $pass, $Logs, $company ,$token, $Token;
 	public $email, $id, $dateBaja, $admin, $user, $pin;
 
 	public function __construct(){
         // Guardamos la empresa sera la misma en la nueva session
         $this->company = $_SESSION['empresa'];
+        if(isset($_COOKIE['auth'])){
+            $this->Token = new \core\BaseClass('auth_tokens'); 
+            $this->token  = $_COOKIE['auth']; 
+            $this->decodeToken($this->token); 
+            $this->pin = $this->Token->getOneBy('selector', $this->selector, 'pin');
+        } 
 		parent::__construct('usuarios');	
-        $this->Logs = new \models\Logs; 	
-	 }
+        $this->Logs = new \models\Logs;
+    }
     public function id(int $id = null){
         if($id) $this->id = $id; 
         return $this->id; 
+    }
+    public function pin(int $arg = null){
+        if($arg) {
+            $this->pin = $arg;
+            $this->Token->saveBy(['selector'=>$this->selector],['pin'=>$arg] ); 
+        } 
+        return $this->pin; 
     }
     public function findUserById(int $id){
         if ($this->user = parent::getById($id))
@@ -30,7 +43,6 @@ class Login extends \core\BaseClass {
         $this->id = $User->id;
         $this->email = $User->email;
         $this->admin = $User->admin;
-        $this->pin = $User->pin; 
                 
      }
     private function loadData(){
@@ -115,13 +127,13 @@ class Login extends \core\BaseClass {
     private function generateRandomString(int $length = 5) { 
         return bin2hex(random_bytes($length)); 
      } 
+     /**
+      * Comprueba un token con el almacenado en la base de datos 
+      *
+      * @param string $tokenByPost el toquen auth cookie => auth
+      * @return devuelve el id usuario o falso
+      */
     public function authByPin(){
-        /**
-         * Comprueba un token con el almacenado en la base de datos 
-         *
-         * @param string $tokenByPost el toquen auth cookie => auth
-         * @return devuelve el id usuario o falso
-         */
         $token = $this->codeToken();
         setcookie("auth", $token , time()+(60*60*24*60),'/');
 
@@ -129,8 +141,9 @@ class Login extends \core\BaseClass {
 
         if ($auth->saveById(-1,[
                 'selector'=> $this->selector,
-                'validator'=>$this->validator, 
-                'idUser' => $this->id
+                'validator'=> $this->validator, 
+                'idUser' => $this->id, 
+                'pin' => $this->pin
             ])){
                 return $this->codeToken();
             } else return false;
@@ -142,6 +155,7 @@ class Login extends \core\BaseClass {
         $arr = $this->decodeToken($tokenByPost);
         $auth = $Auth->getOneBy('selector',$this->selector );
         $this->findUserById((int)$auth['idUser']);
+        $this->pin = $auth['pin']; 
 
         return ($auth['validator'] === $this->validator)?$this->id:false;
      }
@@ -207,7 +221,7 @@ class Login extends \core\BaseClass {
         ]);
         $_SESSION['empresa'] = $this->company;
         return session_id()??false;
-    }
+     }
     public static function example(){
         $demo = PREFIX_DB . 'demo'; 
         $connDemo = new \core\Conexion(null,3);

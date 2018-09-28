@@ -5,21 +5,20 @@
             <section id="newpinpass">
                 <h1 class="heading">Registro nuevo pin</h1>
                 <hr>
-                <h4>Ha seleccionado iniciar sesión con pin.</h4>
-                <p  class="info">Introduzca un numero pin de 4 digitos que podra usar para iniciar la sesion.</p>
+                <h4>Introduzca un numero pin de 4 digitos que podra usar para iniciar la sesion.</h4>
                 <hr>
                 <form id="frmPinpass" defaultbutton="Entrar" >
                     <input type="hidden" name="empresa"  value="<?= $Empresa->code()  ?>">
                     <input type="hidden" name="controller"  value="newPin">
                     <input type="hidden" name="action"  value="save">
                     <div class="iconClass-container">
-                        <span class="caption">Nuevo numero Pin</span>
+                        <span class="caption">Nuevo numero pin 4 dígitos</span>
                         <input type="number" class="pin" id="newpinpass"  name="newpinpass" placeholder="Introduzca su numero pin" 
                          min=0001 max=9999 title="Pin de 4 dígitos" required>
                         <span class="iconClass-inside icon-key icon-left"></span>
                     </div>
                     <div class="iconClass-container">
-                        <span class="caption">Repita el numero Pin</span>
+                        <span class="caption">Repita el numero pin</span>
                         <input type="number" class="pin" id="newpinpass"  name="newpinpass" placeholder="Introduzca su numero pin" 
                          min=0001 max=9999 title="Pin de 4 dígitos" required>
                         <span class="iconClass-inside icon-key icon-left"></span>

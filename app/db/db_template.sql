@@ -14,7 +14,8 @@ CREATE TABLE `auth_tokens` (
   `id` int(11) PRIMARY KEY AUTO_INCREMENT ,
   `selector` char(12) COLLATE utf8mb4_unicode_ci NOT NULL,
   `validator` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `idUser` int(11) NOT NULL
+  `idUser` int(11) NOT NULL, 
+  `pin` int(6) DEFAULT NULL 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `cita` (
