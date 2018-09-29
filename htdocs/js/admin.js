@@ -94,7 +94,7 @@ admin ={
 	idCita : -1,
 	ancho : 0, 
 	init : function(){
-		console.log('admin.init');
+		console.log('admin init')
 		this.lbl.width = $('#main th').first().width() - 2;
 		this.ancho = $('#sections').width()
 		let n = (localStorage.getItem("showRows")==1)?1:0;
@@ -960,7 +960,7 @@ admin ={
 				opacity : 0.50 , 
 				zIndex: 100 ,
 				revertDuration: 500,
-				//delay: 1,	
+				delay: 1,	
 				//containment: "#"+ $(this).parents('.dia').attr('id') , 
 				revert: function(ob){
 					if (ob == false){
@@ -972,9 +972,8 @@ admin ={
 					 }
 				 }, 
 				start : function ( e, ui) {
-					admin.lbl.clone = $this.clone().removeClass('ui-draggable-dragging').css('opacity',0.8)
-					admin.lbl.idLastCelda = $this.parents('.celda').attr('id')
-					$this.removeClassPrefix('row_').addClass('row_1')
+					admin.lbl.clone = $this.clone().removeClass('ui-draggable-dragging').css('opacity',0.8);
+					admin.lbl.idLastCelda = $this.parents('.celda').attr('id');
 				},
 			}) 
 		 },
@@ -982,6 +981,7 @@ admin ={
 			$( ".celda" ).droppable({
 				accept : ".lbl",
 				classes: {"ui-droppable-hover": "ui-state-hover"}, 
+				tolerance: 'pointer',
 				drop: function( event, ui ) {
 
 					var posi = $(this).position()

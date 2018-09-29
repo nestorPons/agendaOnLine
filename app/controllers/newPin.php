@@ -9,7 +9,8 @@ if(isset($_POST['action'])){
     }else{
         die('Error al guardar');    
     }
-    
+    // SE elimina la accion para que muestre la vista desde el controlador
+    unset($_POST['action']);
     include (URL_CONTROLLERS . $action. '.php');
 
 } else {

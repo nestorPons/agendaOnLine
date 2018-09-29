@@ -7,8 +7,8 @@ main = {
 		loaded: ['secLogin'],
 		isLoaded : function(arg){this.loaded.includes(arg)}, 
 		load : function(arg, callback){
+			if(typeof arg == 'undefined') return false;
 			if(!this.loaded.includes(arg)){
-				if(typeof arg == 'undefined') return false;
 				this.loaded.push(arg)
 
 				$.getScript('/js/min/'+arg+'.js',function(){
@@ -16,6 +16,7 @@ main = {
 					typeof callback == 'function' && callback();
 				});
 			} else 	{
+
 				typeof window[arg].init() == 'function' && window[arg].init()
 				typeof callback == 'function' && callback()
 			}
@@ -86,7 +87,6 @@ login = {
 			if(!login.block){
 				login.block = true
 				$.post(INDEX, data, function(r){
-
 					if (r.error == undefined){
 						// Devuelve zona admin o users  logueo correcto
 						login.html = $('#login').detach()

@@ -1,19 +1,23 @@
 <?php namespace models;
  class Logs extends \core\BaseClass{
-    
+    private $exceptions = ['newPin']; 
     public function __construct(){
         parent::__construct('logs');		 
 	 }
     public function set(int $idUser, string $action, int $idFK = 0, string $tables = null ){
-        $arr = [
-            'idFK'=>$idFK, 
-            'date'=>date('Y-m-d H:i:s'), 
-            'idUser'=> $idUser, 
-            'tables'=> $tables, 
-            'action'=> (int)self::formatAction($action)
-        ];
+        if(!in_array($tables, $this->exceptions)){
+            $arr = [
+                'idFK'=>$idFK, 
+                'date'=>date('Y-m-d H:i:s'), 
+                'idUser'=> $idUser, 
+                'tables'=> $tables, 
+                'action'=> (int)self::formatAction($action)
+            ];
 
-       return self::saveById(-1,$arr);
+            return self::saveById(-1,$arr);
+        } else {
+            return false;
+        }
     }
     public function get($day){
         /*

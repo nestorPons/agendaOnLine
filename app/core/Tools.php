@@ -145,19 +145,31 @@ class Tools{
     
      }
     public static function minifierJS($args){
-        require_once URL_LIB . 'minify/src/Minify.php';
-        require_once URL_LIB . 'minify/src/JS.php';
-        require_once URL_LIB . 'minify/src/Exception.php';
-        $minifier = new \MatthiasMullie\Minify\JS(); 
-        if(is_array($args)){
-            $name = $args[0]; 
-            foreach($args as $val){
-                $minifier->add(URL_JS .$val.'.js');
+        try{
+            require_once URL_LIB . 'minify/src/Minify.php';
+            require_once URL_LIB . 'minify/src/CSS.php';
+            require_once URL_LIB . 'minify/src/JS.php';
+            require_once URL_LIB . 'minify/src/Exception.php';
+            require_once URL_LIB . 'minify/src/Exceptions/BasicException.php';
+            require_once URL_LIB . 'minify/src/Exceptions/FileImportException.php';
+            require_once URL_LIB . 'minify/src/Exceptions/IOException.php';
+            require_once URL_LIB . 'path-converter/src/ConverterInterface.php';
+            require_once URL_LIB . 'path-converter/src/Converter.php';
+            
+            $minifier = new \MatthiasMullie\Minify\JS(); 
+            if(is_array($args)){
+                $name = $args[0]; 
+                foreach($args as $val){
+                    $minifier->add(URL_JS .$val.'.js');
+                }
+            }else{ 
+                $name = $args; 
+                $minifier->add(URL_JS . $args.'.js');
             }
-        }else{ 
-            $name = $args; 
-            $minifier->add(URL_JS . $args.'.js');
+            $minifier->minify(URL_JS . 'min/' . $name .'.js' );
+        } catch (Exception $e){
+            echo 'error minifier.js';
+            echo $e->getMessage();
         }
-        $minifier->minify(URL_JS . 'min/' . $name .'.js' );
     }
 }

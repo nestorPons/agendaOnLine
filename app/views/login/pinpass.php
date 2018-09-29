@@ -24,12 +24,6 @@
                 </form>
             </section>
 		</div>
-		<footer class="login about">
-			<p class="about-author">
-				&copy; 2018 <a href="www.reservatucita.es" target="_blank">reservaTuCita v1.1</a>
-				Creado por Néstor Pons
-				<a href="contacto.html" target="_blank">Contacto</a>
-			</p>			
-		</footer>
+		<?php include URL_TEMPLATES . 'login_footer.php'?>
 	</body>
 </html>

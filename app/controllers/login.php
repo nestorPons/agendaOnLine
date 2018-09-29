@@ -1,6 +1,9 @@
 <?php
 use MatthiasMullie\Minify;
-
+$url_font_main = "https://fonts.googleapis.com/css?family=" .
+        str_replace(' ' ,'+' ,CONFIG['font_main']) ."|" . 
+        str_replace(' ' ,'+' ,CONFIG['font_tile']) ; 
+        
 if (isset($_POST['action'])){ 
     require_once URL_AJAX . 'login/' . $_POST['action'] . '.php' ;
     
@@ -19,11 +22,7 @@ if (isset($_POST['action'])){
             $Login->logout();
         }      
         
-    } else {
-        $url_font_main = "https://fonts.googleapis.com/css?family=" .
-        str_replace(' ' ,'+' ,CONFIG['font_main']) ."|" . 
-        str_replace(' ' ,'+' ,CONFIG['font_tile']) ; 
-    
+    } else {    
         // Comprimir y agrupar js y css
         $path = URL_LIB;
         require_once $path . 'minify/src/Minify.php';
@@ -51,7 +50,7 @@ if (isset($_POST['action'])){
             URL_JS . 'funciones.js', 
             URL_JS . 'login.js'
         );
-        $minifier->minify(URL_JS . 'min/index.js');
+        $minifier->minify(URL_JS . 'min/login.js');
         
         $minifier = new Minify\CSS( 
             URL_CSS . 'jquery-ui.min.css',

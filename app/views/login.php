@@ -32,16 +32,6 @@
 						<button class="btn-success btnLoad"  id="btnLogin" value="Entrar"  disabled default>Entrar</button>
 
 					</form>
-	<!-- a falta de implementar los botones de facebook y g+ 
-						<div id="frameSocialMedia">
-							<div id="tileSocialMedia">
-							</div>
-							<button class = "facebook  image-button icon-facebook"  id='fb-facebookLogin'> conectar...</button>
-							<button class = "google  image-button icon-gplus "  id='idGoogle'> conectar...</button>
-						</div>
-	-->
-
-
 					<div class="login-help">
 						<p>
 							¿Olvidaste la contraseña?
@@ -53,14 +43,7 @@
 					</div>
 				</section>
 			</div>
-			<footer class="login about">
-				<address class="about-author">
-					&copy; 2018 <a href="<?=ADMIN_WEB?>" target="_blank">reservaTuCita <?=VERSION?></a>
-					Creado por Néstor Pons
-					<a href="mailto:nestorpons@gmail.com?Subject=Contacto agenda online <?=NAME_EMPRESA?>" target="_top">Contacto</a>
-				</address>	
-		
-			</footer>
+			<?php include URL_TEMPLATES . 'login_footer.php'?>
 			
 			<!--//BLOQUE COOKIES-->
 			<div id="barraaceptacion">
