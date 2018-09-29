@@ -11,7 +11,7 @@
 
 $date = new DateTime();
 $date->modify('-1 minute');
-$timestamp = $date->format('d-m-Y H:i:s');
+$timestamp = $date->format('Y-m-d H:i:s');
 // Clase  que hara la busqueda del los registros actualizados  
 $Logs = new models\Logs();  
 /**

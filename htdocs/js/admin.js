@@ -67,11 +67,12 @@ worker =  {
 								obj = familias;
 								break; 
 							};
-
-						switch(action){
-							case 1: obj.create(v); 			break;  
-							case 2: obj.edit(v);			break;
-							case 3: obj.delete(v, true);	break; 
+						if(!$.isEmpty(obj))	{
+							switch(action){
+								case 1: obj.create(v); 			break;  
+								case 2: obj.edit(v);			break;
+								case 3: obj.delete(v, true);	break; 
+							}
 						}
 					});	 
 				});

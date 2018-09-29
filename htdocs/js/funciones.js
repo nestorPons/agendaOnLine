@@ -34,8 +34,8 @@ jQuery.isEmpty = function(){
 	for (var i = 0; i < arguments.length; i++) {
 		let arg = arguments[i] ;
 
-		isEmpty =
-		arg === undefined || arg === null || arg === 'null' || arg === false|| arg <1 ||arg === ''?true:
+		isEmpty = 
+		typeof arg == 'undefined' || arg === null ||  arg === 'null' || arg === false|| arg <1 ||arg === ''?true:
 		typeof arg == 'number' && isNaN(arg)?true:
 		arg instanceof Date && isNaN(Number(arg))?true:
 		arg.length==0;

@@ -1940,20 +1940,23 @@ input[type="color"] {
 					 }
 				}
 			}
+			.btn-nuevo{
+				display: flex; 
+				align-items: center;
+				border: 1px solid #888; 
+				color: #888 !important;
+				background-color: #fdfdfd !important;
+				*{ padding: 10px } 
+				&:active, &:hover{
+					border-width: 2px !important;
+					*{
+						cursor: pointer;
+					}
+				}
+			}
 		 }
 	 }
-	 .btn-nuevo{
-		border: 1px solid #888; 
-		color: #888 !important;
-		background-color: #fdfdfd !important;
-		*{ padding: 10px } 
-		&:active, &:hover{
-			border-width: 2px !important;
-			*{
-				cursor: pointer;
-			}
-		}
-	}
+
  }
 #dialogs{
 	#dlgHistorial{

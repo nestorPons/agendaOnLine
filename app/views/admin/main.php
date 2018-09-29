@@ -19,7 +19,7 @@
 						$name = $agendas[$a][1];
 						?>
 						<th class='aling-center'>
-							<input tupy="text" id ="nombreagenda<?=$id?>" class ="nombreagenda" name="nombreagenda[]" data-agenda="<?=$id?>" 
+							<input type="text" id ="nombreagenda<?=$id?>" class ="nombreagenda" name="nombreagenda[]" data-agenda="<?=$id?>" 
 							value=<?=$name?>>
 							</input>
 						</th>
