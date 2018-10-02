@@ -23,7 +23,7 @@ main = {
 		},
 	 }, 
 	dir1 : RIGHT, 
-	dir2 : LEFT, 
+	dir2 : LEFT,
 	toggle : function($in){
 		var $out = $('section:visible'),
 			_toggle = function($in){
@@ -67,11 +67,22 @@ main = {
 	loader : {
 		show : function(){
 			$('main').find('#loading').removeClass('hidden')
-		},
+		 },
 		hide: function(){
 			$('main').find('#loading').addClass('hidden')
-		}
-
+		 }
+	}, 
+	logout : function(){	
+		let effect = 'puff'; 
+		$('body')
+			.hide(effect,function(){
+				$(this)
+					.addClass('background-personalized')
+					.empty()	
+					.append(login.html)
+					.show(effect);
+			})
+		 $.post(INDEX, {controller : 'logout'});
 	}
  }, 
 login = {
@@ -89,7 +100,21 @@ login = {
 				$.post(INDEX, data, function(r){
 					if (r.error == undefined){
 						// Devuelve zona admin o users  logueo correcto
-						login.html = $('#login').detach()
+						btn.load.hide();
+						//Filtro por si viene de nuevo pin 
+						// devuelvo entrada de pin normal
+						if($('body').find('#newpinpass').length){
+							let data = {
+								controller : 'login', 
+								view : 'pinpass'
+							}
+							$.post(INDEX,data,function(r){
+								login.html = r
+							},'html')
+						} else { 
+							login.html = $('body').html(); 
+						}
+						$('main').detach();
 						$('body')
 							.append(r)
 							.removeClass()
@@ -298,5 +323,5 @@ $(function(){
 		document.getElementById("barraaceptacion").style.display="block";
 	}
 	
-
+	login.html = $('main')
  })

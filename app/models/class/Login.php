@@ -176,14 +176,14 @@ class Login extends \core\BaseClass {
 
         return ($this->admin>0)?'admin':'users' ;
      }
-    public function logout(bool $deleteCookies = false, bool $redirect = true) {
+    public function logout(bool $deleteCookies = false) {
 
         if($deleteCookies)
             foreach($_COOKIE as $key => $val) setcookie($key, '', time() - 3600, '/');    
          
 
         // Borra todas las variables de sesión  
-        setcookie('auth','',time()-100);
+        //setcookie('auth','',time()-100);
         setcookie('token','',time()-100);
 
 
@@ -206,12 +206,7 @@ class Login extends \core\BaseClass {
 
 
         if (!empty(\core\Error::getLast())) $err = '?err=' . \core\Error::getLast();
-        if ($redirect){
-            header('location:'.$url);
-            exit(1);
-        } else  {
-            return true;
-        }
+        return true;
 
      }
     public function session_start(){

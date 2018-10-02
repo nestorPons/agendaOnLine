@@ -960,8 +960,6 @@ admin ={
 				disabled : false, 
 				opacity : 0.50 , 
 				zIndex: 100 ,
-				revertDuration: 500,
-				delay: 1,	
 				//containment: "#"+ $(this).parents('.dia').attr('id') , 
 				revert: function(ob){
 					if (ob == false){
@@ -1653,4 +1651,7 @@ $('body')
 		$('#lstSerSelect').each(function(){
 			$(this).find('option[value='+id+']').attr('selected','selected');
 		});
-	 });
+	 })
+	 .on('click','.fnMove',function(e){
+		 e.stopPropagation(); 
+	 })

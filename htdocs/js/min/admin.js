@@ -10,7 +10,7 @@ if(typeof historial.sinc=='function')historial.sinc()
 var diaFestivo=$.inArray(Fecha.md(Fecha.general),config.festivos)!=-1;(diaFestivo)?$datepicker.addClass('c-red'):$datepicker.removeClass('c-red')
 $datepicker.val(Fecha.print(fecha)).datepicker("setDate",Fecha.print(fecha))}
 var worker={w:null,interval:null,start:function(){this.interval=window.setInterval(fun=>worker.w.postMessage(0),1000*60)},init:function(){this.w=new Worker('/js/worker.js');this.w.onmessage=e=>{let data=JSON.parse(e.data);if(data){$.each(data,function(i,d){$.each(d,function(i,v){let action=parseInt(v.action),obj=null
-switch(v.table){case 'data':obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}})})}}
+switch(v.table){case 'data':obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};if(!$.isEmpty(obj)){switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}}})})}}
 this.start()},stop:function(){let i=worker.interval;window.clearInterval(i)}},admin={idUser:$('#main').data('user'),z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){console.log('admin init')
 this.lbl.width=$('#main th').first().width()-2;this.ancho=$('#sections').width()
 let n=(localStorage.getItem("showRows")==1)?1:0;this.inactivas.change(n)
@@ -192,7 +192,7 @@ $(this).removeClass('color1 color2 color3 color-admin').addClass(color)}
 var tiempo=Math.ceil($(this).attr('tiempo')/15),servicios=$(this).find('.servicio').length})})
 typeof callback=="function"&&callback()},style:function(){let w=($('#main th').is(':visible'))?$('#main th').first().width():this.width;$('.lbl').css('z-index',2).width(w-3);this.width=w;this.color()},delete:function(data,nomens=!1,callback){let idCita=(typeof data==='object')?data.idCita:data,$this=$('#idCita_'+idCita),_del=function(){$this.hide('explode',1000,function(){$this.remove()})
 admin.lbl.color()
-return!0},r=(nomens||confirm('Desea eliminar la cita con id: '+idCita+' ?'))?_del():!1;typeof callback=="function"&&callback();return r},draggable:function($this){$this.draggable({handle:$this.find('.fnMove'),disabled:!1,opacity:0.50,zIndex:100,revertDuration:500,delay:1,revert:function(ob){if(ob==!1){$('.ui-draggable-dragging').remove()
+return!0},r=(nomens||confirm('Desea eliminar la cita con id: '+idCita+' ?'))?_del():!1;typeof callback=="function"&&callback();return r},draggable:function($this){$this.draggable({handle:$this.find('.fnMove'),disabled:!1,opacity:0.50,zIndex:100,revert:function(ob){if(ob==!1){$('.ui-draggable-dragging').remove()
 $('#'+admin.lbl.idLastCelda).html(admin.lbl.clone)
 admin.lbl.draggable(admin.lbl.clone)
 return!0}},start:function(e,ui){admin.lbl.clone=$this.clone().removeClass('ui-draggable-dragging').css('opacity',0.8);admin.lbl.idLastCelda=$this.parents('.celda').attr('id')},})},droppable:function(){$(".celda").droppable({accept:".lbl",classes:{"ui-droppable-hover":"ui-state-hover"},tolerance:'pointer',drop:function(event,ui){var posi=$(this).position()
@@ -321,4 +321,4 @@ $('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
 if($noteDay.length)$('#mySidenav #menu5').addClass('hay-nota')},edit:function(d){this.delete(d.id)
 this.create(d)}}
 $('body').on('click',".idDateAction",function(){if(!$(this).data('disabled')){sincronizar($(this).data('action'))}}).on('click','#boton-menu',function(){let estado=parseInt(localStorage.getItem("menuOpen"))+1;menu.nav.open(estado);menu.nav.estado(estado)}).on('click','#btnCambiarPass',function(){console.log("Abriendo cambio pass ...")
-dialog.open('dlgCambiarPass',admin.pass)}).on('click','.close',function(e){dialog.close()}).on('change','input',function(){$(this).removeClass('input-error')}).on('change','#lstSerSelect',function(){let id=$(this).val();$('#lstSerSelect').each(function(){$(this).find('option[value='+id+']').attr('selected','selected')})})
+dialog.open('dlgCambiarPass',admin.pass)}).on('click','.close',function(e){dialog.close()}).on('change','input',function(){$(this).removeClass('input-error')}).on('change','#lstSerSelect',function(){let id=$(this).val();$('#lstSerSelect').each(function(){$(this).find('option[value='+id+']').attr('selected','selected')})}).on('click','.fnMove',function(e){e.stopPropagation()})

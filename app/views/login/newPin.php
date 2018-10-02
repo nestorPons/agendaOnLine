@@ -1,5 +1,3 @@
-	<title>Agenda Online zona login</title>
-	</head>
 	<body data-empresa="<?=$Empresa->code()?>" class="<?=CLASS_BACKGROUND?>" >
         <main id="login">
             <div class="login login-form ">

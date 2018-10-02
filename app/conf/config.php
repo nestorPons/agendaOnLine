@@ -1,5 +1,5 @@
 <?php 
-const VERSION = 'v7.8'; 
+const VERSION = 'v8.1'; 
 const STABLE = false; 
 
 define('NAME_EMPRESA' ,  $Empresa->name());

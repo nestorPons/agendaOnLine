@@ -1073,31 +1073,7 @@ $(function(){
 	 });
 	$(document)
 	 	.on('click','#btnExit',function(){
-			 $.post(INDEX, {controller : 'logout'}, function(){
-				let goLogin = function() {
-					let effect = 'puff'
-					$('body')
-						.hide(effect,function(){
-							$(this)
-								.addClass('background-personalized')
-								.empty()	
-								.append(login.html)
-								.show(effect);
-
-						})
-				}
-
-				if($.isEmpty(login.html)){
-					$.post(INDEX,{controller: 'login'},r=>{
-						login.html =  r;
-						goLogin();
-					},'html')
-				}else{
-					goLogin();
-				}
-				
-
-			 })
+			 main.logout();
 		 })
 		.on('click',".btnLoad",function(){
 			let frm = $(this).parents('form'), 
