@@ -79,7 +79,7 @@ main = {
 				$(this)
 					.addClass('background-personalized')
 					.empty()	
-					.append(login.html)
+					.html(login.html)
 					.show(effect);
 			})
 		 $.post(INDEX, {controller : 'logout'});

@@ -445,86 +445,64 @@ var users = {
 		historial.actualizar()
 		$('tytle').text('Menu agenda On line zona usuarios')
 		$('#navbar')
-	.on('click','#btnConfig, #btnDatos',function(){
-		menu.toggle($(this))
-	 })
-	.on('click','#goHome',menu.cerrar)
+			.on('click','#btnConfig, #btnDatos',function(){
+				menu.toggle($(this))
+			})
+			.on('click','#goHome',menu.cerrar)
 
-$('input:password').blur(function(){
-	var pass1 = $('#pass').val()		
-	var pass2 = $('#rpass').val()
-	validar.pass(pass1,pass2)
+		$('input:password').blur(function(){
+			var pass1 = $('#pass').val()		
+			var pass2 = $('#rpass').val()
+			validar.pass(pass1,pass2)
 
- })
-
-$('.nextSteeper').click(function(){
-	var val = $('.steperCapa:visible').data('value')
-	crearCita.stepper(val+1)
- })
-
-$('#crearCita')
-	.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
-	.on('change','#lstSerSelect',function(){servicios.mostrar($(this).val())})
-	.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})	
-	.on('click','.horas',crearCita.dialog)
-	.on('click','.idServicios',function(){crearCita.horas.load($(this))})
-	.on('click','[name="agenda[]"]',function(){
-		crearCita.data.agenda = $(this).val()
 		})
-	.on('change','#crearCitaNota',function(){
-		crearCita.data.nota = $(this).val() 
+
+		$('.nextSteeper').click(function(){
+			var val = $('.steperCapa:visible').data('value')
+			crearCita.stepper(val+1)
 		})
-	.find('#tablas')
-		.on("swipeleft",function(){sincronizar(null,1)})
-		.on("swiperight",function(){sincronizar(null,-1)})
-	.end()
-		.on('click','#btnCancelarDlg',function(){closeDialog('#crearCita #dlgCliente')})
+
+		$('#crearCita')
+			.on('click','a',function(){servicios.mostrar($(this).attr('id'))})
+			.on('change','#lstSerSelect',function(){servicios.mostrar($(this).val())})
+			.on('click','.siguiente',function(e){crearCita.stepper($('div [id^="stepper"]:visible').data('value') + 1)})	
+			.on('click','.horas',crearCita.dialog)
+			.on('click','.idServicios',function(){crearCita.horas.load($(this))})
+			.on('click','[name="agenda[]"]',function(){
+				crearCita.data.agenda = $(this).val()
+				})
+			.on('change','#crearCitaNota',function(){
+				crearCita.data.nota = $(this).val() 
+				})
+			.find('#tablas')
+				.on("swipeleft",function(){sincronizar(null,1)})
+				.on("swiperight",function(){sincronizar(null,-1)})
+			.end()
+				.on('click','#btnCancelarDlg',function(){closeDialog('#crearCita #dlgCliente')})
+			
+		$('#historial')
+			.on('click','.fnDel',function(){
+				cita.del($(this).parent().attr('idSer'))
+			})
+
+		$('#usuarioFrm')
+			.on('submit',function(e){users.guardar(e,$(this))})
+			.on('blur','#oldPassFake',function(){
+				$('#oldPass').val(Tools.SHA($(this).val()))
+				users.comprobarContraseña($('#oldPass'));
+				})
+			.on('change','#oldPassFake',function(){
+				$(this).removeClass('input-error input-success');
+				})
+			.on('blur','#passFake',function(){
+				$('#pass').val(Tools.SHA($(this).val()))
+				})
+			.on('blur','#rpassFake',function(){
+				$('#rpass').val(Tools.SHA($(this).val()))
+				})
+
 	
-$('#historial')
-	.on('click','.fnDel',function(){
-		cita.del($(this).parent().attr('idSer'))
-	 })
-
-$('#usuarioFrm')
-	.on('submit',function(e){users.guardar(e,$(this))})
-	.on('blur','#oldPassFake',function(){
-		$('#oldPass').val(Tools.SHA($(this).val()))
-		users.comprobarContraseña($('#oldPass'));
-		})
-	.on('change','#oldPassFake',function(){
-		$(this).removeClass('input-error input-success');
-		})
-	.on('blur','#passFake',function(){
-		$('#pass').val(Tools.SHA($(this).val()))
-		})
-	.on('blur','#rpassFake',function(){
-		$('#rpass').val(Tools.SHA($(this).val()))
-		})
-
-	$('main')
-		.on('click','#eliminar',function(e){
-			alert('Servicio no disponible, pongase en contacto con el administrador')
-			return false
-		})
-		.on('click','.cancelar', menu.cerrar)
-		.on('click',".idDateAction",function(){
-			if(!$(this).data('disabled')) sincronizar($(this).data('action'));
-			})
-		.on('click','#authEmail',function(){
-			var $input = $(this).find('input:checkbox')
-			$input.prop('checked',!$input.prop('checked'))
-			})
-		.on('click','.del',function(){
-			let $cita =  $(this).parents('.cita')
-			cita.del(
-				$cita.attr('idCita'), 
-				$cita.data('fecha'),
-				$cita.data('hora'),
-				$cita.data('agenda')
-			)
-		 })
-		.on('click','.tile-content',function(){menu.abrir($(this).parent())})
-	},
+	 },
 	guardar_array: function(){
 		this.last = this.data
 
@@ -611,8 +589,42 @@ $('#usuarioFrm')
 					
 		})
 	 },
- }, 
-menu = {
+ },
+tile = { 
+	isOpen : null, 
+	active : function(){
+		
+	}, 
+	open : function($this){
+
+		if (this.isOpen != null && this.isOpen.attr('id') === $this.attr('id')) return;
+		if (this.isOpen != null ) this.close(); 
+		
+		this.isOpen = $this; 
+
+		$this
+			.addClass('tile-active')
+			.prependTo('#contenedorMenuPrincipal')
+			.find('.mensaje').hide(500).end()
+			.find('.contenido ')
+				.show(500)
+				.css({'cursor':'initial'})
+		
+	}, 
+	close : function(){
+		let t = tile.isOpen
+	
+		t.removeClass('tile-active')
+			.removeAttr('style')
+			.find('.mensaje').removeAttr('style').end()
+			.find('.contenido ').removeAttr('style');
+
+
+
+		this.isOpen = null
+	}
+}, 
+menu = { 
 	toggle: function(btn){
 		var span = btn.find('span'), 
 			mnu = $('#'+btn.data('menu'))
@@ -640,40 +652,8 @@ menu = {
 			span.removeClass(c).addClass('lnr-cross')
 		}
 	 }, 
-	 cerrar : ()=>{
-		var $this = $('.tile-active')
-		crearCita.stepper(0)
-		
-		if(typeof(ancho) != "undefined"){
-			$last.animate({
-				height: alto,
-				width: ancho
-			},750)
-			$last.removeAttr('style')
-		}
-		$last = $this
-		ancho = $this.width()
-		alto = $this.height()
-		
-		$('.mensaje').show()
-		$('.contenido').hide()
-		$("input:checkbox").attr('checked', false)
-		$('.dialog').hide()
-		$('.popup-overlay').hide()
-		$('#crearCita input[name="hora[]"]:checked').prop('checked',false)
-	 },
-	abrir : function($this){
-		if ($this.find('.contenido').css('display')!='block'){
-			menu.cerrar();
-			$this
-				.prependTo('#contenedorMenuPrincipal')
-				.find('.mensaje').hide().end()
-				.find('.contenido ')
-					.show()
-					.css({'cursor':'initial'});
-			resize($this);
-		}
-	} 
+
+
  }
 
  //FUNCIONNES
@@ -723,20 +703,34 @@ function logo(){
 		$('#logo').prop('src',logo)
 	}
  }
-function resize(that){
-	var ancho = $('main').width()/1.1;
-	var alto = $(that).find('.contenido').height();
-		$(that).animate({
-				height: alto,
-				width: ancho,
-			},function(){
-				alto = $(that).find('.contenido').height();
-				$(that).animate({	
-				height: alto,
-			})
-	})
- }
+
 
 //INIT
 
 
+$('body')
+	.on('click','#eliminar',function(e){
+		alert('Servicio no disponible, pongase en contacto con el administrador')
+		return false
+	})
+	.on('click','.cancelar',function(e){
+		e.stopPropagation();
+		tile.close()
+	})
+	.on('click',".idDateAction",function(){
+		if(!$(this).data('disabled')) sincronizar($(this).data('action'));
+		})
+	.on('click','#authEmail',function(){
+		var $input = $(this).find('input:checkbox')
+		$input.prop('checked',!$input.prop('checked'))
+		})
+	.on('click','.del',function(){
+		let $cita =  $(this).parents('.cita')
+		cita.del(
+			$cita.attr('idCita'), 
+			$cita.data('fecha'),
+			$cita.data('hora'),
+			$cita.data('agenda')
+		)
+		})
+	.on('click','.tile, .tile-wide',function(){tile.open($(this))})

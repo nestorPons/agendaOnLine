@@ -134,17 +134,18 @@ class Login extends \core\BaseClass {
       * @return devuelve el id usuario o falso
       */
     public function authByPin(){
+
         $token = $this->codeToken();
         setcookie("auth", $token , time()+(60*60*24*60),'/');
-
         $auth = new \core\BaseClass('auth_tokens');
 
         if ($auth->saveById(-1,[
                 'selector'=> $this->selector,
                 'validator'=> $this->validator, 
                 'idUser' => $this->id, 
-                'pin' => $this->pin
+                'pin' => $this->pin??0
             ])){
+ 
                 return $this->codeToken();
             } else return false;
 

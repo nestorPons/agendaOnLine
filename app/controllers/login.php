@@ -14,16 +14,21 @@ if (isset($_POST['action'])){
     require_once URL_VIEWS . 'login/' . $_POST['view'] . '.php';
 } else {
     if(isset($_COOKIE["auth"])){
-    
         $Login = new \models\Login;
         if ($action = $Login->authToken($_COOKIE["auth"])){
             require_once URL_VIEWS . '/login/pinpass.php';
         }else{ 
-            $Login->logout();
+            goLogin(); 
         }      
         
     } else {    
-        // Comprimir y agrupar js y css
+        goLogin(); 
+        
+    }
+}
+function goLogin(){
+    global $Empresa;
+           // Comprimir y agrupar js y css
         $path = URL_LIB;
         require_once $path . 'minify/src/Minify.php';
         require_once $path . 'minify/src/CSS.php';
@@ -64,6 +69,4 @@ if (isset($_POST['action'])){
         $minifier->minify(URL_CSS . 'index.min.css'); 
         /**/
         require_once URL_VIEWS . 'login.php';
-        
-    }
 }

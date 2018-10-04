@@ -15,7 +15,9 @@ $script  =
 			// Viene de login principal
 			:'loginpass.php' ); 
 
+
 $return = include URL_AJAX . 'login/' . $script;
+
 
 if( !isset($return['action']) || $return['action'] == 'login'){
 

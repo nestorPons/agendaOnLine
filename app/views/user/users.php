@@ -1,7 +1,6 @@
 
 <header><?php require_once URL_MENUS . 'users.php'?></header>
-<main id="users" user="user" iduser = <?=$_SESSION['id_usuario']?>>
-	<div class="login no-seleccionable">	
+<main id="users" user="user" iduser = <?=$_SESSION['id_usuario']?> class="no-seleccionable">
 		<div class="tile-container" id="contenedorMenuPrincipal">
 			<section id="crearCita" name="tile" class="tile " data-role="tile">
 				<div	 class="tile-content iconic">
@@ -14,19 +13,6 @@
 					</div>
 				</div>
 			</section>
-			<!--
-				<section id="config"  name="tile" class="tile tile-secon" data-role="tile">
-				<div class="tile-content iconic">
-					<div class="mensaje">
-						<span class="icon icon-config"></span>
-						<span class="tile-label">Configuración</span>
-					</div> 	
-					<div class="contenido">
-						
-					</div>
-				</div>
-			</section>
-			-->
 			<section id="historial" class="tile<?php if(!$Device->isMobile())echo"-wide" ?> "  name="tile" data-role="tile">
 				<div class="tile-content iconic">
 					<div class="mensaje">
@@ -50,7 +36,6 @@
 				</div>
 			</section>
 		</div>
-	</div>
 	<div id="dialogs" class="popup-overlay"></div>
 </main>
 <footer class="about">
@@ -58,3 +43,4 @@
 	<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" 
 		data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
 </footer>
+<script src="js/min/users.js"></script>

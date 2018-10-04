@@ -2456,6 +2456,15 @@ input[type="color"] {
 		-ms-user-select: none;
 		user-select: none;
 	 }
+	section{
+		&[class*='tile']{
+			transition: all 1s;
+		}
+		&.tile-active{
+			width: 100% !important; 
+			height: auto !important;
+		}
+	 }
 	.tile-container{
 		@alto:186.5px; 
 		@espacio: 6px; 
@@ -2493,7 +2502,7 @@ input[type="color"] {
 			float:left;
 			margin:@espacio;
 			position:relative;
-
+			 
 			@media (max-width: 370px){
 				width: 100% !important;
 				height: 120px;	
