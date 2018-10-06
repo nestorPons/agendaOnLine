@@ -22,9 +22,13 @@
                         </div>
                         <input type="button" class="btn-danger logout"  value="Cancelar" >
                     </form>
+
                 </section>
             </div>
         </main>
         <?php include URL_TEMPLATES . 'login_footer.php'?>
+        <div id="loader" class="popup-overlay hide">
+         <i class="lnr-sync animate-spin"></i>
+        </div>
 	</body>
 </html>

@@ -97,6 +97,8 @@ login = {
 		validate : function(data){ 
 			if(!login.block){
 				login.block = true
+				btn.loader.show()
+
 				$.post(INDEX, data, function(r){
 					if (r.error == undefined){
 						// Devuelve zona admin o users  logueo correcto
@@ -128,6 +130,7 @@ login = {
 				})
 				.always(function() {
 					login.block = false;
+					btn.loader.hide()
 				});
 			}
 		}

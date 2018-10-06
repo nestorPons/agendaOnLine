@@ -509,6 +509,14 @@ btn = {
 			typeof callback == "function" && callback();
 			}
 		 },
+	loader : {
+		show : function(){
+			$('#loader').hide().removeClass('hide').show(250)
+		}, 
+		hide :  function(){
+			$('#loader').hide(250).addClass('hide')
+		}
+	}
  }, 
 validar = {
 	nombre: {
@@ -871,6 +879,7 @@ Device = {
 		}
 	 }
 }
+
 function formatofecha (fechaTxt,formatOut){ 
 
 	var fecha = !$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;
