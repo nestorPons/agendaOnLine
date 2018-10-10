@@ -313,7 +313,7 @@ echo(r)}},'json')},load:function(fecha){let data={controller:'notas',action:GET,
 if(this.days.includes(Fecha.general)){this.show()}else{$.post(INDEX,data,function(r){notas.days.push(Fecha.general)
 notas.show()
 if(r.success){for(let i=0,datos=r.data,len=datos.length;i<len;i++){notas.create(datos[i])}}else{$('#menu5').removeClass('c4')}
-return r.success},'json')}},create:function(d){Tools.template(notas,'row.notas.php',function(r){$('#mySidenav #menu5').addClass('hay-nota')
+return r.success},'json')}},create:function(d){if($('#notas').find('#'+d.id).length)return!1;Tools.template(notas,'row.notas.php',function(r){$('#mySidenav #menu5').addClass('hay-nota')
 notas.$template.clone().hide().addClass(Fecha.id).attr('id',d.id).find('.hora span').text(d.hora).end().find('.contenido span').text(d.nota).end().prependTo('#notas').show('fade')})},show:function(){let $sec=$('#notas'),$noteDay=$sec.find('.'+Fecha.id)
 $sec.find('.nota').addClass('hide')
 $noteDay.removeClass('hide')

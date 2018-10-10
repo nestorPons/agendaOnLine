@@ -24,25 +24,11 @@ main = {
 	 }, 
 	dir1 : RIGHT, 
 	dir2 : LEFT,
-	toggle : function($in){
+	toggle : function($in, container){
 		var $out = $('section:visible'),
-			_toggle = function($in){
-				$out.hide('drop',{direction:main.dir1},function(){
-					var id = $in.attr('id')
-					$('#'+id)
-						.show('drop',{direction:main.dir2})
-
-						if(main.dir1 == RIGHT){
-							main.dir1 = LEFT
-							main.dir2 = RIGHT
-						} else {
-							main.dir1 = RIGHT
-							main.dir2 = LEFT
-						}
-				})
-			},
-			nameId = $in.selector.replace('#',''); 
-
+			nameId = $in.selector.replace('#',''), 
+			$container = $('#'+container);
+			
 		if(main.scripts.loaded.indexOf(nameId)==-1){
 			//Cargo el id en la variable para saber cuales estan cargados
 			
@@ -54,14 +40,11 @@ main = {
 			}
 
 			$.post(URL,data,function(html){
-				$('.login').prepend(html)
-				$(html)	.attr('class','')
-				_toggle($(html))
-
-			},'html')
-		} else {
-			_toggle($in)
-		}
+				$container.html(html); 
+				cube.goTo(container); 
+			},'html'); 
+		} else 
+			cube.goTo(container);
 
 	 }, 
 	loader : {
@@ -71,7 +54,7 @@ main = {
 		hide: function(){
 			$('main').find('#loading').addClass('hidden')
 		 }
-	}, 
+	 }, 
 	logout : function(){	
 		let effect = 'puff'; 
 		$('body')
@@ -101,28 +84,36 @@ login = {
 
 				$.post(INDEX, data, function(r){
 					if (r.error == undefined){
-						// Devuelve zona admin o users  logueo correcto
-						btn.load.hide();
-						//Filtro por si viene de nuevo pin 
-						// devuelvo entrada de pin normal
-						if($('body').find('#newpinpass').length){
-							let data = {
-								controller : 'login', 
-								view : 'pinpass'
-							}
-							$.post(INDEX,data,function(r){
-								login.html = r
-							},'html')
-						} else { 
-							login.html = $('body').html(); 
-						}
-						$('main').detach();
-						$('body')
-							.append(r)
-							.removeClass()
-						let section = $(r).filter('main').attr('id');
+						// Si estoy cargando newpinpass que me lo cargue detras de cube 
+						// para mantener estetica
+						if($(r).find('#newpinpass').length){
+							$('#back').html(r); 
+							cube.goTo('back'); 
+						}else{
 
-						main.scripts.load(section)
+							// Devuelve zona admin o users  logueo correcto
+							btn.load.hide();
+							//Filtro por si viene de nuevo pin 
+							// devuelvo entrada de pin normal
+							if($('body').find('#newpinpass').length){
+									let data = {
+										controller : 'login', 
+										view : 'pinpass'
+									}
+								$.post(INDEX,data,function(r){
+									login.html = r
+								},'html')
+							} else { 
+								login.html = $('body').html(); 
+							}
+							$('body > *').detach();
+							$('body')
+								.append(r)
+								.removeClass()
+							let section = $(r).filter('main').attr('id');
+
+							main.scripts.load(section)
+						}
 					} else { 
 						let res = r.error.split("<br>")
 						notify.error(res[1], res[0], 5000);
@@ -176,7 +167,7 @@ user = {
 			
 	 },
 	notification: function(){
-		main.toggle($('#secNewNotification'))
+	//AKI :: 	main.toggle($('#secNewNotification'))
 	 }
  },
 validate = {
@@ -244,13 +235,13 @@ $(function(){
 				empresa : normalize(config.nombre_empresa)
 			}
 					
-			login.send.validate(data) ;
+			login.send.validate(data);
 		})
 		.on('click','.cancel',function(e){
-			main.toggle($('#secLogin'))
+			cube.goTo("front")
 		 })
 		.on('click','#aNewUser',function(){
-			main.toggle($('#newUser'))
+			main.toggle($('#newUser'),'right')
 		 })
 		.on('submit','#frmNewUSer',function(e){
 			e.preventDefault()
@@ -258,19 +249,17 @@ $(function(){
 				user.save()
 		 })
 		.on('click','#forgotPass',function(){
-			main.toggle($('#recover'))
+			main.toggle($('#recover'), 'left')
 		 })
 		.on('submit','#recover form',function(e){
 			e.preventDefault()
-			
 			recover.send(
-				()=>main.toggle($('#newPass'))
+				()=>main.toggle($('#newPass'),'back')
 			)
 					
 		 })
 		.on('click','.logout',function(){
 			deleteAllCookies();
-			location.href = '/'+EMPRESA + '';
 		 })
 		.on('keyup','#pinpass',function(e){
 			e.preventDefault();

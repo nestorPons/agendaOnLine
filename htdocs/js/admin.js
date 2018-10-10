@@ -1594,8 +1594,11 @@ notas = {
 
 	 },
 	create : function (d){
+		if($('#notas').find('#'+d.id).length) return false; 
 		
 		Tools.template(notas, 'row.notas.php',function(r){
+			// Filtramos que no exista la nota 
+
 			// se resalta en barra navegador que hay una nota
 			$('#mySidenav #menu5').addClass('hay-nota')	
 
@@ -1608,6 +1611,7 @@ notas = {
 				.prependTo('#notas')		
 				.show('fade')
 		})
+		
 	 },
 	show : function(){
 		let $sec = $('#notas') , 

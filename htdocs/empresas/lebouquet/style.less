@@ -372,105 +372,32 @@ a,i , .a{
 		color: @orange;
 	}
  }
-.load{
-	margin: 50px auto;
- }
-.login{
+
+#cube .face { 
+	border-radius: @radius;
 	font-family: @main-font;
-	.border-radius;
-	.box-shadow;
-	&-form {
-		.border-radius;
-		.box-shadow;
-	 }
-
-	&-help {
-		a {
-		  color: @t1;
-		}
+	a {
+		color: @blue;
 	}
-
-	.capasPrincipales{
-		display:none;
-		top:45px;
-		position: relative;
-		&.activa{
-			display:block;
-		}
+}
+&.about{
+	position: absolute;
+	bottom: -330px;	
+	*{
+		display: inline-block;	
+		margin: 5px;
 	}
-	&.about{
-		position: absolute;
-		//bottom: 0;
-		margin: 10px auto;
-		padding: 8px;
-		font-size: @fontSize - 0.1;
-		background-color: transparent;
-		border: none;
-		margin-left: auto;
-		margin-right: auto;
-		left: 0;
-		right: 0;
-		p, a{
-			font-size: 0.8rem ;
-		}
-		.border-radius();
-		.box-shadow();
-		  a {
-			  color: @blue;
-			}
-		&-links {
-			height: 30px;
-			& > a {
-			  float: left;
-			  width: 50%;
-			  line-height: 30px;
-			  font-size: @fontSize - 0.2;
-			}
-		}
-		&-author {
-		margin-top: 5px;
-			& > a {
-			  padding: 1px 3px;
-			  margin: 0 -1px;
-			}
-		}
-		@media screen and (max-width: 800px) {
-			font-size: @fontSize -0.1;
-		}
-		@media screen and (max-width: 590px) {
-			position:relative;
-		}
-		@media screen and (max-width: 425px) {
-			padding: 15px;
-		}
+	a {
+		color: @blue;
 	}
- }
-.navigation{
-  width: 15em;
-  right: -15em;
-  position: absolute;
-  overflow: hidden;
-  display: block;
-  height: 10000%;
-  background-color: #000;
-  li{
-	display:block;
-  }
- }
-.politicLink{
-	text-decoration: underline;
-	color: @blue;
-	font-size:@fontSize - 0.3;
-	&:before{content: '( ';}
-	&:after{content: ' )';}
- }
+}
 .popover{
 	border-radius : @radius;
  }
 .lbl{
 	border : 2px solid @text1 ;
 	background : fade(@b1,80%);
-	.border-radius();
+	border-radius: @radius;
 	.iconos{
 		i:hover{
 			color : @orange;
@@ -600,9 +527,7 @@ a,i , .a{
 		.fnNotify(@blue);
 	}
  }
-.hay-nota{
-	background-color: darken(mix(@color_secon,@color, 70%),20%);
-}
+
 #admin{
 	#sections{
 		#agendas{
@@ -613,7 +538,7 @@ a,i , .a{
 			}
 		}
 	}
-}
+ }
 #mnuContacto{
 
 	h1, h4{
@@ -925,7 +850,7 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	@bk-color: darken(mix(@color,@color_secon, 70%),20%);
+	@bk-color: darken(@color,40%);
 	@fnt-color:  contrast(@bk-color, #101010, #fdfdfd,70); 
 	background-color: @bk-color;
 	color: @fnt-color;

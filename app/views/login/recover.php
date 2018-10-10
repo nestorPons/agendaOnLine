@@ -1,5 +1,5 @@
 
-<section id="recover" class="hidden">
+<section id="recover">
     <h1 class="heading">Recuperar contraseña</h1>
     <hr>
     <form id="frmRecover">

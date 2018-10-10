@@ -68,5 +68,6 @@ function goLogin(){
         );
         $minifier->minify(URL_CSS . 'index.min.css'); 
         /**/
-        require_once URL_VIEWS . 'login.php';
+        //AKI :: require_once URL_VIEWS . 'login.php';
+        require_once URL_VIEWS . 'login/index.php';
 }

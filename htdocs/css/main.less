@@ -654,11 +654,7 @@ input[type="color"] {
 	margin: 50px auto;
  }
 .login{
-	margin: auto;
-	padding: 0;
-	padding-top:10px;
-	position:relative;
-	width: 90%;
+
 	text-align:center;
 	@media screen and (max-width: 490px) {
 		top: 0;
@@ -672,49 +668,6 @@ input[type="color"] {
 
 		input[type="radio"], [type="checkbox"] {
 			transform:scale(1.5,1.5);
-		}
-	}
-	&-form {
-		border:	1px solid #bbbbbb;
-		text-align:center;
-		width: 380px;
-		margin: auto;
-		margin-top:20px;
-		background-color: #ffffff;
-		section {
-			height: 100%;
-		}
-		.submit{
-			position: absolute;
-			bottom: 0;
-			width: 98%;
-		}
-		@media screen and (max-width: 590px) {
-
-			text-align:center;
-			width: auto;
-			position: inherit;
-			top: auto;
-			margin-top: 0;
-			left: auto;
-			margin-left: 0;
-			margin: auto;
-			border: none;
-		}
-		@media screen and (max-width: 320px) {
-			padding: 20px 0;
-			width: 320px;
-		}
-		p{
-			margin: 10px auto;
-		}
-	 }
-	.form{
-		text-align:left;
-		label {
-			display: inline-block;
-			width: 30%;
-			padding-right: 20px;
 		}
 	 }
 
@@ -753,18 +706,6 @@ input[type="color"] {
 	transition: display 1s linear 1s;
  };
 
-.navigation{
-  width: 15em;
-  right: -15em;
-  position: absolute;
-  overflow: hidden;
-  display: block;
-  height: 10000%;
-  background-color: #000;
-  li{
-	display:block;
-  }
- }
 .notify{
 	display: block;
 	margin: auto;
@@ -2715,6 +2656,8 @@ input[type="color"] {
 }
 /* The side navigation menu */
 .sidenav {
+	background-image: url("/img/fondo_barra.png") no-repeat center center fixed;
+	background-size: cover;
     height: 100%; /* 100% Full-height */
     width: 0px; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
