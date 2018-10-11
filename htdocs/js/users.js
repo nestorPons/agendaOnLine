@@ -122,8 +122,6 @@ var crearCita ={
 								)
 							}		
 						}
-						
-    					menu.cerrar()	
 					}
 				} else {
 					echo(rsp)
@@ -448,7 +446,6 @@ var users = {
 			.on('click','#btnConfig, #btnDatos',function(){
 				menu.toggle($(this))
 			})
-			.on('click','#goHome',menu.cerrar)
 
 		$('input:password').blur(function(){
 			var pass1 = $('#pass').val()		
