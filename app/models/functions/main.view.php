@@ -3,7 +3,9 @@
 function view($fecha_inicio = null, $existen_array = false ){	
 	global $Device, $_POST;
 	$Agenda = new \models\Agendas;
-
+	/**
+	 * Funcion inArray multiArray
+	 **/
 	function _inArray($hour, $multi_array){
 		foreach($multi_array as $arr){
 			if(in_array($hour,$arr)) return true; 
@@ -11,11 +13,12 @@ function view($fecha_inicio = null, $existen_array = false ){
 
 		return false; 
 	}
+
     date_default_timezone_set('UTC');			
-	$fecha = $fecha_inicio??Date('Y-m-d') ;
+	$fecha = $fecha_inicio??Date('Y-m-d');
 	$dias = round(MARGIN_DAYS/2);
 
-	$fecha_inicio =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
+	$fecha_iinicio =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
 	$fecha_fin =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
 
 	$lbl = new \models\Lbl();
@@ -25,19 +28,17 @@ function view($fecha_inicio = null, $existen_array = false ){
 	$_SESSION['dating_control'] = $lbl->ids;
 
 	for ($d = 0; $d <= ($dias * 2) ; $d++){
-		$fecha =date ( 'Y-m-d', strtotime ( '+'.$d.' day' , strtotime ( $fecha_inicio ) ) );
+
+		$fecha =date ( 'Y-m-d', strtotime ( '+'.$d.' day' , strtotime ( $fecha ) ) );
 		$id_fecha = str_replace('-','',$fecha);
 		//Me llega desde la app los dias cargados si estan que no me lo vuelva a crear
 		if(!(isset($_POST['ids'])&& array_search($id_fecha,$_POST['ids']))){
 
-		
 			$dia_semana = date('w',strtotime($fecha)) ;
 			$array_horas = $_SESSION['HORAS'][$dia_semana]??false;
-
 			if (empty($existen_array)||array_search($id_fecha,$existen_array)<0){
-
 				?>
-				<div id="<?=$id_fecha?>" name="dia[]" class="dia <?= $fecha== Date('Y-m-d') ?'activa':'';?>" diaSemana = "<?= $dia_semana?>" >
+				<div id="<?=$id_fecha?>" name="dia[]" class="dia <?= $fecha == Date('Y-m-d') ?'activa':'';?>" diaSemana = "<?= $dia_semana?>" >
 					<table class = "tablas tablas-general" >	
 						<?php 
 						$h = strtotime($fecha . ' 06:45') ;
@@ -45,12 +46,11 @@ function view($fecha_inicio = null, $existen_array = false ){
 							$h =  strtotime ( '+15 minute' ,  $h  )  ;
 							$str_hora = date('H:i', $h);
 
-							if ($array_horas) {	
 								// si es movil hay que poner pestañas
 								$class = '';/*$Device->isMobile()?' hidden_responsive ':'';*/
 
 								$disabled = 'active' ;
-								if  (!_inArray($str_hora,$array_horas)) {
+								if  (!$array_horas || !_inArray($str_hora,$array_horas)) {
 									$class .= "fuera_horario " ;  
 									$disabled = (empty(CONFIG['ShowRow']))?'disabled' : '' ;
 								} 
@@ -84,7 +84,6 @@ function view($fecha_inicio = null, $existen_array = false ){
 									}?>
 								</tr>
 								<?php
-							}
 						}?>
 					</table>
 				</div>

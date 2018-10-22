@@ -66,6 +66,7 @@ $("#main").find('#'+Fecha.id).addClass('activa')
 $('#main .cuerpo').show("slide",{direction:ent},500)
 admin.inactivas.comprobar()})}
 main.loader.hide()}
+echo($("#main").find('#'+Fecha.id).length)
 if(!$("#main").find('#'+Fecha.id).length)
 admin.crearDias(_pasarDia)
 else _pasarDia()},activeDay:function(){$('.activa').removeClass('activa')

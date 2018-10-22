@@ -1,7 +1,7 @@
 <div class="cabecera">
 	<div class="cabecera-content">
 		<?php 
-			if (!$Device->isMobile()){ require_once URL_TEMPLATES . "diasSemana.php"; }
+		if (!$Device->isMobile()){ require_once URL_TEMPLATES . "diasSemana.php"; }
 		?>
 	</div>
 </div>
@@ -9,7 +9,7 @@
 	<div id="tablasEncabezado">
 		<?php
 		$agendas = $Agendas->get(); 
-	?>
+		?>
 		<table class = "tablas" >	
 			<thead>
 				<tr>
@@ -31,7 +31,6 @@
 	
 	</div>
 	<?php
-
 	functions\view();
 	?>
 </div>	

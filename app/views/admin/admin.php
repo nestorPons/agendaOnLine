@@ -22,4 +22,4 @@
 		<i class="icon-load animate-spin"></i>
 	</div>
 </main>
-<script src="./js/min/admin.js"></script>
+<script src="/js/min/admin.js"></script>

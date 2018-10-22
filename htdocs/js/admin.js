@@ -359,7 +359,7 @@ admin ={
 				}
 				main.loader.hide()
 			}
-
+echo($("#main").find('#'+Fecha.id).length)
 		if (!$("#main").find('#'+Fecha.id).length)
 			admin.crearDias(_pasarDia)
 		else
