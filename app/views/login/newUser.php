@@ -1,4 +1,4 @@
-<section id="newUser" class="hidden">
+<section id="newUser">
     <h1 class="heading">Registro nuevo usuario</h1>
     <hr>
     <form id="frmNewUSer">

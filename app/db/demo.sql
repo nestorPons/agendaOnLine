@@ -2,10 +2,10 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 1;
 SET time_zone = "+00:00";
 
-INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, `idioma`, `dateReg`, `dateBaja`, `status`, `attempts`, `pin`) VALUES
-(1, 'Demo', 'demo@demo.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 2, 'Usuario administrador', 1, '2018-02-04 15:01:40', NULL, 0, 0, NULL),
-(2, 'Admin', 'admin@admin.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 1, 'Usuario administrador', 1, '2018-02-10 16:21:13', NULL, 0, 0, NULL),
-(3, 'Usuario', 'usuario@usuario.es', '', '123456789', 0, 'Usuario general', 1, '2018-02-10 16:21:13', NULL, 0, 0, NULL);
+INSERT INTO `usuarios` (`id`, `nombre`, `email`, `pass`, `tel`, `admin`, `obs`, `idioma`, `dateReg`, `dateBaja`, `status`, `attempts`) VALUES
+(1, 'Demo', 'demo@demo.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 2, 'Usuario administrador', 1, '2018-02-04 15:01:40', NULL, 0, 0),
+(2, 'Admin', 'admin@admin.es', '$2y$10$x0M3DWJjixt65tjPDBODMeWlPK3ETzBxvrWgeQPieTkth0uSW9jNm', '123456789', 1, 'Usuario administrador', 1, '2018-02-10 16:21:13', NULL, 0, 0),
+(3, 'Usuario', 'usuario@usuario.es', '', '123456789', 0, 'Usuario general', 1, '2018-02-10 16:21:13', NULL, 0, 0);
 
 INSERT INTO `agendas` (`id`, `nombre`, `mostrar`) 
     VALUES (0, 'Principal', 1), (1, 'Secundaria', 1);

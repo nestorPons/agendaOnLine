@@ -51,7 +51,6 @@ if(typeof $!='function') {
 		//Para cargar jquery en electron
 		if (typeof module!='undefined') {$ = jQuery = module.exports}
 		loadAsync('/js/lib/jquery-ui.min.js',function(){
-			
 			loadAsync('/js/lib/metro.js',function(){
 				loadSync('/js/lib/jquery.mask.min.js')
 				loadSync('/js/funciones.js',function(){

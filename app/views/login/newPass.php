@@ -1,4 +1,4 @@
-<section id="newPass" class="hidden">
+<section id="newPass">
     <h1 class="heading">Recuperar contraseña</h1>
     <hr>
     <p>Se le ha enviado un email a su cuenta asociada</p>
