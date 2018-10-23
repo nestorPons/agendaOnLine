@@ -42,7 +42,6 @@
         <script  src="/js/main.js" ></script>
         -->
 
-      
         <!-- AKI:: hay que quitar esto del login-->
         <script>
             let config = new Object;
@@ -50,7 +49,7 @@
             config.festivos = <?=json_encode (FESTIVOS)?>;
             config.horarios = <?=json_encode($_SESSION['HORAS']??null)?>;
             config.margenDias  = <?=MARGIN_DAYS?>;	
-            </script>
+        </script>
         <!-- para produccioon
     -->
          

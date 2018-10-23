@@ -65,11 +65,7 @@ $('#main .cuerpo').hide("slide",{direction:sal},500,function(){$('.dia.activa').
 $("#main").find('#'+Fecha.id).addClass('activa')
 $('#main .cuerpo').show("slide",{direction:ent},500)
 admin.inactivas.comprobar()})}
-main.loader.hide()}
-echo($("#main").find('#'+Fecha.id).length)
-if(!$("#main").find('#'+Fecha.id).length)
-admin.crearDias(_pasarDia)
-else _pasarDia()},activeDay:function(){$('.activa').removeClass('activa')
+main.loader.hide()};if(!$("#main").find('#'+Fecha.id).length){admin.crearDias(_pasarDia);this.inactivas.comprobar()}else _pasarDia()},activeDay:function(){$('.activa').removeClass('activa')
 $('#'+Fecha.id).addClass('activa')},crearDias:function(callback){var fecha=fecha||Fecha.general;var dias=$('#main .cuerpo').find('.dia')
 var ids=new Array();$.each(dias,function(){ids.push($(this).attr('id'))})
 $.ajax({type:"POST",url:INDEX,dataType:'html',data:{fecha:Fecha.general,ids:ids,controller:'main',action:VIEW},cache:!1}).done(function(html){$('#main .cuerpo').append(html)
@@ -136,8 +132,8 @@ dialog.open('dlgEditCita',_save,fnCancel,callback)}},del:function(idCita){data={
 if(admin.lbl.delete(data.id,!1)){$.post(INDEX,data,function(r){if(r.success){$('#lstChckSer').empty();$('#dlgEditCita').removeData('idCita')
 dialog.close('dlgEditCita')}},'json').fail(function(jqXHR,textStatus,errorThrown){echo(jqXHR.responseText)})}},guardarNota:function($this){var txt=$this.find('input').val();var id=$this.parents(':eq(3)').attr('idcita')
 if(!$.isEmpty(txt)){$this.find('.icon-load').fadeIn();$.get(INDEX,{id:id,txt:txt},function(r){if(r.success){$this.find('.icon-ok').fadeIn()
-setTimeout(function(){$this.find('.icon-ok').fadeOut()},3000)}else{echo(r)}}).always($this.find('.icon-load').fadeOut())}},unidadTiempo:tiempoServicios=>Math.ceil(tiempoServicios/15),inactivas:{click:function(){var status=localStorage.getItem("showRows")==1||$('.dia.activa').find('.fuera_horario').is(':visible')?0:1;admin.inactivas.change(status)},change:function(std,save=!0){let effect='puff',duration=1500;if(std==1){$('#main .disabled').removeClass('disabled');$('#btnShow').find('.menulbl').html('Ocultar').end().find('i').removeClass().addClass('lnr-star')}else{std=0;$('#main .fuera_horario').parent().addClass('disabled')
-$('#btnShow').find('.menulbl').html('Mostrar').end().find('i').removeClass().addClass('lnr-star-empty')}
+setTimeout(function(){$this.find('.icon-ok').fadeOut()},3000)}else{echo(r)}}).always($this.find('.icon-load').fadeOut())}},unidadTiempo:tiempoServicios=>Math.ceil(tiempoServicios/15),inactivas:{show:function(){$('#main .disabled').removeClass('disabled');$('#btnShow').find('.menulbl').html('Ocultar').end().find('i').removeClass().addClass('lnr-star')},hide:function(){$('#main .fuera_horario').parent().addClass('disabled')
+$('#btnShow').find('.menulbl').html('Mostrar').end().find('i').removeClass().addClass('lnr-star-empty')},click:function(){let localStorageActive=localStorage.getItem("showRows")==1,fueraHorarioVisible=$('.dia.activa').find('.fuera_horario').is(':visible'),status=localStorageActive||fueraHorarioVisible?0:1;admin.inactivas.change(status)},change:function(std,save=!0){let effect='puff',duration=1500;if(std==1){this.show()}else{std=0;this.hide()}
 if(save)localStorage.setItem("showRows",std)},comprobar:function(){if($('#'+Fecha.id).find('tr').find('.fuera_horario').find('.lbl').length)
 admin.inactivas.change(!0,!1)
 else if(localStorage.getItem("showRows")==0)

@@ -358,12 +358,12 @@ admin ={
 					})
 				}
 				main.loader.hide()
-			}
-echo($("#main").find('#'+Fecha.id).length)
-		if (!$("#main").find('#'+Fecha.id).length)
-			admin.crearDias(_pasarDia)
-		else
-			_pasarDia()
+			}; 
+
+		if (!$("#main").find('#'+Fecha.id).length){
+			admin.crearDias(_pasarDia);
+			this.inactivas.comprobar();
+		} else _pasarDia();
 	 },
 	activeDay : function () {
 		$('.activa').removeClass('activa')
@@ -702,32 +702,33 @@ echo($("#main").find('#'+Fecha.id).length)
 	 },
 	unidadTiempo : tiempoServicios=>  Math.ceil(tiempoServicios / 15), 
 	inactivas:{ 
+		show : function(){
+			$('#main .disabled').removeClass('disabled');
+			$('#btnShow')
+				.find('.menulbl').html('Ocultar').end()
+				.find('i').removeClass().addClass('lnr-star');
+		},
+		hide : function(){
+			$('#main .fuera_horario').parent().addClass('disabled')
+			$('#btnShow')
+				.find('.menulbl').html('Mostrar').end()
+				.find('i').removeClass().addClass('lnr-star-empty');
+		}, 
 		click :	function(){
-
-			var status = 
-			localStorage.getItem("showRows")==1||
-			$('.dia.activa').find('.fuera_horario').is(':visible')?0:1;
+			let localStorageActive = localStorage.getItem("showRows")==1, 
+				fueraHorarioVisible = $('.dia.activa').find('.fuera_horario').is(':visible'),
+				status = localStorageActive || fueraHorarioVisible ? 0 : 1 ;
 
 			admin.inactivas.change(status);
-	
 		},
 		change :function (std, save = true){
 			let effect = 'puff',
 				duration = 1500; 
 			if( std == 1 ){			
-				$('#main .disabled').removeClass('disabled');
-				$('#btnShow')
-					.find('.menulbl').html('Ocultar').end()
-					.find('i').removeClass().addClass('lnr-star');
-
+				this.show();
 			}else{	
 				std = 0; 		
-				$('#main .fuera_horario').parent().addClass('disabled')
-				$('#btnShow')
-					.find('.menulbl').html('Mostrar').end()
-					.find('i').removeClass().addClass('lnr-star-empty');
-
-
+				this.hide();
 			}	
 			if(save) localStorage.setItem("showRows", std)		
 		}, 
