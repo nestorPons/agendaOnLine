@@ -27,6 +27,7 @@
         <meta name="msapplication-TileColor" content="#da532c">
         <link rel="stylesheet" href="<?=$url_font_main?>" >
 
+        <!--
         <link rel="stylesheet"  type="text/css" href="/css/jquery-ui.min.css">
         <link rel="stylesheet"  type="text/css" href="/css/metro.css">
         <link rel="stylesheet"  type="text/css" href="/css/iconos.css">
@@ -35,12 +36,11 @@
         <link rel="stylesheet"  type="text/css" href="/css/login.css">
         <link rel="stylesheet"  type="text/css" href="/empresas/<?=$Empresa->code()?>/style.css">
        
-        <script  src="/js/min/login.js" async></script>
-        <script  src="/js/service-worker/registration.min.js" async></script>
-        <!--
-        <link rel="stylesheet"  type="text/css" href="/css/index.min.css">
         <script  src="/js/main.js" ></script>
         -->
+        <link rel="stylesheet"  type="text/css" href="/css/index.min.css">
+        <script  src="/js/service-worker/registration.min.js" async></script>
+        <script  src="/js/min/login.js" async></script>
 
         <!-- AKI:: hay que quitar esto del login-->
         <script>
