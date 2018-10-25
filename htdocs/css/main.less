@@ -478,9 +478,9 @@ input[type="color"] {
   	position: relative;
   	cursor: pointer;
    	&:before {
+		margin: -2px -5px;
 		display: block;
 		position: absolute;
-		color: @base;
 		font-size: 0;
 		content: "";
 		height: 5px;
@@ -490,8 +490,6 @@ input[type="color"] {
 		border-bottom: 1px solid;
 		top: 50%;
 		left: 100%;
-		margin-left: -10px;
-		margin-top: -0.1625rem;
 		z-index: 2;
 		-webkit-transform: rotate(-135deg);
 		transform: rotate(-135deg);

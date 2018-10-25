@@ -28,7 +28,7 @@ if (isset($_POST['action'])){
 }
 function goLogin(){
     global $Empresa;
-           // Comprimir y agrupar js y css
+        // Comprimir y agrupar js y css
         $path = URL_LIB;
         require_once $path . 'minify/src/Minify.php';
         require_once $path . 'minify/src/CSS.php';

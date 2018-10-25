@@ -21,7 +21,7 @@ var estilos = {
 			action : SAVE
 		}
 		$.post(INDEX,data,function(r){ 
-			if (r.success) admin.reload() 
+			document.getElementById('styles').href='css/main_dinamic.min.css';
 		},'json')
 	 }, 
 	_getTheColor : function  (colorVal) {
