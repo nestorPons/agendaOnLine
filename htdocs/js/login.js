@@ -281,7 +281,7 @@ $(function(){
 		 })
 
 	if(!$.isEmpty($_GET['args'])){
-		let code = (!$.isEmpty($_GET['cod']))?pad($_GET['cod'],3):''
+		let code = (!$.isEmpty($_GET['cod']))?('000' + $_GET['cod']).slice (-3):''; 
 		if(!$.isEmpty($_GET['err']))
 			notify.error($_GET['err'], 'ERROR:' + code)
 	 } 

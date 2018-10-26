@@ -1046,12 +1046,6 @@ function existeUrl(url) {
    http.send();
    return http.status!=404;
  }
-
-function pad (n, length) {
-    let  n = n.toString();
-    while(n.length < length) n = "0" + n;
-    return n;
- }
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
 
