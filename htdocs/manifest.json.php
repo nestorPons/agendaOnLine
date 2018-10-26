@@ -9,7 +9,7 @@
   "name": "<?= $empresa?> agenda onLine",
   "description": "Agenda para reserva de citas por internet en tu centro  <?= $empresa?>.",
   "display": "standalone", 
-  "start_url": "app.php/?empresa=<?=$norm_empresa?>",
+  "start_url": "/<?=$norm_empresa?>",
   "background_color": "#fff",
   "theme_color": "#<?= $_GET['color_main']?>", 
   "orientation": "portrait",
