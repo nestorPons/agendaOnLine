@@ -26,6 +26,5 @@
         </div>
         <?php include URL_TEMPLATES . 'login_footer.php'?>
         <!--//FIN BLOQUE COOKIES-->
-        <script src="js/cube.js"></script>
     </body>
 </html>

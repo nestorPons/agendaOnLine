@@ -53,7 +53,8 @@ function goLogin(){
             URL_JS . 'lib/metro.js',
             URL_JS . 'lib/jquery.mask.min.js',
             URL_JS . 'funciones.js', 
-            URL_JS . 'login.js'
+            URL_JS . 'login.js', 
+            URL_JS . 'cube.js'
         );
         $minifier->minify(URL_JS . 'min/login.js');
         
@@ -64,10 +65,10 @@ function goLogin(){
             URL_CSS . 'font.css',
             URL_CSS . 'main.css',
             URL_CSS . 'login.css',
+        
             "empresas/{$Empresa->code()}/style.css"
         );
         $minifier->minify(URL_CSS . 'index.min.css'); 
-        /**/
-        //AKI :: require_once URL_VIEWS . 'login.php';
+
         require_once URL_VIEWS . 'login/index.php';
 }
