@@ -1,5 +1,5 @@
 'use strict'; 
-const version  = 'v1'; 
+const version  = 'v2'; 
 
 self.addEventListener('fetch', event => {
   if(event.request.method === "POST"){
@@ -36,7 +36,7 @@ self.addEventListener('fetch', event => {
     }
 });
 
-let 
+var
 swdb = {
   read : (callback) => {
     console.log('Pidiendo datos .... ')
