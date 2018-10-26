@@ -63,7 +63,7 @@ config ={
 		.done(function(r){
 			if (r.success){
 				notify.success('Guardado con éxito.')
-				var n = ($('#showInactivas').is(":checked"))?1:0
+				let n = ($('#showInactivas').is(":checked"))?1:0
 				admin.inactivas.change(n)
 				
 				$("#config #respuestaLogo").html("<img src="+r+"/logo.png></img>") 

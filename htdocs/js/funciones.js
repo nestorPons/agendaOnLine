@@ -636,7 +636,7 @@ validar = {
 					var $pass = $(':password');
 					
 					//esto solo es para cuando se quiere cambiar la contraseña desde config 
-					var n = ($this.parents('#dlgCambiarPass').length>0)?1:0;
+					let n = ($this.parents('#dlgCambiarPass').length>0)?1:0;
 
 					if ($pass.length>1){
 						if ($this.attr('id') === $pass.eq(n+1).attr('id'))
