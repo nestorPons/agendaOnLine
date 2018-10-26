@@ -13,7 +13,7 @@
             <i class="iconClass-inside icon-mail-1"></i>
         </div>
         <div class="iconClass-container icon-left">
-            <input type="password" id="pass" placeholder="Introduzca su contraseña" value="<?php if(isset($demo_pass)){echo $demo_pass;}?>" require>
+            <input type="password" id="pass_login" placeholder="Introduzca su contraseña" value="<?php if(isset($demo_pass)){echo $demo_pass;}?>" require>
             <i class="iconClass-inside icon-eye"></i>
         </div>
         <div id="chkNoCerrarSesion">

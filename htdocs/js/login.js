@@ -212,7 +212,7 @@ $(function(){
 				controller : 'validar', 
 				ancho : screen.width , 
 				login : $(this).find('#login').val(), 
-				pass : Tools.SHA($(this).find('#pass').val()), 
+				pass : Tools.SHA($(this).find('#pass_login').val()), 
 				recordar : $(this).find('#recordar').is(':checked'), 
 				empresa : normalize(config.nombre_empresa)
 			}

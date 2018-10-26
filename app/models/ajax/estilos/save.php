@@ -44,6 +44,6 @@ $minifier = new Minify\CSS(
     URL_CSS . 'login.css',
     "empresas/{$Empresa->code()}/style.css"
 );
-$minifier->minify(URL_CSS . 'main.min.css');
+$minifier->minify(URL_CSS . 'index.min.css');
 
 echo json_encode($r);

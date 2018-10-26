@@ -38,7 +38,7 @@
        
         <script  src="/js/main.js" ></script>
         -->
-        <link id="styles" rel="stylesheet"  type="text/css" href="/css/main.min.css">
+        <link id="styles" rel="stylesheet"  type="text/css" href="/css/index.min.css">
        <!-- <script  src="/js/service-worker/registration.min.js" async></script>-->
         <script  src="/js/min/login.js" async></script>
 
