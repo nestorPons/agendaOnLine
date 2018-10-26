@@ -65,7 +65,6 @@ function goLogin(){
             URL_CSS . 'font.css',
             URL_CSS . 'main.css',
             URL_CSS . 'login.css',
-        
             "empresas/{$Empresa->code()}/style.css"
         );
         $minifier->minify(URL_CSS . 'index.min.css'); 

@@ -169,31 +169,6 @@ user = {
 	notification: function(){
 	//AKI :: 	main.toggle($('#secNewNotification'))
 	 }
- },
-validate = {
-	login :function() {
-			var $pass = $('#pass'), 
-				$email = $('#login')
-				
-		if ($.isEmpty($pass.val())|| $pass.val() < 6){
-			$pass.addClass('input-error')
-			return false
-		 }
-		return true;
-	 }, 
-	pass : function (pass1, pass2) {
-		if (!$.isEmpty(pass1) && pass1 === pass2){
-			if (pass1.length < 6 ) {
-				notify.error('El password debe de ser de 6 caracteres mínimo','Password invalido') 
-				return false
-			}
-		} else {
-			notify.error('Los passwords no coinciden','Password invalido') 
-			$('#passR').removeClass('input-success').addClass('input-error')
-			return false
-		}
-		return true
-	 }
  }
 
 $(function(){
@@ -244,6 +219,14 @@ $(function(){
 			main.toggle($('#newUser'),'right')
 		 })
 		.on('submit','#frmNewUSer',function(e){
+			let _validate =  function (pass1, pass2) {
+				if (!$.isEmpty(pass1) && pass1 === pass2){
+					if (pass1.length < 6 ) {
+						notify.error('El password debe de ser de 6 caracteres mínimo','Password invalido') 
+						return false
+					}
+				}
+			}
 			e.preventDefault()
 			if (validate.pass($('input#pass').val(), $('input#passR').val()))
 				user.save()
@@ -294,17 +277,6 @@ $(function(){
 		notify.error(textError)
 		//$('div#errors').text('')
 	}
-
-	$('#frmLogin')
-		.keyup(function(e){
-			if(e.keyCode == 13)$('#btnLogin').click()
-		 })
-		.submit(function(e){
-			if (!validate.login()) {
-				e.preventDefault()  
-				btn.load.hide()
-			}
-		 })
 
 	//para poder recoger los get en el login se muestran en la 5 barra de la url amigable
 	//if(error.get()) notify.error(error.mns)
