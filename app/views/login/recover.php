@@ -13,3 +13,4 @@
             <input type="button" class="btn-danger inicio cancel " value="Cancelar" >
     </form>
 </section>
+<script src="js/recover.js"></script>

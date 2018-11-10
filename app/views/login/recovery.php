@@ -1,6 +1,5 @@
 <?php 
-
-    include URL_VIEWS . 'header.php';
+    include URL_VIEWS . 'login/header.php';
     $idUser = substr($_GET['args'],-4);
     $token = $_GET['args'];
 	?>
@@ -26,7 +25,6 @@
                 </form>
             </section>
         </div>
-    <script  src="/js/lib/jquery.min.js" ></script>
-    <script  src="/js/recovery.js" ></script>
+    <script  src="/js/recovery.js"></script>
 	</body>
 </html>

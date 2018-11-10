@@ -5,9 +5,12 @@ $Login->user($User);
 // Si usuario ha sido desactivado por administracion no se pueda volver a activar
 if($User->status()<2){
         if ($User->checkToken($_POST['token'])){
-                $return['action'] = $User->password($_POST['pass'])
-                        ?$Login->createSession()
-                        :false;
+                if($User->password($_POST['pass'])){
+                        unset($_POST['action']);        
+                        $return['action'] = $Login->createSession(); 
+                }else{
+                        $return = 'Error no se ha podido guardar el password';
+                }
                 return $return;
         } else return core\Error::array(core\Error::$last);
 } else {

@@ -1,27 +1,25 @@
 <section id="newUser">
     <h1 class="heading">Registro nuevo usuario</h1>
     <hr>
-    <form id="frmNewUSer">
-        <input type="hidden" id="empresa"  value="<?php  ?>">
+    <form id="frmNewUser">
         <div class="iconClass-container icon-left">
-            <input type="text" id="nombre" placeholder="Introduzca nombre y apellidos." required >	
+            <input type="text" id="nom_new_user" placeholder="Introduzca nombre y apellidos." required >	
             <span class="iconClass-inside icon-user-1"></span>
         </div>
         <div class="iconClass-container icon-left">
-            <input type="email" class="email" name="email" id="email" placeholder="Introduzca email." required>
+            <input type="email" class="email" id="email_new_user" placeholder="Introduzca email." required>
             <span class="iconClass-inside icon-mail-1"></span>
         </div>
         <div class="iconClass-container icon-left">
-            <input type="tel" class="tel" name="tel" id="tel" title="Un numero telefono válido!!"	placeholder="Telefono de contacto" required>
+            <input type="tel" class="tel" id="tel_new_user" title="Un numero telefono válido!!"	placeholder="Telefono de contacto" required>
             <span class="iconClass-inside icon-phone"></span>
         </div>
         <div class="iconClass-container icon-left">
-            <input type="password" id="pass"  placeholder="Introduzca contraseña" required>
+            <input type="password" id="pass_new_user"  placeholder="Introduzca contraseña" required>
             <span class="iconClass-inside icon-eye"></span>
         </div>
-            <input type="hidden" name="pass" id="pass">
         <div class="iconClass-container icon-left">
-            <input type="password" id="passR"  placeholder="repita contraseña" required>
+            <input type="password" id="rpass_new_user"  placeholder="repita contraseña" required>
             <span class="iconClass-inside icon-eye"></span>
         </div>
 
@@ -37,3 +35,4 @@
     <p>Siga las instrucciones para activar la cuenta.</p>
     <p>Gracias</p>
 </section>
+<script src="js/newUser.js"></script>

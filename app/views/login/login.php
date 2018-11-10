@@ -30,7 +30,7 @@
             <a id="forgotPass">Pulsa aquí</a>.
         </p>
         <p>
-            <a id="aNewUser">Crear nuevo usuario.</a>.
+            <a id="goNewUser">Crear nuevo usuario.</a>.
         </p>
     </div>
 </section>

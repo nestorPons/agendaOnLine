@@ -126,49 +126,6 @@ login = {
 			}
 		}
 	 }
- }, 
-recover = {
-	send : function (callback){
-		var data = {
-			email : $('#recover').find('#email').val(),
-			controller : 'login',
-			action : 'recover'
-	  	 }
-
-		$.post(URL, data,function (r) {
-			if (r.success) {
-				notify.success('Siga las instrucciones del email', 'Email enviado')
-				
-			} else {
-				notify.error(r.err, 'Error: '+ r.code)
-				echo(r);
-			 }	
-			btn.load.hide()
-		 },'json')	
-	 }
- }, 
-user = {
-	save : function () {
-		$('#frmNewUSer #pass').val(Tools.SHA$(('#frmNewUSer #fakePass').val()))
-		var	data = $("#frmNewUSer").serializeArray()			
-			data.push({name : 'controller' , value:'login'})
-			data.push({name : 'action' , value : SAVE})
-		$.post(URL, data,function (r) {
-			if (r.success) {
-				notify.success('Su usuario ha sido guardado', 'Registro aceptado')
-				user.notification()
-			} else {
-				
-				notify.error(r.err, 'Error: '+ r.code)
-				echo(r);
-				}	
-			btn.load.hide()
-		},'json');	
-			
-	 },
-	notification: function(){
-	//AKI :: 	main.toggle($('#secNewNotification'))
-	 }
  }
 
 $(function(){
@@ -215,31 +172,11 @@ $(function(){
 		.on('click','.cancel',function(e){
 			cube.goTo("front")
 		 })
-		.on('click','#aNewUser',function(){
+		.on('click','#goNewUser',function(){
 			main.toggle($('#newUser'),'right')
-		 })
-		.on('submit','#frmNewUSer',function(e){
-			let _validate =  function (pass1, pass2) {
-				if (!$.isEmpty(pass1) && pass1 === pass2){
-					if (pass1.length < 6 ) {
-						notify.error('El password debe de ser de 6 caracteres mínimo','Password invalido') 
-						return false
-					}
-				}
-			}
-			e.preventDefault()
-			if (validate.pass($('input#pass').val(), $('input#passR').val()))
-				user.save()
 		 })
 		.on('click','#forgotPass',function(){
 			main.toggle($('#recover'), 'left')
-		 })
-		.on('submit','#recover form',function(e){
-			e.preventDefault()
-			recover.send(
-				()=>main.toggle($('#newPass'),'back')
-			)
-					
 		 })
 		.on('click','.logout',function(){
 			deleteAllCookies();
@@ -288,4 +225,7 @@ $(function(){
 	}
 	
 	login.html = $('main')
+
+	// Carga de scripts recovery si es necesario
+	if(typeof recovery != 'undefined' ) recovery.init();
  })
