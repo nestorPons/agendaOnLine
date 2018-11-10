@@ -29,6 +29,7 @@ jQuery.fn.extend({
 	  }
   }),
 });
+
 jQuery.isEmpty = function(){
 	var isEmpty = false 
 	for (var i = 0; i < arguments.length; i++) {
@@ -512,10 +513,10 @@ btn = {
 	loader : {
 		show : function(){
 			$('#loader').hide().removeClass('hide').show(250)
-		}, 
+		 }, 
 		hide :  function(){
 			$('#loader').hide(250).addClass('hide')
-		}
+		 }
 	}
  }, 
 validar = {

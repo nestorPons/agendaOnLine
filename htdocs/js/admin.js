@@ -706,13 +706,13 @@ admin ={
 			$('#main .disabled').removeClass('disabled');
 			$('#btnShow')
 				.find('.menulbl').html('Ocultar').end()
-				.find('i').removeClass().addClass('lnr-star');
+				.find('i').removeClass().addClass('lnr-indent-decrease');
 		},
 		hide : function(){
 			$('#main .fuera_horario').parent().addClass('disabled')
 			$('#btnShow')
 				.find('.menulbl').html('Mostrar').end()
-				.find('i').removeClass().addClass('lnr-star-empty');
+				.find('i').removeClass().addClass('lnr-line-spacing');
 		}, 
 		click :	function(){
 			let localStorageActive = localStorage.getItem("showRows")==1, 

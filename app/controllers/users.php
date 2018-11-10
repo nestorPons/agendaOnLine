@@ -4,11 +4,8 @@ $User = new models\User($_SESSION['id_usuario']);
 if (isset($_POST['action'])) {
     if ($_POST['action'] == 'view'){
         if($_POST['section']=='historial') $historial = $User->getData(); 
-        
         require_once  URL_VIEWS_USER . $_POST['section'] . '.php' ;
-
     } else {
-
         header('Content-Type: application/json');
         require_once URL_AJAX . $_POST['controller'] . '.php' ;
         

@@ -98,7 +98,7 @@
 			<span class="menulbl">Editar</span>
 		</div>
 		<div id="btnShow" class="app-bar-element no-flexible " >
-			<i class="<?=CONFIG['ShowRow']==1?"lnr-star_empty":"lnr-star"?>"></i>
+			<i class="<?=CONFIG['ShowRow']==1?"lnr-line-spacing":"lnr-indent-decrease"?>"></i>
 			<span class="menulbl"><?=CONFIG['ShowRow']==1?"Ocultar":"Mostrar"?></span>
 		</div>
 	</ul>

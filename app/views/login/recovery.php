@@ -1,13 +1,14 @@
 <?php 
-
-    include URL_VIEWS . 'header.php';
     $idUser = substr($_GET['args'],-4);
     $token = $_GET['args'];
-	?>
+?>
+<!DOCTYPE html>
+<html lang="es">
+    <?php include URL_VIEWS . 'login/header.php' ;?>
 	<title>Agenda Online zona login</title>
 	</head>
 	<body data-empresa="<?=$Empresa->code()?>" class="<?=CLASS_BACKGROUND?>" >
-        <div id="login" class="login login-form ">
+        <section class="login login-form ">
             <section id="newPass"  >
                 <h1 class="heading">Restablecer contraseña</h1>
                 <hr>
@@ -25,8 +26,7 @@
                    <button type="submit" class="btn-success btnLoad" data-value="Aceptar">Aceptar</button>
                 </form>
             </section>
-        </div>
-    <script  src="/js/lib/jquery.min.js" ></script>
+        </section>
     <script  src="/js/recovery.js" ></script>
 	</body>
 </html>
