@@ -26,7 +26,7 @@ window.addEventListener('offline',worker.stop);window.addEventListener('online',
 $('#frmContact').submit(function(event){event.preventDefault()
 var data=$("#frmContact").serializeArray()
 data.push({name:'controller',value:'contacto'})
-data.empresa=$('main').data('empresa')
+data.empresa=$('body').data('empresa')
 data[1].value=normalize(data[1].value)
 $.post(INDEX,data,function(r){if(r.success)
 notify.success('Email mandado con éxito')
