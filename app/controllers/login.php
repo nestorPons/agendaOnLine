@@ -4,6 +4,7 @@ $url_font_main = "https://fonts.googleapis.com/css?family=" .
         str_replace(' ' ,'+' ,CONFIG['font_main']) ."|" . 
         str_replace(' ' ,'+' ,CONFIG['font_tile']) ; 
         
+
 if (isset($_POST['action'])){ 
     require_once URL_AJAX . 'login/' . $_POST['action'] . '.php' ;
     

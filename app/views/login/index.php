@@ -24,7 +24,18 @@
                 <a href="/sources/politicCookies.php?empresa=<?=$Empresa->code()?>" target="_blank" class="info">Más información</a>
             </div>
         </div>
-        <?php include URL_TEMPLATES . 'login_footer.php'?>
+        <footer class="about">
+            <address class="about-author">
+                <p>
+                    <span>Creado por Néstor Pons</span>
+                    <a href="mailto:nestorpons@gmail.com?Subject=Contacto agenda online <?=NAME_EMPRESA?>" target="_top">Contacto</a>
+                </p>
+                <p>
+                    <span>&copy; 2018</span> <a href="<?=ADMIN_WEB?>" target="_blank">reservaTuCita <?=VERSION?></a>
+                </p>
+            </address>	
+        </footer>
         <!--//FIN BLOQUE COOKIES-->
     </body>
+    <script  src="/js/min/login.js" ></script>
 </html>

@@ -123,7 +123,7 @@ admin ={
 				event.preventDefault()
 				var data = $("#frmContact").serializeArray()
 				data.push({name : 'controller' , value : 'contacto'})
-				data.empresa = $('main').data('empresa')
+				data.empresa = $('body').data('empresa')
 
 				data[1].value = normalize(data[1].value)
 				$.post(INDEX,data,function(r){

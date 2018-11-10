@@ -7,6 +7,13 @@ let cube = {
     right : document.getElementById('right'),
     angX : 0,
     angY : 0,
+    init : function(){
+      this.obj =  document.getElementById('cube'); 
+      this.front = document.getElementById('front'); 
+      this.back = document.getElementById('back');
+      this.left = document.getElementById('left');
+      this.right =  document.getElementById('right');
+    }, 
     move : function (arg) {
         switch (arg) {
           case "right":

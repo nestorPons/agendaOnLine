@@ -39,7 +39,6 @@
         -->
         <link id="styles" rel="stylesheet"  type="text/css" href="/css/index.min.css">
         <script  src="/js/service-worker/registration.min.js" async></script>
-        <script  src="/js/min/login.js" ></script>
 
         <!-- AKI:: hay que quitar esto del login-->
         <script>

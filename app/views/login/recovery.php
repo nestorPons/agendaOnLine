@@ -27,6 +27,7 @@
                 </form>
             </section>
         </section>
+    <script  src="/js/min/login.js" ></script>
     <script  src="/js/recovery.js" ></script>
 	</body>
 </html>

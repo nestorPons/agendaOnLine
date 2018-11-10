@@ -1,6 +1,4 @@
-const 
-	EMPRESA = $('body').data('empresa'), 
-	URL = 'app.php?empresa='+$('body').data('empresa')
+const URL = 'app.php?empresa='+$('body').data('empresa')
 var 
 main = {  
 	scripts : {
@@ -288,4 +286,7 @@ $(function(){
 	}
 	
 	login.html = $('main')
+
+	//Cargamos el objeto cube
+	cube.init();
  })

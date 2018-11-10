@@ -3,7 +3,7 @@
     <h1 class="heading">Recuperar contraseña</h1>
     <hr>
     <form id="frmRecover">
-        <input type="hidden" id="empresa"  value="<?php  ?>">
+        <input type="hidden" id="empresa" >
         <p>Introduzca su email</p>
         <div class="iconClass-container icon-left">
             <input type="email" class="email" name="email" id="email" placeholder="Introduzca email." required>
