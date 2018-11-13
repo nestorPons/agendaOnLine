@@ -1,4 +1,3 @@
-'use strict'; 
 const version  = 'v2'; 
 
 self.addEventListener('fetch', event => {
