@@ -179,7 +179,15 @@ $(function(){
 			main.toggle($('#recover'), 'left')
 		 })
 		.on('click','.logout',function(){
-			deleteAllCookies();
+			    let cookies = document.cookie.split(";");
+
+				for (let i = 0; i < cookies.length; i++) {
+					let cookie = cookies[i],
+						eqPos = cookie.indexOf("="),
+						name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+						
+					document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+				}
 		 })
 		.on('keyup','#pinpass',function(e){
 			e.preventDefault();

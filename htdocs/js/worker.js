@@ -1,5 +1,6 @@
 'use strict'
 var ajax = {};
+
 ajax.x = function () {
     if (typeof XMLHttpRequest !== 'undefined') {
         return new XMLHttpRequest();
@@ -55,7 +56,8 @@ ajax.post = function (url, data, callback, async) {
         query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
     }
     ajax.send(url, callback, 'POST', query.join('&'), async)
-};  
+}; 
+
 self.addEventListener('message',(e)=>{
 
     ajax.post('/app.php', {controller: 'refresh'}, function(e) {
