@@ -3,9 +3,9 @@ LEFT = 'left' , RIGHT = 'right', GET = 'get';
 
 //Contains para que sea insensible a mayusculas y minusculas
 jQuery.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
- 	return function( elem ) {
-  		return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
- 	}
+ return function( elem ) {
+  return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+ }
  })
  jQuery.fn.removeClassPrefix = function(prefix) {
     this.each(function(i, el) {
@@ -57,14 +57,16 @@ jQuery.serializeForm = function(form){
 
 	return arr_return;
  }
-
+// Creamos una superglobal get
+var $_GET = {}
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 	function _decode(s) {
 		return decodeURIComponent(s.split("+").join(" "));
 	}
 	$_GET[_decode(arguments[1])] = _decode(arguments[2]);
  });
-var $_GET = {}, 
+// *** 
+var  
 Fecha = {
 	actual: fechaActual(),
 	general: formatofecha(fechaActual(),'sql'),
