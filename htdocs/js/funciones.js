@@ -3,9 +3,9 @@ LEFT = 'left' , RIGHT = 'right', GET = 'get';
 
 //Contains para que sea insensible a mayusculas y minusculas
 jQuery.expr[":"].contains = jQuery.expr.createPseudo(function(arg) {
- return function( elem ) {
-  return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
- }
+ 	return function( elem ) {
+  		return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+ 	}
  })
  jQuery.fn.removeClassPrefix = function(prefix) {
     this.each(function(i, el) {
