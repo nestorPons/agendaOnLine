@@ -1,4 +1,3 @@
-'use strict'
 var ajax = {};
 
 ajax.x = function () {
