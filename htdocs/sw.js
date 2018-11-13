@@ -1,4 +1,4 @@
-const version  = 'v2'; 
+const version  = 'v2.1'; 
 
 self.addEventListener('fetch', event => {
   if(event.request.method === "POST"){
