@@ -38,9 +38,9 @@
         <script  src="/js/main.js" ></script>
         -->
         <link id="styles" rel="stylesheet"  type="text/css" href="/css/index.min.css?ver=<?=VERSION?>">
-        <script  src="/js/min/login.js?ver=<?=VERSION?>"></script>
+        <script  src="/js/min/login.js?ver=<?=VERSION?>" async ></script>
         
-        <script  src="/js/service-worker/registration.min.js?ver=<?=VERSION?>"></script>
+        <script  src="/js/service-worker/registration.min.js?ver=<?=VERSION?>" async ></script>
         
         <!-- AKI:: hay que quitar esto del login-->
         <script>

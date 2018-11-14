@@ -2,7 +2,7 @@
 
 $fecha = $_POST['fecha'] ?? date('Y-m-d');
 
-$ag = $_POST['agenda'] ?? 0;
+$ag = isset($_POST['agenda'])?$_POST['agenda']:0;
 $id_fecha = str_replace('-','',$fecha);
 $dia_semana = date('w',strtotime($fecha)) ;
 

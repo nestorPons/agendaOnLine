@@ -307,8 +307,7 @@ input[type="color"] {
 	p { 
 		color: #888;
 	}
-}
-
+ }
 .center {
 	text-align :  center ;
  }
@@ -464,6 +463,7 @@ input[type="color"] {
 		width:auto;
 		.iconClass-container{
 			width:auto;
+
 		}
 	 }
  }
@@ -521,6 +521,10 @@ input[type="color"] {
 			text-align:center;
 			width: 310px;
 			min-height: 50px;
+			@media (max-width: 320px){
+				margin: 0;
+				width: 90%;
+			}
 		
 			*{
 				box-sizing: border-box;
@@ -587,68 +591,6 @@ input[type="color"] {
 	&-right{
 		right: 1ch
 	 }
- }
-.input{
-	&-control{
-		display: inline-block;
-		min-height: 2.125rem;
-		height: 2.125rem;
-		position: relative;
-		vertical-align: middle;
-		margin: .325rem;
-		line-height: 1;
-		height: inherit;
-		.prepend-icon{
-			top: 50% !important;
-		}
-		input{
-			width:95%;
-		}
-	}
-	&-control{
-		height: inherit;
-	}
-	&-button{
-		//left: 10%;
-		position:relative;
-		//display:flex;
-		width:380px;
-		padding:5px;
-		margin:10px auto;
-		position: relative;
-		@media (max-width: 325px){
-			right: 4.5rem;
-		}
-		input, select{
-			z-index:0;
-			margin: 0;
-			padding: 0 0 0 5px ;
-			width: 100%;
-			&:focus{
-				outline: 0;
-			}
-		}
-		.buttons{
-			display: flex;
-			z-index:2;
-			float: right;
-			 &-square{
-				overflow: visible;
-				float: right;
-				margin: 0;
-				padding: 0;
-				cursor: pointer;
-				height: 32px;
-				width: 32px;
-				text-transform: uppercase;
-
-				&::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
-					border: 0;
-					padding: 0;
-				}
-			}
-		}
-	}
  }
 .invalid{
 	border-color: #ff0000 ;
@@ -1329,7 +1271,7 @@ input[type="color"] {
 		}
 	.ui-datepicker-inline{
 		margin: auto;
-		}
+	}
 	#principal{
 		display:none;
 		}
@@ -1421,7 +1363,7 @@ input[type="color"] {
 		font-size: 8rem;
 		color:#fff;
 	}
-}
+ }
 #admin{ 
 	background-color: #fff;
 	#sections{
@@ -2617,7 +2559,7 @@ input[type="color"] {
 	}
  }
 .ui-datepicker{
-	width: 275;
+	width: 275px;
 
 	&-inline{
 		border-width :0px ;
@@ -2633,11 +2575,9 @@ input[type="color"] {
 .ui{
 	&-widget-content &-corner-all {
 		font-family: 'iconos';
-		.ui-datepicker-next {
-			.ui-icon{
-				&:before { content: '\e80e'; }
-				text-align: center;
-			}
+		.ui-datepicker-next .ui-icon{	
+			&:before { content: '\e80e'; }
+			text-align: center;		
 		}
 		.ui-datepicker-prev .ui-icon{
 			&:before { content: '\e80d'; }

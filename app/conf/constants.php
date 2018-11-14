@@ -1,4 +1,16 @@
 <?php 
+// Constantes de desarrollo
+const PREFIX_DB = 'rtc_'; 
+
+const SAVE = 'save';
+const ADD = 'add';
+const DEL = 'del';
+const EDIT = 'edit';
+const GET = 'get';
+const BR = '<br>';
+
+const _NEW = -1; 
+
 $arr = explode('/', $_SERVER['DOCUMENT_ROOT'] ) ;
 define('URL_ROOT' , str_replace(array_pop($arr),'',$_SERVER['DOCUMENT_ROOT']) );
 
@@ -28,17 +40,7 @@ define('URL_VIEWS' , APP_FOLDER . 'views/' );
 define('URL_PROTOCOL', 'https://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
-// Constantes de desarrollo
-const PREFIX_DB = 'rtc_'; 
 
-const SAVE = 'save';
-const ADD = 'add';
-const DEL = 'del';
-const EDIT = 'edit';
-const GET = 'get';
-const BR = '<br>';
-
-const _NEW = -1; 
 
 //datos de administrador
 define ('ADMIN_WEB','https://www.reservatucita.com');

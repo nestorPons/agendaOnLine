@@ -235,4 +235,5 @@ $(function(){
 
 	// Carga de scripts recovery si es necesario
 	if(typeof recovery != 'undefined' ) recovery.init();
+	cube.init();
  })
