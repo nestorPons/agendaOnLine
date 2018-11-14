@@ -118,7 +118,7 @@ login = {
 						let res = r.error.split("<br>")
 						notify.error(res[1], res[0], 5000);
 					}
-				})
+				},'html')
 				.always(function() {
 					login.block = false;
 					btn.loader.hide()
@@ -133,23 +133,24 @@ $(function(){
 		.find('form button').prop('disabled',false).end()	
 		.on('click','#btnbarraaceptacion',login.setCookie)
 		.on('submit','#loginUsuario ',function(e){
-			e.preventDefault()
+			e.preventDefault();
+			$(this).prop('disabled',true); 
 
 			if (localStorage.getItem('AOLAvisoCookie')!=1) {
 				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
 				btn.load.hide()
-				return false
+			} else { 
+				let data ={
+					controller : 'validar', 
+					ancho : screen.width , 
+					login : $(this).find('#login').val(), 
+					pass : Tools.SHA($(this).find('#pass_login').val()), 
+					recordar : $(this).find('#recordar').is(':checked'), 
+					empresa : normalize(config.nombre_empresa)
+				}
+						
+				login.send.validate(data) ;
 			}
-			let data ={
-				controller : 'validar', 
-				ancho : screen.width , 
-				login : $(this).find('#login').val(), 
-				pass : Tools.SHA($(this).find('#pass_login').val()), 
-				recordar : $(this).find('#recordar').is(':checked'), 
-				empresa : normalize(config.nombre_empresa)
-			}
-					
-			login.send.validate(data) ;
 	
 		 })
 		.on('submit','#newpinpass ',function(e){
