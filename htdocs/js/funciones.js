@@ -1,4 +1,4 @@
-const ADD = 'add', SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'app.php' , 
+const SAVE = 'save', DEL = 'del', EDIT = 'edit', VIEW = 'view', INDEX = 'app.php' , 
 LEFT = 'left' , RIGHT = 'right', GET = 'get';
 
 //Contains para que sea insensible a mayusculas y minusculas

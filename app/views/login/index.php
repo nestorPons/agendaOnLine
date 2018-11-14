@@ -37,5 +37,4 @@
         </footer>
         <!--//FIN BLOQUE COOKIES-->
     </body>
-    <script  src="/js/min/login.js" ></script>
 </html>
