@@ -1,6 +1,5 @@
-const 
-	EMPRESA = $('body').data('empresa'), 
-	URL = 'app.php?empresa='+$('body').data('empresa')
+const URL = 'app.php?empresa='+$('body').data('empresa');
+
 var 
 main = {  
 	scripts : {
@@ -55,7 +54,7 @@ main = {
 			$('main').find('#loading').addClass('hidden')
 		 }
 	 }, 
-	logout : function(){	
+	logout : function(){
 		let effect = 'puff'; 
 		$('body')
 			.hide(effect,function(){
@@ -83,7 +82,9 @@ login = {
 				btn.loader.show()
 
 				$.post(INDEX, data, function(r){
-					if (r.error == undefined){
+					// Buscamos en la cadena devuelta la palabra error para saber si devuelve un JSON o html
+					if (r.indexOf('error') == -1){
+						// Es un HTML 
 						// Si estoy cargando newpinpass que me lo cargue detras de cube 
 						// para mantener estetica
 						if($(r).find('#newpinpass').length){
@@ -93,6 +94,7 @@ login = {
 
 							// Devuelve zona admin o users  logueo correcto
 							btn.load.hide();
+
 							//Filtro por si viene de nuevo pin 
 							// devuelvo entrada de pin normal
 							if($('body').find('#newpinpass').length){
@@ -115,8 +117,9 @@ login = {
 							main.scripts.load(section)
 						}
 					} else { 
-						let res = r.error.split("<br>")
-						notify.error(res[1], res[0], 5000);
+						// Es un JSON
+						let array = JSON.parse(r).error.split("<br>"); 
+						notify.error( array[1], array[0], 2500);
 					}
 				},'html')
 				.always(function() {
@@ -134,7 +137,6 @@ $(function(){
 		.on('click','#btnbarraaceptacion',login.setCookie)
 		.on('submit','#loginUsuario ',function(e){
 			e.preventDefault();
-			$(this).prop('disabled',true); 
 
 			if (localStorage.getItem('AOLAvisoCookie')!=1) {
 				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
@@ -180,15 +182,15 @@ $(function(){
 			main.toggle($('#recover'), 'left')
 		 })
 		.on('click','.logout',function(){
-			    let cookies = document.cookie.split(";");
+			let cookies = document.cookie.split(";");
 
-				for (let i = 0; i < cookies.length; i++) {
-					let cookie = cookies[i],
-						eqPos = cookie.indexOf("="),
-						name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-						
-					document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-				}
+			for (let i = 0; i < cookies.length; i++) {
+				let cookie = cookies[i],
+					eqPos = cookie.indexOf("="),
+					name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+					
+				document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+			}
 		 })
 		.on('keyup','#pinpass',function(e){
 			e.preventDefault();

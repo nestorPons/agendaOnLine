@@ -193,7 +193,7 @@ var crearCita ={
 				m.innerHTML = html	
 				crearCita.horas.load()
 				that.show()
-			})
+			},'html')
 
 		 },		
 		pintar: function(id_table, tiempoServicios = 0){
@@ -584,7 +584,7 @@ var users = {
 				return true;
 			}
 					
-		})
+		},'json')
 	 },
  },
 tile = { 

@@ -96,7 +96,7 @@ var horarios = {
 					} else {
 						notify.error('No se pudo guardare el horario')
 					}
-				})
+				},'json')
 		},
 		del: function(){
 

@@ -43,7 +43,7 @@ that.hide()
 $.post(INDEX,data,function(html){var m=document.getElementById('tablas')
 m.innerHTML=html
 crearCita.horas.load()
-that.show()})},pintar:function(id_table,tiempoServicios=0){var $sec=$('#crearCita'),ts=parseInt(Math.ceil(tiempoServicios/15)),$dia=$sec.find('#'+id_table),$horas=$dia.find('.horas'),count=ts-1
+that.show()},'html')},pintar:function(id_table,tiempoServicios=0){var $sec=$('#crearCita'),ts=parseInt(Math.ceil(tiempoServicios/15)),$dia=$sec.find('#'+id_table),$horas=$dia.find('.horas'),count=ts-1
 $dia.removeClass('reservado').find('input').attr('disabled',!1)
 for(let i=$horas.length-1;i>=0;i--){let $this=$dia.find('#hora'+i)
 if($this.hasClass('ocupado'))count=ts
