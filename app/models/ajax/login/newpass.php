@@ -5,17 +5,11 @@ $Login->user($User);
 if($User->status()<2){
         if ($User->checkToken($_POST['token'])){
                 if($User->password($_POST['pass'])){
-                // if el registro es correcto eliminamos el $_POST['action'] 
-                // para el script user cargue la vista 
-                unset($_POST['action']);
-                $return['action'] = $Login->createSession(); 
-
+                        unset($_POST['action']);        
+                        $return['action'] = $Login->createSession(); 
                 }else{
-                        $return = 'Error al cambiar la contraseña';
+                        $return = 'Error no se ha podido guardar el password';
                 }
-                        
-                        
- 
                 return $return;
         } else return core\Error::array(core\Error::$last);
 } else {

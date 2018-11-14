@@ -1,6 +1,12 @@
 <?php 
-const VERSION = 'v8.2'; 
+const VERSION = 'v8.3.9'; 
 const STABLE = false; 
+
+const PREFIX_DB = 'rtc_'; 
+const MARGIN_DAYS = 7; 
+const DEFAULT_HISTORY_DAYS = 1;
+const NUM_MAX_ATTEMPT = 10; //attempts for crack brute force pass
+
 
 define('NAME_EMPRESA' ,  $Empresa->name());
 define('NAME_CODE' ,  $Empresa->code());

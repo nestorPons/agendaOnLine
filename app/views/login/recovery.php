@@ -1,4 +1,5 @@
 <?php 
+    include URL_VIEWS . 'login/header.php';
     $idUser = substr($_GET['args'],-4);
     $token = $_GET['args'];
 ?>
@@ -26,8 +27,7 @@
                    <button type="submit" class="btn-success btnLoad" data-value="Aceptar">Aceptar</button>
                 </form>
             </section>
-        </section>
-    <script  src="/js/min/login.js" ></script>
-    <script  src="/js/recovery.js" ></script>
+        </div>
+    <script  src="/js/recovery.js?ver=<?=VERSION?>"></script>
 	</body>
 </html>

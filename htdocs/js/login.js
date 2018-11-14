@@ -1,4 +1,4 @@
-const URL = 'app.php?empresa='+$('body').data('empresa')
+const URL = 'app.php?empresa='+$('body').data('empresa');
 var 
 main = {  
 	scripts : {
@@ -53,7 +53,7 @@ main = {
 			$('main').find('#loading').addClass('hidden')
 		 }
 	 }, 
-	logout : function(){	
+	logout : function(){
 		let effect = 'puff'; 
 		$('body')
 			.hide(effect,function(){
@@ -80,17 +80,19 @@ login = {
 				login.block = true
 				btn.loader.show()
 
-				$.post(INDEX, data, function(r){
-					if (r.error == undefined){
+				$.post(INDEX, data, function(respond){
+					// Buscamos en la cadena devuelta la palabra error para saber si devuelve un JSON o html
+					if (respond.indexOf('error') == -1){
+						// Es un HTML 
 						// Si estoy cargando newpinpass que me lo cargue detras de cube 
 						// para mantener estetica
-						if($(r).find('#newpinpass').length){
-							$('#back').html(r); 
+						if($(respond).find('#newpinpass').length){
+							$('#back').html(respond); 
 							cube.goTo('back'); 
 						}else{
-
 							// Devuelve zona admin o users  logueo correcto
 							btn.load.hide();
+
 							//Filtro por si viene de nuevo pin 
 							// devuelvo entrada de pin normal
 							if($('body').find('#newpinpass').length){
@@ -98,74 +100,30 @@ login = {
 										controller : 'login', 
 										view : 'pinpass'
 									}
-								$.post(INDEX,data,function(r){
-									login.html = r
+								$.post(INDEX,data,function(zoneHTML){
+									login.html = zoneHTML; 
 								},'html')
+
 							} else { 
 								login.html = $('body').html(); 
 							}
 							$('body > *').detach();
 							$('body')
-								.append(r)
+								.append(respond)
 								.removeClass()
-							let section = $(r).filter('main').attr('id');
+							let section = $(respond).filter('main').attr('id');
 
 							main.scripts.load(section)
 						}
 					} else { 
-						let res = r.error.split("<br>")
-						notify.error(res[1], res[0], 5000);
+						// Es un JSON
+						let array = JSON.parse(r).error.split("<br>"); 
+						notify.error( array[1], array[0], 2500);
 					}
-				})
-				.always(function() {
-					login.block = false;
-					btn.loader.hide()
-				});
+				},'html')
+
 			}
 		}
-	 }
- }, 
-recover = {
-	send : function (callback){
-		var data = {
-			email : $('#recover').find('#email').val(),
-			controller : 'login',
-			action : 'recover'
-	  	 }
-
-		$.post(URL, data,function (r) {
-			if (r.success) {
-				notify.success('Siga las instrucciones del email', 'Email enviado')
-				
-			} else {
-				notify.error(r.err, 'Error: '+ r.code)
-				echo(r);
-			 }	
-			btn.load.hide()
-		 },'json')	
-	 }
- }, 
-user = {
-	save : function () {
-		$('#frmNewUSer #pass').val(Tools.SHA$(('#frmNewUSer #fakePass').val()))
-		var	data = $("#frmNewUSer").serializeArray()			
-			data.push({name : 'controller' , value:'login'})
-			data.push({name : 'action' , value : SAVE})
-		$.post(URL, data,function (r) {
-			if (r.success) {
-				notify.success('Su usuario ha sido guardado', 'Registro aceptado')
-				user.notification()
-			} else {
-				
-				notify.error(r.err, 'Error: '+ r.code)
-				echo(r);
-				}	
-			btn.load.hide()
-		},'json');	
-			
-	 },
-	notification: function(){
-	//AKI :: 	main.toggle($('#secNewNotification'))
 	 }
  }
 
@@ -174,23 +132,23 @@ $(function(){
 		.find('form button').prop('disabled',false).end()	
 		.on('click','#btnbarraaceptacion',login.setCookie)
 		.on('submit','#loginUsuario ',function(e){
-			e.preventDefault()
+			e.preventDefault();
 
 			if (localStorage.getItem('AOLAvisoCookie')!=1) {
 				alert("Debes autorizar el uso de las cookies para poder continuar usando la aplicacion")
 				btn.load.hide()
-				return false
+			} else { 
+				let data ={
+					controller : 'validar', 
+					ancho : screen.width , 
+					login : $(this).find('#login').val(), 
+					pass : Tools.SHA($(this).find('#pass_login').val()), 
+					recordar : $(this).find('#recordar').is(':checked'), 
+					empresa : normalize(config.nombre_empresa)
+				}
+						
+				login.send.validate(data) ;
 			}
-			let data ={
-				controller : 'validar', 
-				ancho : screen.width , 
-				login : $(this).find('#login').val(), 
-				pass : Tools.SHA($(this).find('#pass_login').val()), 
-				recordar : $(this).find('#recordar').is(':checked'), 
-				empresa : normalize(config.nombre_empresa)
-			}
-					
-			login.send.validate(data) ;
 	
 		 })
 		.on('submit','#newpinpass ',function(e){
@@ -213,34 +171,22 @@ $(function(){
 		.on('click','.cancel',function(e){
 			cube.goTo("front")
 		 })
-		.on('click','#aNewUser',function(){
+		.on('click','#goNewUser',function(){
 			main.toggle($('#newUser'),'right')
-		 })
-		.on('submit','#frmNewUSer',function(e){
-			let _validate =  function (pass1, pass2) {
-				if (!$.isEmpty(pass1) && pass1 === pass2){
-					if (pass1.length < 6 ) {
-						notify.error('El password debe de ser de 6 caracteres mínimo','Password invalido') 
-						return false
-					}
-				}
-			}
-			e.preventDefault()
-			if (validate.pass($('input#pass').val(), $('input#passR').val()))
-				user.save()
 		 })
 		.on('click','#forgotPass',function(){
 			main.toggle($('#recover'), 'left')
 		 })
-		.on('submit','#recover form',function(e){
-			e.preventDefault()
-			recover.send(
-				()=>main.toggle($('#newPass'),'back')
-			)
-					
-		 })
 		.on('click','.logout',function(){
-			deleteAllCookies();
+			let cookies = document.cookie.split(";");
+
+			for (let i = 0; i < cookies.length; i++) {
+				let cookie = cookies[i],
+					eqPos = cookie.indexOf("="),
+					name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+					
+				document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+			}
 		 })
 		.on('keyup','#pinpass',function(e){
 			e.preventDefault();
@@ -287,6 +233,6 @@ $(function(){
 	
 	login.html = $('main')
 
-	//Cargamos el objeto cube
-	cube.init();
+	// Carga de scripts recovery si es necesario
+	if(typeof recovery != 'undefined' ) recovery.init();
  })

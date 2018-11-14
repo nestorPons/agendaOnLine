@@ -58,14 +58,16 @@ jQuery.serializeForm = function(form){
 
 	return arr_return;
  }
-var $_GET = {};
-function decode(s) {
-	return decodeURIComponent(s.split("+").join(" "));
- }
+// Creamos una superglobal get
+var $_GET = {}
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
-	$_GET[decode(arguments[1])] = decode(arguments[2]);
+	function _decode(s) {
+		return decodeURIComponent(s.split("+").join(" "));
+	}
+	$_GET[_decode(arguments[1])] = _decode(arguments[2]);
  });
-var 
+// *** 
+var  
 Fecha = {
 	actual: fechaActual(),
 	general: formatofecha(fechaActual(),'sql'),
@@ -1046,16 +1048,6 @@ function existeUrl(url) {
    http.open('HEAD', url, false);
    http.send();
    return http.status!=404;
- }
-function deleteAllCookies() {
-    var cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        var eqPos = cookie.indexOf("=");
-        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    }
  }
 function colorear_filas($this){
 	$this = $this.find('tbody tr').css('background','').filter(':visible')

@@ -1,1 +1,1 @@
-/srv/http/www.reservatucita.com/htdocs/js/validar.js
+/srv/data/web/vhosts/www.nestorpons.pw/htdocs/js/validar.js
