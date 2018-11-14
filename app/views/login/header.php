@@ -25,9 +25,9 @@
         <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
         <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
+        <!--
         <link rel="stylesheet" href="<?=$url_font_main?>" >
 
-        <!--
         <link rel="stylesheet"  type="text/css" href="/css/jquery-ui.min.css">
         <link rel="stylesheet"  type="text/css" href="/css/metro.css">
         <link rel="stylesheet"  type="text/css" href="/css/iconos.css">
@@ -37,10 +37,11 @@
         <link rel="stylesheet"  type="text/css" href="/empresas/<?=$Empresa->code()?>/style.css">   
         <script  src="/js/main.js" ></script>
         -->
-        <link id="styles" rel="stylesheet"  type="text/css" href="/css/index.min.css">
-        <script  src="/js/service-worker/registration.min.js" async></script>
-        <script  src="/js/min/login.js" async></script>
-
+        <link id="styles" rel="stylesheet"  type="text/css" href="/css/index.min.css?ver=<?=VERSION?>">
+        <script  src="/js/min/login.js?ver=<?=VERSION?>"></script>
+        
+        <script  src="/js/service-worker/registration.js?ver=<?=VERSION?>"></script>
+        
         <!-- AKI:: hay que quitar esto del login-->
         <script>
             let config = new Object;
@@ -53,6 +54,7 @@
     -->
     
 <!-- Fuerza a la no lectura de cache
+-->
 <meta http-equiv="Expires" content="0">
 
 <meta http-equiv="Last-Modified" content="0">
@@ -60,4 +62,3 @@
 <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
 
 <meta http-equiv="Pragma" content="no-cache">
--->

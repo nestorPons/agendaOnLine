@@ -18,6 +18,7 @@ $script  =
 
 $return = include URL_AJAX . 'login/' . $script;
 
+
 if( !isset($return['action']) || $return['action'] == 'login'){
 
 	// En newpass no se crea el action hay que  enviarlo al login

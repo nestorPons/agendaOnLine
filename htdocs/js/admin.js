@@ -696,7 +696,7 @@ admin ={
 					},3000);
 
 				}else{echo(r)}
-			})
+			},'json')
 			.always($this.find('.icon-load').fadeOut());
 		}
 	 },

@@ -1,5 +1,4 @@
 const URL = 'app.php?empresa='+$('body').data('empresa');
-
 var 
 main = {  
 	scripts : {
@@ -81,17 +80,16 @@ login = {
 				login.block = true
 				btn.loader.show()
 
-				$.post(INDEX, data, function(r){
+				$.post(INDEX, data, function(respond){
 					// Buscamos en la cadena devuelta la palabra error para saber si devuelve un JSON o html
-					if (r.indexOf('error') == -1){
+					if (respond.indexOf('error') == -1){
 						// Es un HTML 
 						// Si estoy cargando newpinpass que me lo cargue detras de cube 
 						// para mantener estetica
-						if($(r).find('#newpinpass').length){
-							$('#back').html(r); 
+						if($(respond).find('#newpinpass').length){
+							$('#back').html(respond); 
 							cube.goTo('back'); 
 						}else{
-
 							// Devuelve zona admin o users  logueo correcto
 							btn.load.hide();
 
@@ -102,17 +100,18 @@ login = {
 										controller : 'login', 
 										view : 'pinpass'
 									}
-								$.post(INDEX,data,function(r){
-									login.html = r
+								$.post(INDEX,data,function(zoneHTML){
+									login.html = zoneHTML; 
 								},'html')
+
 							} else { 
 								login.html = $('body').html(); 
 							}
 							$('body > *').detach();
 							$('body')
-								.append(r)
+								.append(respond)
 								.removeClass()
-							let section = $(r).filter('main').attr('id');
+							let section = $(respond).filter('main').attr('id');
 
 							main.scripts.load(section)
 						}
@@ -122,10 +121,7 @@ login = {
 						notify.error( array[1], array[0], 2500);
 					}
 				},'html')
-				.always(function() {
-					login.block = false;
-					btn.loader.hide()
-				});
+
 			}
 		}
 	 }
