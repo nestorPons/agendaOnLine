@@ -2,3 +2,5 @@ htdocs/css/main.css
 htdocs/css/*.min.css
 htdocs/empresas/**/*.css
 htdocs/js/min/*.js
+htdocs/dist/*.*
+

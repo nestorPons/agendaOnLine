@@ -29,6 +29,8 @@ define('URL_PROTOCOL', 'https://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
 // Constantes de desarrollo
+const PREFIX_DB = 'rtc_'; 
+
 const SAVE = 'save';
 const ADD = 'add';
 const DEL = 'del';
