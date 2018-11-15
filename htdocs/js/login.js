@@ -1,4 +1,5 @@
 const URL = 'app.php?empresa='+$('body').data('empresa');
+
 var 
 main = {  
 	scripts : {
@@ -45,6 +46,7 @@ main = {
 			cube.goTo(container);
 
 	 }, 
+	 
 	loader : {
 		show : function(){
 			$('main').find('#loading').removeClass('hidden')
@@ -79,7 +81,6 @@ login = {
 			if(!login.block){
 				login.block = true
 				btn.loader.show()
-
 				$.post(INDEX, data, function(respond){
 					// Buscamos en la cadena devuelta la palabra error para saber si devuelve un JSON o html
 					if (respond.indexOf('error') == -1){

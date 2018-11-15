@@ -1,5 +1,3 @@
-//'use strict'
-
 if ('serviceWorker' in navigator && ('indexedDB' in window)) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js', {scope: '/'})

@@ -1,4 +1,5 @@
-const version  = 'v2.1'; 
+// Se usa mara mandar notificaciones push como recordatorios de las citas
+const version  = 'v2.2'; 
 
 self.addEventListener('fetch', event => {
   if(event.request.method === "POST"){
@@ -120,6 +121,5 @@ timer = {
         timer.interval = setInterval(()=>timer.timerSetInterval(data), 1000 * 60)
       }
     })
-  }, 
-
+  }
 }

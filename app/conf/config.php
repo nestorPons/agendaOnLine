@@ -1,5 +1,5 @@
 <?php 
-const VERSION = 'v8.3.9'; 
+const VERSION = 'v8.4.8'; 
 const STABLE = false; 
 
 const MARGIN_DAYS = 1; 
