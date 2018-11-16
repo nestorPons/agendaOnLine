@@ -59,7 +59,6 @@ class Lbl {
                 LEFT JOIN servicios A ON C.servicio = A.id
                 WHERE $filter D.fecha BETWEEN '$ini' AND '$end'  
                 ORDER BY D.id, D.hora;";
-
         $this->data($sql) ;
     }
     private function data ($sql) {

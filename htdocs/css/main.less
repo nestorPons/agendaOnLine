@@ -2220,7 +2220,7 @@ input[type="color"] {
 			max-width: 280px;
 		i{
 			position: absolute;
-			padding: 2ch;
+			padding: 2.5ch;
 			display: inline-flex;
 			color: #888;
 			z-index:10;
@@ -2247,7 +2247,6 @@ input[type="color"] {
 		}
 		@media (max-width: 340px){
 			max-width: 115px;
-			i{ padding: 2ch 0; }
 		}
 	}
 	.app-bar-element {
@@ -2559,32 +2558,33 @@ input[type="color"] {
 	}
  }
 .ui-datepicker{
-	width: 275px;
-
+	// Sobreescribo los atributos que le da jquery-ui en el evento
+	width: 320px;
+	position: relative !important;
+	top: 34px !important;
+	margin: auto;
+	left: auto !important;
 	&-inline{
 		border-width :0px ;
 		display: inline ;
 	}
-
-	@media (max-width: 590px){
-		td{
-			a{height: 30px;}
-		}	
+	td a{height: 30px;}
+	@media (max-width: 320px){
+		width: 90%;
 	}
- }
-.ui{
-	&-widget-content &-corner-all {
-		font-family: 'iconos';
-		.ui-datepicker-next .ui-icon{	
-			&:before { content: '\e80e'; }
-			text-align: center;		
-		}
-		.ui-datepicker-prev .ui-icon{
-			&:before { content: '\e80d'; }
-			text-align: center;
-		}
+}
+.ui-widget-content .ui-corner-all {
+	font-family: 'iconos';
+	.ui-datepicker-next .ui-icon{	
+		&:before { content: '\e80e'; }
+		text-align: center;		
 	}
- }
+	.ui-datepicker-prev .ui-icon{
+		&:before { content: '\e80d'; }
+		text-align: center;
+	}
+}
+ 
 // Auxiliares
 .noHover{
 	cursor: inherit;

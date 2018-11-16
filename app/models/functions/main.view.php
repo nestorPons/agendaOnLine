@@ -1,6 +1,6 @@
 <?php namespace functions ;
 
-function view($fecha_inicio = null, $existen_array = false ){	
+function view($fecha_actual = null, $existen_array = false ){	
 	global $Device, $_POST;
 	$Agenda = new \models\Agendas;
 	/**
@@ -15,19 +15,17 @@ function view($fecha_inicio = null, $existen_array = false ){
 	}
 
     date_default_timezone_set('UTC');			
-	$fecha = $fecha_inicio??Date('Y-m-d');
-	$dias = round(MARGIN_DAYS/2);
+	$fecha = $fecha_actual??Date('Y-m-d');
 
-	$fecha_iinicio =date ( 'Y-m-d', strtotime ( '-'.$dias.' day' , strtotime ( $fecha ) ) );
-	$fecha_fin =date ( 'Y-m-d', strtotime ( '+'.$dias.' day' , strtotime ( $fecha ) ) );
+	$fecha_fin =date ( 'Y-m-d', strtotime ( '+'.MARGIN_DAYS.' day' , strtotime ( $fecha ) ) );
 
 	$lbl = new \models\Lbl();
-	$lbl->loadDates( $fecha_inicio , $fecha_fin ) ; 
+	$lbl->loadDates( $fecha , $fecha_fin ) ; 
 
 	//Genero variable de session para checkear las citas que se han creado ,eliminado o editado.
 	$_SESSION['dating_control'] = $lbl->ids;
 
-	for ($d = 0; $d <= ($dias * 2) ; $d++){
+	for ($d = 0; $d < MARGIN_DAYS ; $d++){
 
 		$fecha =date ( 'Y-m-d', strtotime ( '+'.$d.' day' , strtotime ( $fecha ) ) );
 		$id_fecha = str_replace('-','',$fecha);
