@@ -3,7 +3,7 @@ services:
   webserver:
     depends_on:
       - db
-    image: nimmis/apache-php7
+    image: httpd
     container_name: Apache2-PHP7
     volumes:
       - ./..:/var/www/html

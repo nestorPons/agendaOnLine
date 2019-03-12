@@ -1,0 +1,32 @@
+Options -Indexes +FollowSymLinks -MultiViews  
+RewriteEngine On
+#AddDefaultCharset UTF-8
+DirectoryIndex index.html index.php
+#php_flag
+php_flag display_errors On
+php_flag "output_buffering" off
+
+## Cache y velocidad de carga 
+SetOutputFilter DEFLATE
+Header unset ETag
+FileETag None
+<FilesMatch "\.(js|css|ico|pdf|jpg|jpeg|png|gif)$">
+Header set Cache-Control "public"
+Header set Expires "Thu, 15 Apr 2020 20:00:00 GMT"
+Header unset Last-Modified
+</FilesMatch>
+
+ErrorDocument 404 error404.php
+
+RewriteRule ^css/(.*)$ - [L]
+RewriteRule ^img/(.*)$ - [L]
+RewriteRule ^js/(.*)$ - [L]
+RewriteRule ^font/(.*)$ - [L]
+RewriteRule ^sources/(.*)$ - [L]
+RewriteRule ^dist/(.*)$ - [L]
+RewriteRule ^empresas/^([0-9a-z_-]+)/(.*)$ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([0-9a-z_-]+)/([^/]+)/([^/]+)/?$ app.php?empresa=$1&controller=$2&args=$3 [L,QSA]
+RewriteRule ^([0-9a-z_-]+)/([^/]+)/?$ app.php?empresa=$1&controller=$2 [L,QSA]
+RewriteRule ^([0-9a-z_-]+)/?$ app.php?empresa=$1 [L,QSA]

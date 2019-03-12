@@ -2,6 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+echo "PUTA MIERDA";
+
 //Establecemos zona horaria por defecto
 date_default_timezone_set('Europe/Madrid');
 
