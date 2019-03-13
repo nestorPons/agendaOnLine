@@ -118,7 +118,7 @@ login = {
 						}
 					} else { 
 						// Es un JSON
-						let array = JSON.parse(r).error.split("<br>"); 
+						let array = JSON.parse(respond).error.split("<br>"); 
 						notify.error( array[1], array[0], 2500);
 					}
 				},'html')

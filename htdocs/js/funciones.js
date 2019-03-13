@@ -1008,7 +1008,7 @@ function colorearMenuDiasSemana(arg){
 
 	//coloreo rojo festivos en datepicker
 	var fes = formatofecha(fecha,'md');
-	if(d==7||$.inArray(fes,config.festivos.year)!=-1)
+	if(d==7||$.inArray(fes,config.festivos)!=-1)
 		$('.datepicker').css('color','#e04747')
 	else
 		$('.datepicker').css('color','initial')
