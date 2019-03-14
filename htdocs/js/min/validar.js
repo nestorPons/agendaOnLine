@@ -1,1 +1,1 @@
-/srv/data/web/vhosts/www.reservatucita.com/htdocs/js/validar.js
+/var/www/html/htdocs/js/validar.js
