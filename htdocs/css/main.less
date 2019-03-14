@@ -333,6 +333,7 @@ input[type="color"] {
  }
 
 .charm{
+	background-image: url("/img/fondo_barra.png");
 	display: none;
 	position: fixed;
 	right: 0;
@@ -1922,7 +1923,7 @@ input[type="color"] {
 #navbar{
 	background-image: url("/img/fondo_barra.png");
 	display: block;
-    width: 100%;
+  width: 100%;
 	height: 50px;
 	position: fixed;
 	z-index:2000;
@@ -1930,7 +1931,7 @@ input[type="color"] {
 	overflow: visible;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-    -ms-user-select: none;
+  -ms-user-select: none;
 	user-select: none;
 	overflow: hidden;
 	#boton-menu{
@@ -2601,7 +2602,7 @@ input[type="color"] {
 }
 /* The side navigation menu */
 .sidenav {
-	background-image: url("/img/fondo_barra.png") no-repeat center center fixed;
+	background-image: url(/img/fondo_barra.png);
 	background-size: cover;
     height: 100%; /* 100% Full-height */
     width: 0px; /* 0 width - change this with JavaScript */
@@ -2641,33 +2642,33 @@ input[type="color"] {
 			vertical-align: middle;
 		 }
 	 }
-	.d-menu { 
-		transform: translate(2px);
-		font-size: .9em;
-		display: none;		
-		li {
-			a {
-				padding-left: 22px;
-				*{
-					display: table-cell;
-					font-size: 12px;
-					position: relative;
+		.d-menu { 
+			transform: translate(2px);
+			font-size: .9em;
+			display: none;		
+			li {
+				a {
+					padding-left: 22px;
+					*{
+						display: table-cell;
+						font-size: 12px;
+						position: relative;
+					}
+					.caption{
+						padding-left: 12px;
+						font-size: @font-size-menu - 5px;
+					}
 				}
-				.caption{
-					padding-left: 12px;
-					font-size: @font-size-menu - 5px;
-				}
+				
+				
 			}
 			
-			
 		}
-		
-	 }
-	.hay-nota {
-		border: 1px solid;
-		background: red;
-	 }
-}
+		.hay-nota {
+			border: 1px solid;
+			background: red;
+		}
+	}
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
