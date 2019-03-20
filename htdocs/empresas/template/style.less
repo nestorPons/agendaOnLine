@@ -6,6 +6,17 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
+@color-base      : @color_secon;
+@color-primary   : mix(@color-base, mediumvioletred);
+@color-secondary : mix(@color-base, lightseagreen);
+@color-tertiary  : mix(@color-base, mintcream);
+@color-complement : spin(@color-base, 180);
+@triadic-secondary : spin(@color-base, -(360 / 3));
+@triadic-tertiary  : spin(@color-base, (360 / 3));
+@color-hover   : saturate(@color-primary, 10%);
+@color-focus   : desaturate(@color-primary, 10%);
+@color-disable : lightness(desaturate(@color-primary, 100%), 30%);
+
 @light: #101010; 
 @dark: #fdfdfd;
 
@@ -68,6 +79,12 @@ body{
 &.background-personalized {
 	background-image: url("background.jpg")
  }
+.about{
+	a { 
+		color: @blue !important;
+	}
+}
+
 p{
 	color: @text-color;
  }
@@ -162,6 +179,9 @@ a,i , .a{
 		}
 	}
  }
+.about a{
+	color: @blue;
+}
 .icon{
 	&-cancel{
 
@@ -186,6 +206,7 @@ a,i , .a{
 	text-decoration: underline;
  }
 #navbar{
+	background-color: @color-primary !important;
 	font-family: @main-font;
 	
 	#conTxtBuscar{
@@ -379,18 +400,7 @@ a,i , .a{
 	a {
 		color: @blue;
 	}
-}
-&.about{
-	position: absolute;
-	bottom: -330px;	
-	*{
-		display: inline-block;	
-		margin: 5px;
-	}
-	a {
-		color: @blue;
-	}
-}
+ }
 .popover{
 	border-radius : @radius;
  }
@@ -487,10 +497,12 @@ a,i , .a{
 	}
  }
 .charm{
-	@bk-color: darken(mix(@color,@color_secon, 70%),30%); 
+	@bk-color: @color-secondary;
 	background-color: @bk-color;
+	color:contrast(@bk-color, #101010, #fdfdfd, 40);
+
 	button{
-		@c : contrast(@bk-color, @light, @dark , 45%); 
+		@c : contrast(@bk-color, @light, @dark); 
 		color: @c; 
 		border-color: @c;
 	}
@@ -668,7 +680,7 @@ a,i , .a{
 			border-color: @blue;
 		}
 	}
-}
+} 
 .bg{
 	&-color{background-color: @b1 !important}
 	&-c1{background-color:@b1 !important}
@@ -791,6 +803,9 @@ a,i , .a{
 				}
 			}
 		}
+		a{
+			color:  @font-color;
+		}
 	}
  }
 
@@ -851,16 +866,15 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	@bk-color: darken(@color,40%);
-	@fnt-color:  contrast(@bk-color, #101010, #fdfdfd,70); 
+	@bk-color: @color-secondary;
 	background-color: @bk-color;
-	color: @fnt-color;
+	color:contrast(@bk-color, #101010, #fdfdfd, 40);
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
-		color:@fnt-color; 
-		background-color: @bk-color;
+		background-color: @color-secondary;
+		color: contrast(@color-secondary, #101010, #fdfdfd); 
 	}
 
  }
