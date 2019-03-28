@@ -107,7 +107,9 @@ var crearCita ={
 						self.data.idCita = rsp.idCita
 						self.data.idUsuario = rsp.idUser
 						self.data.servicios = rsp.services
-
+						// Cerrar paner crearCita 
+						tile.close()
+						crearCita.reset()
 						//Cambiar en solo en usuarios
 						historial.request()
 						// Solicitar permiso para mandar notificaciones 
@@ -239,7 +241,6 @@ var crearCita ={
 				.removeClass('input-error')
 			.end()
 			.find('#cliente')
-				.val("")
 				.removeClass('input-error')
 			.end()
 			.find('#crearCitaNota').val("").end()
@@ -251,7 +252,7 @@ var crearCita ={
 			.find('#lblHora').empty().end()
 			.find('#lblFecha').empty().end()
 			.find('#lblSer').empty().end()
-			.find('#lblCliente').empty()
+			.find('#lblCliente').val($('#crearCita #cliente').val())
 
 		crearCita.data.hora = '';
 		crearCita.data.agenda = 0 
@@ -356,7 +357,7 @@ var historial = {
 									agenda : agenda, 
 									notificacion : 0 
 								})
-								sa.onsuccess = e => console.log( 'guardado : ' + e.target.result)
+								sa.onsuccess = e => console.log( 'guardado desde usuarios: ' + e.target.result)
 								sa.onerror = e=> console.log(' error : ' + e)
 							}
 						}
@@ -586,8 +587,8 @@ var users = {
 					
 		},'json')
 	 },
- },
-tile = { 
+ }
+var tile = { 
 	isOpen : null, 
 	active : function(){
 		
@@ -620,8 +621,8 @@ tile = {
 
 		this.isOpen = null
 	}
-}, 
-menu = { 
+}
+var menu = { 
 	toggle: function(btn){
 		var span = btn.find('span'), 
 			mnu = $('#'+btn.data('menu'))

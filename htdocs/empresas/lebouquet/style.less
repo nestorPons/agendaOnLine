@@ -6,7 +6,7 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
-@color-base      : @color_secon;
+@color-base      : @color;
 @color-primary   : mix(@color-base, mediumvioletred);
 @color-secondary : mix(@color-base, lightseagreen);
 @color-tertiary  : mix(@color-base, mintcream);
@@ -36,14 +36,16 @@
 @b1: mix(@color, #fff, 40%);
 @b2: mix(@color_secon, #fff, 40%);
 
-@orange: desaturate(#F90,lightness(@color));
-@red: desaturate(#FF0000,lightness(@color));
-@green: desaturate(#00FF00,lightness(@color));
-@blue :desaturate(#0000FF,lightness(@color));
-@yellow :desaturate(#FFFF00,lightness(@color));
-@cyan: desaturate(#00FFFF,lightness(@color));
-@pink: desaturate(#FF00FF,lightness(@color));
-@purple: desaturate(#8000FF,lightness(@color));
+@rotate: 1;
+@desaturate: lightness(@color);
+@orange: desaturate(spin(#F90, @rotate), @desaturate);
+@red: desaturate(spin(#FF0000, @rotate), @desaturate);
+@green: desaturate(spin(#00FF00, @rotate), @desaturate);
+@blue :desaturate(spin(#0000FF, @rotate), @desaturate);
+@yellow :desaturate(spin(#FFFF00, @rotate), @desaturate);
+@cyan: desaturate(spin(#00FFFF, @rotate), @desaturate);
+@pink: desaturate(spin(#FF00FF, @rotate), @desaturate);
+@purple: desaturate(spin(#8000FF, @rotate), @desaturate);
 
 @grey:#8a8a7b;
 @grey-bg:mix(@grey,#fff,50%);
@@ -206,7 +208,7 @@ a,i , .a{
 	text-decoration: underline;
  }
 #navbar{
-	background-color: @color-primary !important;
+	background-color: @color-secondary !important;
 	font-family: @main-font;
 	
 	#conTxtBuscar{
@@ -642,12 +644,12 @@ a,i , .a{
 			}
 
 			&#crearCita {
-				.colorSeccion(@yellow);
+				.colorSeccion(@color-primary);
 			}
 			&#historial{
 				.colorSeccion(@blue);
 				#lblHis{
-					background-color: @cyan;
+					background-color: @color-secondary;
 				}
 			}
 			&#eliminar{
@@ -866,15 +868,15 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	@bk-color: @color-secondary;
+	@bk-color: @color-primary;
 	background-color: @bk-color;
 	color:contrast(@bk-color, #101010, #fdfdfd, 40);
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
-		background-color: @color-secondary;
-		color: contrast(@color-secondary, #101010, #fdfdfd); 
+		background-color: @bk-color;
+		color: contrast(@bk-color, #101010, #fdfdfd); 
 	}
 
  }
