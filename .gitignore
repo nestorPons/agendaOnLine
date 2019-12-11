@@ -6,4 +6,4 @@ htdocs/dist/*.*
 htdocs/.htaccess
 htdocs/.htaccess-local
 vendor/
-
+app/conf/UserConn.php

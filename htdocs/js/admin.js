@@ -849,7 +849,7 @@ admin ={
 				nombre = data.nombre||data.cliente.nombre, 
 				lastMod = (typeof data.lastMod == 'undefined')?Fecha.now:data.lastMod;  
 
-			var claseNotas  = ($.isEmpty(data.nota))?'':'show'
+			var claseNotas  = ($.isEmpty(data.nota))?'hidden':'show'
 			var nota  = $.isEmpty(data.nota)?'':data.nota
 			var html = "<div id='idCita_"+data.idCita+"' lastmod='"+lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
 					<div class='iconos'>"+ 

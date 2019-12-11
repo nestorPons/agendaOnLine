@@ -56,6 +56,9 @@
 		<li id= "btnContacto" class="fnToggleCharm app-bar-element no-flexible place-right "  data-frm="mnuContacto" title="Contacto">
 			<i  class=" lnr-envelope"></i>
 		</li>
+		<li class=" app-bar-element no-flexible place-right "  title="Version">
+			<span><?=VERSION?></span>
+		</li>
 	</ul>
 	<!--menu herramientas-->
 
