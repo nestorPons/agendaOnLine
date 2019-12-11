@@ -46,7 +46,6 @@ main = {
 			cube.goTo(container);
 
 	 }, 
-	 
 	loader : {
 		show : function(){
 			$('main').find('#loading').removeClass('hidden')
@@ -69,17 +68,17 @@ main = {
 	}
  }, 
 login = {
-	isLoad : true, 
-	block : false, 
+	isLoad : true,  
 	html : '', 
 	setCookie : ()=>{
 		localStorage.setItem("AOLAvisoCookie", 1);
 		document.getElementById("barraaceptacion").style.display="none";
 	 }, 
 	send : {
-		validate : function(data){ 
-			if(!login.block){
-				login.block = true
+		block : false, 
+		validate(data){ 
+			if(!this.block){
+				this.block = true
 				btn.loader.show()
 				$.post(INDEX, data, function(respond){
 					// Buscamos en la cadena devuelta la palabra error para saber si devuelve un JSON o html
@@ -122,6 +121,9 @@ login = {
 						notify.error( array[1], array[0], 2500);
 					}
 				},'html')
+				.always( _ => {
+					this.block = false
+				})
 
 			}
 		}

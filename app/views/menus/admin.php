@@ -56,9 +56,6 @@
 		<li id= "btnContacto" class="fnToggleCharm app-bar-element no-flexible place-right "  data-frm="mnuContacto" title="Contacto">
 			<i  class=" lnr-envelope"></i>
 		</li>
-		<li id="btnUpgrade" class="app-bar-element no-flexible place-right" title="Mejorar la cuenta">
-			<a class="lnr-magic-wand" href="https://www.paypal.me/reservatucita/2"  ></a>
-		</li>
 	</ul>
 	<!--menu herramientas-->
 

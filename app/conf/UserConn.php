@@ -1,7 +1,13 @@
 <?php namespace conf;
 
 class UserConn{
-    protected $server = 'localhost', $user, $pass, $type = 'mysql', $db;
+    protected 
+        $server = 'localhost', 
+        $user, 
+        $pass, 
+        $type = 'mysql', 
+        $db;
+        
     public function __construct(){}
     protected function user(){
         

@@ -16,6 +16,9 @@
             <i class ='icon-pencil-1 fnEdit ' title="Editar cita"></i> 
             <i class ='icon-trash fnDel' title="Eliminar cita"></i>  
         </div>
+        <?php if($val['obs']): ?>
+            <i class ='icon-note red'></i>
+        <?php endif ?>
         <i class ='icon-move fnMove' Title="Mover cita"></i> 
     </div>
     <div id ='<?=$val['idUsuario']?>' class='nombre'>

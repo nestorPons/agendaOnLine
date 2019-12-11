@@ -1475,6 +1475,7 @@ input[type="color"] {
 				border : 1px solid;
 				opacity: 0.8; 
 				font-size: .9rem;
+			    margin-left: 36px;
 				@media (max-width: 450px){
 					width: 99%;
 					font-size: 0.8em;
@@ -1923,7 +1924,7 @@ input[type="color"] {
 #navbar{
 	background-image: url("/img/fondo_barra.png");
 	display: block;
-  width: 100%;
+    width: 100%;
 	height: 50px;
 	position: fixed;
 	z-index:2000;
@@ -1931,7 +1932,7 @@ input[type="color"] {
 	overflow: visible;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-  -ms-user-select: none;
+    -ms-user-select: none;
 	user-select: none;
 	overflow: hidden;
 	#boton-menu{
@@ -2209,16 +2210,17 @@ input[type="color"] {
 	 }
 	 
 	.contenedor-datepicker{
-			position: absolute;
-			height: 40px;
-			margin: auto;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			top: 0;
-			text-align: center;
-			width: 100%;
-			max-width: 280px;
+		display: inline !important;
+		position: absolute;
+		height: 40px;
+		margin: auto;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: 0;
+		text-align: center;
+		width: 100%;
+		max-width: 280px;
 		i{
 			position: absolute;
 			padding: 2.5ch;
@@ -2602,8 +2604,7 @@ input[type="color"] {
 }
 /* The side navigation menu */
 .sidenav {
-	background-image: url(/img/fondo_barra.png);
-	background-size: cover;
+	background: url(/img/fondo_barra.png) 150px -129px repeat;
     height: 100%; /* 100% Full-height */
     width: 0px; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
@@ -2634,7 +2635,7 @@ input[type="color"] {
 			font-weight: 800;
 		 }
 		.caption{
-			font-size: 14px;
+			font-size: 0.8rem;
 			vertical-align: middle;
 			margin: 0 0 0 8px;
 		 }
@@ -2644,19 +2645,16 @@ input[type="color"] {
 	 }
 		.d-menu { 
 			transform: translate(2px);
-			font-size: .9em;
 			display: none;		
 			li {
 				a {
 					padding-left: 22px;
 					*{
 						display: table-cell;
-						font-size: 12px;
 						position: relative;
 					}
 					.caption{
 						padding-left: 12px;
-						font-size: @font-size-menu - 5px;
 					}
 				}
 				
@@ -3123,4 +3121,8 @@ html{
 }
 .row_60 {
   height: 1494px;
+}
+
+.red{
+	color: red;
 }

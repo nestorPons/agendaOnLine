@@ -5,5 +5,5 @@ htdocs/js/min/*.js
 htdocs/dist/*.*
 htdocs/.htaccess
 htdocs/.htaccess-local
-
+vendor/
 

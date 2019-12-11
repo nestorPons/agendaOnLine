@@ -6,7 +6,7 @@
 @color_secon: ^color_secon;
 @text-color: ^color_text; 
 
-@color-base      : @color;
+@color-base      : @color_secon;
 @color-primary   : mix(@color-base, mediumvioletred);
 @color-secondary : mix(@color-base, lightseagreen);
 @color-tertiary  : mix(@color-base, mintcream);
@@ -36,16 +36,14 @@
 @b1: mix(@color, #fff, 40%);
 @b2: mix(@color_secon, #fff, 40%);
 
-@rotate: 1;
-@desaturate: lightness(@color);
-@orange: desaturate(spin(#F90, @rotate), @desaturate);
-@red: desaturate(spin(#FF0000, @rotate), @desaturate);
-@green: desaturate(spin(#00FF00, @rotate), @desaturate);
-@blue :desaturate(spin(#0000FF, @rotate), @desaturate);
-@yellow :desaturate(spin(#FFFF00, @rotate), @desaturate);
-@cyan: desaturate(spin(#00FFFF, @rotate), @desaturate);
-@pink: desaturate(spin(#FF00FF, @rotate), @desaturate);
-@purple: desaturate(spin(#8000FF, @rotate), @desaturate);
+@orange: desaturate(#F90,lightness(@color));
+@red: desaturate(#FF0000,lightness(@color));
+@green: desaturate(#00FF00,lightness(@color));
+@blue :desaturate(#0000FF,lightness(@color));
+@yellow :desaturate(#FFFF00,lightness(@color));
+@cyan: desaturate(#00FFFF,lightness(@color));
+@pink: desaturate(#FF00FF,lightness(@color));
+@purple: desaturate(#8000FF,lightness(@color));
 
 @grey:#8a8a7b;
 @grey-bg:mix(@grey,#fff,50%);
@@ -208,13 +206,13 @@ a,i , .a{
 	text-decoration: underline;
  }
 #navbar{
-	background-color: @color-secondary !important;
 	font-family: @main-font;
+	background-color: @color;
+	color: contrast(@color, #101010, #fdfdfd, 40);
 	
 	#conTxtBuscar{
 		.color-menu(0);
 	}
-	.color-menu(5%);
 
 	.selected {
 
@@ -265,7 +263,7 @@ a,i , .a{
 			.color-sel(5%);
 		}
 	}
-
+	
  }
 .dialog{
 	i:first-child:hover{ color: @red; }
@@ -644,12 +642,12 @@ a,i , .a{
 			}
 
 			&#crearCita {
-				.colorSeccion(@color-primary);
+				.colorSeccion(@yellow);
 			}
 			&#historial{
 				.colorSeccion(@blue);
 				#lblHis{
-					background-color: @color-secondary;
+					background-color: @cyan;
 				}
 			}
 			&#eliminar{
@@ -787,7 +785,6 @@ a,i , .a{
 		color:#ffffff !important;
 	}
  }
-
 .color-menu(@porcentaje){
 	@menu-color: darken(@color,@porcentaje);
 	@font-color:  contrast(@menu-color, @light, #fdfdfd,70); 
@@ -868,15 +865,15 @@ a,i , .a{
 	color: @text-color;
  }
 .sidenav{
-	@bk-color: @color-primary;
+	@bk-color: @color;
 	background-color: @bk-color;
-	color:contrast(@bk-color, #101010, #fdfdfd, 40);
+	color: contrast(@bk-color, #101010, #fdfdfd, 40);
 	a{
 		border-radius: @radius;
 	}
 	.d-menu{
-		background-color: @bk-color;
-		color: contrast(@bk-color, #101010, #fdfdfd); 
+		background-color: @color-secondary;
+		color: contrast(@color-secondary, #101010, #fdfdfd); 
 	}
 
  }

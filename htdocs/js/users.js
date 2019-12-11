@@ -103,13 +103,12 @@ var crearCita ={
 					if(rsp.ocupado){
 						notify.error( rsp.mns.body , rsp.mns.tile )
 					}else{	
-
+						notify.success(
+							'Cita guardada con éxito!'
+						);
 						self.data.idCita = rsp.idCita
 						self.data.idUsuario = rsp.idUser
 						self.data.servicios = rsp.services
-						// Cerrar paner crearCita 
-						tile.close()
-						crearCita.reset()
 						//Cambiar en solo en usuarios
 						historial.request()
 						// Solicitar permiso para mandar notificaciones 
@@ -118,15 +117,14 @@ var crearCita ={
 								notify.info(
 									'Acepte la siguiente solicitud,<br/> si desea recibir notificaciones para recordarle sus citas<br/> Gracias.', 
 									'SOLICITUD', 
-									3000, 
+									5000, 
 									Notification.requestPermission
-
 								)
-							}		
+							} 
 						}
 					}
 				} else {
-					echo(rsp)
+					console.log(rsp)
 					notify.error('Error inesperado')
 				}
 				dialog.close('dlgGuardar')
@@ -241,6 +239,7 @@ var crearCita ={
 				.removeClass('input-error')
 			.end()
 			.find('#cliente')
+				.val("")
 				.removeClass('input-error')
 			.end()
 			.find('#crearCitaNota').val("").end()
@@ -252,7 +251,7 @@ var crearCita ={
 			.find('#lblHora').empty().end()
 			.find('#lblFecha').empty().end()
 			.find('#lblSer').empty().end()
-			.find('#lblCliente').val($('#crearCita #cliente').val())
+			.find('#lblCliente').empty()
 
 		crearCita.data.hora = '';
 		crearCita.data.agenda = 0 
@@ -357,7 +356,7 @@ var historial = {
 									agenda : agenda, 
 									notificacion : 0 
 								})
-								sa.onsuccess = e => console.log( 'guardado desde usuarios: ' + e.target.result)
+								sa.onsuccess = e => console.log( 'guardado : ' + e.target.result)
 								sa.onerror = e=> console.log(' error : ' + e)
 							}
 						}
@@ -448,10 +447,10 @@ var users = {
 				menu.toggle($(this))
 			})
 
-		$('input:password').blur(function(){
+		$('input:password').blur(_=>{
 			var pass1 = $('#pass').val()		
 			var pass2 = $('#rpass').val()
-			validar.pass(pass1,pass2)
+			this.validar.pass(pass1,pass2)
 
 		})
 
@@ -534,7 +533,7 @@ var users = {
 			rpass = $('#rpass').val()
 		
 		if(!$.isEmpty(opass)) {
-			if(users.validar.pass(opass, npass, rpass)){
+			if(this.validar.pass(opass, npass, rpass)){
 				notify.error('Al cambiar la contraseña' , 'ERROR CONTRASEÑA')	
 				return false 
 			} else {
@@ -587,8 +586,8 @@ var users = {
 					
 		},'json')
 	 },
- }
-var tile = { 
+ },
+tile = { 
 	isOpen : null, 
 	active : function(){
 		
@@ -621,8 +620,8 @@ var tile = {
 
 		this.isOpen = null
 	}
-}
-var menu = { 
+}, 
+menu = { 
 	toggle: function(btn){
 		var span = btn.find('span'), 
 			mnu = $('#'+btn.data('menu'))

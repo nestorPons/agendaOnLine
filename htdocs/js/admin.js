@@ -95,8 +95,8 @@ admin ={
 	idCita : -1,
 	ancho : 0, 
 	init : function(){
-		console.log('admin init')
-		this.lbl.width = $('#main th').first().width() - 2;
+		//console.log('admin init')
+		//this.lbl.width =  $('#main th').first().width() - 200;
 		this.ancho = $('#sections').width()
 		let n = (localStorage.getItem("showRows")==1)?1:0;
 		this.inactivas.change(n)
@@ -859,6 +859,7 @@ admin ={
 							<i class ='fnEdit icon-pencil-1'></i>  \
 							<i class ='fnDel icon-trash'></i>  \
 						</div>\
+						<i class='icon-note red " +claseNotas+ "'></i>\
 						<i class ='fnMove icon-move '></i>  \
 					</div> \
 					<div id ='"+idUsuario+"' class='nombre'> \
@@ -938,7 +939,7 @@ admin ={
 			let w = ($('#main th').is(':visible'))?$('#main th').first().width():this.width; 
 			$('.lbl')
 				.css('z-index',2)
-				.width(w - 3); 
+				.width(w - 38); 
 
 			this.width = w; 
 			this.color(); 

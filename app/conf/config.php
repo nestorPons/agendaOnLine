@@ -1,11 +1,12 @@
 <?php 
-const VERSION = 'v8.4.8'; 
+// Versionado
+const VERSION = 'v8.5'; 
 const STABLE = false; 
+const ENV = true;
 
 const MARGIN_DAYS = 1; 
 const DEFAULT_HISTORY_DAYS = 1;
 const NUM_MAX_ATTEMPT = 10; //attempts for crack brute force pass
-
 
 define('NAME_EMPRESA' ,  $Empresa->name());
 define('NAME_CODE' ,  $Empresa->code());

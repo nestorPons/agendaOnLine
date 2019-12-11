@@ -8,14 +8,14 @@ const EMAIL_PASS = 'QQasw2!!';
 const EMAIL_PORT = 25;
 
 //Server settings
-$this->SMTPDebug =1;           // Enable verbose debug output
+$this->SMTPDebug =3;           // Enable verbose debug output
 $this->isMail();                // Set mailer to use SMTP
 $this->Host = EMAIL_HOST;       // Specify main and backup SMTP servers
-$this->SMTPAuth = false;        // Enable SMTP authentication
+$this->SMTPAuth = true;        // Enable SMTP authentication
 $this->Username = '';   // SMTP username
 $this->Password = '';   // SMTP password
 $this->SMTPSecure = 'TLS';      // Enable TLS encryption, `ssl` also accepted
-$this->Port = 25;
+$this->Port = 587;
  
 $this->From =  EMAIL_FROM;
 $this->FromName =  EMAIL_NAME;
