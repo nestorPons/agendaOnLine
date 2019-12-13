@@ -2,7 +2,7 @@
 
 class UserConn{
     protected 
-        $server = 'localhost', 
+        $server = 'db', 
         $user, 
         $pass, 
         $type = 'mysql', 
