@@ -26,13 +26,13 @@
 			</li>
 			<li title="Servicios">
 				<a id="menu3" name='menu[]' data-capa="servicios" >
-					<span class="lnr-list" ></span>
+					<span class="lnr-license" ></span>
 					<span class="caption">Servicios</span>
 				</a>
 			</li>
 			<li title="Familias">
 				<a id="menu4" name='menu[]' data-capa="familias" >
-					<span class="lnr-bug" ></span>
+					<span class="lnr-text-size" ></span>
 					<span class="caption">Familias</span>
 				</a>
 			</li>
