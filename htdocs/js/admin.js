@@ -437,10 +437,10 @@ admin ={
 		.fail(function(r){console.log(r)})
 
 	 },
+	// Se activa al abrir el formulario de edición
 	edit : function (idCita, idCelda ) {
 		if (!idCita)  return false
 		admin.idCita = idCita
-
 		var lbl = $('#idCita_'+admin.idCita+'.lbl') 
 		admin.lbl.obj= lbl
 
@@ -519,11 +519,8 @@ admin ={
 					.removeClass('template')
 					.find('.codigo')
 						.attr('id_codigo',id)
-						.html(codigo + " => ")
+						.html(codigo)
 						.attr('tiempo',tiempo)
-					.end()
-					.find('.descripcion')
-						.html(descripcion)
 					.end()
 					.appendTo($('#dlgEditCita').find('#codigos'))
 					.on('click','.fnDelSer',function(){
@@ -549,58 +546,6 @@ admin ={
 				$(this).val('')
 			})
 		 }
-		var _save = function () {
-			var dlg = $('#dlgEditCita') , duration = 0 , arrIdSer = new Array() ,data = new Array()
-
-			dlg.find('input').each(function(i,v){
-				data[$(this).attr('id')] = $(this).val()
-			})
-
-			let str = normalize(data['cliente']), 
-				selCli = $('#lstClientes [data-name="'+str+'"]')
-
-			admin.data[admin.idCita].cliente.id =  selCli.data('id')
-			admin.data[admin.idCita].cliente.nombre =  selCli.val()
-			admin.data[admin.idCita].fecha = data['fecha']
-			admin.data[admin.idCita].hora = data['hora']
-			admin.data[admin.idCita].obs = data['obs']
-			admin.data[admin.idCita].tiempo_servicios = data['tiempoServicios']
-			admin.data[admin.idCita].lastMod = Fecha.now()
-
-			$.each(admin.data[admin.idCita].servicios, function( i , v){
-				arrIdSer.push(v.id)
-			})
-
-			var sendData = {
-				action : EDIT ,
-				idCita :  admin.idCita ,
-				agenda : admin.data[admin.idCita].agenda ,
-				idUsuario : admin.data[admin.idCita].cliente.id || false ,
-				fecha :  Fecha.sql(dlg.find('#fecha').val()) ,
-				hora : dlg.find('#hora').val() ,
-				obs :  dlg.find('#obs').val(),
-				tiempo_servicios:  data['tiempoServicios'],
-				servicios : arrIdSer ,
-				status : false 
-			}
-
-			admin.save(sendData,function(){
-				admin.lbl.edit(admin.data[admin.idCita], admin.last)
-				_addServiceToLbl(function(){
-					dialog.close('dlgEditCita')
-					if(!$.isEmpty(sendData.obs)) {
-						admin.lbl.obj
-							.find('.text_note').text(sendData.obs).end()
-							.find('.note').addClass('show')
-					}else{
-						admin.lbl.obj
-							.find('.text_note').text(sendData.obs).end()
-							.find('.note').removeClass('show')
-					}
-				})
-				
-			})		
-		 }
 
 		if (!$.isEmpty(idCelda)) { 
 
@@ -625,39 +570,107 @@ admin ={
 
 			admin.save(edata)
 
-		 } else {		
+		 } else {	
+			const  
+				cancel = function(){
+					admin.del(admin.data[admin.idCita].idCita)
+				}, 
+				load = function($this){
+					// Carga el formulario editar 
+					// Hasta este punto el formulario no existe
+					const 
+						$selAgenda = $('#dlgEditCita').find('#agenda'),
+						id = admin.idCita;
 
-			var 
-			fnCancel = function(){
-				admin.del(admin.data[admin.idCita].idCita)
-			 }, 
-			callback = function($this){
-				$this 
-					.find('#codigos').html('').end()
-					.data('idCita',admin.idCita)
-					.find('#id').val(admin.idCita).end()
-					.find('#cliente')
-						.val(admin.data[admin.idCita].cliente.nombre)
+					//Limpiamos las opciones de agenda
+					$selAgenda.empty();
+		
+					//añadimos las opciones de agendas disponibles
+					$('.nombreagenda').each( (i, el) => {
+						$selAgenda
+							.append(`<option value="${el.dataset.agenda}" selected="selected">${el.value}</option>`);
+					})	
+
+					$this 
+						.find('#codigos').html('').end()
+						.data('idCita',id)
+						.find('#id').val(id).end()
+						.find('#agenda').val(admin.data[id].agenda).end()
+						.find('#cliente')
+							.val(admin.data[id].cliente.nombre)
+							.end()
+						.find('#obs')
+							.val(admin.data[id].obs||null)
 						.end()
-					.find('#obs')
-						.val(admin.data[admin.idCita].obs||null)
-					.end()
-					.find('#fecha')
-						.val(admin.data[admin.idCita].fecha)
-					.end()
-					.find('#hora')
-						.val(admin.data[admin.idCita].hora)
-					.end()
-					.find('#tiempoServicios')
-						.val(admin.data[admin.idCita].tiempo_servicios); 
-						
-				$.each(admin.data[admin.idCita].servicios , function(i,a){
-					_addRow( a.id , a.codigo , a.descripcion , a.tiempo,  admin.set.tiempoServicios);
-				})
+						.find('#fecha')
+							.val(admin.data[id].fecha)
+						.end()
+						.find('#hora')
+							.val(admin.data[id].hora)
+						.end()
+						.find('#tiempoServicios')
+							.val(admin.data[id].tiempo_servicios); 
+							
+					$.each(admin.data[id].servicios , function(i,a){
+						_addRow( a.id , a.codigo , a.descripcion , a.tiempo,  admin.set.tiempoServicios);
+					})
 
-				if (dialog.new) _eventAddService()
-			 }
-			dialog.open('dlgEditCita',_save, fnCancel, callback)	
+					if (dialog.new) _eventAddService()
+				},
+				save = function () {
+					var dlg = $('#dlgEditCita') , duration = 0 , arrIdSer = new Array() ,data = new Array()
+		
+					dlg.find('input, select').each(function(i,v){
+						data[$(this).attr('id')] = $(this).val()
+					})
+		
+					let str = normalize(data['cliente']), 
+						selCli = $('#lstClientes [data-name="'+str+'"]')
+		
+					admin.data[admin.idCita].cliente.id =  selCli.data('id')
+					admin.data[admin.idCita].cliente.nombre =  selCli.val()
+					admin.data[admin.idCita].agenda = data['agenda']
+					admin.data[admin.idCita].fecha = data['fecha']
+					admin.data[admin.idCita].hora = data['hora']
+					admin.data[admin.idCita].obs = data['obs']
+					admin.data[admin.idCita].tiempo_servicios = data['tiempoServicios']
+					admin.data[admin.idCita].lastMod = Fecha.now()
+		
+					$.each(admin.data[admin.idCita].servicios, function( i , v){
+						arrIdSer.push(v.id)
+					})
+		
+					const sendData = {
+						action 			: EDIT ,
+						idCita 			: admin.idCita ,
+						agenda 			: admin.data[admin.idCita].agenda ,
+						idUsuario 		: admin.data[admin.idCita].cliente.id || false ,
+						fecha			: Fecha.sql(dlg.find('#fecha').val()) ,
+						hora 			: dlg.find('#hora').val() ,
+						obs 			: dlg.find('#obs').val(),
+						tiempo_servicios: data['tiempoServicios'],
+						servicios      	: arrIdSer ,
+						status          : false 
+					}
+		
+					admin.save(sendData,function(){
+						admin.lbl.edit(admin.data[admin.idCita], admin.last)
+						_addServiceToLbl(function(){
+							dialog.close('dlgEditCita')
+							if(!$.isEmpty(sendData.obs)) {
+								admin.lbl.obj
+									.find('.text_note').text(sendData.obs).end()
+									.find('.note').addClass('show')
+							}else{
+								admin.lbl.obj
+									.find('.text_note').text(sendData.obs).end()
+									.find('.note').removeClass('show')
+							}
+						})
+						
+					})		
+				 }
+			dialog.open('dlgEditCita', save, cancel, load)	
 		 }
 	 },
 	del: function(idCita){
@@ -805,29 +818,28 @@ admin ={
 			let $lbl = $('#idCita_'+ data.idCita); 
 
 			if($lbl.length && Fecha.equate(data.lastMod, $lbl.attr('lastmod'))==1) {
-
 				// Modificamos la fecha de edicion de la cita
 				$lbl.attr('lastmod',data.lastMod);
 
 				if(last){
-
-					var idCita = data.idCita , object = $('#main').find('#idCita_'+idCita)
-					$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios )
+					const idCita = data.idCita , object = $('#main').find('#idCita_'+idCita);
+					$('#idCita_'+data.idCita+'.lbl').attr('tiempo',  data.tiempo_servicios );
 	
 					if (data.cliente.id != last.cliente.id){
 						object.find('.nombre')
 							.attr('id', data.cliente.id)
-							.find('.text-value').html(data.cliente.nombre)
+							.find('.text-value').html(data.cliente.nombre);
 					} 
-					if (data.fecha != last.fecha || data.hora != last.hora){
-							let idCell=  generateId.encode( data.agenda , data.fecha , data.hora ),
-								clon = object.clone()
-							
-							object.remove()
-							clon.appendTo('#'+idCell)
-							admin.lbl.style()
-						}
-					if (data.obs != last.obs) object.find('#obs').val(data.obs)
+					if (data.fecha != last.fecha || data.hora != last.hora || data.agenda != last.agenda){
+						const 
+							idCell 	= generateId.encode( data.agenda , data.fecha , data.hora ),
+							clon 	= object.clone();
+						
+						object.remove();
+						$('#'+idCell).empty().append(clon);
+						admin.lbl.style();
+					}
+					if (data.obs != last.obs) object.find('#obs').val(data.obs);
 				}else{
 
 					this.loadData(data) ;

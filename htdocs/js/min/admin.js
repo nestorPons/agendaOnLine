@@ -92,7 +92,7 @@ if(borrar_index!=null){admin.data[admin.idCita].servicios.splice(borrar_index,1)
 div.fadeOut('fast').remove()}
 admin.set.tiempoServicios()}
 var _addRow=function(id,codigo,descripcion,tiempo,callback){var $dlg=$('#dlgEditCita')
-$dlg.find('.template').clone().removeClass('template').find('.codigo').attr('id_codigo',id).html(codigo+" => ").attr('tiempo',tiempo).end().find('.descripcion').html(descripcion).end().appendTo($('#dlgEditCita').find('#codigos')).on('click','.fnDelSer',function(){_delRow($(this).parent())})
+$dlg.find('.template').clone().removeClass('template').find('.codigo').attr('id_codigo',id).html(codigo).attr('tiempo',tiempo).end().appendTo($('#dlgEditCita').find('#codigos')).on('click','.fnDelSer',function(){_delRow($(this).parent())})
 typeof callback=="function"&&callback()}
 var _eventAddService=function(){$('#dlgEditCita').on('change','#lstServ',function(){var select=$(this).find(':selected')
 id=select.val(),codigo=select.attr('codigo'),descripcion=select.text(),tiempo=select.attr('tiempo')
@@ -100,21 +100,6 @@ admin.data[admin.idCita].servicios.push({id,codigo,descripcion,tiempo})
 admin.data[admin.idCita].tiempo_servicios+=parseInt(tiempo)
 _addRow(id,codigo,descripcion,tiempo,admin.set.tiempoServicios)
 $(this).val('')})}
-var _save=function(){var dlg=$('#dlgEditCita'),duration=0,arrIdSer=new Array(),data=new Array()
-dlg.find('input').each(function(i,v){data[$(this).attr('id')]=$(this).val()})
-let str=normalize(data.cliente),selCli=$('#lstClientes [data-name="'+str+'"]')
-admin.data[admin.idCita].cliente.id=selCli.data('id')
-admin.data[admin.idCita].cliente.nombre=selCli.val()
-admin.data[admin.idCita].fecha=data.fecha
-admin.data[admin.idCita].hora=data.hora
-admin.data[admin.idCita].obs=data.obs
-admin.data[admin.idCita].tiempo_servicios=data.tiempoServicios
-admin.data[admin.idCita].lastMod=Fecha.now()
-$.each(admin.data[admin.idCita].servicios,function(i,v){arrIdSer.push(v.id)})
-var sendData={action:EDIT,idCita:admin.idCita,agenda:admin.data[admin.idCita].agenda,idUsuario:admin.data[admin.idCita].cliente.id||!1,fecha:Fecha.sql(dlg.find('#fecha').val()),hora:dlg.find('#hora').val(),obs:dlg.find('#obs').val(),tiempo_servicios:data.tiempoServicios,servicios:arrIdSer,status:!1}
-admin.save(sendData,function(){admin.lbl.edit(admin.data[admin.idCita],admin.last)
-_addServiceToLbl(function(){dialog.close('dlgEditCita')
-if(!$.isEmpty(sendData.obs)){admin.lbl.obj.find('.text_note').text(sendData.obs).end().find('.note').addClass('show')}else{admin.lbl.obj.find('.text_note').text(sendData.obs).end().find('.note').removeClass('show')}})})}
 if(!$.isEmpty(idCelda)){let decode=generateId.decode(idCelda)
 admin.data[admin.idCita].agenda=decode.agenda
 admin.data[admin.idCita].fecha=decode.date
@@ -124,10 +109,27 @@ edata.servicios=new Array;edata.idUsuario=edata.cliente.id
 delete edata.cliente
 for(let i=0;i<len;i++){edata.servicios.push(ser[i].id)}
 edata.action=EDIT
-admin.save(edata)}else{var
-fnCancel=function(){admin.del(admin.data[admin.idCita].idCita)},callback=function($this){$this.find('#codigos').html('').end().data('idCita',admin.idCita).find('#id').val(admin.idCita).end().find('#cliente').val(admin.data[admin.idCita].cliente.nombre).end().find('#obs').val(admin.data[admin.idCita].obs||null).end().find('#fecha').val(admin.data[admin.idCita].fecha).end().find('#hora').val(admin.data[admin.idCita].hora).end().find('#tiempoServicios').val(admin.data[admin.idCita].tiempo_servicios);$.each(admin.data[admin.idCita].servicios,function(i,a){_addRow(a.id,a.codigo,a.descripcion,a.tiempo,admin.set.tiempoServicios)})
-if(dialog.new)_eventAddService()}
-dialog.open('dlgEditCita',_save,fnCancel,callback)}},del:function(idCita){data={id:idCita,action:'del',controller:'cita',fecha:Fecha.sql(Fecha.general)}
+admin.save(edata)}else{const
+cancel=function(){admin.del(admin.data[admin.idCita].idCita)},load=function($this){const
+$selAgenda=$('#dlgEditCita').find('#agenda'),id=admin.idCita;$selAgenda.empty();$('.nombreagenda').each((i,el)=>{$selAgenda.append(`<option value="${el.dataset.agenda}" selected="selected">${el.value}</option>`)})
+$this.find('#codigos').html('').end().data('idCita',id).find('#id').val(id).end().find('#agenda').val(admin.data[id].agenda).end().find('#cliente').val(admin.data[id].cliente.nombre).end().find('#obs').val(admin.data[id].obs||null).end().find('#fecha').val(admin.data[id].fecha).end().find('#hora').val(admin.data[id].hora).end().find('#tiempoServicios').val(admin.data[id].tiempo_servicios);$.each(admin.data[id].servicios,function(i,a){_addRow(a.id,a.codigo,a.descripcion,a.tiempo,admin.set.tiempoServicios)})
+if(dialog.new)_eventAddService()},save=function(){var dlg=$('#dlgEditCita'),duration=0,arrIdSer=new Array(),data=new Array()
+dlg.find('input, select').each(function(i,v){data[$(this).attr('id')]=$(this).val()})
+let str=normalize(data.cliente),selCli=$('#lstClientes [data-name="'+str+'"]')
+admin.data[admin.idCita].cliente.id=selCli.data('id')
+admin.data[admin.idCita].cliente.nombre=selCli.val()
+admin.data[admin.idCita].agenda=data.agenda
+admin.data[admin.idCita].fecha=data.fecha
+admin.data[admin.idCita].hora=data.hora
+admin.data[admin.idCita].obs=data.obs
+admin.data[admin.idCita].tiempo_servicios=data.tiempoServicios
+admin.data[admin.idCita].lastMod=Fecha.now()
+$.each(admin.data[admin.idCita].servicios,function(i,v){arrIdSer.push(v.id)})
+const sendData={action:EDIT,idCita:admin.idCita,agenda:admin.data[admin.idCita].agenda,idUsuario:admin.data[admin.idCita].cliente.id||!1,fecha:Fecha.sql(dlg.find('#fecha').val()),hora:dlg.find('#hora').val(),obs:dlg.find('#obs').val(),tiempo_servicios:data.tiempoServicios,servicios:arrIdSer,status:!1}
+admin.save(sendData,function(){admin.lbl.edit(admin.data[admin.idCita],admin.last)
+_addServiceToLbl(function(){dialog.close('dlgEditCita')
+if(!$.isEmpty(sendData.obs)){admin.lbl.obj.find('.text_note').text(sendData.obs).end().find('.note').addClass('show')}else{admin.lbl.obj.find('.text_note').text(sendData.obs).end().find('.note').removeClass('show')}})})}
+dialog.open('dlgEditCita',save,cancel,load)}},del:function(idCita){data={id:idCita,action:'del',controller:'cita',fecha:Fecha.sql(Fecha.general)}
 if(admin.lbl.delete(data.id,!1)){$.post(INDEX,data,function(r){if(r.success){$('#lstChckSer').empty();$('#dlgEditCita').removeData('idCita')
 dialog.close('dlgEditCita')}},'json').fail(function(jqXHR,textStatus,errorThrown){echo(jqXHR.responseText)})}},guardarNota:function($this){var txt=$this.find('input').val();var id=$this.parents(':eq(3)').attr('idcita')
 if(!$.isEmpty(txt)){$this.find('.icon-load').fadeIn();$.get(INDEX,{id:id,txt:txt},function(r){if(r.success){$this.find('.icon-ok').fadeIn()
@@ -145,13 +147,9 @@ if($celda.length!==0){$.each(data.servicios,function(id,serv){htmlSer+=lbl.servi
 $celda.find('.fnCogerCita').remove().end().append(lbl.container(data,htmlSer))
 this.obj=$('#idCita_'+data.idCita+'.lbl')
 lbl.style()
-admin.lbl.draggable(this.obj)}},edit:function(data,last=null){let $lbl=$('#idCita_'+data.idCita);if($lbl.length&&Fecha.equate(data.lastMod,$lbl.attr('lastmod'))==1){$lbl.attr('lastmod',data.lastMod);if(last){var idCita=data.idCita,object=$('#main').find('#idCita_'+idCita)
-$('#idCita_'+data.idCita+'.lbl').attr('tiempo',data.tiempo_servicios)
-if(data.cliente.id!=last.cliente.id){object.find('.nombre').attr('id',data.cliente.id).find('.text-value').html(data.cliente.nombre)}
-if(data.fecha!=last.fecha||data.hora!=last.hora){let idCell=generateId.encode(data.agenda,data.fecha,data.hora),clon=object.clone()
-object.remove()
-clon.appendTo('#'+idCell)
-admin.lbl.style()}
+admin.lbl.draggable(this.obj)}},edit:function(data,last=null){let $lbl=$('#idCita_'+data.idCita);if($lbl.length&&Fecha.equate(data.lastMod,$lbl.attr('lastmod'))==1){$lbl.attr('lastmod',data.lastMod);if(last){const idCita=data.idCita,object=$('#main').find('#idCita_'+idCita);$('#idCita_'+data.idCita+'.lbl').attr('tiempo',data.tiempo_servicios);if(data.cliente.id!=last.cliente.id){object.find('.nombre').attr('id',data.cliente.id).find('.text-value').html(data.cliente.nombre)}
+if(data.fecha!=last.fecha||data.hora!=last.hora||data.agenda!=last.agenda){const
+idCell=generateId.encode(data.agenda,data.fecha,data.hora),clon=object.clone();object.remove();$('#'+idCell).empty().append(clon);admin.lbl.style()}
 if(data.obs!=last.obs)object.find('#obs').val(data.obs)}else{this.loadData(data)}}else return!1},container:function(data,htmlSer){if(!$.isEmpty(data.obs))data.nota=data.obs;var html_icono_desplegar=(data.servicios.length<=data.tiempo_servicios)?"<i class ='icon-angle-down fnExtend' ></i>":"",html_icono_usuario_coge_cita=typeof data.cliente!='undefined'&&data.cliente.usuarioCogeCita==admin.idUser?"<i class ='lnr-laptop-phone' title='La cita ha sido remotamente'></i>":"",idUsuario=data.idUsuario||data.cliente.id,nombre=data.nombre||data.cliente.nombre,lastMod=(typeof data.lastMod=='undefined')?Fecha.now:data.lastMod;var claseNotas=($.isEmpty(data.nota))?'hidden':'show'
 var nota=$.isEmpty(data.nota)?'':data.nota
 var html="<div id='idCita_"+data.idCita+"' lastmod='"+lastMod+"'	 idcita="+data.idCita+" class='lbl row_"+admin.unidadTiempo(data.tiempo_servicios)+"' tiempo='"+data.tiempo_servicios+"'> \
