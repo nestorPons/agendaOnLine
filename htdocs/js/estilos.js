@@ -10,7 +10,7 @@ var estilos = {
 		this.border = value ;
 		$('#btnTest').css('border-radius' , value)
 	 },
-	save : function () {
+	save : function (callback) {
 		var data = {
 			color1 : $('#btnColor1').val() ,
 			color2 : $('#btnColor2').val() ,
@@ -23,6 +23,7 @@ var estilos = {
 		$.post(INDEX,data,function(r){ 
 			document.getElementById('styles').href='/css/index.min.css';
 		},'json')
+		.always(_=> callback())
 	 }, 
 	_getTheColor : function  (colorVal) {
 		var theColor = "";

@@ -207,9 +207,12 @@ a,i , .a{
  }
 #navbar{
 	font-family: @main-font;
-	background-color: @color;
-	color: contrast(@color, #101010, #fdfdfd, 40);
 	
+	background:linear-gradient(to bottom right, @color 10px, white);
+	color: contrast(@color, #555, #aaa);
+	#tools{
+    	background: linear-gradient(105deg, #68B768 39px ,rgba(0,0,0,0));
+	}
 	#conTxtBuscar{
 		.color-menu(0);
 	}
@@ -866,8 +869,8 @@ a,i , .a{
  }
 .sidenav{
 	@bk-color: @color;
-	background-color: @bk-color;
-	color: contrast(@bk-color, #101010, #fdfdfd, 40);
+	background: linear-gradient(106deg, @bk-color 16px, rgba(0,0,0,0));
+	color: contrast(@bk-color, #444, #aaa);
 	a{
 		border-radius: @radius;
 	}
@@ -875,7 +878,6 @@ a,i , .a{
 		background-color: @color-secondary;
 		color: contrast(@color-secondary, #101010, #fdfdfd); 
 	}
-
  }
 #boton-menu{
 	border-radius: @radius; 

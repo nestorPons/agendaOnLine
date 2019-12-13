@@ -52,7 +52,6 @@ config ={
 
 		data.append("controller", config.controller )
 		data.append("action", true )
-
 		$.ajax({
 			url: INDEX,
 			type: "POST",
@@ -70,11 +69,14 @@ config ={
 			} else {	
 				notify.error('No se ha podido guardar los datos')	
 			}
-	 		typeof callback == "function" && callback()
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ){
 			alert( jqXHR + ' , '  +  textStatus + ' , ' +  errorThrown )
 	 		typeof callback == "function" && callback()
+		})
+		.complete(_=>{
+			console.log('COMPLETE')
+			typeof callback == "function" && callback()
 		})
 
 		config.change = false

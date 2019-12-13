@@ -9,7 +9,7 @@ compilaLess(URL_CSS."main.css",URL_CSS."main.less", false);
 
 if ($controller == 'login') compilaLess(URL_CSS."login.css",URL_CSS."login.less");
 
-function compilaLess($style_css,$style_less){
+function compilaLess($style_css, $style_less){
 	global $Empresa ; 
 	
 	include_once URL_CLASS . "lessc.inc.php";
@@ -24,7 +24,7 @@ function compilaLess($style_css,$style_less){
 		//if ($config = $conn->assoc("SELECT * FROM config_css"))
 		$less->arrPHP = $Empresa->conf_css();
 			
-		$less->checkedCompile($style_less,$style_css);
+		$less->compileFile($style_less, $style_css);
 
 	}catch (Exception $e){
 

@@ -179,6 +179,9 @@ textarea{
  }
 input[type="text"], textarea { 
 	cursor: text ; 
+	&:read-only{
+		border: none;
+	}
  }
 input[type="radio"], [type="checkbox"]{
 	display: inline-block;
@@ -409,7 +412,7 @@ input[type="color"] {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
 	display:none;
 	width: 320px;
-    margin: 55px auto; 
+    margin: 10px auto; 
 	padding: 20px;
 	line-height: 1.5em;
     z-index: 1050;
@@ -1945,6 +1948,7 @@ input[type="color"] {
 		padding: 5px; 
 		&:hover{
 			background:rgb(0,0,0,0.5);
+			color: #aaa;
 		}
 		@media (max-width: 425px){
 			left: 5px;
@@ -2284,8 +2288,10 @@ input[type="color"] {
 
 	 }
 	#tools{
-		margin-left: 50px;
-
+		padding-left: 50px;
+		min-width: 150px;
+		min-height: 100%;
+		
 		.app-bar-element{
 			display: none;
 			padding: 0 10px;
@@ -2604,7 +2610,6 @@ input[type="color"] {
 }
 /* The side navigation menu */
 .sidenav {
-	background: url(/img/fondo_barra.png) 150px -129px repeat;
     height: 100%; /* 100% Full-height */
     width: 0px; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */

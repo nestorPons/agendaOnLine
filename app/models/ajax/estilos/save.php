@@ -16,7 +16,6 @@ $r['success'] = $conf_css->saveAll($args);
 
 if ($config = $conf_css->getAll()){
     $url_css = URL_EMPRESA . "style.css";
-    unlink($url_css);
 
     $url_less = URL_EMPRESA . "style.less";
 
