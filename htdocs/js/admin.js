@@ -159,6 +159,7 @@ admin ={
 				e.stopPropagation();
 			})
 			.on('dblclick','.lbl', function(e){	
+
 				admin.edit($(this).attr('idcita'))
 			})
 			.on('click','.celda',function(){

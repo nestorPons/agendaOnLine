@@ -46,7 +46,7 @@
 	$cls_festivos = (!empty(FESTIVOS)) && (in_array(Date('md') , FESTIVOS )) ? 'c-red' : '' ;
 	$fecha = isset($_POST['fecha'])?$_POST['fecha']:Date('Y-m-d');
 	?>
-	<ul class="app-bar-menu place-right no-flexible" data-flexdirection="reverse" title="Salir">
+	<ul id="auxBotons" class="app-bar-menu place-right no-flexible" data-flexdirection="reverse" title="Salir">
 		<li id="btnExit" class="app-bar-element no-flexible place-right">
 			<i class="lnr-power-switch " ></i>
 		</li>

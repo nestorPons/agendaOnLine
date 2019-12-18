@@ -1314,6 +1314,7 @@ input[type="color"] {
 	text-align: center;
 	select{
 		width: 250px;
+		height: 20px;
 		margin: 1% auto;
 		color: @grey ;
 		text-align-last:center;
@@ -1321,7 +1322,7 @@ input[type="color"] {
 		border-style: none;
 		text-indent: 5px;
 		overflow: hidden;
-			box-shadow: none;
+		box-shadow: none;
 	}
 	ul{
 		margin:0 auto;
@@ -1998,7 +1999,6 @@ input[type="color"] {
 		width: 200;
 	}
 	li{
-		width: 50px;
 		text-align: center;	
 		*, *:hover, *:active{
 			background-color: transparent;
@@ -2017,7 +2017,6 @@ input[type="color"] {
 		}
 	}
 	.app-bar-menu {
-		display: inline-block;
 		float: left;
 		li{
 			padding: 0;
@@ -2262,17 +2261,17 @@ input[type="color"] {
 			text-align:center;
 			font-size: 1.1em;
 			width: 100%;
+
+			background: transparent;
+			
 		}
-		@media (max-width: 425px){
-			max-width: 210px; 
+		@media (max-width: 426px){
+			max-width: 110px; 
 			margin: auto ;
-		}
-		@media (max-width: 375px){
-			max-width: 180px;
-				i{ padding: 2ch 0.5ch; }
-		}
-		@media (max-width: 340px){
-			max-width: 115px;
+			i{ 
+				padding-left: 0;
+				padding-right: 0; 
+			}
 		}
 	}
 	.app-bar-element {
@@ -2299,9 +2298,14 @@ input[type="color"] {
 		.button{
 			margin-top: -0.15rem;
 		 }
-		@media (max-width: 450px){
+		 @media (max-width: 426px){
+			margin: auto;
+			padding: 0;
 			span{
 				display: none;
+			}
+			*{
+				margin: auto;
 			}
 		}
 
@@ -2313,13 +2317,9 @@ input[type="color"] {
 		
 		.app-bar-element{
 			display: none;
-			padding: 0 10px;
 			//inicio main activado mostrar
 			&#btnShow{
 				display: inline-table;
-			}
-			@media (max-width: 350px){
-				padding: 0;
 			}
 		}
 	}
