@@ -180,11 +180,11 @@ class User extends \core\BaseClass {
 		$Cita = new \core\BaseClass('cita');
 		$Serv = new \core\BaseClass('servicios');
 
-		$data = $Data->getBy('idUsuario',$this->id, '*', MYSQLI_ASSOC, 'LIMIT ' . $totalRecords);
+		$data = $Data->getBy('idUsuario',$this->id, '*', MYSQLI_ASSOC, 'ORDER BY id DESC LIMIT ' . $totalRecords);
 		$arr = [];
 		foreach($data as $i => $d){
 			$arr[$i] = $d;
-			$services = $Cita->getBy('idCita',$d['id'],'servicio');
+			$services = $Cita->getBy('idCita',$d['id'],'servicio', TRUE);
 			foreach($services as $s){
 				$arr[$i]['servicios'][] = $Serv->getById($s,'descripcion'); 
 			}

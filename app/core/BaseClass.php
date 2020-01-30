@@ -69,7 +69,6 @@ class BaseClass{
             $filters = (string)$column ." = '".(string)$value ."'";  
         }
         $sql = "SELECT $return FROM {$this->table} WHERE $filters $filter;";
-
         $query = $this->conn->query($sql);
         $result = $query->fetch_all($type); 
 
