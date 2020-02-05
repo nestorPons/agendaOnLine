@@ -1,6 +1,6 @@
 <?php 
 // Versionado
-const VERSION = 'v8.5.2'; 
+const VERSION = 'v8.5.3'; 
 const STABLE = false; 
 const ENV = true;
 

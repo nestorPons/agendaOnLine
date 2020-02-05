@@ -1114,27 +1114,5 @@ $.ajaxSetup({
 		btn.load.hide();
 		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
 		typeof callback == "function" && callback()
-	 },
-	send: function(){
-
-	}, 
-	error : function(jqXHR, textStatus, errorThrowne){
-		if (jqXHR.status === 0) {
-			console.warn('Not connect: Verify Network.');
-		} else if (jqXHR.status == 404) {
-			console.warn('Requested page not found [404]');
-		} else if (jqXHR.status == 500) {
-			console.warn('Internal Server Error [500].');
-		} else if (textStatus === 'parsererror') {
-			console.warn('Requested JSON parse failed.');
-		} else if (textStatus === 'timeout') {
-			console.warn('Time out error.');
-		} else if (textStatus === 'abort') {
-			console.warn('Ajax request aborted.');
-		} else {
-			console.warn('Uncaught Error: ' + jqXHR.responseText);
-		}
-		console.error(jqXHR);
-		console.error(errorThrowne);
 	 }
 });

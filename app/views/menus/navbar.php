@@ -26,7 +26,7 @@
 			</li>
 			<li title="Servicios">
 				<a id="menu3" name='menu[]' data-capa="servicios" >
-					<span class="lnr-license" ></span>
+					<span class="lnr-tag" ></span>
 					<span class="caption">Servicios</span>
 				</a>
 			</li>

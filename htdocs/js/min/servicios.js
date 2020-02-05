@@ -23,24 +23,23 @@ servicios.sendAjax(DEL,_fnOk)}else{dialog.close('dlgServicios')}},edit:function(
 $('#crearCita #rowServicios'+datos.id).removeClass('mostrar_baja , ocultar_baja').css('class','fam'+datos.idFamilia).find('label').attr('for',datos.codigo).text(datos.descripcion+' ('+datos.tiempo+'min.)').end().find(':checkbox').attr({id:datos.codigo,value:datos.id,'data-time':datos.tiempo,'data-familia':datos.idFamilia,})
 $('.lbl .servicio').each(function(){let $span=$(this).find('span'),cod=$span.attr('id_codigo')
 if(cod==datos.id){$span.attr('des_codigo',datos.descripcion).attr('tiempo',datos.tiempo).attr('title',datos.descripcion).text(datos.codigo)}})},create:function(data){var mostrar=(data.mostrar==1)?'checked':'';$('#servicios').find('table tbody').append('\
-			<tr id="rowServicios'+data.id+'">\
-				<td class="ico"><a name="editar[]" class="icon-edit x6"></a></td>\
-				<td name="cod" class="aling-left cod"></td>\
-				<td name="des" class="nom"></td>\
-				<td name="time" class="ico"></td>\
-				<td name="price" class="hidden"></td>\
-			</tr>\
-		')
+				<tr id="rowServicios'+data.id+'">\
+					<td class="ico"><a name="editar[]" class="icon-edit x6"></a></td>\
+					<td name="cod" class="aling-left cod"></td>\
+					<td name="des" class="nom"></td>\
+					<td name="time" class="ico"></td>\
+					<td name="price" class="hidden"></td>\
+				</tr>\
+			')
 $('#crearCita').find('.contenedorServicios tbody').append('\
-			<tr id="rowServicios'+data.id+'">\
-				<td>\
-					<label>\
-						<input type="checkbox" name="servicios[]" class="idServicios">\
-					</label>\
-				</td>\
-			</tr>\
-		')
-servicios.actualizar(data)},sendAjax:function(action,callback){var dlg=$('#dlgServicios'),id=dlg.find('#id').val(),row=dlg.find("#rowServicios"+id)
+				<tr id="rowServicios'+data.id+'">\
+					<td>\
+						<label>\
+							<input type="checkbox" name="servicios[]" class="idServicios">\
+						</label>\
+					</td>\
+				</tr>\
+			')},sendAjax:function(action,callback){var dlg=$('#dlgServicios'),id=dlg.find('#id').val(),row=dlg.find("#rowServicios"+id)
 var data=$("#frmEditarServicios").serializeArray()
 data.push({name:'baja',value:0})
 data.push({name:'controller',value:servicios.controller})
@@ -49,5 +48,6 @@ if(action==DEL)
 data.push({name:'baja',value:1})
 var isNew=id==-1
 id!=-1&&row.fadeTo("slow",0.30)
-$.ajax({url:INDEX,type:"POST",dataType:"json",data:data,}).done(function(rsp){typeof callback=="function"&&callback(rsp,isNew)}).fail(function(jqXHR,textStatus,errorThrown){echo(jqXHR,textStatus,errorThrown)})},validate:{form:function(){var nombre=$('#dlgServicios #codigo').val();if($.isEmpty(nombre)){notify.error('El campo del codigo no puede estar vacio.','ERROR CAMPO VACIO!')
+$.ajax({url:INDEX,type:"POST",dataType:"json",data:data,}).done(function(r,s){if(s=='success')
+typeof callback=="function"&&callback(r,isNew);else alert('Error: \n')}).fail(function(jqXHR,textStatus,errorThrown){alert('Error \n'+jqXHR.responseText)})},validate:{form:function(){var nombre=$('#dlgServicios #codigo').val();if($.isEmpty(nombre)){notify.error('El campo del codigo no puede estar vacio.','ERROR CAMPO VACIO!')
 return!1}else{return!0}}}}
