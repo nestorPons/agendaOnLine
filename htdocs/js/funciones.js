@@ -1112,7 +1112,6 @@ $.ajaxSetup({
 	async : true,
 	complete : function(){
 		btn.load.hide();
-		if (typeof window['menu'] != undefined) ()=>menu.btn.save.off()
-		typeof callback == "function" && callback()
+		if (typeof window['menu'] != undefined) _=>menu.btn.save.off();
 	 }
 });
