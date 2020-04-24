@@ -8,6 +8,11 @@ const MARGIN_DAYS = 1;
 const DEFAULT_HISTORY_DAYS = 1;
 const NUM_MAX_ATTEMPT = 10; //attempts for crack brute force pass
 
+//datos de administrador
+define ('ADMIN_WEB','https://www.lebouquet.es');
+define ('ADMIN_NAME' , 'Nestor Pons') ; 
+define ('ADMIN_EMAIL' , 'admin@lebouquet.com') ; 
+
 define('NAME_EMPRESA' , 'Le Bouquet');
 define('NAME_CODE' ,  'lebouquet');
 

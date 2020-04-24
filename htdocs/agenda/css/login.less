@@ -1,0 +1,60 @@
+#login{
+    .login-form{
+        height : 530px;
+        section{
+            border: 2px solid #fff;
+        }
+        #secNewUser{
+            height: 100%;
+            p.submit{
+                margin: 10px auto;
+                width: 100%;
+                color: #000;
+                bottom: 0;
+                position: absolute;
+            }
+        }
+    }
+
+    .inner {
+        width:100%;
+        position:absolute;
+        padding-left:5px;
+        font-family:verdana;
+        font-size:1em;
+        top:30%;
+    }
+    
+    .inner a.ok {
+        padding:4px;
+        color:#00ff2e;
+        text-decoration:none;
+    }
+    
+    .inner a.info {
+        padding-left:5px;
+        text-decoration:none;
+        color:#faff00;
+    }
+    .politicLink{
+        text-decoration: underline;
+        font-size:1em - 0.3;
+        &:before{content: '( ';}
+        &:after{content: ' )';}
+    }
+}
+#barraaceptacion {
+    display:none;
+    position:fixed;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    padding-bottom:20px;
+    width:100%;
+    text-align:center;
+    min-height:40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color:#fff;
+    z-index:99999;
+    height: 120px;
+}

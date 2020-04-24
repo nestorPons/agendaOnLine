@@ -9,7 +9,6 @@ const EDIT = 'edit';
 const GET = 'get';
 const BR = '<br>';
 
-
 $arr = explode('/', $_SERVER['DOCUMENT_ROOT'] ) ;
 define('URL_ROOT' , str_replace(array_pop($arr),'',$_SERVER['DOCUMENT_ROOT']) );
 
@@ -38,10 +37,3 @@ define('URL_VIEWS' , APP_FOLDER . 'views/' );
 
 define('URL_PROTOCOL', 'https://');
 define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
-
-
-
-//datos de administrador
-define ('ADMIN_WEB','https://www.lebouquet.es');
-define ('ADMIN_NAME' , 'Nestor Pons') ; 
-define ('ADMIN_EMAIL' , 'admin@lebouquet.com') ; 

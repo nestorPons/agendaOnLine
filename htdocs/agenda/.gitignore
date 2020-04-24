@@ -1,0 +1,9 @@
+htdocs/css/main.css
+htdocs/css/*.min.css
+htdocs/empresas/**/*.css
+htdocs/js/min/*.js
+htdocs/dist/*.*
+htdocs/.htaccess
+htdocs/.htaccess-local
+vendor/
+app/conf/UserConn.php

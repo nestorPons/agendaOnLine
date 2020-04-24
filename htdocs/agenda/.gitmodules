@@ -1,0 +1,3 @@
+[submodule "docker-lamp"]
+	path = docker-lamp
+	url = https://github.com/mattrayner/docker-lamp.git

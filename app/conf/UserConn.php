@@ -5,36 +5,40 @@
  */
 class UserConn{
     protected 
-        $server = 'db', # Cambiar por localhost para servidores remotos
+        $server = 'db', // dirección de la conexión al contenedor
         $user, 
         $pass, 
         $type = 'mysql', 
-        $db;
+        $db,
+        $onlyOneUSer = 'root', // usuario de la base de datos del contenedor
+        $onlyOnePass = 'test'; // Pass de la base de datos del contenedor
         
-    
+    public function __construct(){
+
+    }
     protected function user(){
         
-        $this->user = 'root';
-        $this->pass = 'test';
+        $this->user = $this->onlyOneUSer;
+        $this->pass = $this->onlyOnePass;
         
     }
     protected function create(){
         
-        $this->user = 'root';
-        $this->pass = 'test';
+        $this->user = $this->onlyOneUSer;
+        $this->pass = $this->onlyOnePass;
 
     }
     protected function select(){
 
-        $this->user = 'root';
-        $this->pass = 'test';
+        $this->user = $this->onlyOneUSer;
+        $this->pass = $this->onlyOnePass;
 
     }
 
     protected function createDemo(){
 
-        $this->user = 'root';
-        $this->pass = 'test';
+        $this->user = $this->onlyOneUSer;
+        $this->pass = $this->onlyOnePass;
 
     }
 }

@@ -4,7 +4,7 @@ const EMAIL_FROM = 'admin@reservatucita.com';
 const EMAIL_NAME = 'ReservaTuCita.com';
 const EMAIL_HOST = 'mail.gandi.net';// 'smtp.sd3.gpaas.net';  //smtp.gmail.com';
 const EMAIL_USER = 'admin@reservatucita.com';
-const EMAIL_PASS = 'QQasw2!!';
+const EMAIL_PASS = 'YOU_PASS';
 const EMAIL_PORT = 25;
 
 //Server settings
