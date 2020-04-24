@@ -1,5 +1,5 @@
 <?php namespace models;
- class Logs extends \core\BaseClass{
+final class Logs extends \core\BaseClass{
     private $exceptions = ['newPin']; 
     public function __construct(){
         parent::__construct('logs');		 

@@ -349,7 +349,7 @@ margin-left: -0.3125rem;
         // https://github.com/matthiasmullie/minify/issues/68
         $tests[] = array(
             __DIR__.'/sample/external_imports/issue68.css',
-            '@import url(http://localhost/file.css);body{background:green}',
+            '@import url(http://localhost/agenda/file.css);body{background:green}',
         );
 
         // https://github.com/matthiasmullie/minify/issues/67

@@ -24,7 +24,7 @@
 </div>
 <nav  id= "navbar" class="app-bar" data-role="appbar">
 	<a href= "<?=CONFIG['web']??''?>"  target="_blank">
-		<img id="logo" src="/<?=URL_LOGO_48?>" alt="logo image"/>
+		<img id="logo" src="./<?=URL_LOGO_48?>" alt="logo image"/>
 	</a>
 	<span class="app-bar-divider"></span>
 	<?php if(!$Device->isMobile()){ ?>

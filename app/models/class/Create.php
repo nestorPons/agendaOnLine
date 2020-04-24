@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Create{
+final class Create{
     public $nameCompany ,$db;
     private $empresas, $pass, $cConn, $post, $id, $exceptionsPost = ['web'];
 

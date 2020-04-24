@@ -6,6 +6,7 @@ class Conexion extends \conf\UserConn {
 	public $result, $error = false, $mQCount, $mQResult;
 
 	function __construct( $db = null, $user = 0 ) {
+		
 		switch($user){
 			case 0:
 				$this->user();
@@ -20,19 +21,16 @@ class Conexion extends \conf\UserConn {
 				$this->createDemo();
 				break;
 		}
-
-		$this->db = $db; 
+		
+		$this->db = $db;
 
 		if (!$this->connect()) 
 			 throw new \Exception(\core\Error::E051,51 );
 	 }
 	private function connect(){
 		try{
-			if ( $this->db == PREFIX_DB) throw new \Exception(\core\Error::E051,51 );
 			if(
-				$this->conexion = (empty($this->db))
-					? mysqli_connect($this->server, $this->user, $this->pass) 
-					: mysqli_connect($this->server, $this->user, $this->pass , $this->db)
+				$this->conexion = mysqli_connect($this->server, $this->user, $this->pass, $this->db)
 			){
 				@mysqli_query("SET NAMES 'utf8'") ;
 				@mysqli_query("SET time_zone= Europe/Madrid") ;

@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Cita extends \core\BaseClass {
+final class Cita extends \core\BaseClass {
     public $Data , $Cita , $Data_del , $Cita_del ;
     private $data, $exist = false; 
     function __CONSTRUCT(int $id = null){

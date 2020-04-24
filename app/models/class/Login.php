@@ -1,12 +1,11 @@
 <?php namespace models;
 
-class Login extends \core\BaseClass {
-	private $num, $selector, $validator, $pass, $Logs, $company ,$token, $Token;
+final class Login extends \core\BaseClass {
+	private $num, $selector, $validator, $pass, $Logs ,$token, $Token;
 	public $email, $id, $dateBaja, $admin, $user, $pin;
 
 	public function __construct(){
-        // Guardamos la empresa sera la misma en la nueva session
-        $this->company = $_SESSION['empresa'];
+
         if(isset($_COOKIE['auth'])){
             $this->Token = new \core\BaseClass('auth_tokens'); 
             $this->token  = $_COOKIE['auth']; 
@@ -215,7 +214,7 @@ class Login extends \core\BaseClass {
         session_start([
             'cookie_lifetime' => 86400,
         ]);
-        $_SESSION['empresa'] = $this->company;
+
         return session_id()??false;
      }
     public static function example(){

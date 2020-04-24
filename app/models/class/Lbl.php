@@ -1,6 +1,6 @@
 <?php  namespace models;
 
-class Lbl {	
+final class Lbl {	
     //datos
     private $id ;
     private $idCita ; 

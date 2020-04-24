@@ -24,33 +24,18 @@
         <!-- iOS Safari -->
         <meta name="apple-mobile-web-app-status-bar-style" content="<?= CONFIG['color_main']?>">
         <!--  manifest -->    
-        <link rel="manifest" href="/manifest.json.php?nombre_empresa=<?=CONFIG['nombre_empresa']?>&color_main=<?= substr(CONFIG['color_main'],1)?>">
+        <link rel="manifest" href="./manifest.json.php?nombre_empresa=<?=CONFIG['nombre_empresa']?>&color_main=<?= substr(CONFIG['color_main'],1)?>">
         
         <!--favicon-->
-        <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
-        <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon-16x16.png">
+        <link rel="mask-icon" href="./img/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
-        <!--
-        <link rel="stylesheet" href="<?=$url_font_main?>" >
+        
+        <link id="styles" rel="stylesheet"  type="text/css" href="./css/index.min.css?ver=<?=VERSION?>">
+        <script  src="./js/min/login.js?ver=<?=VERSION?>" async ></script>
 
-        <link rel="stylesheet"  type="text/css" href="/css/jquery-ui.min.css">
-        <link rel="stylesheet"  type="text/css" href="/css/metro.css">
-        <link rel="stylesheet"  type="text/css" href="/css/iconos.css">
-        <link rel="stylesheet"  type="text/css" href="/css/font.css">
-        <link rel="stylesheet"  type="text/css" href="/css/main.css">
-        <link rel="stylesheet"  type="text/css" href="/css/login.css">
-        <link rel="stylesheet"  type="text/css" href="/empresas/<?=$Empresa->code()?>/style.css">   
-        <script  src="/js/main.js" ></script>
-        -->
-        
-        <link id="styles" rel="stylesheet"  type="text/css" href="/css/index.min.css?ver=<?=VERSION?>">
-        <script  src="/js/min/login.js?ver=<?=VERSION?>" async ></script>
-     <!--
-        <script  src="/js/service-worker/sw-registration.js?ver=<?=VERSION?>"  ></script>
-        
-        <!-- AKI:: hay que quitar esto del login-->
         <script>
             let config = new Object;
             config = <?=json_encode (CONFIG)?>;
@@ -58,6 +43,4 @@
             config.horarios = <?=json_encode($_SESSION['HORAS']??null)?>;
             config.margenDias  = <?=MARGIN_DAYS?>;	
         </script>
-        <!-- para produccioon
-    -->
   

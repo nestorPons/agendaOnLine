@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Forms{ 
+final class Forms{ 
     const ISINT = 1 , ISBOOL = 2, ISSTR = 3, ISDATE = 4, ISEMAIL = 5, ISHOUR = 6, ISFLOAT= 7, ISCOL = 8;
     private $exceptions, $post;
     private  $rules =  [

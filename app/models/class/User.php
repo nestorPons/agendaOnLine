@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class User extends \core\BaseClass {
+final class User extends \core\BaseClass {
 	
 	private $user, $pass, $config, $data, 
 		$authEmail, $color, $lang;
@@ -32,13 +32,6 @@ class User extends \core\BaseClass {
 					: parent::getOneBy('nombre', $id);
 				
 			}
-			//Nuevo usuario
-
-			//Compruebo que exita la conf de usuario si no inicio un registro
-			/*
-			parent::__construct('usuarios_config');
-			if(!parent::getById($id)) parent::saveById(_NEW, ['id'=>$id]);
-			*/
 			
 			if ( $this->user ){
 
@@ -136,7 +129,7 @@ class User extends \core\BaseClass {
 			$this->token = sha1($cadena) . str_pad($this->id, 4, "0", STR_PAD_LEFT); 
 			
 			$Token = new \core\BaseClass('tblreseteopass');
-			if( !$Token->saveById(_NEW, [
+			if( !$Token->saveById(-1, [
 				'id_user'=> $this->id , 
 				'token' => $this->token , 
 				'date'	=> \core\Tools::current_date()

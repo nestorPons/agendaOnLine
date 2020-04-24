@@ -9,12 +9,11 @@ const EDIT = 'edit';
 const GET = 'get';
 const BR = '<br>';
 
-const _NEW = -1; 
 
 $arr = explode('/', $_SERVER['DOCUMENT_ROOT'] ) ;
 define('URL_ROOT' , str_replace(array_pop($arr),'',$_SERVER['DOCUMENT_ROOT']) );
 
-define('PUBLIC_FOLDER', URL_ROOT . 'htdocs' . '/');
+define('PUBLIC_FOLDER', URL_ROOT . 'htdocs/agenda/');
 define('APP_FOLDER', URL_ROOT . 'app/');
 define('URL_LIB' , APP_FOLDER .'lib/' );
 define('URL_VENDOR' , APP_FOLDER .'vendor/' );
@@ -43,6 +42,6 @@ define('URL_ABSOLUT', URL_PROTOCOL . $_SERVER['SERVER_NAME'] . '/');
 
 
 //datos de administrador
-define ('ADMIN_WEB','https://www.reservatucita.com');
+define ('ADMIN_WEB','https://www.lebouquet.es');
 define ('ADMIN_NAME' , 'Nestor Pons') ; 
-define ('ADMIN_EMAIL' , 'nestorpons@gmail.com') ; 
+define ('ADMIN_EMAIL' , 'admin@lebouquet.com') ; 

@@ -35,7 +35,7 @@ class JS extends Minify
 
     /**
      * Full list of JavaScript reserved words.
-     * Will be loaded from /data/js/keywords_reserved.txt.
+     * Will be loaded from /data./js/keywords_reserved.txt.
      *
      * @see https://mathiasbynens.be/notes/reserved-keywords
      *
@@ -52,7 +52,7 @@ class JS extends Minify
      * else
      *     console.log('this is quite fine')
      *
-     * Will be loaded from /data/js/keywords_before.txt
+     * Will be loaded from /data./js/keywords_before.txt
      *
      * @var string[]
      */
@@ -67,7 +67,7 @@ class JS extends Minify
      * variable
      *     instanceof String
      *
-     * Will be loaded from /data/js/keywords_after.txt
+     * Will be loaded from /data./js/keywords_after.txt
      *
      * @var string[]
      */
@@ -76,7 +76,7 @@ class JS extends Minify
     /**
      * List of all JavaScript operators.
      *
-     * Will be loaded from /data/js/operators.txt
+     * Will be loaded from /data./js/operators.txt
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators
      *
@@ -92,7 +92,7 @@ class JS extends Minify
      * Note: Most operators are fine, we've only removed ++ and --.
      * ++ & -- have to be joined with the value they're in-/decrementing.
      *
-     * Will be loaded from /data/js/operators_before.txt
+     * Will be loaded from /data./js/operators_before.txt
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators
      *
@@ -111,7 +111,7 @@ class JS extends Minify
      * ) & ] are "special" in that they have lots or usecases. () for example
      * is used for function calls, for grouping, in if () and for (), ...
      *
-     * Will be loaded from /data/js/operators_after.txt
+     * Will be loaded from /data./js/operators_after.txt
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators
      *

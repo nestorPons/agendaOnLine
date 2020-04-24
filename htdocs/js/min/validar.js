@@ -1,1 +1,0 @@
-/var/www/html/htdocs/js/validar.js

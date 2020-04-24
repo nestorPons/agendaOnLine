@@ -1,6 +1,6 @@
 <?php 
 // Versionado
-const VERSION = 'v8.5.3'; 
+const VERSION = 'v8.5.5'; 
 const STABLE = false; 
 const ENV = true;
 
@@ -8,8 +8,9 @@ const MARGIN_DAYS = 1;
 const DEFAULT_HISTORY_DAYS = 1;
 const NUM_MAX_ATTEMPT = 10; //attempts for crack brute force pass
 
-define('NAME_EMPRESA' ,  $Empresa->name());
-define('NAME_CODE' ,  $Empresa->code());
+define('NAME_EMPRESA' , 'Le Bouquet');
+define('NAME_CODE' ,  'lebouquet');
+
 // Se necesita para no tener que declarar en la clase BaseClass y poder poner una bd por defecto
 define('NAME_DB' , $Empresa->dbName() );
 

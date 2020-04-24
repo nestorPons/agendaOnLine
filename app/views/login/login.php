@@ -1,6 +1,6 @@
 <section id="secLogin">
     <a href= "<?=CONFIG['web']??''?>"  target="_blank">
-        <img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
+        <img id="logo" src="./<?=URL_LOGO?>" alt="logo image"/>
     </a>
     <h1 class="heading">Agenda <?=NAME_EMPRESA?></span></h1>
     <hr>

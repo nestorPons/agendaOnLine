@@ -1,37 +1,40 @@
 <?php namespace conf;
-
+/**
+ * Archivo de configuración de la conexión a a la base de datos 
+ * ¡IMPORTANTE! ESTA INCLUIDA EN EL GITIGNORE
+ */
 class UserConn{
     protected 
-        $server = 'localhost', 
+        $server = 'db', # Cambiar por localhost para servidores remotos
         $user, 
         $pass, 
         $type = 'mysql', 
         $db;
         
-    public function __construct(){}
+    
     protected function user(){
         
-        $this->user = 'user';
-        $this->pass = '0Z8AHyYDKN0hUYik';
-
+        $this->user = 'root';
+        $this->pass = 'test';
+        
     }
     protected function create(){
         
-        $this->user = 'create';
-        $this->pass = 'UYQsjBRIv6dCVfEz';
+        $this->user = 'root';
+        $this->pass = 'test';
 
     }
     protected function select(){
 
-        $this->user = 'select';
-        $this->pass = 'gon3rJGgpCBwksi0';
+        $this->user = 'root';
+        $this->pass = 'test';
 
     }
 
     protected function createDemo(){
 
-        $this->user = 'demo';
-        $this->pass = 'YLot6pyQCwgTjolF';
+        $this->user = 'root';
+        $this->pass = 'test';
 
     }
 }

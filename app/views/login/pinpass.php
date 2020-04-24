@@ -8,7 +8,7 @@
             <div class="login login-form ">
                 <section id="pinpass">
                     <a href= "<?=CONFIG['web']??''?>"  target="_blank">
-                        <img id="logo" src="/<?=URL_LOGO?>" alt="logo image"/>
+                        <img id="logo" src="./<?=URL_LOGO?>" alt="logo image"/>
                     </a>
                     <h1 class="heading">Introduzca pin</h1>
                     <hr>

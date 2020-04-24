@@ -20,7 +20,7 @@ $link = $_SERVER['SERVER_NAME']."/".$nameCompany."/index.php";
     <title>Login form :: Metro UI CSS - The front-end framework for developing projects on the web in Windows Metro Style</title>
 	 <link href="/css/main.css" rel="stylesheet">
 
-	<script  type="text/javascript" src="/js/jquery.min.js" async></script>
+	<script  type="text/javascript" src="./js/jquery.min.js" async></script>
  
     <script>
         $(function(){

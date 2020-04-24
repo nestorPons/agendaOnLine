@@ -28,6 +28,6 @@
                 </form>
             </section>
         </div>
-    <script  src="/js/recovery.js?ver=<?=VERSION?>"></script>
+    <script  src="./js/recovery.js?ver=<?=VERSION?>"></script>
 	</body>
 </html>

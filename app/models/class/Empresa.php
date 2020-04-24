@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Empresa extends \core\BaseClass {
+final class Empresa extends \core\BaseClass {
    private $data, $code, $conf_css, $conf, $plan, $dbName;
 
     function __construct($codeEmpresa){

@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Agendas extends \core\BaseClass {
+final class Agendas extends \core\BaseClass {
    public $count;
    private $isZoneUsers, $get;
 

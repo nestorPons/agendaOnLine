@@ -15,38 +15,28 @@ try {
         $demo_email = "demo@demo.es"; 
         $demo_pass = "Demo1234"; 
     }
+        
+        $Empresa = new models\Empresa('lebouquet');
+        require_once $url_base . 'app/conf/config.php' ;
+    
+        $Logs = new models\Logs;
 
-        // Comprobando el GET sabreos si estamos en login
-        if(isset($_GET['empresa'])) $_SESSION['empresa'] = $_GET['empresa'];
-        // Todos los demas casos que haya pasado por login
-        if (isset($_SESSION['empresa'])){
-
-            $Empresa = new models\Empresa($_SESSION['empresa']);
-            require_once $url_base . 'app/conf/config.php' ;
-      
-            $Logs = new models\Logs;
-
-            if (file_exists(URL_EMPRESA)){     
-                require_once URL_FUNCTIONS . 'compilaLess.php' ;
-           
-                if(!$Security->checkSession($controller) && $controller != 'validar') {
-                    $Login = new \models\Login; 
-                    $Login->logout();
-                }
-                
-                require  URL_CONTROLLERS . $controller . '.php';
-                
-            }else{
-                include(PUBLIC_FOLDER . "error404.php");
-                
+        if (file_exists(URL_EMPRESA)){     
+            require_once URL_FUNCTIONS . 'compilaLess.php' ;
+        
+            if(!$Security->checkSession($controller) && $controller != 'validar') {
+                $Login = new \models\Login; 
+                $Login->logout();
             }
             
-        } else {
-            /**
-             * Si no he pasado por login voy a scripts (validar y crear nueva empresa)
-             */
-            require_once URL_SCRIPTS . $controller. '.php';
+            require  URL_CONTROLLERS . $controller . '.php';
+            
+        }else{
+            include(PUBLIC_FOLDER . "error404.php");
+            
         }
+            
+        
     //AKI :: implementar seguridad por eventos
     //echo $_SESSION['count']++ ;
 } catch (\Exception $e) {

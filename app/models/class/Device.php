@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Device{
+final class Device{
 
   public $os , $browser , $agente, $browserShort, $device;
   public $isMovile = false, $isTablet = false, $isWatch= false, $isLaptop= false, $width;

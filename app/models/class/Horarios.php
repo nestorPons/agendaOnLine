@@ -1,6 +1,6 @@
 <?php namespace models;
 
-class Horarios extends \core\BaseClass {
+final class Horarios extends \core\BaseClass {
 
 	public $horas_array  ;
 	public $close_hours ;
