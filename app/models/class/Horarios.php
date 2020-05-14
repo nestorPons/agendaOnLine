@@ -35,7 +35,6 @@ final class Horarios extends \core\BaseClass {
 	 }
 
 	public function hours($day = 'all', $agenda = 0){
-
   		$sql =  ($day=='all') ?
 			"SELECT * FROM horarios ORDER BY dia_inicio" :
 			"SELECT * FROM horarios WHERE agenda = $agenda 
