@@ -1,4 +1,5 @@
 main.scripts.loaded.push('usuarios');
+
 var usuarios = {
 	isLoad : true, 
 	controller : 'usuarios' , 
@@ -7,12 +8,12 @@ var usuarios = {
 		let $this = this	
 		$this.select('A')
 		$("#usuarios")
-			.on('click','[name*="editar"]',function(){
-
-				var id = $(this).parents('tr:first').data('value')
+			.on('click','.row_usuario',function(e){
+				const id = $(this).data('value')
 				$this.dialog(id)
 			})
 			.on('click',"[name='historia']",function(e){
+				e.stopPropagation()
 				$this.id = $(this).parents('tr').data('value')
 				$this.historial($this.id)
 			})
@@ -118,10 +119,7 @@ var usuarios = {
 		
 		},
 		edit : function(data){
-			var $this  =$('#frmUsuarios'),
-				chckObs = $.isEmpty(data.obs)?'No':'Si',
-				admin = $.isEmpty(data.admin)?0:1,
-				activa = $.isEmpty(data.activa)?1:0
+			const chckObs = $.isEmpty(data.obs)?'No':'Si'
 
 			$('#rowUsuarios'+data.id)
 				.data('color', data.color)
@@ -181,7 +179,7 @@ var usuarios = {
 					
 				if (id!=-1){
 					var $this = $("#usuarios #rowUsuarios"+id)
-					
+
 					var nom = $this.find("[name='nom']").text()
 					var email = $this.find("[name='email']").data("value")
 					var tel = $this.find("[name='tel']").text()

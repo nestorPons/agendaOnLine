@@ -1,7 +1,8 @@
 main.scripts.loaded.push('usuarios');var usuarios={isLoad:!0,controller:'usuarios',id:0,init:function(){let $this=this
 $this.select('A')
-$("#usuarios").on('click','[name*="editar"]',function(){var id=$(this).parents('tr:first').data('value')
-$this.dialog(id)}).on('click',"[name='historia']",function(e){$this.id=$(this).parents('tr').data('value')
+$("#usuarios").on('click','.row_usuario',function(e){const id=$(this).data('value')
+$this.dialog(id)}).on('click',"[name='historia']",function(e){e.stopPropagation()
+$this.id=$(this).parents('tr').data('value')
 $this.historial($this.id)}).on('click','#mainLstABC a',function(){$this.select($(this).html())}).on('change','#lstABC',function(){$this.select($(this).val())})
 $('#dialogs').on('change','#ultimosServicios',function(){$this.historial($this.id,$(this).val())}).on('click','.fnBuscarCita',function(){})},guardar:function(idUsuario=-1,data=null,callback){if(data==null){var frm=new Object
 frm=$.serializeForm('frmUsuarios'),data={nombre:frm.nombre,email:frm.email||null,tel:frm.tel||null,obs:frm.obs||null,status:$.isEmpty(frm.activa)?0:2,admin:$.isEmpty(frm.admin)?0:1,color:(frm.sinColor)?null:frm.color}}
@@ -17,7 +18,7 @@ usuarios.select(frm.nombre[0])}
 typeof callback=="function"&&callback()}).fail(function(jqXHR,textStatus,errorThrown){alert(jqXHR+' , '+textStatus+' , '+errorThrown)
 notify.error('No se pudo guardar el usuario')})},rows:{create:function(data){let $template=$('#usuarios').find('.template')
 $template.clone().removeClass('template').attr('id','rowUsuarios'+data.id).data('value',data.id).data('color',data.color).find('[name=id]').html(data.id).end().find('[name=nom]').html(data.nombre).attr('id',normalize(data.nombre)).end().find('[name=tel]').html(data.tel).end().find('[name=email]').html($.isEmpty(data.email)?'No':'Si').data('value',data.email).end().find('[name=obs]').html($.isEmpty(data.obs)?'No':'Si').data('obs',data.obs).end().find('[name=admin]').html($.isEmpty(data.admin)?'No':'Si').data('value',data.admin).end().insertAfter($template)
-$('#lstClientes').append('<option data-id="'+data.id+'" data-name="'+normalize(data.nombre)+'" value="'+data.nombre+'" data-color="#'+data.color+'"></option>')},edit:function(data){var $this=$('#frmUsuarios'),chckObs=$.isEmpty(data.obs)?'No':'Si',admin=$.isEmpty(data.admin)?0:1,activa=$.isEmpty(data.activa)?1:0
+$('#lstClientes').append('<option data-id="'+data.id+'" data-name="'+normalize(data.nombre)+'" value="'+data.nombre+'" data-color="#'+data.color+'"></option>')},edit:function(data){const chckObs=$.isEmpty(data.obs)?'No':'Si'
 $('#rowUsuarios'+data.id).data('color',data.color).find('td[name="nom"]').html(data.nombre).data('value',data.nombre).end().find('td[name="tel"]').html(data.tel).end().find('td[name="email"]').html(data.email).data('value',data.email).end().find('td[name="obs"]').html(chckObs).data('value',data.obs)
 $('#lstClientes').find('option[data-id="'+data.id+'"]').attr('data-name',normalize(data.nombre)).attr('data-color',data.color).val(data.nombre)
 $('.lbl').each(function(){let $name=$(this).find('div.nombre'),idUserLbl=$name.attr('id');if(idUserLbl==data.id){$name.find('span').text(data.nombre)}})},delete:function(data){let id=data.id,nombre=data.nombre

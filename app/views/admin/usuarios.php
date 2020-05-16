@@ -2,20 +2,18 @@
 <div class="cabecera" >
 	<?php include URL_MENUS . 'abc.php'  ?>
 </div>	
-<div class="cuerpo">
+<div class="cuerpo usuarios">
 	<table class="tablas colorear-filas">					
 		<thead>
 			<tr>
 				<th class="tileOpc">Opcion</th>
 				<th class="tileId">Id</th>
 				<th class="tileName">Nombre</th>
-				<?php if(!$Device->isMobile()){?>
-					<th class="tileTel">Teléfono</th>
-					<th class="tileEmail">Email</th>
-					<th class="tileObs">Obs</th>
-					<th class="tileAdmin">Admin</th>
-				<?php
-				}?>	
+				<th class="tileTel tel">Teléfono</th>
+				<th class="tileEmail email">Email</th>
+				<th class="tileObs obs">Obs</th>
+				<th class="tileAdmin admin">Admin</th>
+
 			</tr>
 		</thead>
 		<tbody>
@@ -56,3 +54,10 @@
 	</table>
 </div> 
 <scirpt src="js/min/usuarios.js"></scirpt>
+<style>
+	@media only screen and (max-width: 600px) {
+		.usuarios .tel, .usuarios .email, .usuarios .obs, .usuarios .admin{
+			display: none;	
+		}
+	}
+</style>
