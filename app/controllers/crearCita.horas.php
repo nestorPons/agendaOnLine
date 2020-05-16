@@ -16,7 +16,7 @@ $lbl->loadDates( $fecha ,$fecha , $ag ) ;
 
 $arr_horas_ocupadas = $Horarios->set_arr_busy(array_column($lbl->data, 'tiempoTotal' , 'hora')); 
 
-$horas = $Horarios->hours($dia_semana,$_POST['agenda']);
+$horas = $Horarios->hours($dia_semana,$ag);
 $array_horas = $horas[$dia_semana][$ag]??false;
 
 require_once URL_VIEWS_ADMIN . 'crearCita/horas.php' ;

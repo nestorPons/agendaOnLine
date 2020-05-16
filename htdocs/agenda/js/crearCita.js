@@ -135,7 +135,7 @@ crearCita={
 
 		if(self.validate.form()){
 			$.post(INDEX,crearCita.data,function( rsp ){
-		
+				
 				if(rsp.success){
 				
 					if(rsp.ocupado){
@@ -162,10 +162,7 @@ crearCita={
 				}
 				dialog.close('dlgGuardar')
 			},'json')
-			.fail(function( jqXHR, textStatus, errorThrown){
-				notify.error(jqXHR + '<br/>' +  textStatus + '<br/>' + errorThrown);
-				return false;
-			})
+			.fail(()=> notify.error('creando la cita en crearCita.js '));
 		}else{
 			notify.error('Complete todos los datos')
 			return false
@@ -216,7 +213,7 @@ crearCita={
 				
 			let	that = this,
 				data = {
-					agenda: crearCita.data.agenda,
+					agenda: $("input[name='agenda[]']:checked").val(),
 					fecha: id_table , 
 					controller : 'crearCita.horas'
 			 	} 
@@ -294,9 +291,9 @@ crearCita={
 		dialog.close('dlgGuardar')
 	 },
 	stepper: function(index){
-		var $visible = $('.steperCapa:visible')
-		var $stepper = $('#stepper'+index)
-		if($visible.attr('id')==$stepper.attr('id'))return false
+		let $visible = $('.steperCapa:visible')
+		let $stepper = $('#stepper'+index)
+		if($visible.attr('id')==$stepper.attr('id')) return false
 		if (!$stepper.is(':visible')&&$visible.length){
 			if(index==0){
 				_slider()
