@@ -213,7 +213,7 @@ crearCita={
 				
 			let	that = this,
 				data = {
-					agenda: crearCita.data.agenda,
+					agenda: $("input[name='agenda[]']:checked").val(),
 					fecha: id_table , 
 					controller : 'crearCita.horas'
 			 	} 

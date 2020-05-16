@@ -37,7 +37,7 @@ serviciosSeleccionados.each(function(){tiempoServicios+=$(this).data('time')})
 lblTS.text(tiempoServicios)
 crearCita.horas.pintar(Fecha.id,tiempoServicios)
 if(!$.isEmpty(crearCita.data.hora)){$('#crearCita .dia.activa').find('.horas[value="'+crearCita.data.hora+'"]').prop('checked',!0)
-crearCita.dialog()}},crear:function(id_table){let that=this,data={agenda:crearCita.data.agenda,fecha:id_table,controller:'crearCita.horas'}
+crearCita.dialog()}},crear:function(id_table){let that=this,data={agenda:$("input[name='agenda[]']:checked").val(),fecha:id_table,controller:'crearCita.horas'}
 if($('#crearCita #'+id_table).length)$('#crearCita #'+id_table).remove()
 that.hide()
 $.post(INDEX,data,function(html){var m=document.getElementById('tablas')
