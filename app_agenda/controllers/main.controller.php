@@ -1,6 +1,7 @@
 <?php 
+
 try {
-    require_once $url_base . 'app/conf/autoload.php' ;
+    
     $Security = new \core\Security;
     $Forms = new models\Forms($_POST, ['fileLogo','tel','chck']);
 
@@ -17,7 +18,7 @@ try {
     }
         
         $Empresa = new models\Empresa('lebouquet');
-        require_once $url_base . 'app/conf/config.php' ;
+        require_once $FOLDER_CONFIG .'config.php' ;
     
         $Logs = new models\Logs;
 

@@ -13,7 +13,7 @@ $arr = explode('/', $_SERVER['DOCUMENT_ROOT'] ) ;
 define('URL_ROOT' , str_replace(array_pop($arr),'',$_SERVER['DOCUMENT_ROOT']) );
 
 define('PUBLIC_FOLDER', URL_ROOT . 'htdocs/agenda/');
-define('APP_FOLDER', URL_ROOT . 'app/');
+define('APP_FOLDER', URL_ROOT . 'app_agenda/');
 define('URL_LIB' , APP_FOLDER .'lib/' );
 define('URL_VENDOR' , APP_FOLDER .'vendor/' );
 define('URL_AJAX' , APP_FOLDER .'models/ajax/' );
