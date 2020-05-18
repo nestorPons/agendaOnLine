@@ -7,7 +7,7 @@
     
     <table class = "tablas">
         <thead>
-            <tr>
+            <tr class="row">
                 <th class="id">Id</th>
                 <th class="icono">Ico</th>
                 <th class="fecha">Fecha</th>

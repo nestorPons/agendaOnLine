@@ -3152,3 +3152,22 @@ html{
 .red{
 	color: red;
 }
+
+
+@media only screen and (max-width: 770px) {
+	tr.row {
+		height: 3rem !important;
+		font-size: 1.5rem;
+		.botons, .icono{
+			margin: 20% auto;
+		}
+		input[type=checkbox]{
+			/* Doble-tamaño Checkboxes */
+			-ms-transform: scale(1.5); /* IE */
+			-moz-transform: scale(1.5); /* FF */
+			-webkit-transform: scale(1.5); /* Safari y Chrome */
+			-o-transform: scale(1.5); /* Opera */
+			padding: 10px;
+		}
+	}
+}

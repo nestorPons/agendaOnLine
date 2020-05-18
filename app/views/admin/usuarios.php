@@ -5,7 +5,7 @@
 <div class="cuerpo usuarios">
 	<table class="tablas colorear-filas">					
 		<thead>
-			<tr>
+			<tr class="row">
 				<th class="tileOpc">Opcion</th>
 				<th class="tileId">Id</th>
 				<th class="tileName">Nombre</th>
@@ -55,9 +55,12 @@
 </div> 
 <scirpt src="js/min/usuarios.js"></scirpt>
 <style>
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 770px) {
 		.usuarios .tel, .usuarios .email, .usuarios .obs, .usuarios .admin{
 			display: none;	
+		}
+		.usuarios .tileOpc{
+			width: 10ch !important;
 		}
 	}
 </style>

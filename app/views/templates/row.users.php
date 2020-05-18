@@ -1,5 +1,5 @@
-<tr id="rowUsuarios<?=$id?>" class="<?=$clase?> row_usuario" data-value ="<?=$id?>" data-color="<?=$color??''?>" data-status=<?=$status?>> 
-    <td> 
+<tr id="rowUsuarios<?=$id?>" class="<?=$clase?> row_usuario row" data-value ="<?=$id?>" data-color="<?=$color??''?>" data-status=<?=$status?>> 
+    <td class="botons"> 
         <span name="historia" class= "icon-doc-text " title="Historial de usuario"></span>
         <span name="editar[]" class= "icon-edit x6 a"  title="Editar usuario"></span>
     </td>

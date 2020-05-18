@@ -10,7 +10,7 @@ $baja = $serv[6]==1?'ocultar_baja':'';
 ?>
 
 <tr id="rowServicios<?=$id?>" 
-    class="fam<?=$familia?> <?=$baja?>"  
+    class="fam<?=$familia?> <?=$baja?> row"  
     name="<?=\core\Tools::normalize($codigo)?>" 
     familia = "<?=$familia?>"
     value=<?= $id?> >
