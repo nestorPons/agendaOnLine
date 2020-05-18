@@ -60,7 +60,7 @@ if(!$stepper.is(':visible')&&$visible.length){if(index==0){_slider()}else if(ind
 $('.tblHoras').show()
 crearCita.data.agenda=$('#crearCita').find('input[name="agenda[]"]:checked').val()
 _slider(crearCita.servicios.init)}else if(index==2&&crearCita.validate.service()){menu.status('calendar')
-!$('#crearCita').find('#'+Fecha.id).length&&crearCita.horas.sincronizar()
+crearCita.horas.sincronizar()
 crearCita.validate.name()&&_slider()}}
 function _slider(callback){var dir=$visible.data('value')>0||1
 var dirEntrada=index-dir<0?'right':'left'

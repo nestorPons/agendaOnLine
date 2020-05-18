@@ -309,7 +309,7 @@ crearCita={
 				
 				menu.status('calendar')
 				
-				!$('#crearCita').find('#'+Fecha.id).length && crearCita.horas.sincronizar()
+				crearCita.horas.sincronizar()
 				crearCita.validate.name() && _slider()
 				
 			}
