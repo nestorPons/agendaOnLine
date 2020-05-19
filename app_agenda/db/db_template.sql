@@ -129,7 +129,7 @@ CREATE TABLE `usuarios` (
   `nombre` tinytext CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
   `email` varchar(50) NULL DEFAULT NULL,
   `pass` varchar(255) NULL DEFAULT NULL,
-  `tel` varchar(20) NULL DEFAULT NULL,
+  `tel` varchar(50) NULL DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `obs` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish2_ci,
   `dateReg` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

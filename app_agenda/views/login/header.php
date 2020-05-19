@@ -4,14 +4,7 @@
         <title id = "loginTile">agenda OnLine</title>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-          
-        <!-- Fuerza a la no lectura de cache
-        <meta http-equiv="Expires" content="0">
-        <meta http-equiv="Last-Modified" content="0">
-        <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
-        <meta http-equiv="Pragma" content="no-cache">
-        -->
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
 
         <!-- quita css de seleccion en explorer!-->
         <meta name="msapplication-tap-highlight" content="no">
@@ -35,6 +28,7 @@
         
         <link id="styles" rel="stylesheet"  type="text/css" href="./css/index.min.css?ver=<?=VERSION?>">
         <script  src="./js/min/login.js?ver=<?=VERSION?>" async ></script>
+
 
         <script>
             let config = new Object;

@@ -2,9 +2,7 @@
 
 final class User extends \core\BaseClass {
 	
-	private $user, $pass, $config, $data, 
-		$authEmail, $color, $lang;
-		
+	private $user, $pass, $config, $data, $authEmail, $color, $lang;
 	public $nombre, $email, $tel, $id, $dateBaja, $dateReg, $idioma, $admin, $obs, $token = 'undefined';
 
 	public function __construct( $id ){

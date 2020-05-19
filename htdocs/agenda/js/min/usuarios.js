@@ -44,7 +44,7 @@ for(let i=0;i<len;i++){let servicios=d[i].servicios
 $this.find('#hisCita').clone(!0,!0).removeClass('template').removeAttr('id').find('.hisAgenda').html(d[i].agenda).end().find('.hisIdCita').html(d[i].id).end().find('.hisFecha').html(Fecha.print(d[i].fecha)).end().find('.hisHoras').html(d[i].hora).end().appendTo($this.find('table'))
 servicios.forEach(e=>{let $clone=$this.find('#hisServicios').clone(!0,!0).removeClass('template').removeAttr('id')
 $clone.find('.hisServicio').text(e)
-$clone.appendTo($this.find('table'))})}},'json')})},select:function(letra){var $sec=$('#usuarios')
+$clone.appendTo($this.find('table'))})}},'json')})},select:function(letra){const $sec=$('#usuarios')
 $sec.find('a.c3').removeClass('c3').end().find('#menu'+letra).addClass('c3').end().find('tbody tr:visible').hide().end().find('.name[id^="'+letra.toLowerCase()+'"]').parent().show()
 colorear_filas($sec.find('.colorear-filas'))},validate:{form:function(){var value=$('#dlgUsuarios	#nombre').val()
 if($.isEmpty(value)){notify.error('El campo nombre no puede estar vacio.','Error crear usuario')

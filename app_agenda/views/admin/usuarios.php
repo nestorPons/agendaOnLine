@@ -6,10 +6,10 @@
 	<table class="tablas colorear-filas">					
 		<thead>
 			<tr class="row">
-				<th class="tileOpc">Opcion</th>
-				<th class="tileId">Id</th>
+				<th class="botons">Opción</th>
+				<th class="id">Id</th>
 				<th class="tileName">Nombre</th>
-				<th class="tileTel tel">Teléfono</th>
+				<th class="tileTel telefono">Teléfono</th>
 				<th class="tileEmail email">Email</th>
 				<th class="tileObs obs">Obs</th>
 				<th class="tileAdmin admin">Admin</th>
@@ -18,21 +18,6 @@
 		</thead>
 		<tbody>
 			<?php 
-			//template para js 
-			$id = '' ;
-			$nombre = '' ; 
-			$email = '' ; 
-			$tel = '' ; 
-			$admin = '' ; 
-			$obs = '' ; 
-			$activa = '' ; 
-			$email_status= '';
-			$obs_status = '';
-			$status = 0;
-			$clase = 'template';
-			include (URL_TEMPLATES .'row.users.php');			
-			//****//
-
 			foreach($users as $user){
 				$id = $user['id'] ;
 				$nombre = $user['nombre'] ; 
@@ -56,7 +41,7 @@
 <scirpt src="js/min/usuarios.js"></scirpt>
 <style>
 	@media only screen and (max-width: 770px) {
-		.usuarios .tel, .usuarios .email, .usuarios .obs, .usuarios .admin{
+		.usuarios .telefono, .usuarios .email, .usuarios .obs, .usuarios .admin{
 			display: none;	
 		}
 		.usuarios .tileOpc{

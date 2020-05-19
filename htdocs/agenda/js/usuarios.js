@@ -268,7 +268,7 @@ var usuarios = {
 	 },
 	select: function (letra) {
 	//Coloreal filas de las tablas
-		var $sec = $('#usuarios')
+		const $sec = $('#usuarios')
 		$sec 
 			.find('a.c3').removeClass('c3').end()
 			.find('#menu'+letra).addClass('c3').end()
