@@ -325,7 +325,7 @@ return res.replace(/\s/g,"").toLowerCase().trim()}
 function echo(){for(let i=0;i<arguments.length;i++){console.log(arguments[i])}}
 function existeUrl(url){var http=new XMLHttpRequest();http.open('HEAD',url,!1);http.send();return http.status!=404}
 function colorear_filas($this){$this=$this.find('tbody tr').css('background','').filter(':visible')
-if($this.length)$this.filter(':even').css('background','#eee')}
+if($this.length)$this.filter(':even').css('background','#aaa')}
 $(function(){$('.time').mask('00:00');$('.tel').mask('##000000000');$('.date').mask('00/00/0000');$('.pin').mask('0000');jQuery.each(jQuery('textarea[data-autoresize]'),function(){var offset=this.offsetHeight-this.clientHeight;var resizeTextarea=function(el){jQuery(el).css('height','auto').css('height',el.scrollHeight+offset)};jQuery(this).on('keyup input',function(){resizeTextarea(this)}).removeAttr('data-autoresize')});$(document).on('click','#btnExit',function(){main.logout()}).on('click',".btnLoad",function(){let frm=$(this).parents('form'),enabled=!$(this).prop('disabled')
 btn.load.show($(this))
 enabled&&$(this).is(':submit')&&!$.isEmpty(frm)&&frm.submit()}).on('click','.icon-eye',function(e){var $pass=$(this).siblings('input:password'),$text=$(this).siblings('input:text')
