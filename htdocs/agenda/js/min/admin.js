@@ -9,7 +9,7 @@ if(typeof crearCita.horas=='object')crearCita.horas.sincronizar()
 if(typeof historial.sinc=='function')historial.sinc()
 var diaFestivo=$.inArray(Fecha.md(Fecha.general),config.festivos)!=-1;(diaFestivo)?$datepicker.addClass('c-red'):$datepicker.removeClass('c-red')
 $datepicker.val(Fecha.print(fecha)).datepicker("setDate",Fecha.print(fecha))}
-var worker={w:null,interval:null,start:function(){this.interval=window.setInterval(fun=>worker.w.postMessage(0),1000*60)},init:function(){this.w=new Worker('./js/worker.js');this.w.onmessage=e=>{let data=JSON.parse(e.data);if(data){$.each(data,function(i,d){$.each(d,function(i,v){let action=parseInt(v.action),obj=null
+var worker={w:null,interval:null,start:function(){this.interval=window.setInterval(fun=>worker.w.postMessage(0),1000*30)},init:function(){this.w=new Worker('./js/worker.js');this.w.onmessage=e=>{let data=JSON.parse(e.data);if(data){$.each(data,function(i,d){$.each(d,function(i,v){let action=parseInt(v.action),obj=null
 switch(v.table){case 'data':obj=admin.lbl;break;case 'notas':obj=notas;break;case 'usuarios':obj=usuarios.rows;break;case 'servicios':obj=servicios;break;case 'familias':obj=familias;break};if(!$.isEmpty(obj)){switch(action){case 1:obj.create(v);break;case 2:obj.edit(v);break;case 3:obj.delete(v,!0);break}}})})}}
 this.start()},stop:function(){let i=worker.interval;window.clearInterval(i)}},admin={idUser:$('#main').data('user'),z_index:2,data:new Object(),arrSer:new Array(),last:new Object(),idsControl:new Object(),idCita:-1,ancho:0,init:function(){this.ancho=$('#sections').width()
 let n=(localStorage.getItem("showRows")==1)?1:0;this.inactivas.change(n)

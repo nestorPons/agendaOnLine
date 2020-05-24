@@ -59,7 +59,7 @@ ajax.post = function (url, data, callback, async) {
 
 self.addEventListener('message',(e)=>{
 
-    ajax.post('/index.php', {controller: 'refresh'}, function(e) {
+    ajax.post('/agenda/index.php', {controller: 'refresh'}, function(e) {
         self.postMessage(e);
     });
 

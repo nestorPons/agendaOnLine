@@ -39,7 +39,7 @@ worker =  {
 	w : null ,
 	interval : null,
 	start : function(){
-		this.interval = window.setInterval(fun=>worker.w.postMessage(0), 1000 * 60);
+		this.interval = window.setInterval(fun=>worker.w.postMessage(0), 1000 * 30);
 	}, 
 	init : function(){
 		this.w = new Worker('./js/worker.js');
