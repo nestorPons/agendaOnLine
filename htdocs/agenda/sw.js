@@ -1,5 +1,5 @@
 // Se usa mara mandar notificaciones push como recordatorios de las citas
-const version  = 'v2.5'; 
+const version  = 'v2.6'; 
 
 self.addEventListener('fetch', event => {
   if(event.request.method === "POST"){

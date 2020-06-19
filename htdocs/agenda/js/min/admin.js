@@ -292,28 +292,27 @@ $('.ocultar_baja').removeClass('ocultar_baja').addClass('mostrar_baja');else $('
 $encontrados=txt.match(/^@$/)?$sec.find('.email:contains('+txt+')'):$sec.find('.busqueda:contains('+txt+')')
 if($encontrados.length){$sec.find("tbody tr").hide().end()
 $encontrados.parents('tr').show()}else{$sec.find("tbody tr").hide()}
-colorear_filas($('.colorear-filas:visible'))}},notas={days:[Fecha.general],nombreDlg:'dlgNotas',$template:null,dir:'right',init:function(){this.show()},dialog:function(id=-1){var _load=function(){var $dlg=$('#'+notas.nombreDlg)
+colorear_filas($('.colorear-filas:visible'))}},notas={days:[Fecha.general],$template:null,dir:'right',init(){this.show()},dialog(id=-1){var _load=function(){var $dlg=$('#dlgNotas')
 $dlg.find("#id").val(id)
 if(id==-1){$dlg.find('#fecha').val(Fecha.sql).end().find('#hora').val('00:00').end().find('#descripcion').val('').end().find('h1').html('Nuevo...')}else{var $nota=$("#notas #"+id),fecha=Fecha.general,hora=$nota.find(".hora span").text(),des=$nota.find(".contenido span").text()
 $dlg.find('#fecha').val(Fecha.sql(fecha.trim())).end().find('#hora').val(hora.trim()).end().find('#descripcion').val(des).find('h1').html('Editando...')}}
-dialog.open(notas.nombreDlg,notas.save,()=>notas.delete($('#dlgNotas #id').attr('value')),_load)},save:function(callback){var $dlg=$('#dlgNotas'),data={id:$dlg.find('#id').val(),nota:$dlg.find('#descripcion').val(),fecha:$dlg.find('#fecha').val(),hora:$dlg.find('#hora').val(),controller:'notas',action:SAVE}
-$.post(INDEX,data,function(r,textStatus,jqXHR){if(r.success){dialog.close(this.nombreDlg)
+dialog.open('dlgNotas',notas.save,()=>notas.delete($('#dlgNotas #id').attr('value')),_load)},save(callback){const $dlg=$('#dlgNotas');const data={id:$dlg.find('#id').val(),nota:$dlg.find('#descripcion').val(),fecha:$dlg.find('#fecha').val(),hora:$dlg.find('#hora').val(),controller:'notas',action:SAVE};$.post(INDEX,data,(r,textStatus,jqXHR)=>{if(r.success){dialog.close(`dlgNotas`)
 data.id=(data.id>-1)?data.id:r.id;notas.create(data)
 notify.success('Su nota ha sido guardada')}else{notify.error('No se ha podido guardar la nota')
 echo(r)}
-typeof callback=="function"&&callback()},'json')},delete:function(id){let data={controller:'notas',action:DEL,id:id}
+typeof callback=="function"&&callback()},'json')},delete(id){let data={controller:'notas',action:DEL,id:id}
 $.post(INDEX,data,function(r){if(r.success){$("#notas #"+id).hide('explode',1000).remove()
 dialog.close('dlgNotas')}else{notify.error('No se ha podido eliminar la nota')
-echo(r)}},'json')},load:function(fecha){let data={controller:'notas',action:GET,fecha:fecha}
+echo(r)}},'json')},load(fecha){let data={controller:'notas',action:GET,fecha:fecha}
 if(this.days.includes(Fecha.general)){this.show()}else{$.post(INDEX,data,function(r){notas.days.push(Fecha.general)
 notas.show()
 if(r.success){for(let i=0,datos=r.data,len=datos.length;i<len;i++){notas.create(datos[i])}}else{$('#menu5').removeClass('c4')}
-return r.success},'json')}},create:function(d){if($('#notas').find('#'+d.id).length)return!1;Tools.template(notas,'row.notas.php',function(r){$('#mySidenav #menu5').addClass('hay-nota')
-notas.$template.clone().hide().addClass(Fecha.id).attr('id',d.id).find('.hora span').text(d.hora).end().find('.contenido span').text(d.nota).end().prependTo('#notas').show('fade')})},show:function(){let $sec=$('#notas'),$noteDay=$sec.find('.'+Fecha.id)
+return r.success},'json')}},create(d){if($('#notas').find('#'+d.id).length)return!1;Tools.template(notas,'row.notas.php',function(r){$('#mySidenav #menu5').addClass('hay-nota')
+notas.$template.clone().hide().addClass(Fecha.id).attr('id',d.id).find('.hora span').text(d.hora).end().find('.contenido span').text(d.nota).end().prependTo('#notas').show('fade')})},show(){let $sec=$('#notas'),$noteDay=$sec.find('.'+Fecha.id)
 $sec.find('.nota').addClass('hide')
 $noteDay.removeClass('hide')
 $('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
-if($noteDay.length)$('#mySidenav #menu5').addClass('hay-nota')},edit:function(d){this.delete(d.id)
+if($noteDay.length)$('#mySidenav #menu5').addClass('hay-nota')},edit(d){this.delete(d.id)
 this.create(d)}}
 $('body').on('click',".idDateAction",function(){if(!$(this).data('disabled')){sincronizar($(this).data('action'))}}).on('click','#boton-menu',function(){let estado=parseInt(localStorage.getItem("menuOpen"))+1;menu.nav.open(estado);menu.nav.estado(estado)}).on('click','#btnCambiarPass',function(){console.log("Abriendo cambio pass ...")
 dialog.open('dlgCambiarPass',admin.pass)}).on('click','.close',function(e){dialog.close()}).on('change','input',function(){$(this).removeClass('input-error')}).on('change','#lstSerSelect',function(){let id=$(this).val();$('#lstSerSelect').each(function(){$(this).find('option[value='+id+']').attr('selected','selected')})}).on('click','.fnMove',function(e){e.stopPropagation()})

@@ -1491,15 +1491,14 @@ menu = {
  },
 notas = {
 	days : [Fecha.general], 
-	nombreDlg : 'dlgNotas',
 	$template: null, 
 	dir : 'right',
-	init : function(){
+	init (){
 		this.show()
 	 }, 
-	dialog:function(id=-1){
+	dialog (id=-1){
 		var _load = function () {
-			var  $dlg = $('#'+notas.nombreDlg)
+			var  $dlg = $('#dlgNotas')
 			$dlg.find("#id").val(id)
 
 			if (id==-1){ 
@@ -1528,28 +1527,27 @@ notas = {
 		}
 		
 		dialog.open(
-			notas.nombreDlg,
+			'dlgNotas',
 			notas.save,
 			()=>notas.delete($('#dlgNotas #id').attr('value')),
 			_load
 		)
 
 	 },
-	save : function(callback){
-
-		var  $dlg = $('#dlgNotas'), 
-		 data =  {
+	save (callback){
+		const $dlg = $('#dlgNotas');
+		const  data =  {
 			id : $dlg.find('#id').val(), 
 			nota : $dlg.find('#descripcion').val(),
 			fecha : $dlg.find('#fecha').val() ,
 			hora : $dlg.find('#hora').val(), 
 			controller : 'notas', 
 			action : SAVE
-		}
-
-		$.post(INDEX, data,function (r, textStatus, jqXHR) {
+		};
+		$.post(INDEX, data,(r, textStatus, jqXHR) => {
 			if (r.success) {
-				dialog.close(this.nombreDlg)
+
+				dialog.close(`dlgNotas`)
 
 				data.id = (data.id>-1) ?data.id:r.id; 
 				notas.create(data)
@@ -1564,7 +1562,7 @@ notas = {
 		 },'json')
 		
 	 }, 
-	delete : function(id){
+	delete(id){
 
 		let data = {
 			controller : 'notas' , 
@@ -1581,7 +1579,7 @@ notas = {
 				} 
 			},'json')
 	 },
-	load : function(fecha){
+	load(fecha){
 
 		let data = {
 			controller : 'notas' , 
@@ -1608,7 +1606,7 @@ notas = {
 		}
 
 	 },
-	create : function (d){
+	create(d){
 		if($('#notas').find('#'+d.id).length) return false; 
 		
 		Tools.template(notas, 'row.notas.php',function(r){
@@ -1628,7 +1626,7 @@ notas = {
 		})
 		
 	 },
-	show : function(){
+	show(){
 		let $sec = $('#notas') , 
 			$noteDay = $sec.find('.'+Fecha.id)
 
@@ -1640,7 +1638,7 @@ notas = {
 		$('#mySidenav #menu5.hay-nota').removeClass('hay-nota')
 		if($noteDay.length) $('#mySidenav #menu5').addClass('hay-nota')
 	 }, 
-	edit : function(d){
+	edit(d){
 		this.delete(d.id)
 		this.create(d)
 	 }

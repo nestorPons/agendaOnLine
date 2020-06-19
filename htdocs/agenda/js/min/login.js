@@ -283,28 +283,28 @@ validar.pass.estado=!1}}else{$this.removeClass('input-error input-success')
 return!1}},reset:function($this){$this.find(':password').each(function(){$(this).removeClass('input-error input-success').val('')})}},form:function(idFrm){var frm=$('#'+idFrm);if(frm[0].checkValidity()!=!1){return!0}else{notify.error(frm[0].validationMessage,'Error formulario')
 return!1}},},input={success:function($input){if($.isEmpty())return!1
 $input.removeClass('input-error').addClass('input-success')},error:function($input){if($.isEmpty())return!1
-$input.removeClass('input-success').addClass('input-error')}},dialog={loads:new Array,section:$('#dialogs'),isOpen:null,new:!1,open:function(objName,fnOk,fnCancel,callback){dialog.isOpen=objName
+$input.removeClass('input-success').addClass('input-error')}},dialog={loads:new Array,section:$('#dialogs'),isOpen:null,new:!1,open(objName,fnOk,fnCancel,callback){dialog.isOpen=objName
 let loads=dialog.loads,_open=function($this){$this.show('fade','fast').find('.iconClass-container input').first().focus().end().find('.btn-success').attr('disabled',!1)
 $('.popup-overlay').fadeIn()
 typeof callback=="function"&&callback($this)};if(loads.includes(objName)){this.new=!1;dialog.reset(objName)
 _open($('#dialogs #'+objName))}else{loads.push(objName)
-this.new=!0;dialog.create(objName,fnOk,fnCancel,function(){_open($('#dialogs #'+objName))})}},close:function(objName,callback){var $this=$('#'+objName)||$('#'.dialog.isOpen)
+this.new=!0;dialog.create(objName,fnOk,fnCancel,function(){_open($('#dialogs #'+objName))})}},close(objName,callback){var $this=$('#'+objName)||$('#'.dialog.isOpen)
 validar.pass.reset($('#'+objName))
 $this.fadeOut()
 $('#dialogs').fadeOut()
 dialog.isOpen=null
-typeof callback=="function"&&callback(!0)},create:function(objName,fnOk,fnCancel,callback){let $this,data={controller:'dialogs',view:objName}
+typeof callback=="function"&&callback(!0)},create(objName,fnOk,fnCancel,callback){let $this,data={controller:'dialogs',view:objName}
 $.post(INDEX,data,function(html){$('#dialogs').append(html).promise().done(function(){$this=$('#dialogs').find('#'+objName)
 $this.draggable({disabled:!1,opacity:0.70,zIndex:100,start:function(){}}).keypress(function(e){var code=e.keyCode;if(event.which==13)$this.find('.aceptar').click()})
 $this.on('click','.fnClose',function(){dialog.close(objName)}).on('keydown',function(event){if(event.which==27)dialog.close(objName)}).on('click','.btn-danger',function(e){typeof fnCancel=="function"?fnCancel():dialog.close(objName)})
-if(typeof fnOk=="function")$this.on('click','.btn-success',fnOk)}).done(()=>callback($this))},'html')},reset:function(objName){var $this=$('#'+objName)
+if(typeof fnOk=="function")$this.on('click','.btn-success',fnOk)}).done(()=>callback($this))},'html')},reset(objName){var $this=$('#'+objName)
 var $load=$this.find('.btnLoad');if($this.find('form').length){$this.find('form')[0].reset()}else{$this.find('input').each(function(){$(this).val('')})
 $this.find('.lst').each(function(){$(this).empty()})}
-if($load.length){$load.each(function(){var caption=$(this).data('value');$(this).html(caption)})}}},notify={success:function(mns,cptn,keep,$input){var cptn=cptn||'Guardado',mns=mns||'El registro ha sido guardado';$.Notify({type:'success',caption:cptn,content:mns,icon:'icon-floppy',keepOpen:keep||!1,})
-if(!$.isEmpty($input))input.success($input)},error:function(mns,cptn,timewait,$input){let keep=typeof(timewait)=="boolean"?timewait:!1,time=typeof(timewait)=="number"?timewait:3000;$.Notify({type:'alert',caption:cptn||'Error',content:mns||'Ha ocurrido un error',icon:'lnr-warning',keepOpen:keep,timeout:time})
-!$.isEmpty($input)&&input.error($input)},alert:function(mns,cptn,timewait,callback){let keep=typeof(timewait)=="boolean"?timewait:!1,time=typeof(timewait)=="number"?timewait:3000;$.Notify({type:'warning',caption:cptn||'Warning',content:mns||'Alerta algo requiere su atencion',icon:'icon-attention-alt',keepOpen:keep||!1,timeout:time})
-typeof callback=="function"&&setTimeout(callback,timewait)},info:function(mns,cptn,timewait,callback){let keep=typeof(timewait)=="boolean"?timewait:!1,time=typeof(timewait)=="number"?timewait:3000;$.Notify({type:'info',caption:cptn||'Información',content:mns||'Le informamos ...',icon:'icon-info',keepOpen:keep,timeout:time})
-typeof callback=="function"&&setTimeout(callback,timewait)},},Device={cel:!1,init:function(){this.cel=($(window).width()<=425)},isCel:function(val=!1){if($.isEmpty(val)){return this.cel}else{this.cel=val}}}
+if($load.length){$load.each(function(){var caption=$(this).data('value');$(this).html(caption)})}}},notify={success(mns,cptn,keep,$input){var cptn=cptn||'Guardado',mns=mns||'El registro ha sido guardado';$.Notify({type:'success',caption:cptn,content:mns,icon:'icon-floppy',keepOpen:keep||!1,})
+if(!$.isEmpty($input))input.success($input)},error(mns,cptn,timewait,$input){let keep=typeof(timewait)=="boolean"?timewait:!1,time=typeof(timewait)=="number"?timewait:3000;$.Notify({type:'alert',caption:cptn||'Error',content:mns||'Ha ocurrido un error',icon:'lnr-warning',keepOpen:keep,timeout:time})
+!$.isEmpty($input)&&input.error($input)},alert(mns,cptn,timewait,callback){let keep=typeof(timewait)=="boolean"?timewait:!1,time=typeof(timewait)=="number"?timewait:3000;$.Notify({type:'warning',caption:cptn||'Warning',content:mns||'Alerta algo requiere su atencion',icon:'icon-attention-alt',keepOpen:keep||!1,timeout:time})
+typeof callback=="function"&&setTimeout(callback,timewait)},info(mns,cptn,timewait,callback){let keep=typeof(timewait)=="boolean"?timewait:!1,time=typeof(timewait)=="number"?timewait:3000;$.Notify({type:'info',caption:cptn||'Información',content:mns||'Le informamos ...',icon:'icon-info',keepOpen:keep,timeout:time})
+typeof callback=="function"&&setTimeout(callback,timewait)},},Device={cel:!1,init(){this.cel=($(window).width()<=425)},isCel(val=!1){if($.isEmpty(val)){return this.cel}else{this.cel=val}}}
 function formatofecha(fechaTxt,formatOut){var fecha=!$.isEmpty(fechaTxt)?fechaTxt.toString():Fecha.general;if(fecha.indexOf("/")>0){var mdy=fecha.split('/');var d=("0"+mdy[0]).slice(-2);var m=("0"+mdy[1]).slice(-2);var a=mdy[2]}else if(fecha.indexOf("-")>0){var mdy=fecha.split('-');var d=("0"+mdy[2]).slice(-2);var m=("0"+mdy[1]).slice(-2);var a=mdy[0]}else if(fecha.length==4){var d=fecha.substr(2);var m=fecha.substr(0,2);var a=fechaActual('y')}else if(fecha.length==8){var d=fecha.substr(6,2);var m=fecha.substr(4,2);var a=fecha.substr(0,4)}
 switch(formatOut){case 'sql':var fch=a+'-'+m+'-'+d;break;case 'print':var fch=d+'/'+m+'/'+a;break;case 'md':var fch=m+d;break;case 'number':var fch=a+m+d;break;case 'day':var fch=d;break;case 'month':var fch=m;break;case 'year':var fch=a;break;default:var fch=new Date(a,m-1,d)}
 return(fch)}

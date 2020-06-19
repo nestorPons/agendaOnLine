@@ -702,7 +702,7 @@ dialog = {
 	section : $('#dialogs') , 
 	isOpen : null,  
 	new : false, 
-	open:function(objName,fnOk,fnCancel,callback){
+	open(objName,fnOk,fnCancel,callback){
 		dialog.isOpen = objName
 
 		let loads = dialog.loads,
@@ -730,7 +730,7 @@ dialog = {
 
 		}
 	 },
-	close:function (objName,callback){
+	close (objName,callback){
 		var $this = $('#'+objName) || $('#'.dialog.isOpen)
 
 		//en el caso que existan passwords formaear el diseño
@@ -742,7 +742,7 @@ dialog = {
 
 		typeof callback == "function" && callback(true);
 	 },
-	create: function (objName,fnOk,fnCancel,callback){
+	create (objName,fnOk,fnCancel,callback){
 		let $this, 
 			data = {
 				controller : 'dialogs' , 
@@ -787,7 +787,7 @@ dialog = {
 				.done(()=>callback($this))
 		},'html')
 	 },
-	reset : function(objName){
+	reset(objName){
 		var $this = $('#'+objName)
 		var $load = $this.find('.btnLoad');
 		if ($this.find('form').length){
@@ -811,7 +811,7 @@ dialog = {
 	 }
  }, 
 notify = {
-	success: function(mns, cptn, keep, $input){
+	success(mns, cptn, keep, $input){
 		var cptn = cptn||'Guardado',
 			mns = mns||'El registro ha sido guardado';
 		$.Notify({
@@ -824,7 +824,7 @@ notify = {
 
 		if (!$.isEmpty($input)) input.success($input)
 	},
-	error: function(mns,cptn ,timewait , $input){
+	error(mns,cptn ,timewait , $input){
 		let	keep = typeof(timewait) == "boolean" ? timewait : false , 
 			time = typeof(timewait) == "number" ? timewait : 3000 ;
 
@@ -838,7 +838,7 @@ notify = {
 		})
 		!$.isEmpty($input) && input.error($input)
 	},
-	alert: function(mns, cptn, timewait , callback){
+	alert(mns, cptn, timewait , callback){
 		let	keep = typeof(timewait) == "boolean" ? timewait : false , 
 			time = typeof(timewait) == "number" ? timewait : 3000 ;
 	
@@ -853,7 +853,7 @@ notify = {
 		typeof callback == "function" && setTimeout(callback,timewait);
 
 	},
-	info: function(mns, cptn, timewait , callback){
+	info(mns, cptn, timewait , callback){
 		let keep = typeof(timewait) == "boolean" ? timewait : false , 
 			time = typeof(timewait) == "number" ? timewait : 3000 ;
 	
@@ -871,10 +871,10 @@ notify = {
  },
 Device = {
 	cel: false, 
-	init : function(){
+	init(){
 		this.cel = ($(window).width()<=425)
 	 }, 
-	isCel: function(val = false){
+	isCel(val = false){
 		if($.isEmpty(val)){
 			return this.cel
 		} else  {
