@@ -11,4 +11,9 @@ $FOLDER_CONFIG = $url_base  . 'app_agenda/conf/';
 //configuracion general 
 require_once $FOLDER_CONFIG  . 'constants.php' ;
 require_once  $FOLDER_CONFIG . 'autoload.php' ;
+require('../../vendor/autoload.php');
+$dotenv = Dotenv\Dotenv::createImmutable(APP_FOLDER);
+$dotenv->load();
+
+
 require URL_CONTROLLERS . 'main.controller.php';

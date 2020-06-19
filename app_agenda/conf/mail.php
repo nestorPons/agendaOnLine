@@ -1,11 +1,11 @@
 <?php 
 // Constantes para el envio de emails
-const EMAIL_FROM = 'admin@reservatucita.com';
-const EMAIL_NAME = 'ReservaTuCita.com';
-const EMAIL_HOST = 'mail.gandi.net';// 'smtp.sd3.gpaas.net';  //smtp.gmail.com';
-const EMAIL_USER = 'admin@reservatucita.com';
-const EMAIL_PASS = 'YOU_PASS';
-const EMAIL_PORT = 25;
+const EMAIL_FROM = $_ENV['EMAIL_FROM'];
+const EMAIL_NAME = $_ENV['EMAIL_NAME'];
+const EMAIL_HOST = $_ENV['EMAIL_HOST'];// 'smtp.sd3.gpaas.net';  //smtp.gmail.com';
+const EMAIL_USER = $_ENV['EMAIL_USER'];
+const EMAIL_PASS = $_ENV['EMAIL_PASS'];
+const EMAIL_PORT = $_ENV['EMAIL_PORT'];
 
 //Server settings
 $this->SMTPDebug =3;           // Enable verbose debug output

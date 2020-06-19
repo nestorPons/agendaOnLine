@@ -45,6 +45,6 @@ function classBackground(){
     return $Device->isMobile()
         ?""
         :file_exists(URL_EMPRESA ."background.jpg")
-                ?"background-personalized"
-                :"background";
+            ?"background-personalized"
+            :"background";
 }

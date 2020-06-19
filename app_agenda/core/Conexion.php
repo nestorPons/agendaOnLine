@@ -6,7 +6,7 @@ class Conexion extends \conf\UserConn {
 	public $result, $error = false, $mQCount, $mQResult;
 
 	function __construct( $db = null, $user = 0 ) {
-		
+		parent::__construct();
 		switch($user){
 			case 0:
 				$this->user();
@@ -43,7 +43,7 @@ class Conexion extends \conf\UserConn {
 		} catch (\Exception $e) {
 			echo $e->getMessage();
 			echo ('<br>');
-			print_r([$this->server, $this->user, $this->db]);
+			print_r([$this->server, $this->user, $this->pass, $this->db]);
 			exit;
 		}
 	

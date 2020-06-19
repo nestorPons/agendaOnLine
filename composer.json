@@ -1,0 +1,12 @@
+{
+    "name": "nestor/agenda",
+    "authors": [
+        {
+            "name": "nestorpons",
+            "email": "nestorpons@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.0"
+    }
+}
