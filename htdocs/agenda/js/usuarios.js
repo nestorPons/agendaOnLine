@@ -226,8 +226,15 @@ var usuarios = {
 			limit : limit
 		 }
 		
-		$.post(INDEX,data,function(datos){	
-
+		$.post(INDEX,data,function(datos){
+			let data = datos.data
+			console.log(data)
+			data.sort((a, b) => {
+				let dateA = new Date(a.fecha + 'T' + a.hora + 'Z')
+				let dateB = new Date(b.fecha + 'T' + a.hora + 'Z')
+				return dateA > dateB ? 1 : -1; 
+			})
+			data.reverse()
 			dialog.open('dlgHistorial',null, null, function(){
 				var $this=$('#dlgHistorial'), 
 					d = datos.data , 
@@ -237,7 +244,7 @@ var usuarios = {
 
 				for (let i = 0; i<len ;i++){
 					let servicios = d[i].servicios 
-					
+					let fechaHora = Fecha.print(d[i].fecha) + ' ' + d[i].hora
 
 						$this
 							.find('#hisCita')
@@ -246,8 +253,7 @@ var usuarios = {
 							.removeAttr('id')
 							.find('.hisAgenda').html(d[i].agenda).end()
 							.find('.hisIdCita').html(d[i].id).end()
-							.find('.hisFecha').html(Fecha.print(d[i].fecha)).end()
-							.find('.hisHoras').html(d[i].hora).end()
+							.find('.hisFecha').html(fechaHora).end()
 							.appendTo($this.find('table'))
 					
 					servicios.forEach(e => {

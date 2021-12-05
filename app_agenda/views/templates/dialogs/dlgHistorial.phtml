@@ -1,18 +1,3 @@
-<!--<div id="dlgHistorial" class="dialog">
-	<i class="icon-cancel fnClose"></i>
-	<div class="content-popup">
-		<div class="template">
-			<i class ="icon-search"></i>
-			<span class="hisFecha"></span> <span class="hisHoras"></span> Nº cita <span class="hisIdCita"></span> 
-			 agenda <span class="hisAgenda"></span> los servicios: 
-			<div class="hisServicios">
-				<div class="hisServicio template"></div>
-			</div>
-		</div>
-		<div id="contenedor-historial"></div>
-	</div>
-</div>
--->
 <div id="dlgHistorial" class="dialog">
 	<i class="fnClose" title="Salir"></i>
 	<div class="content-popup">
@@ -21,29 +6,22 @@
 			<option value="20">mostrar 20</option>
 			<option value="50">mostrar 50</option>
 		</select>
-<!--
-implemenar busqueda por periodo de tiempo 
-		input.iconClass
-			
-		<input id="historialInicio" type="date">
-		<input id="historialFinal" type="date">
-
--->
+		<br>
 		<table class="">
 			<thead>
 				<tr class = "encabezado">
-					<th>Opc</th><th>Fecha</th><th>Hora</th><th>Agenda</th>
+					<th>Opc</th><th>Agenda</th><th>Fecha/Hora</th>
 				</tr>
-				<tr id="hisCita" class="template">
-					<td><span class ="icon-search fnBuscarCita" tittle = "Ir a la cita" ></span></td>
-					<td class="hisFecha"></td>
-					<td class="hisHoras"></td>
+				<tr id="hisCita" class="template hisCita">
+					<td class="hisicon"><span class ="icon-search fnBuscarCita" tittle = "Ir a la cita" ></span></td>
 					<td class="hisAgenda"></td>
+					<td class="hisFecha"></td>
 				</tr>
-				<tr id="hisServicios" class="template">
+				<tr id="hisServicios" class="template hisServicios">
 					<td><i class="icon-angle-right"></i></td>
 					<td colspan=4 class="hisServicio"></td>
 				</tr>
+				
 			</thead>
 		</table>
 	</div>

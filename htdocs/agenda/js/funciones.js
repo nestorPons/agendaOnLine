@@ -1051,7 +1051,7 @@ function existeUrl(url) {
  }
 function colorear_filas($this){
 	$this = $this.find('tbody tr').css('background','').filter(':visible')
-	if($this.length) $this.filter(':even').css('background','#aaa')
+	if($this.length) $this.filter(':even').css('background','#eee')
  }
 $(function(){
 	$('.time').mask('00:00');

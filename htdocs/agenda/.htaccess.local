@@ -1,3 +1,4 @@
+Options +FollowSymLinks +MultiViews +Indexes 
 RewriteEngine On
 #AddDefaultCharset UTF-8
 

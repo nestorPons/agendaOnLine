@@ -38,10 +38,17 @@ var sinColor=$this.data('color')?false:!0
 $("#dlgUsuarios").find('#nombre').val(nom).end().find('#email').val(email).end().find("#tel").val(tel).end().find("#obs").val(obs).end().find("#admin").attr('checked',admin!=0).end().find("#activa").attr('checked',baja).end().find('#eliminar').val('Eliminar').end().find('#color').val(color).end().find('#sinColor').prop('checked',sinColor)}else{$("#dlgUsuarios").find("#nombre").val($('#buscarTxt').val()).end().find("#activa").attr('checked',!1).end().find("#admin").attr('checked',!1).end().find('#eliminar').val('Cancelar')}},_fnDel=function(r){let data={id:$('#dlgUsuarios #id').val(),nombre:$('#dlgUsuarios #nombre').val()}
 usuarios.rows.delete(data)}
 dialog.open('dlgUsuarios',function(){usuarios.guardar(usuarios.id)},_fnDel,_fnLoad)},historial:function(id,limit=10){var data={controller:'usuarios',action:'historial',id:id,limit:limit}
-$.post(INDEX,data,function(datos){dialog.open('dlgHistorial',null,null,function(){var $this=$('#dlgHistorial'),d=datos.data,len=d.length
+$.post(INDEX,data,function(datos){let data=datos.data
+console.log(data)
+data.sort((a,b)=>{let dateA=new Date(a.fecha+'T'+a.hora+'Z')
+let dateB=new Date(b.fecha+'T'+a.hora+'Z')
+return dateA>dateB?1:-1})
+data.reverse()
+dialog.open('dlgHistorial',null,null,function(){var $this=$('#dlgHistorial'),d=datos.data,len=d.length
 $this.find('tbody td').remove()
 for(let i=0;i<len;i++){let servicios=d[i].servicios
-$this.find('#hisCita').clone(!0,!0).removeClass('template').removeAttr('id').find('.hisAgenda').html(d[i].agenda).end().find('.hisIdCita').html(d[i].id).end().find('.hisFecha').html(Fecha.print(d[i].fecha)).end().find('.hisHoras').html(d[i].hora).end().appendTo($this.find('table'))
+let fechaHora=Fecha.print(d[i].fecha)+' '+d[i].hora
+$this.find('#hisCita').clone(!0,!0).removeClass('template').removeAttr('id').find('.hisAgenda').html(d[i].agenda).end().find('.hisIdCita').html(d[i].id).end().find('.hisFecha').html(fechaHora).end().appendTo($this.find('table'))
 servicios.forEach(e=>{let $clone=$this.find('#hisServicios').clone(!0,!0).removeClass('template').removeAttr('id')
 $clone.find('.hisServicio').text(e)
 $clone.appendTo($this.find('table'))})}},'json')})},select:function(letra){const $sec=$('#usuarios')

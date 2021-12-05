@@ -5,10 +5,6 @@ final class Empresa extends \core\BaseClass {
 
     function __construct($codeEmpresa){
         parent::__construct('empresas', 'aa_db', 2);
- 
-//AKI :: implementar metodo para crear una session con los datos 
-//y no tener que hacer tantas peticiones 
-//ademas debera actualizar cadavez que se cambien los datos INSERT o UPDATE
 
         $this->code = $codeEmpresa; 
         $this->dbName = PREFIX_DB . $codeEmpresa;
@@ -38,16 +34,21 @@ final class Empresa extends \core\BaseClass {
     }
     public function conf_css(){
         $this->table = "config_css"; 
-        $this->conf_css = $this->getAll('*',MYSQLI_ASSOC)[0];
-
-        return  $this->conf_css;
+        $css = $this->getAll('*',MYSQLI_ASSOC); 
+        return  $this->conf_css = isset($css[0]) ? $css[0] : false;
     }
     private function conf(){
         $this->table = "config";
-        return $this->getAll('*',MYSQLI_ASSOC )[0]??false;
+        $css = $this->getAll('*',MYSQLI_ASSOC );
+        return isset($css[0])? $css[0] : false;
     }
     public function getConf(){
-        $this->conf = array_merge($this->data(), $this->conf(), $this->conf_css(), $this->plan); 
+        $arr1 = $this->data()?:[];
+        $arr2 = $this->conf()?:[];
+        $arr3 = $this->conf_css()?:[];
+        $arr4 = $this->plan?:[];
+
+        $this->conf = array_merge($arr1,$arr2,$arr3,$arr4); 
         return $this->conf;  
     }
 
