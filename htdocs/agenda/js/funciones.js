@@ -750,7 +750,7 @@ dialog = {
 			}
 
 		$.post(INDEX,data,function(html){
-
+			
 			$('#dialogs')
 				.append(html)
 				.promise()
@@ -765,17 +765,14 @@ dialog = {
 					 })
 					.keypress(function(e){
 						var code = e.keyCode ;
-		
+						
 						//BOTON PREDETERMINADO EN LOS DIALOGS
-						if(event.which==13) $this.find('.aceptar').click()
+						if(e.which==13) $this.find('.aceptar').click()
 				     })
-				 			
+
 					$this
 						.on('click','.fnClose',function(){
 							dialog.close(objName)
-						})
-						.on('keydown',function(event){
-							if(event.which==27)	dialog.close(objName)
 						})
 						.on('click','.btn-danger',function(e){
 							typeof fnCancel == "function"?fnCancel():dialog.close(objName)
@@ -1115,3 +1112,7 @@ $.ajaxSetup({
 		if (typeof window['menu'] != undefined) _=>menu.btn.save.off();
 	 }
 });
+
+$(document).on('keydown',function(event){
+	if(event.which==27)	dialog.close()
+})

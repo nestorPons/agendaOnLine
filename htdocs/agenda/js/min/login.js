@@ -295,8 +295,8 @@ $('#dialogs').fadeOut()
 dialog.isOpen=null
 typeof callback=="function"&&callback(!0)},create(objName,fnOk,fnCancel,callback){let $this,data={controller:'dialogs',view:objName}
 $.post(INDEX,data,function(html){$('#dialogs').append(html).promise().done(function(){$this=$('#dialogs').find('#'+objName)
-$this.draggable({disabled:!1,opacity:0.70,zIndex:100,start:function(){}}).keypress(function(e){var code=e.keyCode;if(event.which==13)$this.find('.aceptar').click()})
-$this.on('click','.fnClose',function(){dialog.close(objName)}).on('keydown',function(event){if(event.which==27)dialog.close(objName)}).on('click','.btn-danger',function(e){typeof fnCancel=="function"?fnCancel():dialog.close(objName)})
+$this.draggable({disabled:!1,opacity:0.70,zIndex:100,start:function(){}}).keypress(function(e){var code=e.keyCode;if(e.which==13)$this.find('.aceptar').click()})
+$this.on('click','.fnClose',function(){dialog.close(objName)}).on('click','.btn-danger',function(e){typeof fnCancel=="function"?fnCancel():dialog.close(objName)})
 if(typeof fnOk=="function")$this.on('click','.btn-success',fnOk)}).done(()=>callback($this))},'html')},reset(objName){var $this=$('#'+objName)
 var $load=$this.find('.btnLoad');if($this.find('form').length){$this.find('form')[0].reset()}else{$this.find('input').each(function(){$(this).val('')})
 $this.find('.lst').each(function(){$(this).empty()})}
@@ -335,7 +335,7 @@ else $pass.attr('type','text')
 e.stopPropagation()}).on('change','input:password',function(){validar.pass.estado=!1
 validar.pass.funcion($(this))}).on('blur','.email',function(e){validar.email.funcion($(this),e)}).on('change','.email',function(e){validar.email.estado=!1
 validar.email.funcion($(this),e)}).on('blur','.tel',function(){validar.tel.funcion($(this))}).on('change','.tel',function(){validar.tel.estado=!1}).on('blur','.nombre',function(){validar.nombre.funcion($(this))}).on('change','.nombre',function(){validar.nombre.estado=!1}).end().on('keydown','.input-error',function(){$(this).removeClass('input-error')}).on('keydown','.input-success',function(){$(this).removeClass('input-success')}).on('click','.inicio',function(){window.location.href="index.php"})})
-$.ajaxSetup({url:INDEX,cache:!0,async:!0,complete:function(){btn.load.hide();if(typeof window.menu!=undefined)_=>menu.btn.save.off()}});const URL='index.php?empresa='+$('body').data('empresa');var main={scripts:{loaded:['secLogin'],isLoaded:function(arg){this.loaded.includes(arg)},load:function(arg,callback){if(typeof arg=='undefined')return!1;if(!this.loaded.includes(arg)){this.loaded.push(arg)
+$.ajaxSetup({url:INDEX,cache:!0,async:!0,complete:function(){btn.load.hide();if(typeof window.menu!=undefined)_=>menu.btn.save.off()}});$(document).on('keydown',function(event){if(event.which==27)dialog.close()});const URL='index.php?empresa='+$('body').data('empresa');var main={scripts:{loaded:['secLogin'],isLoaded:function(arg){this.loaded.includes(arg)},load:function(arg,callback){if(typeof arg=='undefined')return!1;if(!this.loaded.includes(arg)){this.loaded.push(arg)
 $.getScript('./js/min/'+arg+'.js',function(){typeof window[arg].init=='function'&&window[arg].init();typeof callback=='function'&&callback()})}else{typeof window[arg].init()=='function'&&window[arg].init()
 typeof callback=='function'&&callback()}},},dir1:RIGHT,dir2:LEFT,toggle:function($in,container){var $out=$('section:visible'),nameId=$in.selector.replace('#',''),$container=$('#'+container);if(main.scripts.loaded.indexOf(nameId)==-1){main.scripts.loaded[main.scripts.length]=nameId
 if(nameId=='newUser')main.scripts.loaded[main.scripts.loaded.length]='secNewNotification';var data={controller:'login',view:nameId}
