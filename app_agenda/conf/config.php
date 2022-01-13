@@ -38,4 +38,13 @@ define('CONFIG', array_merge($Empresa->getConf(),$myAgenda));
 
 //Si voy a admin o otro lado creo la clase dispositivo 
 $Device = new \models\Mobile_Detect;
-define('CLASS_BACKGROUND', "background.jpg");
+define('CLASS_BACKGROUND', classBackGround());
+
+function classBackground(){
+    global $Device;
+    return $Device->isMobile()
+        ?""
+        :file_exists(URL_EMPRESA ."background.jpg")
+            ?"background-personalized"
+            :"background";
+}
