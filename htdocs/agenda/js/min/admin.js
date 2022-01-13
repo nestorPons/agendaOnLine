@@ -42,7 +42,7 @@ crearCita.data.hora=celda.parents('tr').data('hour')
 $this.find('#agenda'+crearCita.data.agenda).prop('checked',!0)})}).on('click','#mainLstDiasSemana a',function(){var diaA=parseInt(Fecha.diaSemana(Fecha.general));var diaB=parseInt($(this).data('value'));sincronizar(diaB-diaA)}).on('change','#lstDiasSemana',function(){var diaA=parseInt(Fecha.diaSemana(Fecha.general));var diaB=parseInt($(this).val());sincronizar(diaB-diaA)}).on('click','.icon-attention',function(e){admin.citasSup($(this));e.stopPropagation()}).on('click','.fnEdit',function(e){e.stopPropagation()
 admin.edit($(this).parents('.lbl').attr('idcita'))}).on('click','.cita',function(e){$(this).parent().find('.note').addClass('show').find('input').focus()}).on('click','.lbl .fnDel',function(e){$(".selector").draggable("option","disabled",!0);e.stopPropagation();admin.del($(this).parents('.lbl').attr('idcita'))}).on('change','.nombreagenda',function(){var data={id:$(this).data('agenda'),nombre:$(this).val(),controller:'agendas',action:'saveName'}
 $.post(INDEX,data,function(r){},'json')}).find('.cuerpo').on("swipeleft",function(){sincronizar(1)}).on("swiperight",function(){sincronizar(-1)})
-$('#navbar').on('click','#btnShow',menu.show).on('click','#btnEdit',menu.edit).on('click','#btnSearch',function(){if($('#txtBuscar').is(':hidden')){$('#txtBuscar').parent().show('slide',{direction:'right'}).end().focus();$('#btnSearch').find('i').removeClass().addClass('lnr-cross').end().find('span').text('Cerrar')}else{menu.load()}}).on('change','#txtBuscar',function(){if($('#txtBuscar').val()!=""){menu.buscar($('#txtBuscar').val(),$('.capasPrincipales.activa').attr('id'))}}).on('click','#btnReset',function(){if($('#usuarios').is(':visible'))usuarios.select('A')}).on('click','#btnSave',menu.save).on('keyup','#txtBuscar',function(event){if(event.which==13)menu.load();if(event.which==27)
+$('#navbar').on('click','#btnToday',menu.today).on('click','#btnShow',menu.show).on('click','#btnEdit',menu.edit).on('click','#btnSearch',function(){if($('#txtBuscar').is(':hidden')){$('#txtBuscar').parent().show('slide',{direction:'right'}).end().focus();$('#btnSearch').find('i').removeClass().addClass('lnr-cross').end().find('span').text('Cerrar')}else{menu.load()}}).on('change','#txtBuscar',function(){if($('#txtBuscar').val()!=""){menu.buscar($('#txtBuscar').val(),$('.capasPrincipales.activa').attr('id'))}}).on('click','#btnReset',function(){if($('#usuarios').is(':visible'))usuarios.select('A')}).on('click','#btnSave',menu.save).on('keyup','#txtBuscar',function(event){if(event.which==13)menu.load();if(event.which==27)
 menu.exit();event.stopPropagation()}).on('click','#btnAdd',menu.add).on('click','#btnDel',menu.del).on('click','#btnReset',menu.reset).on('click','#btnOptions #chckOpUsersDel',menu.options).find('#showByTime').on('click','input',function(){$(this).prop('checked',!0)
 historial.get($(this).val())}).end()
 $('#mySidenav').find('[name="menu[]"]').parent().click(function(){if(Device.isCel()){menu.nav.open(0)
@@ -50,7 +50,8 @@ menu.nav.estado(0)}
 admin.mostrarCapa($(this).find('a').data('capa'))})
 $('#notas').on("click",".fnEdit",function(e){notas.dialog($(this).attr('id'))}).on("click",".fnDel",function(e){e.stopPropagation()
 notas.delete($(this).parent().attr('id'))}).on('click','#nuevaNota',function(){notas.dialog(-1)})
-$('<title/>').text('AgendaOnline zona admin').appendTo('head')},reload:function(){let that=this
+$('<title/>').text('AgendaOnline zona admin').appendTo('head')
+menu.status('main')},reload:function(){let that=this
 $.post(INDEX,{controller:'admin'},function(html){let $main=$(html).filter('main')
 $('body').hide('fade').find('#sections').detach().end().show('fade').append($main);menu.nav.btn.save.switch()
 menu.status('main');that.init()},'html')},set:{nameAgenda:function(id,name){$('#main').find('#nombreagenda'+id).val(name)},data:function(idCita){var lbl=$('#idCita_'+idCita+'.lbl')
@@ -255,12 +256,13 @@ this.idBtnOpen=''},open:function(){let $btn=this.btn,$frm=$('#'+$btn.data('frm')
 $frm.show('slide',{direction:'right'})
 this.icon=$btn.find('i').attr('class')
 $btn.find('i').removeClass().addClass('lnr-cross')
-this.idBtnOpen=$btn.attr('id')}},btn:{save:{off:function(){$('#btnSave').find('i').removeClass().addClass('icon-floppy')},switch:function(){if($('#btnSave').find('.lnr-sync').length){$('#btnSave').find('i').removeClass().addClass('icon-floppy')}else{$('#btnSave').find('i').removeClass().addClass('lnr-sync animate-spin')}}}}},status:function(capa){var add=$('#btnAdd'),reset=$('#btnReset'),search=$('#btnSearch'),save=$('#btnSave'),show=$('#btnShow'),edit=$('#btnEdit'),options=$('#btnOptions'),del=$('#btnDel'),calendar=$('.contenedor-datepicker'),df={options:!0}
+this.idBtnOpen=$btn.attr('id')}},btn:{save:{off:function(){$('#btnSave').find('i').removeClass().addClass('icon-floppy')},switch:function(){if($('#btnSave').find('.lnr-sync').length){$('#btnSave').find('i').removeClass().addClass('icon-floppy')}else{$('#btnSave').find('i').removeClass().addClass('lnr-sync animate-spin')}}}}},status:function(capa){var add=$('#btnAdd'),today=$('#btnToday'),reset=$('#btnReset'),search=$('#btnSearch'),save=$('#btnSave'),show=$('#btnShow'),edit=$('#btnEdit'),options=$('#btnOptions'),del=$('#btnDel'),calendar=$('.contenedor-datepicker'),df={options:!0}
 options.find('li').addClass('disabled')
 $('#tools').find('.app-bar-element:visible').hide()
 $('.contenedor-datepicker').hide()
-switch(capa){case 'main':menu.enabled(show,calendar)
-break;case 'crearCita':break;case 'usuarios':menu.enabled(add,search)
+switch(capa){case 'main':menu.enabled(show,calendar,today)
+break;case 'crearCita':menu.enabled(today)
+break;case 'usuarios':menu.enabled(add,search)
 break;case 'servicios':menu.enabled(add,search)
 break;case 'config':menu.enabled(save)
 break;case 'familias':menu.enabled(add)
@@ -292,7 +294,7 @@ $('.ocultar_baja').removeClass('ocultar_baja').addClass('mostrar_baja');else $('
 $encontrados=txt.match(/^@$/)?$sec.find('.email:contains('+txt+')'):$sec.find('.busqueda:contains('+txt+')')
 if($encontrados.length){$sec.find("tbody tr").hide().end()
 $encontrados.parents('tr').show()}else{$sec.find("tbody tr").hide()}
-colorear_filas($('.colorear-filas:visible'))}},notas={days:[Fecha.general],$template:null,dir:'right',init(){this.show()},dialog(id=-1){var _load=function(){var $dlg=$('#dlgNotas')
+colorear_filas($('.colorear-filas:visible'))},today:function(){sincronizar(0,Fecha.actual)}},notas={days:[Fecha.general],$template:null,dir:'right',init(){this.show()},dialog(id=-1){var _load=function(){var $dlg=$('#dlgNotas')
 $dlg.find("#id").val(id)
 if(id==-1){$dlg.find('#fecha').val(Fecha.sql).end().find('#hora').val('00:00').end().find('#descripcion').val('').end().find('h1').html('Nuevo...')}else{var $nota=$("#notas #"+id),fecha=Fecha.general,hora=$nota.find(".hora span").text(),des=$nota.find(".contenido span").text()
 $dlg.find('#fecha').val(Fecha.sql(fecha.trim())).end().find('#hora').val(hora.trim()).end().find('#descripcion').val(des).find('h1').html('Editando...')}}

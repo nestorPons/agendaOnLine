@@ -95,8 +95,6 @@ admin ={
 	idCita : -1,
 	ancho : 0, 
 	init : function(){
-		//console.log('admin init')
-		//this.lbl.width =  $('#main th').first().width() - 200;
 		this.ancho = $('#sections').width()
 		let n = (localStorage.getItem("showRows")==1)?1:0;
 		this.inactivas.change(n)
@@ -219,6 +217,7 @@ admin ={
 				.on("swiperight",function(){sincronizar(-1)})
 
 			$('#navbar')
+				.on('click','#btnToday',menu.today)
 				.on('click','#btnShow',menu.show)
 				.on('click','#btnEdit',menu.edit)
 				.on('click','#btnSearch',function(){
@@ -290,6 +289,7 @@ admin ={
 
 			// Añadimos etiqueta al head
 		$('<title/>').text('AgendaOnline zona admin').appendTo('head')
+		menu.status('main')
 	 },
 	reload : function(){
 		let that = this
@@ -1285,7 +1285,8 @@ menu = {
 		}
 	 }, 
 	status: function (capa){
-		var add = $('#btnAdd'),
+		var add 	= $('#btnAdd'),
+			today 	= $('#btnToday'), 
 			reset 	= $('#btnReset'),
 			search 	= $('#btnSearch'),
 			save 	= $('#btnSave'),
@@ -1306,12 +1307,13 @@ menu = {
 		//Mostrar mcontroles 
 		switch(capa) {
 			case 'main':
-				menu.enabled(show,calendar)
+				menu.enabled(show, calendar, today)
 				break;
 			case 'crearCita':
+				menu.enabled(today)
 				break;
 			case 'usuarios':
-				menu.enabled(add,search)
+				menu.enabled(add, search)
 				break;
 			case 'servicios':
 				menu.enabled(add,search)
@@ -1487,6 +1489,10 @@ menu = {
 			$sec.find("tbody tr").hide()
 		}
 		colorear_filas($('.colorear-filas:visible'))
+	 },
+	 today: function(){
+		 // Boton del menu que sincroniza la agenda al dia actual 
+		 sincronizar(0, Fecha.actual)
 	 }
  },
 notas = {
