@@ -69,7 +69,7 @@ $('.stepper').find('li').removeClass('current').end().find('#step'+index).addCla
 $visible.hide("slide",{direction:dirSalida},750,function(){$stepper.removeClass('hidden').show("slide",{direction:dirEntrada},750,function(){$('.tile-active').height('auto')})})
 typeof callback=="function"&&callback()}},validate:{form:function(){return $('#crearCita [name="servicios[]"]:checked').length!==0&&$('#crearCita #cliente').val()!==""&&crearCita.data.hora!='undefined'},name:function(){let $this=$('#crearCita #cliente'),cliente=$this.val().trim();if(cliente!=""){let str=normalize(cliente)
 var selCli=$('#lstClientes [data-name="'+str+'"]')
-if(selCli.length==0){$this.addClass('input-error');dialog.open('dlgUsuarios',crearCita.user.save,null,function(){$('#dlgUsuarios').find('#id').val(-1).end().find('#nombre').val($('#crearCita #cliente').val()).end().find('h1').text('Nuevo usuario')})}else{crearCita.data.idUser=selCli.data('id')
+if(selCli.length==0){$this.addClass('input-error');return!1}else{crearCita.data.idUser=selCli.data('id')
 $('#crearCita #lblCliente').html($this.val())
 $this.removeClass('input-error').addClass('input-success');crearCita.data.nombre=cliente
 return!0}}else{$this.addClass('input-error').removeClass('input-success');$this.popover('show');return!1}},service:function(){$('#crearCita #lblSer').empty();var $ser=$('#crearCita [name="servicios[]"]:checked');if($ser.length==0){$('#login #crearCita [name="stepperServicios"]').popover('show');return!1}else{$ser.each(function(i,v){var txtSer=$(this).attr('id');$('#crearCita #lblSer').append(txtSer+', ')})

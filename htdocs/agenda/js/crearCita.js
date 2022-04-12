@@ -347,15 +347,16 @@ crearCita={
 
 				if (selCli.length==0){
 					$this.addClass('input-error');
-				
-						dialog.open('dlgUsuarios',crearCita.user.save, null, function(){
 
-							$('#dlgUsuarios')
-								.find('#id').val(-1).end()
-								.find('#nombre').val($('#crearCita #cliente').val()).end()
-								.find('h1').text('Nuevo usuario')
-						})
-
+					// 12-04-22 se quita esta funcion por posibles errores  
+					//dialog.open('dlgUsuarios',crearCita.user.save, null, function(){
+					//
+					//	$('#dlgUsuarios')
+					//		.find('#id').val(-1).end()
+					//		.find('#nombre').val($('#crearCita #cliente').val()).end()
+					//		.find('h1').text('Nuevo usuario')
+					//})
+					return false
 				}else{
 					crearCita.data.idUser = selCli.data('id') 
 					$('#crearCita #lblCliente').html($this.val())

@@ -15,6 +15,7 @@
         <div class='icons_crud'>           
             <i class ='icon-pencil-1 fnEdit ' title="Editar cita"></i> 
             <i class ='icon-trash fnDel' title="Eliminar cita"></i>  
+            <i class ='icon-star' title="Eliminar cita"></i>  
         </div>
         <?php if($val['obs']): ?>
             <i class ='icon-note red'></i>
